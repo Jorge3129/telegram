@@ -1,0 +1,62 @@
+* {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    box-sizing: border-box;
+}
+
+:root {
+    /* App */
+    --light-blue-gray: #e1e9f5;
+    --blue-gray: #bac8db;
+    --white: #fff;
+    --blue: #52abff;
+    /* Messages */
+    --message-bg: var(--light-blue-gray);
+    --green-light: #f0ffe3;
+    /* Chat List */
+    --border: 0.05em solid var(--light-blue-gray);
+    --blue-light: #d9ecff;
+    --gray-super-light: #f0f0f0;
+    --gray: #b5b3b0;
+    --yellow: #ff9500;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--light-blue-gray);
+    overflow: hidden;
+}
+
+#root {
+    height: 100%;
+}
+
+.App {
+    text-align: center;
+    height: 100%;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    height: 100%;
+    transition: all ease 0.5s;
+}
+
+.main_section {
+    height: 100%;
+}
+
+.right {
+    background-color: var(--blue-gray);
+}
+
+
+@media screen and (max-width: 768px) {
+    .main {
+        grid-template-columns: 0fr 4fr 1fr;
+        transition: grid-template-columns 0.5s;
+    }
+}
