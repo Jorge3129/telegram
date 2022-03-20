@@ -2,33 +2,41 @@ import React, {FC, useState} from 'react';
 import {Socket} from 'socket.io-client'
 import message from "./Message";
 import {useAppDispatch} from "../../redux/store";
-import {addMessage} from "../../redux/messages.reducer";
+import {addMessage, selectMessages} from "../../redux/messages.reducer";
+import {IChat} from '../../types/types';
+import {setLastMessage} from "../../redux/chats.reducer";
+import {useSelector} from "react-redux";
 
 interface IMainInput {
     socket: Socket;
+    chat: IChat;
 }
 
-const MainInput: FC<IMainInput> = ({socket}) => {
+const MainInput: FC<IMainInput> = ({socket, chat}) => {
 
     const [text, setText] = useState<string>('');
+    const {messages} = useSelector(selectMessages);
     const dispatch = useAppDispatch();
 
     const handleSend = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
+        const message = {
+            text,
+            timestamp: new Date().toISOString(),
+            author: localStorage.getItem('user') || '',
+            chatId: chat.id,
+            messageId: messages.length
+        }
+
         socket.emit('message',
             {
-                message: text,
+                message: message,
                 receiver: localStorage.getItem('user') === 'a' ? 'b' : 'a'
             })
 
-        dispatch(addMessage(
-            {
-                text,
-                timestamp: new Date().toISOString(),
-                author: localStorage.getItem('user') || ''
-            }
-        ));
+        dispatch(addMessage(message));
+        dispatch(setLastMessage({message, chatId: chat.id || -1}));
         setText('');
     }
 

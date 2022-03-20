@@ -1,20 +1,19 @@
 import React, {FC, useEffect, useState} from 'react';
 import MainChat from "./chat/MainChat";
 import {useSocket} from "../hooks/socket";
-import {useSelector} from "react-redux";
 import {useAppDispatch} from "../redux/store";
 import {chatThunk, selectChats, setChats} from "../redux/chats.reducer";
 import ChatsContainer from "./chat-sidebar/ChatsContainer";
+import {IChat} from "../types/types";
 
 const Main: FC = () => {
 
-    const [chat, setChat] = useState<number | null>(null);
+    const [chat, setChat] = useState<IChat | null>(null);
     const [socket] = useSocket();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(chatThunk(localStorage.getItem('user') || ''))
-        //dispatch(messageThunk())
     }, []);
 
     return (
@@ -24,8 +23,8 @@ const Main: FC = () => {
                 chat ?
                     <MainChat
                         socket={socket}
-                        title={chat+''}
-                        chatId={chat}
+                        chat={chat}
+                        setChat={setChat}
                     />
                     : <div className="chat_container main_section">
                         Please select a chat

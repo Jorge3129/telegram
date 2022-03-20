@@ -6,6 +6,7 @@
 .chat_top_bar {
     background-color: var(--white);
     padding: 0.5em;
+    border-bottom: var(--border);
 }
 
 .chat_input_container {
@@ -45,6 +46,6 @@
 @media screen and (max-width: 768px) {
     .chat_send_button {
         padding: 0.5em;
-       max-width: 4em;
+        max-width: 4em;
     }
 }

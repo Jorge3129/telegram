@@ -1,6 +1,9 @@
 import {FC} from "react";
 import {IChat} from "../../types/types";
 import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween"
+
+dayjs.extend(isBetween)
 
 interface IChatItem {
     chat: IChat
@@ -8,7 +11,7 @@ interface IChatItem {
 
 const ChatItem: FC<IChatItem> = ({chat}) => {
 
-    const {timestamp, title, unread} = chat;
+    const {lastMessage, title, unread, muted} = chat;
 
     const initials = (title: string) => {
         const tokens = title.split(' ');
@@ -17,6 +20,13 @@ const ChatItem: FC<IChatItem> = ({chat}) => {
             .map(t => t.split('')[0])
             .join('')
             .toUpperCase()
+    }
+
+    const formatLastMessage = (timestamp: string): string => {
+        const date = dayjs(timestamp);
+        if (date.isSame(dayjs(), 'date')) return date.format('HH:mm')
+        if (date.isBetween(dayjs(), dayjs().subtract(5, 'day'))) return date.format('ddd')
+        return date.format('DD.MM.YYYY')
     }
 
     const avatar =
@@ -37,20 +47,22 @@ const ChatItem: FC<IChatItem> = ({chat}) => {
             </li>
             <li className="chat_timestamp_container grey_text info_container">
                 <div className="chat_timestamp">
-                    {dayjs(timestamp).format('HH:mm')}
+                    {formatLastMessage(lastMessage.timestamp)}
                 </div>
             </li>
         </ul>
 
     const lowerSection =
         <ul className="chat_body_lower">
-            <div className="chat_last_message_container hide_overflow grey_text">
+            <div className="chat_last_message_container grey_text hide_overflow">
                 <div className="chat_last_message text_ellipsis">
-                    Long last message haha lool lmao
+                    {lastMessage.text}
                 </div>
             </div>
-            <div className="chat_unread_container info_container">
-                <div className="chat_unread">
+            <div className="chat_unread_container info_container"
+                 style={unread ? {} : {display: 'none'}}
+            >
+                <div className={"chat_unread" + (muted ? ' muted' : '')}>
                     {unread}
                 </div>
             </div>

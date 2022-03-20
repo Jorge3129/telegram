@@ -16,6 +16,8 @@
     overflow-x: hidden;
     position: absolute;
     bottom: 0;
+    border-bottom: var(--border);
+    border-color: var(--blue-gray);
 }
 
 .msg-loading {
@@ -27,8 +29,13 @@
     display: flex;
 }
 
+.message_list_item:last-child {
+    margin-bottom: 1em;
+}
+
 .message_item {
     min-width: 3em;
+    max-width: 70%;
     margin: 0.2em 1em;
     padding: 0.8em;
     background-color: var(--white);

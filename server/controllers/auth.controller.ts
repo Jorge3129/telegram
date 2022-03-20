@@ -5,7 +5,7 @@ import {IUser} from "../types/types";
 class AuthController {
     async register(req: Request, res: Response) {
         const {username, password} = req.body;
-        users.push({username, password});
+        users.push({username, password, id: users.length + 1});
         res.send({success: true});
     }
 
@@ -15,7 +15,7 @@ class AuthController {
         const user: IUser | undefined = users
             .find(u => u.username === username
                 && u.password === password);
-        if(user) res.json({success: true, username});
+        if (user) res.json({success: true, username});
         else res.status(403).json({success: false});
     }
 }

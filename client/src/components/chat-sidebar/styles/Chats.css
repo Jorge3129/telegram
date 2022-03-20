@@ -96,6 +96,7 @@
 
 .chat_last_message {
     padding-top: 0.12em;
+    padding-right: 0.1em;
 }
 
 .grey_text {
@@ -122,23 +123,32 @@
 
 .chat_unread {
     color: var(--white);
-    background-color: var(--gray);
+    background-color: var(--green);
     font-weight: 600;
     height: 1.4em;
     padding: 0.2em 0.5em;
-    border-radius: 50%;
+    border-radius: 43%;
+}
+
+.chat_unread.muted {
+    background-color: var(--gray);
 }
 
 .chat_item_button.selected_chat {
     background-color: var(--blue);
 }
 
-.chat_item_button.selected_chat .grey_text,
-.chat_item_button.selected_chat .chat_title {
+.selected_chat .grey_text,
+.selected_chat .chat_title {
     color: var(--white);
 }
 
-.chat_item_button.selected_chat .chat_unread {
+.selected_chat .chat_unread {
+    color: var(--blue);
+    background-color: var(--white);
+}
+
+.selected_chat .chat_unread.muted {
     color: var(--blue);
     background-color: var(--blue-light);
 }

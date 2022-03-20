@@ -4,15 +4,19 @@ import {SERVER_URL} from "../config";
 
 class Api {
     async getMessages(chatId: number) {
-        return await axios.get<IMessage[]>(`${SERVER_URL}/messages/`+ chatId)
+        return await axios.get<IMessage[]>(SERVER_URL + '/messages/' + chatId)
     }
 
     async getChats(user: string) {
-        return await axios.get<IChat[]>(`${SERVER_URL}/chats/` + user)
+        return await axios.get<IChat[]>(SERVER_URL + '/chats/' + user)
     }
 
     async login(login: IUser) {
-        return await axios.post(`${SERVER_URL}/auth/login`, login);
+        return await axios.post(SERVER_URL + '/auth/login', login);
+    }
+
+    async updateLastRead(chatId: number, user: string, lastRead: string) {
+        return await axios.patch(SERVER_URL + `/lastRead${chatId}/${user}`, {lastRead})
     }
 }
 

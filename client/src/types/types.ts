@@ -2,7 +2,8 @@ export interface IMessage {
     text: string;
     timestamp: string;
     author: string;
-    chatId?: number
+    chatId: number
+    messageId: number;
 }
 
 export interface IUser {
@@ -13,6 +14,7 @@ export interface IUser {
 export interface IChat {
     id: number
     unread: number;
-    timestamp: string;
     title: string;
+    lastMessage: IMessage;
+    muted: boolean;
 }

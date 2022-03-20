@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IChat} from "../types/types";
+import {IChat, IMessage} from "../types/types";
 import {RootState} from "./rootReducer";
 import api from "../api/api";
 
@@ -25,10 +25,25 @@ const chatSlice = createSlice({
         setChats: (state, {payload}: PayloadAction<IChat[]>) => {
             state.chats = payload;
         },
+        setLastMessage: (state, {payload}: PayloadAction<{ message: IMessage, chatId: number }>) => {
+            const {message, chatId} = payload;
+            const chat = state.chats.find(chat => chat.id === chatId);
+            if (chat) chat.lastMessage = message;
+        },
+        setUnread: (state, {payload}: PayloadAction<{ unread: number, chatId: number }>) => {
+            const {unread, chatId} = payload;
+            const chat = state.chats.find(chat => chat.id === chatId);
+            if (chat) chat.unread = unread;
+        },
+        incrementUnread: (state, {payload}: PayloadAction<{ chatId: number }>) => {
+            const {chatId} = payload;
+            const chat = state.chats.find(chat => chat.id === chatId);
+            if (chat) chat.unread = chat.unread + 1;
+        }
     }
 })
 
-export const {setLoading, setChats} = chatSlice.actions;
+export const {setLoading, setChats, setLastMessage, setUnread, incrementUnread} = chatSlice.actions;
 
 export const chatThunk = createAsyncThunk('/chats/get',
     async (user: string, thunkApi) => {
