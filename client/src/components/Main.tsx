@@ -2,13 +2,16 @@ import React, {FC, useEffect, useState} from 'react';
 import MainChat from "./main-chat/MainChat";
 import {useSocket} from "../hooks/socket";
 import {useAppDispatch} from "../redux/store";
-import {chatThunk, selectChats, setChats} from "../redux/chats.reducer";
+import {chatThunk, selectChats, setChats} from "./chat-sidebar/chats.reducer";
 import ChatsContainer from "./chat-sidebar/ChatsContainer";
 import {IChat} from "../types/types";
+import {useSelector} from "react-redux";
+import {selectMainChat} from "./main-chat/main.chat.reducer";
+import MediaSidebar from "./media-sidebar/MediaSidebar";
 
 const Main: FC = () => {
 
-    const [chat, setChat] = useState<IChat | null>(null);
+    const {chatId} = useSelector(selectMainChat);
     const [socket] = useSocket();
     const dispatch = useAppDispatch();
 
@@ -18,19 +21,17 @@ const Main: FC = () => {
 
     return (
         <div className="main">
-            <ChatsContainer chat={chat} setChat={setChat}/>
+            <ChatsContainer/>
             {
-                chat ?
+                chatId ?
                     <MainChat
                         socket={socket}
-                        chat={chat}
-                        setChat={setChat}
                     />
                     : <div className="chat_container main_section">
                         Please select a chat
                     </div>
             }
-            <div className="right main_section">C</div>
+            <MediaSidebar/>
         </div>
     );
 };

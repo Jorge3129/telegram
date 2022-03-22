@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IMessage} from "../types/types";
-import {RootState} from "./rootReducer";
-import api from "../api/api";
+import {IMessage} from "../../types/types";
+import {RootState} from "../../redux/rootReducer";
+import api from "../../api/api";
 
 interface MessageState {
     messages: IMessage[]
@@ -27,11 +27,15 @@ const messageSlice = createSlice({
         },
         addMessage: (state, {payload}: PayloadAction<IMessage>) => {
             state.messages.push(payload);
+        },
+        setSeenMessage: (state, {payload}: PayloadAction<IMessage>) => {
+            const msg = state.messages.find(msg => msg.messageId === payload.messageId);
+            if (msg) msg.seen = true;
         }
     }
 })
 
-export const {setLoading, setMessages, addMessage} = messageSlice.actions;
+export const {setLoading, setMessages, addMessage, setSeenMessage} = messageSlice.actions;
 
 export const messageThunk = createAsyncThunk('/messages/get',
     async (id: number, thunkApi) => {

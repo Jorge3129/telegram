@@ -1,27 +1,27 @@
 import {Dispatch, FC, MouseEvent, SetStateAction, useMemo} from 'react';
 import {useSelector} from "react-redux";
-import {selectChats} from "../../redux/chats.reducer";
+import {selectChats} from "./chats.reducer";
 import {IChat} from "../../types/types";
 import ChatItem from "./ChatItem";
 import './styles/Chats.css'
 import * as _ from 'lodash'
 import {useAppDispatch} from "../../redux/store";
-import {setChatId} from "../../redux/main.chat.reducer";
+import {selectMainChat, setChat, setChatId} from "../main-chat/main.chat.reducer";
 
 interface IChatsContainer {
-    setChat: Dispatch<SetStateAction<IChat | null>>
-    chat: IChat | null
+
 }
 
-const ChatsContainer: FC<IChatsContainer> = ({chat, setChat}) => {
+const ChatsContainer: FC<IChatsContainer> = ({}) => {
 
     const {chats, loading} = useSelector(selectChats);
+    const {chatId,} = useSelector(selectMainChat);
     const dispatch = useAppDispatch()
 
     const handleChat = (e: MouseEvent<HTMLButtonElement>) => {
         const chatId = parseInt(e.currentTarget.id);
         const chatObject = chats.find(ch => ch.id === chatId);
-        if (chatObject) setChat(chatObject);
+        if (chatObject) dispatch(setChat(chatObject))
         dispatch(setChatId(chatId))
     }
 
@@ -39,7 +39,7 @@ const ChatsContainer: FC<IChatsContainer> = ({chat, setChat}) => {
                 className="chat_list_item"
             >
                 <button
-                    className={"chat_item_button " + (chat?.id === ch.id ? ' selected_chat' : '')}
+                    className={"chat_item_button " + (chatId === ch.id ? ' selected_chat' : '')}
                     id={ch.id + ''}
                     onClick={handleChat}
                 >

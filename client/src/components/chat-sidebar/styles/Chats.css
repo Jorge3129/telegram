@@ -147,7 +147,7 @@
     font-weight: 600;
     height: 1.4em;
     padding: 0.2em 0.5em;
-    border-radius: 43%;
+    border-radius: 0.7em;
 }
 
 .chat_unread.muted {

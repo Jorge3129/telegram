@@ -1,12 +1,12 @@
 import {useEffect, useRef} from "react";
 import {useSelector} from "react-redux";
-import {selectMessages} from "../redux/messages.reducer";
+import {selectMessages} from "../components/main-chat/messages.reducer";
 import {IMessage} from "../types/types";
 
 export const useAutoScroll = (unread: number) => {
     const {messages, loading} = useSelector(selectMessages);
 
-    const scrollRef = useRef<HTMLUListElement | null>(null);
+    const scrollRef = useRef<HTMLUListElement>(null);
 
     // jump to the last message the user has seen
     useEffect(() => {
@@ -20,7 +20,8 @@ export const useAutoScroll = (unread: number) => {
     // jump to bottom when new message is added
     useEffect(() => {
         const list = scrollRef.current;
-        if (list) {
+        if (list && messages
+            && messages.slice(-1)[0]?.author === localStorage.getItem('user')) {
             list.scrollTop = list.scrollHeight;
         }
     }, [messages])

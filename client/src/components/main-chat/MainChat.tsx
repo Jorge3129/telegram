@@ -1,4 +1,4 @@
-import React, {FC, useEffect, UIEvent, useRef, Dispatch, SetStateAction} from 'react';
+import React, {FC, useEffect} from 'react';
 import './styles/Chat.css'
 import './styles/Messages.css'
 import MainInput from "./MainInput";
@@ -6,38 +6,38 @@ import Message from "./Message"
 import {useAutoScroll} from "../../hooks/autoScroll";
 import {Socket} from "socket.io-client";
 import {useSelector} from "react-redux";
-import {messageThunk, selectMessages} from "../../redux/messages.reducer";
+import {messageThunk, selectMessages} from "./messages.reducer";
 import {useAppDispatch} from "../../redux/store";
 import {IChat} from "../../types/types";
 import {useDetectScroll} from "../../hooks/detectScroll";
-import {selectMainChat} from "../../redux/main.chat.reducer";
+import {selectMainChat} from "./main.chat.reducer";
 
 interface IMainChat {
-    chat: IChat
-    setChat: Dispatch<SetStateAction<IChat | null>>
     socket: Socket | null
 }
 
-const MainChat: FC<IMainChat> = ({chat, setChat, socket}) => {
+const MainChat: FC<IMainChat> = ({socket}) => {
     const {messages, loading} = useSelector(selectMessages);
-    const {chatId} = useSelector(selectMainChat);
-    const scrollRef = useAutoScroll(chat.unread);
+    const {chatId, mainChat} = useSelector(selectMainChat);
+    const scrollRef = useAutoScroll(mainChat?.unread || 0);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(messageThunk(chat.id));
+        dispatch(messageThunk(chatId || -1));
     }, [chatId]);
 
-    const handleScroll = useDetectScroll(socket, scrollRef, chat, messages)
+    const {onMessagesFirstRendered, handleScroll} = useDetectScroll(socket, scrollRef, messages)
 
     const messageList = loading ? <li key={"loading"}>Loading...</li> :
-        messages.map(msg => (
+        messages.map((msg, i, {length}) => (
             <li
                 className={"message_list_item" + (msg.author === localStorage.getItem('user') ? ' self' : '')}
                 key={msg.timestamp + Math.random()}
                 id={'message-' + msg.messageId}
             >
-                <Message msg={msg}/>
+                <Message msg={msg}
+                         callback={i === length - 1 ? onMessagesFirstRendered : null}
+                />
                 {msg.messageId}
             </li>
         ))
@@ -45,7 +45,7 @@ const MainChat: FC<IMainChat> = ({chat, setChat, socket}) => {
     return (
         <div className="chat_container main_section">
             <div className="chat_top_bar">
-                {chat.title}
+                {mainChat?.title || ''}
             </div>
             <div className="message_list_wrapper">
                 <ul
@@ -59,7 +59,6 @@ const MainChat: FC<IMainChat> = ({chat, setChat, socket}) => {
             {socket ?
                 <MainInput
                     socket={socket}
-                    chat={chat}
                 />
                 : <></>}
         </div>

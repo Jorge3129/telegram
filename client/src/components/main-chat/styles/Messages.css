@@ -51,15 +51,28 @@
     background-color: var(--green-light)
 }
 
+.self .message_info {
+    color: var(--green-deep)
+}
+
 .message_text {
     overflow-wrap: break-word;
     text-align: left;
+    float: left;
 }
 
 .message_info {
     float: right;
-    bottom: 0.5em;
-    right: 0.5em;
     color: var(--blue-gray);
-    font-size: 0.6em;
+    font-size: 0.75em;
+    font-weight: 500;
+    margin: 0.5em 0 0 0.5em;
+}
+
+.message_timestamp {
+    padding-left: 0.5em;
+}
+
+.clearfix {
+    clear: both;
 }

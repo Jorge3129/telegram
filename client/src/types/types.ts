@@ -1,9 +1,12 @@
+import {IEmojiBlock} from "../components/media-sidebar/EmojiBlock";
+
 export interface IMessage {
     text: string;
     timestamp: string;
     author: string;
     chatId: number
     messageId: number;
+    seen?: boolean
 }
 
 export interface IUser {

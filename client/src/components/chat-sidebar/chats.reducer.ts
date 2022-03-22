@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IChat, IMessage} from "../types/types";
-import {RootState} from "./rootReducer";
-import api from "../api/api";
+import {IChat, IMessage} from "../../types/types";
+import {RootState} from "../../redux/rootReducer";
+import api from "../../api/api";
 
 interface ChatState {
     chats: IChat[]

@@ -1,22 +1,27 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {Socket} from 'socket.io-client'
 import message from "./Message";
 import {useAppDispatch} from "../../redux/store";
-import {addMessage, selectMessages} from "../../redux/messages.reducer";
-import {IChat} from '../../types/types';
-import {setLastMessage} from "../../redux/chats.reducer";
+import {addMessage, messageThunk, selectMessages} from "./messages.reducer";
+import {setLastMessage, setUnread} from "../chat-sidebar/chats.reducer";
 import {useSelector} from "react-redux";
+import {selectMainChat, setText} from "./main.chat.reducer";
 
 interface IMainInput {
     socket: Socket;
-    chat: IChat;
 }
 
-const MainInput: FC<IMainInput> = ({socket, chat}) => {
+const MainInput: FC<IMainInput> = ({socket}) => {
 
-    const [text, setText] = useState<string>('');
     const {messages} = useSelector(selectMessages);
+    const {chatId, text} = useSelector(selectMainChat);
     const dispatch = useAppDispatch();
+
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, [text]);
 
     const handleSend = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -25,7 +30,7 @@ const MainInput: FC<IMainInput> = ({socket, chat}) => {
             text,
             timestamp: new Date().toISOString(),
             author: localStorage.getItem('user') || '',
-            chatId: chat.id,
+            chatId: chatId || 0,
             messageId: messages.length
         }
 
@@ -33,26 +38,34 @@ const MainInput: FC<IMainInput> = ({socket, chat}) => {
 
         dispatch(addMessage(message));
         dispatch(setLastMessage({message, chatId: message.chatId}));
-        setText('');
+        dispatch(setText(''))
+        dispatch(setUnread({unread: 0, chatId: message.chatId}))
     }
 
     return (
         <div className="chat_input_container">
             <form className="chat_input_form">
+                <i className="fa-solid fa-paperclip add_media input_icon"/>
                 <input
                     type="text"
-                    className="chat_input_text"
-                    placeholder="Enter message ..."
+                    className="chat_input"
+                    placeholder=" Write a message..."
                     value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    ref={inputRef}
+                    onChange={(e) => dispatch(setText(e.target.value))}
                 />
-                {text && <button
-                    type="submit"
-                    className="chat_send_button"
-                    onClick={handleSend}
-                >
-                    Send
-                </button>}
+                {(text && <button
+                        type="submit"
+                        className="chat_send_button"
+                        onClick={handleSend}
+                    >
+                        <i className="fa-solid fa-paper-plane"/>
+                    </button>) ||
+                    <div style={{display: 'flex', flexDirection: 'row', width: '3em', justifyContent: 'space-between'}}>
+                        <i className="fa-solid fa-microphone input_icon"/>
+                        <i className="fa-solid fa-face-smile input_icon"/>
+                    </div>
+                }
             </form>
         </div>
     );

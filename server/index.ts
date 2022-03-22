@@ -1,16 +1,14 @@
-import {getSocketId, users} from "./db/users";
-
+import {getSocketId, users} from "./db/users"
 const express = require('express')
-import {Request, Response} from 'express'
 import {Server} from 'socket.io'
 import {IUser} from "./types/types";
 import {chats, getChats, updateLastRead} from "./db/chats";
 import {getMessages, messages} from "./db/messages";
-
 const cors = require('cors')
 const authRouter = require('./routes/auth.router')
 const PORT = process.env.PORT || 4000;
 const app = express();
+const router = require('./routes/router')
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -27,21 +25,8 @@ const io = new Server(server, {
 });
 
 app.use('/auth', authRouter)
+app.use('/', router)
 
-app.get('/', (req: Request, res: Response) => {
-    res.send({foo: 'bar'})
-})
-
-app.get('/messages/:chatId', (req: Request, res: Response) => {
-    const chatId = parseInt(req.params.chatId);
-    const messages = getMessages(chatId)
-    res.json(messages)
-})
-
-app.get('/chats/:user', (req: Request, res: Response) => {
-    const chats = getChats(req.params.user);
-    res.json(chats)
-})
 
 const findContacts = (user: IUser) => {
     return chats.filter(ch => ch.members.find(u => u.username === user.username))
@@ -60,7 +45,7 @@ io.on('connection', (socket) => {
         user.online = true;
         user.socketId = socket.id;
         findContacts(user).forEach(({username, chatId}) => {
-            const socketId = getSocketId(username|| '')
+            const socketId = getSocketId(username || '')
             //console.log(socketId)
             socket.to(socketId)
                 .emit('online-change', {online: true, chatId})
@@ -84,6 +69,9 @@ io.on('connection', (socket) => {
     socket.on('read', (data) => {
         const {message, username} = data;
         updateLastRead(message.chatId, username, message.timestamp)
+        const socketId = getSocketId(message.author)
+        socket.to(socketId)
+            .emit('seen', message, username)
     })
 
     socket.on('disconnect', (reason) => {
@@ -92,7 +80,6 @@ io.on('connection', (socket) => {
             user.socketId = undefined;
             findContacts(user).forEach(({username, chatId}) => {
                 const socketId = getSocketId(username || '')
-                //console.log(socketId)
                 socket.to(socketId)
                     .emit('online-change', {online: false, chatId})
             })

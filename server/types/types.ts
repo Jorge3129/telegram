@@ -12,6 +12,7 @@ export interface IMessage {
     author: string;
     chatId: number;
     messageId: number;
+    seen?: boolean
 }
 
 export interface IChat {
