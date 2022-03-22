@@ -16,11 +16,12 @@ export interface IMessage {
 
 export interface IChat {
     id: number
-    members: { username: string, lastRead: string, muted: boolean}[],
+    members: { username: string, lastRead: string, muted: boolean }[],
+    type: 'personal' | 'group'
 }
 
 /**
- * User info stored in a chat
+ * User info stored in a main-chat
  */
 export interface IChatUser {
     username: string;
@@ -33,4 +34,6 @@ export interface IClientChat {
     title: string;
     lastMessage: IMessage;
     muted: boolean
+    type: 'personal' | 'group'
+    online?: boolean
 }

@@ -14,10 +14,6 @@ class Api {
     async login(login: IUser) {
         return await axios.post(SERVER_URL + '/auth/login', login);
     }
-
-    async updateLastRead(chatId: number, user: string, lastRead: string) {
-        return await axios.patch(SERVER_URL + `/lastRead${chatId}/${user}`, {lastRead})
-    }
 }
 
 export default new Api()

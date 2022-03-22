@@ -10,6 +10,7 @@ import {messageThunk, selectMessages} from "../../redux/messages.reducer";
 import {useAppDispatch} from "../../redux/store";
 import {IChat} from "../../types/types";
 import {useDetectScroll} from "../../hooks/detectScroll";
+import {selectMainChat} from "../../redux/main.chat.reducer";
 
 interface IMainChat {
     chat: IChat
@@ -19,17 +20,15 @@ interface IMainChat {
 
 const MainChat: FC<IMainChat> = ({chat, setChat, socket}) => {
     const {messages, loading} = useSelector(selectMessages);
+    const {chatId} = useSelector(selectMainChat);
     const scrollRef = useAutoScroll(chat.unread);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(messageThunk(chat.id));
-    }, [chat]);
+    }, [chatId]);
 
-    const ref = useRef<number[]>([]);
-    const topRef = useRef<number>(scrollRef.current?.scrollTop || 0);
-
-    const handleScroll = useDetectScroll(topRef, scrollRef, ref, chat, messages)
+    const handleScroll = useDetectScroll(socket, scrollRef, chat, messages)
 
     const messageList = loading ? <li key={"loading"}>Loading...</li> :
         messages.map(msg => (

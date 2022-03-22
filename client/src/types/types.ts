@@ -15,6 +15,8 @@ export interface IChat {
     id: number
     unread: number;
     title: string;
-    lastMessage: IMessage;
+    lastMessage?: IMessage;
     muted: boolean;
+    type: 'personal' | 'group'
+    online?: boolean
 }

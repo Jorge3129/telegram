@@ -17,6 +17,7 @@ const mainChatSlice = createSlice({
     initialState,
     reducers: {
         setChatId: (state, {payload}: PayloadAction<number>) => {
+            //console.log(payload)
             state.chatId = payload;
         }
     }

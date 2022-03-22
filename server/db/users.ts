@@ -32,3 +32,9 @@ export const users: IUser[] = [
         online: false
     },
 ];
+
+export const getSocketId = (username: string) => {
+    const userReceiver = users.find(u =>
+        u.username === username);
+    return userReceiver?.socketId || '';
+}

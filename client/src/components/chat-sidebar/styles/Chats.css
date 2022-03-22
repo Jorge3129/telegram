@@ -40,6 +40,8 @@
     flex-direction: row;
 }
 
+
+/* AVATAR */
 .chat_avatar_wrapper {
     height: 100%;
     display: flex;
@@ -56,6 +58,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+.online::before {
+    --width: 0.6em;
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: var(--green);
+    width: var(--width);
+    height: var(--width);
+    border-radius: 50%;
+    border: 0.2em solid var(--white);
+}
+
+.chat_item_button:hover .online::before {
+    border: 0.2em solid var(--gray-super-light);
 }
 
 .chat_avatar_text {
@@ -136,6 +156,11 @@
 
 .chat_item_button.selected_chat {
     background-color: var(--blue);
+}
+
+.chat_item_button.selected_chat .online::before {
+    background-color: var(--white);
+    border: 0.2em solid var(--blue);
 }
 
 .selected_chat .grey_text,

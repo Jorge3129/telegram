@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import MainChat from "./chat/MainChat";
+import MainChat from "./main-chat/MainChat";
 import {useSocket} from "../hooks/socket";
 import {useAppDispatch} from "../redux/store";
 import {chatThunk, selectChats, setChats} from "../redux/chats.reducer";

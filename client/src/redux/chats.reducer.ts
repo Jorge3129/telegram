@@ -39,11 +39,16 @@ const chatSlice = createSlice({
             const {chatId} = payload;
             const chat = state.chats.find(chat => chat.id === chatId);
             if (chat) chat.unread = chat.unread + 1;
+        },
+        setOnline: (state, {payload}: PayloadAction<{ online: boolean, chatId: number }>) => {
+            const {online, chatId} = payload;
+            const chat = state.chats.find(chat => chat.id === chatId);
+            if (chat) chat.online = online;
         }
     }
 })
 
-export const {setLoading, setChats, setLastMessage, setUnread, incrementUnread} = chatSlice.actions;
+export const {setLoading, setChats, setLastMessage, setUnread, incrementUnread, setOnline} = chatSlice.actions;
 
 export const chatThunk = createAsyncThunk('/chats/get',
     async (user: string, thunkApi) => {

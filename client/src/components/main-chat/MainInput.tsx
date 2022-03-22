@@ -29,14 +29,10 @@ const MainInput: FC<IMainInput> = ({socket, chat}) => {
             messageId: messages.length
         }
 
-        socket.emit('message',
-            {
-                message: message,
-                receiver: localStorage.getItem('user') === 'a' ? 'b' : 'a'
-            })
+        socket.emit('message', {message})
 
         dispatch(addMessage(message));
-        dispatch(setLastMessage({message, chatId: chat.id || -1}));
+        dispatch(setLastMessage({message, chatId: message.chatId}));
         setText('');
     }
 

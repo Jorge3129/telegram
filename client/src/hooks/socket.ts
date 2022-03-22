@@ -3,8 +3,8 @@ import {io, Socket} from "socket.io-client";
 import {addMessage} from "../redux/messages.reducer";
 import {useAppDispatch} from "../redux/store";
 import {SERVER_WS_URL} from "../config";
-import {IMessage} from "../types/types";
-import {incrementUnread, setLastMessage, setUnread} from "../redux/chats.reducer";
+import {IChat, IMessage} from "../types/types";
+import {incrementUnread, setLastMessage, setOnline, setUnread} from "../redux/chats.reducer";
 import {useSelector} from "react-redux";
 import {selectMainChat} from "../redux/main.chat.reducer";
 
@@ -13,28 +13,37 @@ export const useSocket = () => {
     const dispatch = useAppDispatch();
     const {chatId} = useSelector(selectMainChat);
 
+    const onMessage = (data: IMessage) => {
+        console.log('LOOL')
+        console.log(chatId)
+        if (chatId === data.chatId) {
+            dispatch(addMessage(data))
+        }
+        dispatch(setLastMessage({message: data, chatId: data.chatId}))
+        dispatch(incrementUnread({chatId: data.chatId}))
+    }
+
     useEffect(() => {
         const newSocket = io(`${SERVER_WS_URL}`, {
-            query: {
-                username: localStorage.getItem('user')
-            }
+            query: {username: localStorage.getItem('user')}
         });
-
-        newSocket.on('message-to-client', (data: IMessage) => {
-            //console.log(data)
-            dispatch(addMessage(data))
-            //console.log(chatId)
-            if (chatId) {
-                dispatch(setLastMessage({message: data, chatId}))
-                dispatch(incrementUnread({chatId}))
-            }
+        newSocket.on('message-to-client', onMessage)
+        newSocket.on('online-change', ({online, chatId}) => {
+            console.log(online, chatId)
+            dispatch(setOnline({online, chatId}));
         })
-
         setSocket(newSocket);
         return () => {
             newSocket.close()
         };
     }, [])
+
+    useEffect(() => {
+        console.log('HI!')
+        if (!socket) return;
+        socket.off('message-to-client')
+        socket.on('message-to-client', onMessage)
+    }, [chatId]);
 
     return [socket, setSocket] as
         [Socket | null, Dispatch<SetStateAction<Socket | null>>];

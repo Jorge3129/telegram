@@ -27,7 +27,8 @@ const ChatsContainer: FC<IChatsContainer> = ({chat, setChat}) => {
 
     const sortedChats = useMemo(() => {
         return _.sortBy(chats, (ch: IChat) =>
-            new Date(ch.lastMessage.timestamp))
+            ch.lastMessage ?
+                new Date(ch.lastMessage.timestamp) : new Date())
             .reverse();
     }, [chats]);
 

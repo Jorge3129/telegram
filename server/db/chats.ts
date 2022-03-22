@@ -1,47 +1,13 @@
 import {IChat, IClientChat} from "../types/types";
 import {getMessages} from "./messages";
+import {chats as chatsTemp} from "./chatsTemp";
+import {users} from "./users";
 
 const dayjs = require('dayjs')
 
-export const chats: IChat[] = [
-    {
-        id: 1,
-        members: [
-            {username: 'a', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
-            {username: 'b', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
-        ],
-    },
-    {
-        id: 2,
-        members: [
-            {username: 'a', lastRead: '2022-03-20T13:16:35+02:00', muted: true},
-            {username: 'c', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
-        ],
-    },
-    {
-        id: 3,
-        members: [
-            {username: 'b', lastRead: '2022-03-15T09:16:35+02:00', muted: true},
-            {username: 'c', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
-        ],
-    },
-    {
-        id: 4,
-        members: [
-            {username: 'a', lastRead: '2022-03-18T08:16:35+02:00', muted: true},
-            {username: 'Jim Morrison', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
-        ],
-    },
-    {
-        id: 5,
-        members: [
-            {username: 'a', lastRead: '2022-03-20T07:16:35+02:00', muted: true},
-            {username: 'Paul McCartney', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
-        ],
-    },
-]
+export const chats: IChat[] = chatsTemp
 
-const mapChatToClient = ({id, members}: IChat, username: string): IClientChat => {
+const mapChatToClient = ({id, members, type}: IChat, username: string): IClientChat => {
 
     let unreadCount = 0;
     const user = members.find(u => u.username === username);
@@ -55,19 +21,22 @@ const mapChatToClient = ({id, members}: IChat, username: string): IClientChat =>
                 const msg = dayjs(m.timestamp)
                 const last = dayjs(lastRead);
                 const diff = msg.diff(last, 'minute');
-                return diff >= 0;
+                return diff > 0;
             })
             .length;
     }
 
-    console.log('Unread: ' + unreadCount)
+    //console.log('Unread: ' + unreadCount)
+    const receiverName = members.find(u => u.username !== username)?.username || '';
 
     return {
         id,
-        title: members.find(u => u.username !== username)?.username || '',
+        title: receiverName,
         lastMessage: messages.slice(-1)[0],
         unread: unreadCount,
-        muted: !!user?.muted
+        muted: !!user?.muted,
+        type,
+        online: users.find(u => u.username === receiverName)?.online
     }
 }
 
@@ -77,4 +46,12 @@ export const getChats = (username: string): IClientChat[] => {
         .filter(c => !!c.members
             .find(u => u.username === username))
         .map((ch) => mapChatToClient(ch, username))
+}
+
+export const updateLastRead = (chatId: number, user: string, lastRead: string) => {
+    const chat = chats.find(ch => ch.id === chatId)
+    if (!chat) return {success: false}
+    const searchedUser = chat.members.find(u => u.username === user)
+    if (searchedUser) searchedUser.lastRead = lastRead;
+    return {success: true}
 }
