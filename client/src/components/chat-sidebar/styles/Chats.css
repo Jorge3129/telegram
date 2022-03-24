@@ -150,6 +150,10 @@
     border-radius: 0.7em;
 }
 
+.chat_seen_icon {
+    color: var(--green-deep);
+}
+
 .chat_unread.muted {
     background-color: var(--gray);
 }
@@ -171,6 +175,10 @@
 .selected_chat .chat_unread {
     color: var(--blue);
     background-color: var(--white);
+}
+
+.selected_chat .chat_seen_icon {
+    color: var(--white);
 }
 
 .selected_chat .chat_unread.muted {

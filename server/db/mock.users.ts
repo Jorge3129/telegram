@@ -33,7 +33,7 @@ export const users: IUser[] = [
     },
 ];
 
-export const getSocketId = (username: string) => {
+export const getUserSocketId = (username: string) => {
     const userReceiver = users.find(u =>
         u.username === username);
     return userReceiver?.socketId || '';

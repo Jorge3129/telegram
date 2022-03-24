@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-import {IMessage} from "../../../types/types";
+import {IMessage} from "../../types/types";
+import React from "react";
 
 export const initials = (title: string) => {
     const tokens = title.split(' ');
@@ -23,4 +24,12 @@ export const formatLastMessage = (message: IMessage | undefined): string => {
     const {author} = message;
     const user = localStorage.getItem('user') || '';
     return (author === user ? 'You: ' : '') + message.text;
+}
+
+export const getSeenIcon = (lastMessage: IMessage | undefined) => {
+    //console.log(lastMessage)
+    if (!lastMessage || lastMessage.author !== localStorage.getItem('user')) return '';
+    return lastMessage.seen ?
+        <i className="fa-solid fa-check-double chat_seen_icon"/>
+        : <i className="fa-solid fa-check chat_seen_icon"/>;
 }

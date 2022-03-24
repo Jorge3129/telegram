@@ -8,7 +8,6 @@ import {Socket} from "socket.io-client";
 import {useSelector} from "react-redux";
 import {messageThunk, selectMessages} from "./messages.reducer";
 import {useAppDispatch} from "../../redux/store";
-import {IChat} from "../../types/types";
 import {useDetectScroll} from "../../hooks/detectScroll";
 import {selectMainChat} from "./main.chat.reducer";
 
@@ -39,6 +38,7 @@ const MainChat: FC<IMainChat> = ({socket}) => {
                          callback={i === length - 1 ? onMessagesFirstRendered : null}
                 />
                 {msg.messageId}
+                {msg.author.split('')[0]}
             </li>
         ))
 

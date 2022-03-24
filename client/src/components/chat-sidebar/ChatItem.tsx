@@ -2,7 +2,7 @@ import {FC} from "react";
 import {IChat, IMessage} from "../../types/types";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween"
-import {formatLastMessage, formatTimestamp, initials} from "./utils/chats.utils";
+import {formatLastMessage, formatTimestamp, getSeenIcon, initials} from "./chats.utils";
 
 dayjs.extend(isBetween)
 
@@ -32,6 +32,9 @@ const ChatItem: FC<IChatItem> = ({chat}) => {
             </li>
             <li className="chat_timestamp_container grey_text info_container">
                 <div className="chat_timestamp">
+                    <span style={{paddingRight: '0.3em'}}>{
+                        getSeenIcon(lastMessage)
+                    }</span>
                     {formatTimestamp(lastMessage?.timestamp)}
                 </div>
             </li>

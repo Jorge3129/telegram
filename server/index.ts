@@ -1,9 +1,9 @@
-import {getSocketId, users} from "./db/users"
+import {ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData} from "./socket/socket.types";
+
 const express = require('express')
 import {Server} from 'socket.io'
-import {IUser} from "./types/types";
-import {chats, getChats, updateLastRead} from "./db/chats";
-import {getMessages, messages} from "./db/messages";
+import {onConnect} from "./socket/listeners/onConnect";
+
 const cors = require('cors')
 const authRouter = require('./routes/auth.router')
 const PORT = process.env.PORT || 4000;
@@ -17,7 +17,7 @@ app.use(cors({
 app.use(express.json())
 
 const server = require('http').createServer(app);
-const io = new Server(server, {
+const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(server, {
     cors: {
         origin: "http://localhost:3000",
         methods: ["GET", "POST"]
@@ -27,66 +27,6 @@ const io = new Server(server, {
 app.use('/auth', authRouter)
 app.use('/', router)
 
-
-const findContacts = (user: IUser) => {
-    return chats.filter(ch => ch.members.find(u => u.username === user.username))
-        .map(ch => ({
-            username: ch.members.find(u => u.username !== user.username)?.username,
-            chatId: ch.id
-        }))
-}
-
-io.on('connection', (socket) => {
-    console.log('CONNECTED ' + socket.handshake.query.username)
-
-    const user: IUser | undefined = users.find(u =>
-        u.username === socket.handshake.query.username);
-    if (user) {
-        user.online = true;
-        user.socketId = socket.id;
-        findContacts(user).forEach(({username, chatId}) => {
-            const socketId = getSocketId(username || '')
-            //console.log(socketId)
-            socket.to(socketId)
-                .emit('online-change', {online: true, chatId})
-        })
-    }
-
-    socket.on('message', (data) => {
-        const {message} = data;
-        messages.push(message);
-        updateLastRead(message.chatId, user?.username || '', message.timestamp);
-        const chat = chats.find(ch => ch.id === message.chatId);
-        if (!chat) return;
-        chat.members.forEach((member) => {
-            const socketId = getSocketId(member.username)
-            //console.log(socketId)
-            socket.to(socketId)
-                .emit('message-to-client', message)
-        })
-    })
-
-    socket.on('read', (data) => {
-        const {message, username} = data;
-        updateLastRead(message.chatId, username, message.timestamp)
-        const socketId = getSocketId(message.author)
-        socket.to(socketId)
-            .emit('seen', message, username)
-    })
-
-    socket.on('disconnect', (reason) => {
-        if (user) {
-            user.online = false;
-            user.socketId = undefined;
-            findContacts(user).forEach(({username, chatId}) => {
-                const socketId = getSocketId(username || '')
-                socket.to(socketId)
-                    .emit('online-change', {online: false, chatId})
-            })
-        }
-        //console.log(users)
-    });
-
-})
+io.on('connection', onConnect)
 
 server.listen(PORT, () => console.log(`Server on http://localhost:${PORT}`))

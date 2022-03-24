@@ -1,6 +1,7 @@
-import {IUser} from "./types/types";
-import {users} from "./db/users";
+import {users} from "../../db/mock.users";
 import ErrnoException = NodeJS.ErrnoException;
+import {chats} from "../../db/chats";
+import {IChat} from "../../types/types";
 
 const fs = require('fs')
 
@@ -38,7 +39,7 @@ const genStringChats = (): string => {
         '\n]';
 }
 
-fs.writeFile('./db/chatsTemp.ts', genStringChats(), (err: ErrnoException | null) => {
+fs.writeFile('./mock.chats.ts', genStringChats(), (err: ErrnoException | null) => {
     if (err)
         console.log(err);
     else {

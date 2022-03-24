@@ -1,4 +1,5 @@
 import {IMessage} from "../types/types";
+import {chats} from "./chatsTemp";
 
 const dayjs = require('dayjs')
 
@@ -14,22 +15,27 @@ const texts = ['hi', 'hey', 'yo', 'whosap',
     'open-source front-end JavaScript library[3] for ' +
     'building user interfaces based on UI components.']
 
+const generateAuthor = (chatId: number) => {
+    const chat = chats.find(ch => ch.id === chatId);
+    return chat ? chat.members[Math.random() > 0.5 ? 1 : 0]?.username : ''
+}
+
 export const generateMsgs = (chatId: number): IMessage[] => new Array(Math.floor(Math.random() * 20) + 50)
     .fill({})
     .map((o, i, {length}): IMessage =>
         ({
             text: texts[Math.floor(Math.random() * 7) % 7],
             timestamp: dayjs().subtract((length - i) * 30 + (chatNum - chatId) * 2000, 'minute').format(),
-            author: Math.random() > 0.5 ? 'a' : 'b',
+            author: generateAuthor(chatId),
             chatId: chatId,
             messageId: i
         }))
 
-export const messages: IMessage[] = new Array(chatNum)
+export const messagesGen: IMessage[] = new Array(chatNum)
     .fill(0)
     .reduce((arr, _, i) => arr.concat(generateMsgs(i + 1)), [])
 
-export const getMessages = (chatId: number): IMessage[] => {
+export const getMessagesByChat = (chatId: number, messages: IMessage[]): IMessage[] => {
     return messages
         .filter(m => m.chatId === chatId)
         .sort((a, b) => (

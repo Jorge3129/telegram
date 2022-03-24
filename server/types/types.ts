@@ -17,7 +17,7 @@ export interface IMessage {
 
 export interface IChat {
     id: number
-    members: { username: string, lastRead: string, muted: boolean }[],
+    members: IChatUser[],
     type: 'personal' | 'group'
 }
 
@@ -25,8 +25,9 @@ export interface IChat {
  * User info stored in a main-chat
  */
 export interface IChatUser {
-    username: string;
-    lastMessage: string;
+    username: string,
+    lastRead: string,
+    muted: boolean
 }
 
 export interface IClientChat {
