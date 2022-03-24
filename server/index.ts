@@ -2,7 +2,7 @@ import {ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketDat
 
 const express = require('express')
 import {Server} from 'socket.io'
-import {onConnect} from "./socket/listeners/onConnect";
+import {onConnect} from "./socket/onConnect";
 
 const cors = require('cors')
 const authRouter = require('./routes/auth.router')

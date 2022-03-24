@@ -1,6 +1,6 @@
 import {IUser} from "../types/types";
 
-export const users: IUser[] = [
+export const mockUsers: IUser[] = [
     {
         id: 1,
         username: 'a',
@@ -32,9 +32,3 @@ export const users: IUser[] = [
         online: false
     },
 ];
-
-export const getUserSocketId = (username: string) => {
-    const userReceiver = users.find(u =>
-        u.username === username);
-    return userReceiver?.socketId || '';
-}

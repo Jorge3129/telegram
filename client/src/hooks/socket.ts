@@ -21,7 +21,7 @@ export const useSocket = () => {
         dispatch(incrementUnread({chatId: data.chatId}))
     }
 
-    const onSeen = (message: IMessage, username: string) => {
+    const onSeen = ({message, username}: { message: IMessage, username: string }) => {
         console.log(chatId)
         if (chatId === message.chatId) {
             dispatch(setSeenMessage(message))

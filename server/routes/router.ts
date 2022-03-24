@@ -1,13 +1,15 @@
 import {Request, Response, Router} from "express";
-import {getMessagesByChat,} from "../db/messagesGen";
-import {getChats, messages as messagesDb} from "../db/chats";
+import {Message, Chat} from "../db/db.functions";
+
+const {getMessagesByChat} = Message;
+const {getChats} = Chat;
 
 const express = require('express')
 const router: Router = express.Router();
 
 router.get('/messages/:chatId', (req: Request, res: Response) => {
     const chatId = parseInt(req.params.chatId);
-    const messages = getMessagesByChat(chatId, messagesDb)
+    const messages = getMessagesByChat(chatId)
     res.json(messages)
 })
 

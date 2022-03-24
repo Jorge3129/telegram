@@ -1,5 +1,5 @@
 import {MutableRefObject, UIEvent, useEffect, useRef} from "react";
-import {getVisibleHeight} from "./scrollUtils";
+import {calculateUnread, getVisibleHeight} from "./scrollUtils";
 import {selectChats, setUnread} from "../components/chat-sidebar/chats.reducer";
 import {useSelector} from "react-redux";
 import {IChat, IMessage} from "../types/types";
@@ -14,36 +14,47 @@ export const useDetectScroll = (
 ) => {
 
     const {chats, loading} = useSelector(selectChats);
-    const {chatId} = useSelector(selectMainChat);
+    const {chatId, mainChat} = useSelector(selectMainChat);
     const dispatch = useAppDispatch();
     const readRef = useRef<number[]>([]);
     const topRef = useRef<number>(scrollRef.current?.scrollTop || 0);
 
-    const getLastVisibleMessage = () => {
+    const getVisibleMessages = () => {
         const divs = Array.from(document.querySelectorAll('.message_list_item'));
 
-        const visible = divs.filter((el, i) => {
-            const seen = getVisibleHeight(el, scrollRef.current);
-            return seen > 0 && seen === el.clientHeight;
-        }).map(el => parseInt(el.id.split('-')[1]))
+        const visible = divs
+            .filter((el, i) => {
+                const seen = getVisibleHeight(el, scrollRef.current);
+                return seen > 0 && seen === el.clientHeight;
+            })
+            .map(el => parseInt(el.id.split('-')[1]))
 
-        return [...visible].pop();
+        return visible;
     }
 
+    const getLastVisibleMessage = () => [...getVisibleMessages()].pop();
+
     const emitReadEvent = (searchedId: number) => {
-        const msgRead = messages.find(msg => msg.messageId === searchedId)
+        const msgRead = messages.find(msg => msg.messageId === searchedId);
         if (msgRead) {
             const ind = messages.indexOf(msgRead);
             dispatch(setUnread({unread: messages.slice(ind + 1).length, chatId: chatId || -1}))
+        // if (!msgRead || !mainChat) return;
+        // const unread = calculateUnread(msgRead, messages);
+        // if (mainChat.unread > unread) {
+        //     dispatch(setUnread({unread: calculateUnread(msgRead, messages), chatId: chatId || -1}))
             if (!socket) return;
             socket.emit('read', {message: msgRead, username: localStorage.getItem('user')})
         }
     }
 
     const onMessagesFirstRendered = () => {
+        // const visible = getVisibleMessages();
+        // visible.forEach(msg => emitReadEvent(msg));
         const last = getLastVisibleMessage();
         //console.log('last: ' + last)
         if (last || last === 0) emitReadEvent(last);
+
     }
 
     const handleScroll = (e: UIEvent<HTMLUListElement>) => {

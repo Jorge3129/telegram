@@ -1,3 +1,6 @@
+import {IMessage} from "../types/types";
+
+
 export const getVisibleHeight = (element: Element, container: HTMLElement | null): number => {
     if (!container) return -1;
     let scrollTop = container.scrollTop;
@@ -16,4 +19,10 @@ export const getVisibleHeight = (element: Element, container: HTMLElement | null
     let visibleBot = eleBot > scrollBot ? scrollBot : eleBot;
 
     return visibleBot - visibleTop;
+}
+
+
+export const calculateUnread = (message: IMessage, messages: IMessage[]) => {
+    const index = messages.indexOf(message);
+    return messages.slice(index + 1).length;
 }

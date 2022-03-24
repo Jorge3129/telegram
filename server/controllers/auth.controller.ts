@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {users} from "../db/mock.users";
+import {users} from "../db/db.functions";
 import {IUser} from "../types/types";
 
 class AuthController {
