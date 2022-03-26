@@ -7,6 +7,8 @@ export interface IMessage {
     chatId: number
     messageId: number;
     seen?: boolean
+    seenBy?: string[]
+    src?: string
 }
 
 export interface IUser {
@@ -23,3 +25,5 @@ export interface IChat {
     type: 'personal' | 'group'
     online?: boolean
 }
+
+export type IContextMenu = { x: number, y: number, messageId: number } | null;

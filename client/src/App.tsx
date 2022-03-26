@@ -1,5 +1,6 @@
 import React, {FC, useState} from 'react';
 import './App.css';
+import './components/reuse/Avatar.css'
 import Main from "./components/Main";
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import Login from "./components/auth/Login";

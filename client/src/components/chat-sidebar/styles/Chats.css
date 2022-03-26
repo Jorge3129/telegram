@@ -61,6 +61,12 @@
     position: relative;
 }
 
+.chat_avatar_text {
+    color: var(--white);
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
 .online::before {
     --width: 0.6em;
     content: "";
@@ -76,12 +82,6 @@
 
 .chat_item_button:hover .online::before {
     border: 0.2em solid var(--gray-super-light);
-}
-
-.chat_avatar_text {
-    color: var(--white);
-    font-weight: 600;
-    font-size: 1.2em;
 }
 
 .chat_body {
@@ -117,6 +117,10 @@
 .chat_last_message {
     padding-top: 0.12em;
     padding-right: 0.1em;
+}
+
+.chat_last_message_author {
+    color: var(--blue);
 }
 
 .grey_text {
@@ -165,6 +169,10 @@
 .chat_item_button.selected_chat .online::before {
     background-color: var(--white);
     border: 0.2em solid var(--blue);
+}
+
+.chat_item_button.selected_chat .chat_last_message_author {
+    color: var(--white);
 }
 
 .selected_chat .grey_text,

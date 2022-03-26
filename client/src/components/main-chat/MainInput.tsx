@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, MouseEvent} from 'react';
 import {Socket} from 'socket.io-client'
 import message from "./Message";
 import {useAppDispatch} from "../../redux/store";
@@ -6,6 +6,8 @@ import {addMessage, messageThunk, selectMessages} from "./messages.reducer";
 import {setLastMessage, setUnread} from "../chat-sidebar/chats.reducer";
 import {useSelector} from "react-redux";
 import {selectMainChat, setText} from "./main.chat.reducer";
+import FileInput from "./FileInput";
+import {useSend} from "./hooks/useSend";
 
 interface IMainInput {
     socket: Socket;
@@ -14,7 +16,7 @@ interface IMainInput {
 const MainInput: FC<IMainInput> = ({socket}) => {
 
     const {messages} = useSelector(selectMessages);
-    const {chatId, text} = useSelector(selectMainChat);
+    const {text} = useSelector(selectMainChat);
     const dispatch = useAppDispatch();
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -23,29 +25,17 @@ const MainInput: FC<IMainInput> = ({socket}) => {
         inputRef.current?.focus();
     }, [text]);
 
-    const handleSend = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
+    const sendMessage = useSend(socket)
 
-        const message = {
-            text,
-            timestamp: new Date().toISOString(),
-            author: localStorage.getItem('user') || '',
-            chatId: chatId || 0,
-            messageId: messages.length
-        }
-
-        socket.emit('message', {message})
-
-        dispatch(addMessage(message));
-        dispatch(setLastMessage({message, chatId: message.chatId}));
-        dispatch(setText(''))
-        dispatch(setUnread({unread: 0, chatId: message.chatId}))
+    const handleSubmit = (e: MouseEvent<HTMLElement>) => {
+        e.preventDefault()
+        sendMessage()
     }
 
     return (
         <div className="chat_input_container">
             <form className="chat_input_form">
-                <i className="fa-solid fa-paperclip add_media input_icon"/>
+                <FileInput socket={socket}/>
                 <input
                     type="text"
                     className="chat_input"
@@ -57,7 +47,7 @@ const MainInput: FC<IMainInput> = ({socket}) => {
                 {(text && <button
                         type="submit"
                         className="chat_send_button"
-                        onClick={handleSend}
+                        onClick={handleSubmit}
                     >
                         <i className="fa-solid fa-paper-plane"/>
                     </button>) ||

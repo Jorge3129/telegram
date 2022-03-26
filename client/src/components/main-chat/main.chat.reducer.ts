@@ -6,16 +6,18 @@ interface MainChatState {
     chatId: number | null,
     mainChat: IChat | null,
     text: string;
+    src: string;
 }
 
 const initialState: MainChatState = {
     chatId: null,
     mainChat: null,
     text: '',
+    src: '',
 }
 
 const mainChatSlice = createSlice({
-    name: 'messages',
+    name: 'mainChat',
     initialState,
     reducers: {
         setChatId: (state, {payload}: PayloadAction<number>) => {
@@ -30,11 +32,15 @@ const mainChatSlice = createSlice({
         },
         addText: (state, {payload}: PayloadAction<string>) => {
             state.text += payload;
-        }
+        },
+        setSrc: (state, {payload}: PayloadAction<string>) => {
+            console.log('src: ' + payload)
+            state.src = payload;
+        },
     }
 })
 
-export const {setChatId, setChat, setText, addText} = mainChatSlice.actions;
+export const {setChatId, setChat, setText, addText, setSrc} = mainChatSlice.actions;
 
 export const selectMainChat = (state: RootState) => state.mainChat
 

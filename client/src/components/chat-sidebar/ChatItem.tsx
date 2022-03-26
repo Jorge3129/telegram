@@ -1,8 +1,9 @@
-import {FC} from "react";
+import React, {FC} from "react";
 import {IChat, IMessage} from "../../types/types";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween"
-import {formatLastMessage, formatTimestamp, getSeenIcon, initials} from "./chats.utils";
+import {formatChatAuthor, formatTimestamp, getSeenIcon, initials} from "./chats.utils";
+import Avatar from "../reuse/Avatar";
 
 dayjs.extend(isBetween)
 
@@ -12,16 +13,7 @@ interface IChatItem {
 
 const ChatItem: FC<IChatItem> = ({chat}) => {
 
-    const {lastMessage, title, unread, muted} = chat;
-
-    const avatar =
-        <li className="chat_avatar_wrapper">
-            <div className={"chat_avatar" + (chat.online ? ' online' : '')}>
-                <div className="chat_avatar_text">
-                    {initials(title)}
-                </div>
-            </div>
-        </li>
+    const {lastMessage, title, unread, muted, type} = chat;
 
     const upperSection =
         <ul className="chat_body_upper">
@@ -44,7 +36,8 @@ const ChatItem: FC<IChatItem> = ({chat}) => {
         <ul className="chat_body_lower">
             <div className="chat_last_message_container grey_text hide_overflow">
                 <div className="chat_last_message text_ellipsis">
-                    {formatLastMessage(lastMessage)}
+                    <span className="chat_last_message_author">{formatChatAuthor(lastMessage, type)}</span>
+                    <span className="chat_last_message_text">{lastMessage?.text}</span>
                 </div>
             </div>
             <div className="chat_unread_container info_container"
@@ -58,7 +51,7 @@ const ChatItem: FC<IChatItem> = ({chat}) => {
 
     return (
         <ul className="chat_item">
-            {avatar}
+            <Avatar chat={chat} title={title} prefix="chat"/>
             <li className="chat_body">
                 {upperSection}
                 {lowerSection}

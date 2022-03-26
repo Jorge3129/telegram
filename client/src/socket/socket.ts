@@ -4,7 +4,12 @@ import {addMessage, setSeenMessage} from "../components/main-chat/messages.reduc
 import {useAppDispatch} from "../redux/store";
 import {SERVER_WS_URL} from "../config";
 import {IChat, IMessage} from "../types/types";
-import {incrementUnread, setLastMessage, setOnline, setUnread} from "../components/chat-sidebar/chats.reducer";
+import {
+    incrementUnread,
+    setLastMessage,
+    setOnline,
+    setSeenLastMessage,
+} from "../components/chat-sidebar/chats.reducer";
 import {useSelector} from "react-redux";
 import {selectMainChat} from "../components/main-chat/main.chat.reducer";
 
@@ -13,19 +18,21 @@ export const useSocket = () => {
     const dispatch = useAppDispatch();
     const {chatId} = useSelector(selectMainChat);
 
-    const onMessage = (data: IMessage) => {
-        if (chatId === data.chatId) {
-            dispatch(addMessage(data))
+    const onMessage = (msg: IMessage) => {
+        //console.log('message')
+        if (chatId === msg.chatId) {
+            dispatch(addMessage(msg))
         }
-        dispatch(setLastMessage({message: data, chatId: data.chatId}))
-        dispatch(incrementUnread({chatId: data.chatId}))
+        dispatch(setLastMessage({message: msg, chatId: msg.chatId}))
+        dispatch(incrementUnread({chatId: msg.chatId}))
     }
 
     const onSeen = ({message, username}: { message: IMessage, username: string }) => {
-        console.log(chatId)
+        //console.log(chatId)
         if (chatId === message.chatId) {
-            dispatch(setSeenMessage(message))
+            dispatch(setSeenMessage({message, username}))
         }
+        dispatch(setSeenLastMessage({message}))
     }
 
     useEffect(() => {

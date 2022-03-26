@@ -51,12 +51,19 @@ export const getMessagesByChat = (chatId: number): IMessage[] => {
 }
 
 const updateSeen = (username: string, {chatId, timestamp, author}: IMessage) => {
-    //if (username === author)
-    //     messages
-    //         .filter(m => m.chatId === chatId
-    //             && m.timestamp <= timestamp
-    //             && m.author === author)
-    //         .forEach(m => m.seen = true)
+    if (username !== author) {
+        messages
+            .filter(m => m.chatId === chatId
+                && new Date(m.timestamp) <= new Date(timestamp)
+                && m.author === author)
+            .forEach(m => {
+                m.seen = true;
+                console.log(m.seenBy)
+                if (!m.seenBy) m.seenBy = [username]
+                if (!m.seenBy.includes(username)) m.seenBy.push(username)
+                console.log(m.seenBy)
+            })
+    }
 }
 
 export const Message = {getMessagesByChat, updateSeen}

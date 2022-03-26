@@ -13,12 +13,29 @@ export interface IMessage {
     chatId: number;
     messageId: number;
     seen?: boolean
+    seenBy?: string[]
+}
+
+export interface IPersonalMessage extends IMessage {
+
+}
+
+export interface IGroupMessage extends IMessage {
+    seenBy?: string[]
 }
 
 export interface IChat {
     id: number
     members: IChatUser[],
     type: 'personal' | 'group'
+    title?: string
+}
+
+export interface IPersonalChat extends IChat {
+    members: [IChatUser, IChatUser],
+}
+
+export interface IGroupChat extends IChat {
 }
 
 /**

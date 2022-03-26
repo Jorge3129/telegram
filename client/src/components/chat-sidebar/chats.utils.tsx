@@ -19,17 +19,16 @@ export const formatTimestamp = (timestamp: string | undefined): string => {
     return date.format('DD.MM.YYYY')
 }
 
-export const formatLastMessage = (message: IMessage | undefined): string => {
-    if (!message) return ''
+export const formatChatAuthor = (message: IMessage | undefined, type: 'personal' | 'group'): string => {
+    if (!message || type === 'personal') return ''
     const {author} = message;
     const user = localStorage.getItem('user') || '';
-    return (author === user ? 'You: ' : '') + message.text;
+    return (author === user ? 'You: ' : author + ': ')
 }
 
-export const getSeenIcon = (lastMessage: IMessage | undefined) => {
-    //console.log(lastMessage)
-    if (!lastMessage || lastMessage.author !== localStorage.getItem('user')) return '';
-    return lastMessage.seen ?
+export const getSeenIcon = (msg: IMessage | undefined) => {
+    if (!msg || msg.author !== localStorage.getItem('user')) return '';
+    return msg.seen ?
         <i className="fa-solid fa-check-double chat_seen_icon"/>
         : <i className="fa-solid fa-check chat_seen_icon"/>;
 }

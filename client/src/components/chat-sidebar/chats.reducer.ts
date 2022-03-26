@@ -30,6 +30,15 @@ const chatSlice = createSlice({
             const chat = state.chats.find(chat => chat.id === chatId);
             if (chat) chat.lastMessage = message;
         },
+        setSeenLastMessage: (state, {payload}: PayloadAction<{ message: IMessage }>) => {
+            const {message} = payload;
+            //console.log(message, chatId)
+            const chat = state.chats.find(chat => chat.id === message.chatId);
+            if (chat?.lastMessage) {
+                //console.log(chat.lastMessage.messageId, message.messageId)
+                if (chat.lastMessage.messageId === message.messageId) chat.lastMessage.seen = true;
+            }
+        },
         setUnread: (state, {payload}: PayloadAction<{ unread: number, chatId: number }>) => {
             const {unread, chatId} = payload;
             const chat = state.chats.find(chat => chat.id === chatId);
@@ -44,11 +53,19 @@ const chatSlice = createSlice({
             const {online, chatId} = payload;
             const chat = state.chats.find(chat => chat.id === chatId);
             if (chat) chat.online = online;
-        }
+        },
     }
 })
 
-export const {setLoading, setChats, setLastMessage, setUnread, incrementUnread, setOnline} = chatSlice.actions;
+export const {
+    setLoading,
+    setChats,
+    setLastMessage,
+    setSeenLastMessage,
+    setUnread,
+    incrementUnread,
+    setOnline
+} = chatSlice.actions;
 
 export const chatThunk = createAsyncThunk('/chats/get',
     async (user: string, thunkApi) => {

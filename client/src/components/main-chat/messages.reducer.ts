@@ -28,9 +28,20 @@ const messageSlice = createSlice({
         addMessage: (state, {payload}: PayloadAction<IMessage>) => {
             state.messages.push(payload);
         },
-        setSeenMessage: (state, {payload}: PayloadAction<IMessage>) => {
-            const msg = state.messages.find(msg => msg.messageId === payload.messageId);
-            if (msg) msg.seen = true;
+        setSeenMessage: (state, {payload}: PayloadAction<{ message: IMessage, username: string }>) => {
+            const username = payload.username;
+
+            state.messages.filter(msg =>
+                msg.author === payload.message.author
+                && new Date(msg.timestamp) <= new Date(payload.message.timestamp))
+                .forEach(msg => {
+                    //console.log(msg.seenBy)
+                    if (!msg.seenBy) msg.seenBy = [username]
+                    if (!msg.seenBy.includes(username)) msg.seenBy.push(username)
+                    //console.log(msg.seenBy)
+                    if (msg.seen) return;
+                    msg.seen = true;
+                })
         }
     }
 })

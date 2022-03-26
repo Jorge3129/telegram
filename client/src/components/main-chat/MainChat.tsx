@@ -1,15 +1,16 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, MouseEvent, useState} from 'react';
 import './styles/Chat.css'
 import './styles/Messages.css'
 import MainInput from "./MainInput";
 import Message from "./Message"
-import {useAutoScroll} from "../../hooks/autoScroll";
+import {useAutoScroll} from "./hooks/autoScroll";
 import {Socket} from "socket.io-client";
 import {useSelector} from "react-redux";
 import {messageThunk, selectMessages} from "./messages.reducer";
 import {useAppDispatch} from "../../redux/store";
-import {useDetectScroll} from "../../hooks/detectScroll";
+import {useDetectScroll} from "./hooks/detectScroll";
 import {selectMainChat} from "./main.chat.reducer";
+import MessageList from "./MessageList";
 
 interface IMainChat {
     socket: Socket | null
@@ -28,19 +29,12 @@ const MainChat: FC<IMainChat> = ({socket}) => {
     const {onMessagesFirstRendered, handleScroll} = useDetectScroll(socket, scrollRef, messages)
 
     const messageList = loading ? <li key={"loading"}>Loading...</li> :
-        messages.map((msg, i, {length}) => (
-            <li
-                className={"message_list_item" + (msg.author === localStorage.getItem('user') ? ' self' : '')}
-                key={msg.timestamp + Math.random()}
-                id={'message-' + msg.messageId}
-            >
-                <Message msg={msg}
-                         callback={i === length - 1 ? onMessagesFirstRendered : null}
-                />
-                {msg.messageId}
-                {msg.author.split('')[0]}
-            </li>
-        ))
+        <MessageList
+            messages={messages}
+            onMessagesFirstRendered={onMessagesFirstRendered}
+            mainChat={mainChat}
+        />
+
 
     return (
         <div className="chat_container main_section">
@@ -60,7 +54,8 @@ const MainChat: FC<IMainChat> = ({socket}) => {
                 <MainInput
                     socket={socket}
                 />
-                : <></>}
+                : <></>
+            }
         </div>
     );
 };

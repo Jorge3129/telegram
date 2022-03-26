@@ -3,7 +3,7 @@ import {IChat, IClientChat, IUser} from "../types/types";
 const dayjs = require('dayjs')
 import {getMessagesByChat} from "./db.functions";
 
-export const mapChatToClient = ({id, members, type}: IChat, username: string, users: IUser[]): IClientChat => {
+export const mapChatToClient = ({id, members, type, title}: IChat, username: string, users: IUser[]): IClientChat => {
 
     let unreadCount = 0;
     const user = members.find(u => u.username === username);
@@ -21,11 +21,11 @@ export const mapChatToClient = ({id, members, type}: IChat, username: string, us
 
     return {
         id,
-        title: receiverName,
+        title: title || receiverName,
         lastMessage: msgs.slice(-1)[0],
         unread: unreadCount,
         muted: !!user?.muted,
         type,
-        online: users.find(u => u.username === receiverName)?.online
+        //online: users.find(u => u.username === receiverName)?.online
     }
 }

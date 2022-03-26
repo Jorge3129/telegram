@@ -1,4 +1,4 @@
-import {IMessage} from "../types/types";
+import {IMessage} from "../../../types/types";
 
 
 export const getVisibleHeight = (element: Element, container: HTMLElement | null): number => {
