@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IMessage} from "../../types/types";
-import {RootState} from "../../redux/rootReducer";
-import api from "../../api/api";
+import {IMessage} from "../../../types/types";
+import {RootState} from "../../../redux/rootReducer";
+import api from "../../../api/api";
 
 interface MessageState {
     messages: IMessage[]

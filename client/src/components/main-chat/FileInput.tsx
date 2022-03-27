@@ -1,9 +1,9 @@
-import React, {ChangeEvent, FC, useState, MouseEvent} from 'react';
+import React, {ChangeEvent, FC} from 'react';
 import {Socket} from 'socket.io-client';
-import {SERVER_URL} from "../../config";
-import {useSend} from "./hooks/useSend";
-import {setSrc} from "./main.chat.reducer";
+import {setMedia} from "./reducers/main.chat.reducer";
 import {useDispatch} from "react-redux";
+import {convertFileToMedia} from "../../utils/general.utils";
+import api from "../../api/api";
 
 interface IFileInput {
     socket: Socket
@@ -11,26 +11,24 @@ interface IFileInput {
 
 const FileInput: FC<IFileInput> = ({socket}) => {
 
-    const [status, setStatus] = useState('')
     const dispatch = useDispatch()
-    const sendMessage = useSend(socket)
 
-    const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
-        if (!e.target?.files) return;
-        e.preventDefault()
-        let formData = new FormData()
-        formData.append('file', e.target.files[0])
-        const response = await fetch(SERVER_URL + `/image`, {
-            method: 'POST',
-            body: formData,
-        })
-        if (response) setStatus(response.statusText)
-        dispatch(setSrc(URL.createObjectURL(e.target.files[0])))
+    const saveToApi = (file: File) => {
+        const formData = new FormData()
+        formData.append('file', file)
+        api.preparePostFile(formData)
     }
 
-    const handleCLick = (e: MouseEvent<HTMLButtonElement>) => {
+    const saveToRedux = (file: File) => {
+        const mediaObject = convertFileToMedia(file);
+        dispatch(setMedia(mediaObject))
+    }
+
+    const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
-        sendMessage()
+        if (!e.target?.files) return;
+        saveToApi(e.target.files[0])
+        saveToRedux(e.target.files[0])
     }
 
     return (
@@ -42,12 +40,6 @@ const FileInput: FC<IFileInput> = ({socket}) => {
                 onChange={handleChange}
             />
             <i className="fa-solid fa-paperclip add_media input_icon"/>
-            <button
-                style={{position: 'fixed', top: '5em', left: '5em'}}
-                onClick={handleCLick}
-            >
-                SEND!!!
-            </button>
         </label>
     )
 }

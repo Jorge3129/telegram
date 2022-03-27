@@ -10,20 +10,22 @@ interface IContextMenuProps {
 
 const ContextMenu: FC<IContextMenuProps> = ({contextMenu, msg, type}) => {
 
+    const showContextMenu = () => type === 'group'
+        && isSelf(msg)
+
     if (!contextMenu ||
         contextMenu.messageId !== msg.messageId) return <></>
 
     return (
         <div
             className="context_menu"
-             style={{position: 'absolute', top: contextMenu.x + '', left: contextMenu.y + ''}}
-             onClick={e => e.stopPropagation()}
+            style={{position: 'absolute', top: contextMenu.x + '', left: contextMenu.y + ''}}
+            onClick={e => e.stopPropagation()}
         >
             Menu
             <ul>
                 {
-                    type === 'group'
-                    && isSelf(msg)
+                    showContextMenu()
                     && msg.seenBy
                     && msg.seenBy.map(member => (
                         <li key={member}>

@@ -1,6 +1,7 @@
 import {initials} from "../chat-sidebar/chats.utils";
 import React, {CSSProperties, FC} from "react";
-import {IChat} from "../../types/types";
+import {IChat, IMessage} from "../../types/types";
+import {isSelf} from "../../utils/general.utils";
 
 interface IAvatar {
     chat?: IChat,
@@ -25,3 +26,4 @@ const Avatar: FC<IAvatar> = ({chat, title, prefix, hide}) => {
 };
 
 export default Avatar;
+

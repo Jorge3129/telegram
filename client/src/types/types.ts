@@ -8,8 +8,15 @@ export interface IMessage {
     messageId: number;
     seen?: boolean
     seenBy?: string[]
+    media?: IMedia
+}
+
+export interface IMedia {
+    filename: string;
+    type: string,
     src?: string
 }
+
 
 export interface IUser {
     username: string;

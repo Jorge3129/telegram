@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import {selectContextMenu, setContextMenu} from "../menu.reducer";
+import {selectContextMenu, setContextMenu} from "../reducers/menu.reducer";
 import {useAppDispatch} from "../../../redux/store";
 import {MouseEvent} from "react";
 import { IMessage } from "../../../types/types";

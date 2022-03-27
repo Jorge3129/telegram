@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {RootState} from "../../redux/rootReducer";
-import {IContextMenu} from "../../types/types";
+import {RootState} from "../../../redux/rootReducer";
+import {IContextMenu} from "../../../types/types";
 
 
 interface MenuState {

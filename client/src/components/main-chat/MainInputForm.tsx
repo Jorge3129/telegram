@@ -1,11 +1,9 @@
 import React, {FC, useEffect, useRef, MouseEvent} from 'react';
 import {Socket} from 'socket.io-client'
-import message from "./Message";
 import {useAppDispatch} from "../../redux/store";
-import {addMessage, messageThunk, selectMessages} from "./messages.reducer";
-import {setLastMessage, setUnread} from "../chat-sidebar/chats.reducer";
+import {selectMessages} from "./reducers/messages.reducer";
 import {useSelector} from "react-redux";
-import {selectMainChat, setText} from "./main.chat.reducer";
+import {selectMainChat, setText} from "./reducers/main.chat.reducer";
 import FileInput from "./FileInput";
 import {useSend} from "./hooks/useSend";
 
@@ -13,7 +11,7 @@ interface IMainInput {
     socket: Socket;
 }
 
-const MainInput: FC<IMainInput> = ({socket}) => {
+const MainInputForm: FC<IMainInput> = ({socket}) => {
 
     const {messages} = useSelector(selectMessages);
     const {text} = useSelector(selectMainChat);
@@ -61,4 +59,4 @@ const MainInput: FC<IMainInput> = ({socket}) => {
     );
 };
 
-export default MainInput;
+export default MainInputForm;

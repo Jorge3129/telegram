@@ -6,7 +6,7 @@ import ChatItem from "./ChatItem";
 import './styles/Chats.css'
 import * as _ from 'lodash'
 import {useAppDispatch} from "../../redux/store";
-import {selectMainChat, setChat, setChatId} from "../main-chat/main.chat.reducer";
+import {selectMainChat, setChat, setChatId} from "../main-chat/reducers/main.chat.reducer";
 
 interface IChatsContainer {
 

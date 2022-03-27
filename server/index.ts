@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 9000;
 const app = express();
 const router = require('./routes/router')
 const multer = require('multer')
-import {FileFilterCallback} from 'multer'
+const path = require('path')
 
 type DestinationCallback = (error: Error | null, destination: string) => void
 type FileNameCallback = (error: Error | null, filename: string) => void
@@ -25,16 +25,21 @@ app.use(express.json())
 const storage = multer.diskStorage({
     destination: (request: Request, file: Express.Multer.File, callback: DestinationCallback) => {
         callback(null, 'images/')
-        console.log(file)
     },
     filename: (req: Request, file: Express.Multer.File, callback: FileNameCallback) => {
         callback(null, file.originalname)
+        console.log(file.originalname)
     },
 })
 
 const upload = multer({storage: storage})
 
-app.post('/image', upload.single('file'),
+app.get('/media/:filename', (req: Request, res: Response) => {
+    const {filename} = req.params;
+    res.sendFile(path.resolve('./images/' + filename))
+})
+
+app.post('/media', upload.single('file'),
     (req: Request, res: Response) => {
         console.log(req.body)
         res.json({})

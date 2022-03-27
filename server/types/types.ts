@@ -14,6 +14,12 @@ export interface IMessage {
     messageId: number;
     seen?: boolean
     seenBy?: string[]
+    media?: IMedia
+}
+
+export interface IMedia {
+    filename: string;
+    type: string,
 }
 
 export interface IPersonalMessage extends IMessage {

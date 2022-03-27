@@ -1,6 +1,6 @@
 import React, {FC, MouseEvent} from "react";
 import {useAppDispatch} from "../../redux/store";
-import {addText, selectMainChat} from "../main-chat/main.chat.reducer";
+import {addText, selectMainChat} from "../main-chat/reducers/main.chat.reducer";
 import {useSelector} from "react-redux";
 
 export interface IEmojiBlock {

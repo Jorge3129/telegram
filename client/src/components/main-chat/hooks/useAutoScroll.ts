@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import {useSelector} from "react-redux";
-import {selectMessages} from "../messages.reducer";
+import {selectMessages} from "../reducers/messages.reducer";
 import {IMessage} from "../../../types/types";
 import {isSelf} from "../../../utils/general.utils";
 

@@ -1,6 +1,6 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {io, Socket} from "socket.io-client";
-import {addMessage, setSeenMessage} from "../components/main-chat/messages.reducer";
+import {addMessage, setSeenMessage} from "../components/main-chat/reducers/messages.reducer";
 import {useAppDispatch} from "../redux/store";
 import {SERVER_WS_URL} from "../config";
 import {IChat, IMessage} from "../types/types";
@@ -11,7 +11,7 @@ import {
     setSeenLastMessage,
 } from "../components/chat-sidebar/chats.reducer";
 import {useSelector} from "react-redux";
-import {selectMainChat} from "../components/main-chat/main.chat.reducer";
+import {selectMainChat} from "../components/main-chat/reducers/main.chat.reducer";
 
 export const useSocket = () => {
     const [socket, setSocket] = useState<Socket | null>(null);

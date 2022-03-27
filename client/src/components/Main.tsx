@@ -6,9 +6,9 @@ import {chatThunk, selectChats, setChats} from "./chat-sidebar/chats.reducer";
 import ChatsContainer from "./chat-sidebar/ChatsContainer";
 import {IChat} from "../types/types";
 import {useSelector} from "react-redux";
-import {selectMainChat} from "./main-chat/main.chat.reducer";
+import {selectMainChat} from "./main-chat/reducers/main.chat.reducer";
 import MediaSidebar from "./media-sidebar/MediaSidebar";
-import {setContextMenu} from "./main-chat/menu.reducer";
+import {setContextMenu} from "./main-chat/reducers/menu.reducer";
 
 const Main: FC = () => {
 

@@ -1,19 +1,22 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IChat} from "../../types/types";
-import {RootState} from "../../redux/rootReducer";
+import {IChat, IMedia} from "../../../types/types";
+import {RootState} from "../../../redux/rootReducer";
 
 interface MainChatState {
     chatId: number | null,
     mainChat: IChat | null,
     text: string;
-    src: string;
+    media: IMedia;
 }
 
 const initialState: MainChatState = {
     chatId: null,
     mainChat: null,
     text: '',
-    src: '',
+    media: {
+        filename: '',
+        type: ''
+    }
 }
 
 const mainChatSlice = createSlice({
@@ -33,14 +36,16 @@ const mainChatSlice = createSlice({
         addText: (state, {payload}: PayloadAction<string>) => {
             state.text += payload;
         },
-        setSrc: (state, {payload}: PayloadAction<string>) => {
-            console.log('src: ' + payload)
-            state.src = payload;
+        setMedia: (state: MainChatState, {payload}: PayloadAction<IMedia>) => {
+            state.media = payload;
+        },
+        clearMedia: (state: MainChatState, {payload}: PayloadAction) => {
+            state.media = {...initialState.media};
         },
     }
 })
 
-export const {setChatId, setChat, setText, addText, setSrc} = mainChatSlice.actions;
+export const {setChatId, setChat, setText, addText, setMedia, clearMedia} = mainChatSlice.actions;
 
 export const selectMainChat = (state: RootState) => state.mainChat
 

@@ -1,9 +1,11 @@
 import React, {FC, useEffect, MouseEvent, useState} from 'react';
-import {IMessage} from "../../types/types";
+import {IMedia, IMessage} from "../../types/types";
 import dayjs from "dayjs";
-import {useContextMenu} from "./hooks/contextMenu";
+import {useContextMenu} from "./hooks/useContextMenu";
 import {getSeenIcon} from "../chat-sidebar/chats.utils";
 import ContextMenu from "./ContextMenu";
+import {getMediaByType} from "../../utils/general.utils";
+import {useLoadFile} from "./hooks/useLoadFile";
 
 interface IPropsMessage {
     msg: IMessage;
@@ -12,12 +14,15 @@ interface IPropsMessage {
 }
 
 const Message: FC<IPropsMessage> = ({msg, callback, type}) => {
-    const {text, timestamp, seen, author, src} = msg;
+    const {text, timestamp, seen, author, media} = msg;
 
     useEffect(() => {
         if (callback && !msg.seen) callback();
-        console.log('Message src: ' + src)
     }, [])
+
+    const [file, setFile] = useState<IMedia | null>(null);
+
+    useLoadFile(media, setFile);
 
     const {contextMenu, handleContextMenu} = useContextMenu(msg);
     const showAuthor = type === 'group' && author !== localStorage.getItem('user');
@@ -27,11 +32,13 @@ const Message: FC<IPropsMessage> = ({msg, callback, type}) => {
             <li className="message_author">
                 {showAuthor && author}
             </li>
+            {file &&
+                <li className="message_media">
+                    {getMediaByType(file, 'message_img')}
+                </li>
+            }
             <li className="message_text">
                 {text}
-            </li>
-            <li className="message_media">
-                {src && <img className="message_img" src={src} alt={src}/>}
             </li>
             <li className="message_info">
                 {getSeenIcon(msg)}

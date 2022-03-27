@@ -1,4 +1,4 @@
-import {IMessage} from "../types/types";
+import {IMedia, IMessage} from "../types/types";
 
 export const isSelf = (msg: IMessage) => msg && msg.author === localStorage.getItem('user');
 
@@ -14,4 +14,24 @@ export const alreadySeen = (timestamp: string, unread: number, messages: IMessag
     // console.log('from unread: ' + lastMessageSeen.timestamp)
     // console.log('from onFirstRendered: ' + timestamp)
     return new Date(lastMessageSeen.timestamp) >= new Date(timestamp);
+}
+
+export const getMediaByType = (media: IMedia, className: string) => {
+    const type = media.type.split('/')[0]
+    switch (type) {
+        case 'image':
+            return <img className={className} src={media.src} alt={media.filename}/>
+        case 'video':
+            return <video className={className} controls>
+                <source src={media.src} type={media.type}/>
+            </video>
+    }
+}
+
+export const convertFileToMedia = (file: File): IMedia => {
+    return {
+        filename: file.name,
+        type: file.type,
+        src: URL.createObjectURL(file)
+    }
 }

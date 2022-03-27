@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 import {IChat, IMessage} from "../../../types/types";
 import {useAppDispatch} from "../../../redux/store";
 import {Socket} from "socket.io-client";
-import {selectMainChat} from "../main.chat.reducer";
+import {selectMainChat} from "../reducers/main.chat.reducer";
 import {alreadySeen, getMsgById} from "../../../utils/general.utils";
 
 export const useDetectScroll = (
