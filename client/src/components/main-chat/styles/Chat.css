@@ -3,18 +3,45 @@
     position: relative;
 }
 
+/* TOP BAR */
 .chat_top_bar {
     background-color: var(--white);
-    padding: 0.5em;
+    height: var(--chat_bar_height);
     border: var(--border);
     border-top: none;
+    display: flex;
+    flex-direction: row;
 }
 
+.chat_top_bar_title_container {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 0.5em;
+}
+
+.chat_top_bar_title {
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.chat_top_bar_separator {
+    flex: 5 1 auto;
+}
+
+.chat_top_bar_members {
+    font-size: 0.8em;
+    color: var(--gray);
+}
+
+/* INPUT FORM */
 .chat_input_container {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 3em;
+    height: var(--chat_bar_height);
     background-color: var(--white);
     border: var(--border);
     border-bottom: none;
@@ -27,7 +54,18 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    padding: 0.5em;
+}
+
+.input_icon_container {
+    height: var(--chat_bar_height);
+    width: var(--chat_bar_height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input_icon_container:hover {
+    cursor: pointer;
 }
 
 .chat_input {
@@ -36,17 +74,19 @@
     padding: 1em;
     border: none;
     font-size: 1em;
+    flex: 2 1 auto;
 }
 
 .chat_input:focus {
     outline: none;
 }
 
+
+/* ICONS */
 .chat_send_button {
-    padding: 0.5em;
     color: var(--white);
     border: none;
-    border-radius: 0.3em;
+    background-color: var(--white);
 }
 
 .chat_send_button:hover {
@@ -54,17 +94,19 @@
 }
 
 .chat_send_icon {
-    background-color: var(--blue);
-    transform: scale(1.5);
+    color: var(--blue);
+    background-color: var(--white);
+    transform: scale(2);
 }
 
-.input_icon {
+.main_chat_icon {
     transform: scale(1.5);
     color: var(--gray);
 }
 
-.input_icon:hover {
-    cursor: pointer;
+.main_chat_icon_top {
+    transform: scale(1.1);
+    color: var(--gray);
 }
 
 .add_media {
@@ -72,8 +114,5 @@
 }
 
 @media screen and (max-width: 768px) {
-    .chat_send_button {
-        padding: 0.5em;
-        max-width: 4em;
-    }
+
 }

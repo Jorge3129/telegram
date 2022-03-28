@@ -9,6 +9,7 @@ import {useDetectScroll} from "./hooks/useDetectScroll";
 import {Socket} from "socket.io-client";
 import {useAppDispatch} from "../../redux/store";
 import MessageAvatar from "../reuse/MessageAvatar";
+import LoadSpinner from "../reuse/LoadSpinner";
 
 interface IMessageList {
     socket: Socket;
@@ -27,32 +28,35 @@ const MessageList: FC<IMessageList> = ({socket}) => {
     }, [chatId]);
 
 
-    if (loading) return <li key={"loading"}>Loading...</li>;
-
     return (
         <div className="message_list_wrapper">
-            <ul
-                className={"message_list" + (loading ? ' msg-loading' : '')}
-                ref={scrollRef}
-                onScroll={handleScroll}
-            >
-                {messages.map((msg, i, {length}) =>
-                    <li
-                        className={"message_list_item" + (isSelf(msg) ? ' self' : '')}
-                        key={msg.messageId}
-                        id={'message-' + msg.messageId}
-                    >
-                        <MessageAvatar data={{mainChat, msg, nextMsg: messages[i + 1]}}/>
-                        <Message
-                            msg={msg}
-                            callback={i === length - 1 ? onMessagesFirstRendered : null}
-                            type={mainChat?.type || 'personal'}
-                        />
-                        {msg.messageId}
-                        {false && msg.author.split('')[0]}
-                    </li>
-                )}
-            </ul>
+            {loading
+                ?
+                <LoadSpinner backgroundColor='var(--light-blue-gray)'/>
+                :
+                <ul
+                    className={"message_list" + (loading ? ' msg-loading' : '')}
+                    ref={scrollRef}
+                    onScroll={handleScroll}
+                >
+                    {messages.map((msg, i, {length}) =>
+                        <li
+                            className={"message_list_item" + (isSelf(msg) ? ' self' : '')}
+                            key={msg.messageId}
+                            id={'message-' + msg.messageId}
+                        >
+                            <MessageAvatar data={{mainChat, msg, nextMsg: messages[i + 1]}}/>
+                            <Message
+                                msg={msg}
+                                callback={i === length - 1 ? onMessagesFirstRendered : null}
+                                type={mainChat?.type || 'personal'}
+                            />
+                            {msg.messageId}
+                            {false && msg.author.split('')[0]}
+                        </li>
+                    )}
+                </ul>
+            }
         </div>
     );
 }

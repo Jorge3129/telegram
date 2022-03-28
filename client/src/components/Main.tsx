@@ -2,13 +2,13 @@ import React, {FC, useEffect, useState} from 'react';
 import MainChat from "./main-chat/MainChat";
 import {useSocket} from "../socket/socket";
 import {useAppDispatch} from "../redux/store";
-import {chatThunk, selectChats, setChats} from "./chat-sidebar/chats.reducer";
+import {chatThunk} from "./chat-sidebar/chats.reducer";
 import ChatsContainer from "./chat-sidebar/ChatsContainer";
-import {IChat} from "../types/types";
 import {useSelector} from "react-redux";
 import {selectMainChat} from "./main-chat/reducers/main.chat.reducer";
 import MediaSidebar from "./media-sidebar/MediaSidebar";
 import {setContextMenu} from "./main-chat/reducers/menu.reducer";
+import LoadSpinner from "./reuse/LoadSpinner";
 
 const Main: FC = () => {
 

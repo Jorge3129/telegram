@@ -3,7 +3,7 @@ import {Socket} from 'socket.io-client';
 import {setMedia} from "./reducers/main.chat.reducer";
 import {useDispatch} from "react-redux";
 import {convertFileToMedia} from "../../utils/general.utils";
-import api from "../../api/api";
+import FileAPI from "../../api/file.api";
 
 interface IFileInput {
     socket: Socket
@@ -16,7 +16,7 @@ const FileInput: FC<IFileInput> = ({socket}) => {
     const saveToApi = (file: File) => {
         const formData = new FormData()
         formData.append('file', file)
-        api.preparePostFile(formData)
+        FileAPI.preparePostFile(formData)
     }
 
     const saveToRedux = (file: File) => {
@@ -32,14 +32,14 @@ const FileInput: FC<IFileInput> = ({socket}) => {
     }
 
     return (
-        <label className="chat_file_input_label">
+        <label className="chat_file_input_label input_icon_container">
             <input
                 type="file" style={{display: 'none'}}
                 className="chat_file_input"
                 id="chat_file_input"
                 onChange={handleChange}
             />
-            <i className="fa-solid fa-paperclip add_media input_icon"/>
+            <i className="fa-solid fa-paperclip add_media main_chat_icon"/>
         </label>
     )
 }

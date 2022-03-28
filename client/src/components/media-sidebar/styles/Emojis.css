@@ -1,6 +1,13 @@
+/* TOP */
+.top_bar {
+    background-color: var(--white);
+    height: var(--chat_bar_height);
+    border-bottom: var(--border);
+}
 
+/* EMOJI */
 .emoji_blocks_list {
-    height: 100vh;
+    height: 90vh;
     overflow-y: scroll;
     overflow-x: hidden;
 }

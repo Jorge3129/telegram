@@ -1,0 +1,39 @@
+
+.load_spinner_container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.load_spinner {
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+    background: conic-gradient(var(--white), var(--gray));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: spin 2s linear infinite;
+}
+
+.load_spinner_inside {
+    --size: calc(100% - 0.5em);
+    border-radius: 50%;
+    background-color: var(--light-blue-gray);
+    width: var(--size);
+    height: var(--size);
+}
+
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

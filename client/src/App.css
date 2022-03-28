@@ -12,17 +12,18 @@
     --white: #fff;
     --blue: #52abff;
     --blue-darker: #2f83d4;
-    /* Messages */
+    --chat_bar_height: 3.3em;
+        /* Messages */
     --message-bg: var(--light-blue-gray);
     --green-light: #f0ffe3;
     --green-deep: #85c940;
     /* Chat List */
-    --border: 0.05em solid var(--light-blue-gray);
     --blue-light: #d9ecff;
     --gray-super-light: #f0f0f0;
     --gray: #b5b3b0;
     --yellow: #ff9500;
     --green: #66ff63;
+    --border: 0.05em solid var(--light-blue-gray);
     /* Modals */
     --gray-dark: #525252;
     --black: #000;

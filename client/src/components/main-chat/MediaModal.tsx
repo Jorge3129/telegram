@@ -5,7 +5,7 @@ import {clearMedia, selectMainChat} from "./reducers/main.chat.reducer";
 import {getMediaByType} from "../../utils/general.utils";
 import {useSend} from "./hooks/useSend";
 import { Socket } from 'socket.io-client';
-import api from "../../api/api";
+import FileAPI from "../../api/file.api";
 import {useAppDispatch} from "../../redux/store";
 
 interface IMediaModal {
@@ -22,7 +22,7 @@ const MediaModal:FC<IMediaModal> = ({socket}) => {
         e.preventDefault()
         sendMessage();
         dispatch(clearMedia());
-        await api.postFile();
+        await FileAPI.postFile();
     }
 
     const handleCancel = (e: MouseEvent<HTMLButtonElement>) => {

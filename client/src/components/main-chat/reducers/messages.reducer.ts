@@ -55,7 +55,7 @@ export const messageThunk = createAsyncThunk('/messages/get',
 
             await (async () => {
                 return new Promise((resolve) => {
-                    setTimeout(() => resolve(''), 500);
+                    setTimeout(() => resolve(''), 200);
                 })
             })();
 
