@@ -3,11 +3,6 @@
     --avatar-height: 3.4em;
 }
 
-.chats_container {
-    background-color: var(--white);
-    /*border-right: var(--border);*/
-}
-
 /* SEARCH BAR */
 
 .chat_search_bar {
@@ -97,6 +92,7 @@
     color: var(--white);
     font-weight: 600;
     font-size: 1.2em;
+    overflow: hidden;
 }
 
 .online::before {
@@ -224,4 +220,9 @@
 .selected_chat .chat_unread.muted {
     color: var(--blue);
     background-color: var(--blue-light);
+}
+
+
+@media screen and (max-width: 450px) {
+
 }

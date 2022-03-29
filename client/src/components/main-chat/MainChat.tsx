@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-import './styles/Chat.css'
+import React, {FC, MouseEvent} from 'react';
+import './styles/MainChat.css'
 import './styles/Messages.css'
 import MainInputForm from "./MainInputForm";
 import {Socket} from "socket.io-client";
@@ -18,7 +18,7 @@ const MainChat: FC<IMainChat> = ({socket}) => {
     </div>
 
     return (
-        <div className="chat_container main_section">
+        <div className="main_chat_container main_section">
             <MainTopBar/>
             <MessageList socket={socket}/>
             <MainInputForm socket={socket}/>

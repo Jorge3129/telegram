@@ -1,12 +1,22 @@
-import React from 'react';
+import React, {MouseEvent} from 'react';
 import {useSelector} from "react-redux";
-import {selectMainChat} from "./reducers/main.chat.reducer";
+import {clearMainChat, selectMainChat, setChat} from "./reducers/main.chat.reducer";
+import {useAppDispatch} from "../../redux/store";
+import {setChatsWidth} from "../chat-sidebar/chats.reducer";
 
 const MainTopBar = () => {
     const {mainChat} = useSelector(selectMainChat);
+    const dispatch = useAppDispatch();
+
+    const backToChats = (e: MouseEvent) => {
+        dispatch(clearMainChat());
+    }
 
     return (
         <ul className="chat_top_bar">
+            <li className="chat_top_bar_back input_icon_container" onClick={backToChats}>
+                <i className="fa-solid fa-arrow-left main_chat_icon_top"/>
+            </li>
             <li className="chat_top_bar_title_container">
                 <div className="chat_top_bar_title">
                     {mainChat?.title || ''}

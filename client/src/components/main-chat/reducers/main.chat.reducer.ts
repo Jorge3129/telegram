@@ -42,10 +42,13 @@ const mainChatSlice = createSlice({
         clearMedia: (state: MainChatState, {payload}: PayloadAction) => {
             state.media = {...initialState.media};
         },
+        clearMainChat: (state: MainChatState, {payload} : PayloadAction) => {
+            return initialState;
+        }
     }
 })
 
-export const {setChatId, setChat, setText, addText, setMedia, clearMedia} = mainChatSlice.actions;
+export const {setChatId, setChat, setText, addText, setMedia, clearMedia, clearMainChat} = mainChatSlice.actions;
 
 export const selectMainChat = (state: RootState) => state.mainChat
 

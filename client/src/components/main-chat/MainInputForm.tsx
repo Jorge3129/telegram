@@ -31,11 +31,11 @@ const MainInputForm: FC<IMainInput> = ({socket}) => {
     }
 
     return (
-        <div className="chat_input_container">
-            <form className="chat_input_form">
+        <div className="main_chat_input_container">
+            <form className="main_chat_input_form">
                 <FileInput socket={socket}/>
                 <input
-                    className="chat_input"
+                    className="main_chat_input"
                     type="text"
                     placeholder=" Write a message..."
                     value={text}
@@ -50,10 +50,10 @@ const MainInputForm: FC<IMainInput> = ({socket}) => {
                     <div className="input_icon_container">
                         <button
                             type="submit"
-                            className="chat_send_button input_icon_container"
+                            className="main_chat_send_button input_icon_container"
                             onClick={handleSubmit}
                         >
-                            <i className="fa-solid fa-paper-plane chat_send_icon"/>
+                            <i className="fa-solid fa-paper-plane main_chat_send_icon"/>
                         </button>
                     </div>
                     :

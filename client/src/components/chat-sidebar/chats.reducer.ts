@@ -4,15 +4,17 @@ import {RootState} from "../../redux/rootReducer";
 import api from "../../api/api";
 
 interface ChatState {
-    chats: IChat[]
-    loading: boolean
-    error: boolean
+    chats: IChat[];
+    loading: boolean;
+    error: boolean;
+    width: string;
 }
 
 const initialState: ChatState = {
     chats: [],
     loading: false,
     error: false,
+    width: '',
 }
 
 const chatSlice = createSlice({
@@ -54,6 +56,9 @@ const chatSlice = createSlice({
             const chat = state.chats.find(chat => chat.id === chatId);
             if (chat) chat.online = online;
         },
+        setChatsWidth: (state, {payload}: PayloadAction<string>) => {
+            state.width = payload;
+        }
     }
 })
 
@@ -64,7 +69,8 @@ export const {
     setSeenLastMessage,
     setUnread,
     incrementUnread,
-    setOnline
+    setOnline,
+    setChatsWidth,
 } = chatSlice.actions;
 
 export const chatThunk = createAsyncThunk('/chats/get',

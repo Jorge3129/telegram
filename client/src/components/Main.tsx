@@ -8,7 +8,7 @@ import {useSelector} from "react-redux";
 import {selectMainChat} from "./main-chat/reducers/main.chat.reducer";
 import MediaSidebar from "./media-sidebar/MediaSidebar";
 import {setContextMenu} from "./main-chat/reducers/menu.reducer";
-import LoadSpinner from "./reuse/LoadSpinner";
+import MainPlaceholder from "./MainPlaceholder";
 
 const Main: FC = () => {
 
@@ -23,16 +23,18 @@ const Main: FC = () => {
     return (
         <div className="main" onClick={e => dispatch(setContextMenu(null))}>
             <ChatsContainer/>
-            {
-                chatId ?
+            {chatId
+                ?
+                <div className="main_chat_media_container">
                     <MainChat
                         socket={socket}
                     />
-                    : <div className="chat_container main_section">
-                        Please select a chat
-                    </div>
+                    <MediaSidebar/>
+                </div>
+                :
+                <MainPlaceholder/>
             }
-            <MediaSidebar/>
+
         </div>
     );
 };

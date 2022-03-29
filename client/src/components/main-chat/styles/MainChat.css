@@ -1,0 +1,145 @@
+
+.main_chat_container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    flex: 4 0 auto;
+}
+
+/* ICONS */
+.input_icon_container {
+    height: var(--chat_bar_height);
+    width: var(--chat_bar_height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input_icon_container:hover {
+    cursor: pointer;
+}
+
+.main_chat_send_button {
+    color: var(--white);
+    border: none;
+    background-color: var(--white);
+}
+
+.main_chat_send_button:hover {
+    cursor: pointer;
+}
+
+.main_chat_send_icon {
+    color: var(--blue);
+    background-color: var(--white);
+    transform: scale(2);
+}
+
+.main_chat_icon {
+    transform: scale(1.5);
+    color: var(--gray);
+}
+
+.main_chat_icon_top {
+    transform: scale(1.1);
+    color: var(--gray);
+}
+
+.add_media {
+    transform: rotate(180deg) scale(1.5);
+}
+
+/* TOP BAR */
+.chat_top_bar {
+    background-color: var(--white);
+    height: var(--chat_bar_height);
+    border: var(--border);
+    border-top: none;
+    display: flex;
+    flex-direction: row;
+}
+
+.chat_top_bar_title_container {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 1em;
+}
+
+.chat_top_bar_title {
+    font-size: 0.84em;
+    font-weight: 600;
+}
+
+.chat_top_bar_separator {
+    flex: 2 1 auto;
+}
+
+.chat_top_bar_members {
+    font-size: 0.8em;
+    color: var(--gray);
+}
+
+.chat_top_bar_back.input_icon_container {
+    display: none;
+}
+
+.chat_top_bar_back:hover {
+    cursor: pointer;
+}
+
+/* INPUT FORM */
+.main_chat_input_container {
+    justify-self: flex-end;
+    width: 100%;
+    height: var(--chat_bar_height);
+    background-color: var(--white);
+    border: var(--border);
+    border-bottom: none;
+}
+
+.main_chat_input_form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.input_icon_container {
+    height: var(--chat_bar_height);
+    width: var(--chat_bar_height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input_icon_container:hover {
+    cursor: pointer;
+}
+
+.main_chat_input {
+    height: 1.8em;
+    padding: 1em;
+    border: none;
+    font-size: 1em;
+    flex: 2 1 auto;
+}
+
+.main_chat_input:focus {
+    outline: none;
+}
+
+
+@media screen and (max-width: 768px) {
+
+}
+
+@media screen and (max-width: 450px) {
+    .chat_top_bar_back.input_icon_container {
+        display: flex;
+    }
+}

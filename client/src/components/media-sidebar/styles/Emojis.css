@@ -7,9 +7,9 @@
 
 /* EMOJI */
 .emoji_blocks_list {
-    height: 90vh;
     overflow-y: scroll;
     overflow-x: hidden;
+    flex: 0 0 auto;
 }
 
 .emoji_blocks_list_item {

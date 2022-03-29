@@ -10,6 +10,8 @@ import {Socket} from "socket.io-client";
 import {useAppDispatch} from "../../redux/store";
 import MessageAvatar from "../reuse/MessageAvatar";
 import LoadSpinner from "../reuse/LoadSpinner";
+import wallpaper from "../../assets/telegram_background.png";
+
 
 interface IMessageList {
     socket: Socket;
@@ -30,6 +32,7 @@ const MessageList: FC<IMessageList> = ({socket}) => {
 
     return (
         <div className="message_list_wrapper">
+            <img src={wallpaper} alt="wallpaper" className="chat_wallpaper"/>
             {loading
                 ?
                 <LoadSpinner backgroundColor='var(--light-blue-gray)'/>
@@ -51,7 +54,7 @@ const MessageList: FC<IMessageList> = ({socket}) => {
                                 callback={i === length - 1 ? onMessagesFirstRendered : null}
                                 type={mainChat?.type || 'personal'}
                             />
-                            {msg.messageId}
+                            {false && msg.messageId}
                             {false && msg.author.split('')[0]}
                         </li>
                     )}

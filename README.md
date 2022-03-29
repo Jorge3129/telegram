@@ -6,7 +6,7 @@ DISLAIMER! This project is only on the initial stage of development, so there ar
 
 See the app live: [https://telegram-xd.herokuapp.com](https://telegram-xd.herokuapp.com)
 
-Login, password: a, a
+Login, password: a, a.
 
 ###Scripts
 

@@ -1,12 +1,12 @@
 
 .message_list_wrapper {
-    height: 86%;
-    background-color: var(--message-bg);
+    flex: 2 0 auto;
+    /*background-color: var(--message-bg);*/
     position: relative;
 }
 
 .message_list {
-    background-color: var(--light-blue-gray);
+    /*background-color: var(--light-blue-gray);*/
     width: 100%;
     min-height: min-content;
     max-height: 100%;

@@ -7,7 +7,8 @@ import './styles/Chats.css'
 import * as _ from 'lodash'
 import {useAppDispatch} from "../../redux/store";
 import {selectMainChat, setChat, setChatId} from "../main-chat/reducers/main.chat.reducer";
-import ChatsSearchBar from "./ChatsSearchBar";
+import ChatsSearchBar from "./ChatsSearchBar"
+import LoadSpinner from "../reuse/LoadSpinner";
 
 interface IChatsContainer {
 
@@ -15,8 +16,8 @@ interface IChatsContainer {
 
 const ChatsContainer: FC<IChatsContainer> = ({}) => {
 
-    const {chats, loading} = useSelector(selectChats);
-    const {chatId} = useSelector(selectMainChat);
+    const {chats, loading, width} = useSelector(selectChats);
+    const {chatId, mainChat} = useSelector(selectMainChat);
     const dispatch = useAppDispatch()
 
     const handleChat = (e: MouseEvent<HTMLButtonElement>) => {
@@ -41,7 +42,7 @@ const ChatsContainer: FC<IChatsContainer> = ({}) => {
             chat.title.toLowerCase().split('').includes(searchItem.toLowerCase()))
     }, [searchItem, sortedChats]);
 
-    const chatList = loading ? <h4>Loading...</h4> :
+    const chatList = loading ? <LoadSpinner backgroundColor={'var(--white'}/> :
         filteredChats.map((ch: IChat) => (
             <li
                 key={ch.id + ''}
@@ -57,8 +58,10 @@ const ChatsContainer: FC<IChatsContainer> = ({}) => {
             </li>
         ))
 
+    const chatClass = () => mainChat ? ' main_chat_active' : '';
+
     return (
-        <div className="chats_container main_section">
+        <div className={"chats_container main_section" + chatClass()} style={width ? {width} : {}}>
             <ChatsSearchBar searchItem={searchItem} setSearchItem={setSearchItem}/>
             <ul className="chat_list">
                 {chatList}
@@ -68,3 +71,4 @@ const ChatsContainer: FC<IChatsContainer> = ({}) => {
 };
 
 export default ChatsContainer;
+

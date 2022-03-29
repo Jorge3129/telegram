@@ -12,17 +12,19 @@
     height: 3em;
     width: 3em;
     border-radius: 50%;
-    background: conic-gradient(var(--white), var(--gray));
+    background: conic-gradient(var(--black), var(--white));
     display: flex;
     justify-content: center;
     align-items: center;
     animation: spin 2s linear infinite;
+    opacity: 0.2;
+
 }
 
 .load_spinner_inside {
     --size: calc(100% - 0.5em);
     border-radius: 50%;
-    background-color: var(--light-blue-gray);
+    background-color: #849989;
     width: var(--size);
     height: var(--size);
 }
