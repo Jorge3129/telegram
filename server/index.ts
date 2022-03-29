@@ -3,7 +3,7 @@ import {ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketDat
 const express = require('express')
 import {Server} from 'socket.io'
 import {onConnect} from "./socket/onConnect";
-import {request, Request, Response} from "express"
+import {NextFunction, Request, Response} from "express"
 
 const cors = require('cors')
 const authRouter = require('./routes/auth.router')
@@ -17,10 +17,18 @@ type DestinationCallback = (error: Error | null, destination: string) => void
 type FileNameCallback = (error: Error | null, filename: string) => void
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://telegram-xd.herokuapp.com/'],
+    origin: ['http://localhost:3000', 'https://telegram-xd.herokuapp.com'],
 }))
 
 app.use(express.json())
+
+const fs = require('fs');
+const dir = './public';
+
+if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+}
+
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 const storage = multer.diskStorage({
@@ -50,7 +58,7 @@ app.post('/media', upload.single('file'),
 const server = require('http').createServer(app);
 const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: ['http://localhost:3000', 'https://telegram-xd.herokuapp.com'],
         methods: ["GET", "POST"]
     }
 });

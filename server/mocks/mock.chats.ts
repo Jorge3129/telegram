@@ -49,7 +49,7 @@ export const mockChats: (IPersonalChat | IGroupChat)[] = [
             {username: 'Paul McCartney', lastRead: '2022-03-24T19:10:46+02:00', muted: true}
         ],
         type: 'group',
-        title: 'Глисти із жопи'
+        title: 'GIJ'
     },
     {
         id: 11,
