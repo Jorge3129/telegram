@@ -17,14 +17,15 @@ type DestinationCallback = (error: Error | null, destination: string) => void
 type FileNameCallback = (error: Error | null, filename: string) => void
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: ['http://localhost:3000', 'https://telegram-xd.herokuapp.com/'],
 }))
 
 app.use(express.json())
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 const storage = multer.diskStorage({
     destination: (request: Request, file: Express.Multer.File, callback: DestinationCallback) => {
-        callback(null, 'images/')
+        callback(null, 'public/')
     },
     filename: (req: Request, file: Express.Multer.File, callback: FileNameCallback) => {
         callback(null, file.originalname)
@@ -36,7 +37,7 @@ const upload = multer({storage: storage})
 
 app.get('/media/:filename', (req: Request, res: Response) => {
     const {filename} = req.params;
-    res.sendFile(path.resolve('./images/' + filename))
+    res.sendFile(path.resolve('./public/' + filename))
 })
 
 app.post('/media', upload.single('file'),
