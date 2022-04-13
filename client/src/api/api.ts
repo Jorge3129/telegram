@@ -13,7 +13,17 @@ export class Api {
     }
 
     static async login(login: IUser) {
-        return await axios.post(SERVER_URL + '/auth/login', login);
+        try {
+            return await axios.post(SERVER_URL + '/auth/login', login);
+        } catch (e) {
+            return {
+                data: {
+                    success: false,
+                },
+                error: e,
+            };
+        }
+
     }
 }
 

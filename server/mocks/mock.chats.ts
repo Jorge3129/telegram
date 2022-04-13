@@ -90,5 +90,187 @@ export const mockChats: (IPersonalChat | IGroupChat)[] = [
             {username: 'Paul McCartney', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
         ],
         type: 'personal'
-    }]
+    },
+    {
+        id: 17,
+        members: [
+            {username: 'Leonid', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'George', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 18,
+        members: [
+            {username: 'Alexander', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'George', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 19,
+        members: [
+            {username: 'Michael', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'George', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 20,
+        members: [
+            {username: 'Alexander', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'a', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 21,
+        members: [
+            {username: 'Leonid', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'a', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 22,
+        members: [
+            {username: 'Michael', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'a', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 23,
+        members: [
+            {username: 'Denis', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Jorge', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 24,
+        members: [
+            {username: 'Jorge', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Heorhii', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 25,
+        members: [
+            {username: 'Denis', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Heorhii', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 26,
+        members: [
+            {username: 'Jorge', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Vladyslav', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 27,
+        members: [
+            {username: 'Jorge', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Sanya', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 28,
+        members: [
+            {username: 'Jorge', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Vlaad', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 29,
+        members: [
+            {username: 'Jorge', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Chris', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 30,
+        members: [
+            {username: 'Jorge', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Artem', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 31,
+        members: [
+            {username: 'Jorge', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'FatRat', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 32,
+        members: [
+            {username: 'Sanya', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Vladyslav', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 33,
+        members: [
+            {username: 'Sanya', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Vlaad', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 34,
+        members: [
+            {username: 'Vlaad', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Vlasyslav', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 35,
+        members: [
+            {username: 'Sanya', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'FatRat', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 36,
+        members: [
+            {username: 'Artem', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Vladyslav', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 36,
+        members: [
+            {username: 'Artem', lastRead: '2022-03-13T10:16:35+02:00', muted: false},
+            {username: 'Sanya', lastRead: '2011-10-05T14:48:00+02:00', muted: true}
+        ],
+        type: 'personal'
+    },
+    {
+        id: 37,
+        members: [
+            {username: 'Sanya', lastRead: '2022-03-24T18:10:46+02:00', muted: true},
+            {username: 'Vlaad', lastRead: '2022-03-24T19:10:46+02:00', muted: true},
+            {username: 'Vladyslav', lastRead: '2022-03-24T19:10:46+02:00', muted: true},
+            {username: 'Jorge', lastRead: '2022-03-24T19:10:46+02:00', muted: true},
+            {username: 'Artem', lastRead: '2022-03-24T19:10:46+02:00', muted: true},
+            {username: 'FatRat', lastRead: '2022-03-24T19:10:46+02:00', muted: true},
+        ],
+        type: 'group',
+        title: 'Глисти з жопи ХХДД'
+    },
+]
 

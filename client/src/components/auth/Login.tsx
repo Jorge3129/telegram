@@ -13,6 +13,7 @@ const Login: FC<ILogin> = ({setLoggedIn}) => {
     const navigate = useNavigate();
 
     const [state, setState] = useState<IUser>({username: '', password: ''});
+    const [res, setRes] = useState<string>('');
 
     const handleUser = (e: ChangeEvent<HTMLInputElement>) => {
         setState({...state, username: e.target.value})
@@ -26,12 +27,15 @@ const Login: FC<ILogin> = ({setLoggedIn}) => {
         e.preventDefault();
         const response = await api.login(state);
         if (response.data.success) setLoggedIn(true);
+        setRes(JSON.stringify(response))
         localStorage.setItem('user', response.data.username)
         navigate('/');
     }
 
     return (
         <div className="login_container">
+            Response{res}
+            User:{localStorage.getItem('user')}
             <h2>Login</h2>
             <form className="login_form">
                 <label>Username

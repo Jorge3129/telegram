@@ -1,4 +1,4 @@
-##Telegram clone
+## Telegram clone
 
 This is my pet project aimed at implementing the main functionality of Telegram.
 
@@ -8,7 +8,7 @@ See the app live: [https://telegram-xd.herokuapp.com](https://telegram-xd.heroku
 
 Login, password: a, a.
 
-###Scripts
+### Scripts
 
 To run the client:
 

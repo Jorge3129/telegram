@@ -50,7 +50,7 @@ app.get('/media/:filename', (req: Request, res: Response) => {
 
 app.post('/media', upload.single('file'),
     (req: Request, res: Response) => {
-        console.log(req.body)
+        console.log('POST!!!')
         res.json({})
     }
 )

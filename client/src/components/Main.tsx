@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, MouseEvent, useEffect, useState} from 'react';
 import MainChat from "./main-chat/MainChat";
 import {useSocket} from "../socket/socket";
 import {useAppDispatch} from "../redux/store";
@@ -20,8 +20,16 @@ const Main: FC = () => {
         dispatch(chatThunk(localStorage.getItem('user') || ''))
     }, []);
 
+    const [error, setError] = useState(false);
+
+    const throwError = (e: MouseEvent<HTMLButtonElement>) => {
+        setError(true)
+        throw new Error('LOOLERROR')
+    }
+
     return (
         <div className="main" onClick={e => dispatch(setContextMenu(null))}>
+            <button className="error_button" onClick={throwError}>Throw error</button>
             <ChatsContainer/>
             {chatId
                 ?

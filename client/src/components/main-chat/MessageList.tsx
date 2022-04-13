@@ -29,7 +29,6 @@ const MessageList: FC<IMessageList> = ({socket}) => {
         dispatch(messageThunk(chatId || -1));
     }, [chatId]);
 
-
     return (
         <div className="message_list_wrapper">
             <img src={wallpaper} alt="wallpaper" className="chat_wallpaper"/>

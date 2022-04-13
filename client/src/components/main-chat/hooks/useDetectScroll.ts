@@ -64,8 +64,10 @@ export const useDetectScroll = (
         const unr = chats.find(ch => ch.id === chatId)?.unread;
         if (!unr) return;
 
-        if (!scrollRef.current?.scrollTop || topRef.current > scrollRef.current?.scrollTop)
-            return (topRef.current = scrollRef.current?.scrollTop || 0)
+        if (!scrollRef.current?.scrollTop || topRef.current > scrollRef.current?.scrollTop) {
+            topRef.current = scrollRef.current?.scrollTop || 0;
+            return;
+        }
 
         topRef.current = scrollRef.current?.scrollTop || 0;
 
