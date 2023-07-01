@@ -1,33 +1,27 @@
 {
-  "name": "server",
+  "name": "telegram-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.9",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.7.1"
+  },
   "scripts": {
-    "start": "node dist/index.js",
-    "postinstall": "tsc",
-    "watch-node": "nodemon dist/index.js",
-    "watch-ts": "tsc -w"
+    "start:dev": "nodemon src/index.ts",
+    "test": "jest"
   },
-  "engines": {
-    "node": "14.17.3"
-  },
-  "author": "",
+  "author": "Heorhii Sanchenko",
   "license": "ISC",
   "devDependencies": {
-    "@tsconfig/node16": "^1.0.2",
-    "@types/express": "^4.17.13",
-    "@types/node": "^17.0.21",
-    "ts-node": "^10.7.0",
-    "typescript": "^4.6.2"
-  },
-  "dependencies": {
+    "@types/express": "^4.17.17",
     "@types/multer": "^1.4.7",
-    "@types/socket.io": "^3.0.2",
-    "cors": "^2.8.5",
-    "dayjs": "^1.11.0",
-    "express": "^4.17.3",
-    "multer": "^1.4.4",
-    "socket.io": "^4.4.1"
+    "@types/node": "^20.3.3",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
   }
 }
