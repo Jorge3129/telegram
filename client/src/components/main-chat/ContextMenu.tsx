@@ -1,6 +1,8 @@
 import React, { FC } from "react";
 import { IContextMenu, IMessage } from "../../types/types";
 import { isSelf } from "../../utils/general.utils";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/user-reducer";
 
 interface IContextMenuProps {
   contextMenu: IContextMenu;
@@ -9,7 +11,9 @@ interface IContextMenuProps {
 }
 
 const ContextMenu: FC<IContextMenuProps> = ({ contextMenu, msg, type }) => {
-  const showContextMenu = () => type === "group" && isSelf(msg);
+  const { user } = useSelector(selectUser);
+
+  const showContextMenu = () => type === "group" && isSelf(msg, user);
 
   if (!contextMenu || contextMenu.messageId !== msg.id) return <></>;
 

@@ -1,34 +1,35 @@
 import dayjs from "dayjs";
-import {IMessage} from "../../types/types";
-import React from "react";
+import { IMessage, User } from "../../types/types";
 
 export const initials = (title: string) => {
-    const tokens = title.split(' ');
-    return tokens
-        .slice(0, 2)
-        .map(t => t.split('')[0])
-        .join('')
-        .toUpperCase()
-}
+  const tokens = title.split(" ");
+  return tokens
+    .slice(0, 2)
+    .map((t) => t.split("")[0])
+    .join("")
+    .toUpperCase();
+};
 
 export const formatTimestamp = (timestamp: string | undefined): string => {
-    if (!timestamp) return ''
-    const date = dayjs(timestamp);
-    if (date.isSame(dayjs(), 'date')) return date.format('HH:mm')
-    if (date.isBetween(dayjs(), dayjs().subtract(5, 'day'))) return date.format('ddd')
-    return date.format('DD.MM.YYYY')
-}
+  if (!timestamp) return "";
+  const date = dayjs(timestamp);
+  if (date.isSame(dayjs(), "date")) return date.format("HH:mm");
+  if (date.isBetween(dayjs(), dayjs().subtract(5, "day")))
+    return date.format("ddd");
+  return date.format("DD.MM.YYYY");
+};
 
-export const formatChatAuthor = (message: IMessage | undefined, type: 'personal' | 'group'): string => {
-    if (!message || type === 'personal') return ''
-    const {author} = message;
-    const user = localStorage.getItem('user') || '';
-    return (author === user ? 'You: ' : author + ': ')
-}
+export const getSeenIcon = (
+  msg: IMessage | undefined,
+  currentUser: User | null
+) => {
+  if (!msg || msg.author !== currentUser?.username) {
+    return "";
+  }
 
-export const getSeenIcon = (msg: IMessage | undefined) => {
-    if (!msg || msg.author !== localStorage.getItem('user')) return '';
-    return msg.seen ?
-        <i className="fa-solid fa-check-double chat_seen_icon"/>
-        : <i className="fa-solid fa-check chat_seen_icon"/>;
-}
+  return msg.seen ? (
+    <i className="fa-solid fa-check-double chat_seen_icon" />
+  ) : (
+    <i className="fa-solid fa-check chat_seen_icon" />
+  );
+};
