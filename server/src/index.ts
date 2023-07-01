@@ -1,3 +1,11 @@
+import express from "express";
+import { NextFunction, Request, Response } from "express";
+import cors from "cors";
+import multer from "multer";
+import path from "path";
+
+import { Server } from "socket.io";
+import { onConnect } from "./socket/onConnect";
 import {
   ClientToServerEvents,
   InterServerEvents,
@@ -5,18 +13,12 @@ import {
   SocketData,
 } from "./socket/socket.types";
 
-const express = require("express");
-import { Server } from "socket.io";
-import { onConnect } from "./socket/onConnect";
-import { NextFunction, Request, Response } from "express";
+import { authRouter } from "./routes/auth.router";
+import { chatsRouter } from "./routes/chats.router";
 
-const cors = require("cors");
-const authRouter = require("./routes/auth.router");
-const PORT = process.env.PORT || 9000;
 const app = express();
-const router = require("./routes/router");
-const multer = require("multer");
-const path = require("path");
+
+const PORT = process.env.PORT || 9000;
 
 type DestinationCallback = (error: Error | null, destination: string) => void;
 type FileNameCallback = (error: Error | null, filename: string) => void;
@@ -82,7 +84,7 @@ const io = new Server<
 });
 
 app.use("/auth", authRouter);
-app.use("/", router);
+app.use("/", chatsRouter);
 
 io.on("connection", onConnect);
 

@@ -1,41 +1,59 @@
-import {IMessage, IUser} from "../types/types";
-import {Socket} from "socket.io";
-import {chats, messages, users, User, Chat, Message} from "../db/db.functions"
+import { Socket } from "socket.io";
+import { User } from "../users/user.type";
+import { userService } from "../users/user.service";
+import { chatsRepo } from "../chats/chats.repository";
+import { chatsService } from "../chats/chats.service";
+import { messagesRepo } from "../messages/message.repository";
 
-const {findUserContacts, getUserSocketId} = User;
-const {updateLastRead, getChats} = Chat;
-const {updateSeen, getMessagesByChat} = Message;
+export const onMessage =
+  (socket: Socket, user: User | null) => async (data: any) => {
+    const { message } = data;
 
-export const onMessage = (socket: Socket, user: IUser | undefined) => (data: any) => {
-    const {message} = data;
-    messages.push(message);
-    updateLastRead(user?.username || '', message);
-    const chat = chats.find(ch => ch.id === message.chatId);
-    if (!chat) return;
-    chat.members.forEach((member) => {
-        emitEvent(socket, member.username, 'message-to-client', message);
-    })
-}
+    const savedMessage = await messagesRepo.save(message);
 
-export const onRead = (socket: Socket) => (data: any) => {
-    const {message, username} = data;
-    updateLastRead(username, message)
-    updateSeen(username, message);
-    emitEvent(socket, message.author,'seen', {message, username})
-}
+    await chatsService.updateLastRead(user?.username || "", message);
 
-export const onDisconnect = (socket: Socket, user: IUser | undefined) => (reason: any) => {
-    if (user) {
-        user.online = false;
-        user.socketId = undefined;
-        findUserContacts(user).forEach(({username, chatId}) => {
-            emitEvent(socket, username, 'online-change', {online: false, chatId})
-        })
+    const chat = await chatsRepo.findOne((ch) => ch.id === message.chatId);
+
+    if (!chat) {
+      return;
     }
-}
 
-export const emitEvent = (socket: Socket, username: string | undefined, id: string, args: any) => {
-    const socketId = getUserSocketId(username || '')
-    socket.to(socketId)
-        .emit(id, args)
-}
+    chat.members.forEach((member) => {
+      emitEvent(socket, member.username, "message-to-client", message);
+    });
+  };
+
+export const onRead = (socket: Socket) => async (data: any) => {
+  const { message, username } = data;
+  await chatsService.updateLastRead(username, message);
+
+  await messagesRepo.updateSeen(username, message);
+
+  emitEvent(socket, message.author, "seen", { message, username });
+};
+
+export const onDisconnect =
+  (socket: Socket, user: User | null) => async (reason: any) => {
+    if (user) {
+      user.online = false;
+      user.socketId = undefined;
+
+      const contacts = await userService.findUserContacts(user);
+
+      contacts.forEach(({ username, chatId }) => {
+        emitEvent(socket, username, "online-change", { online: false, chatId });
+      });
+    }
+  };
+
+export const emitEvent = (
+  socket: Socket,
+  username: string | undefined,
+  id: string,
+  args: any
+) => {
+  userService.getUserSocketId(username || "").then((socketId) => {
+    socket.to(socketId).emit(id, args);
+  });
+};
