@@ -12,15 +12,7 @@ chatsRouter.get("/messages/:chatId", async (req: Request, res: Response) => {
 });
 
 chatsRouter.get("/chats/:userId", async (req: Request, res: Response) => {
-  const user = await userRepository.findOne({
-    id: parseInt(req.params.userId),
-  });
-
-  if (!user) {
-    throw new Error("NO such user");
-  }
-
-  const chats = await chatsService.getUserChats(user?.username);
+  const chats = await chatsService.getUserChats(parseInt(req.params.userId));
 
   res.json(chats);
 });

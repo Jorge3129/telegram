@@ -18,7 +18,9 @@ const Avatar: FC<IAvatar> = ({ chat, title, prefix, hide }) => {
         className={
           prefix +
           "_avatar avatar" +
-          (chat?.online && prefix === "chat" ? " online" : "")
+          (chat?.online && prefix === "chat" && chat.type === "personal"
+            ? " online"
+            : "")
         }
       >
         <div className={prefix + "_avatar_text avatar_text"}>

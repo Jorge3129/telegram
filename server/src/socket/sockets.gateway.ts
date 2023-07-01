@@ -4,17 +4,15 @@ import { Socket } from "socket.io";
 
 export class SocketsGateway {
   public async onConnect(socket: Socket): Promise<void> {
-    const username = socket.handshake.query.username;
+    const userId = parseInt((socket.handshake.query.userId as string) || "");
 
-    console.log("CONNECTED " + username);
-
-    const user = await userRepository.findOne(
-      (u) => u.username === socket.handshake.query.username
-    );
+    const user = await userRepository.findOne({ id: userId });
 
     if (!user) {
-      throw new Error(`No user with name ${username}`);
+      throw new Error(`No user with id ${userId}`);
     }
+
+    console.log("CONNECTED " + user.username);
 
     await userRepository.update(
       { id: user.id },

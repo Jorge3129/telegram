@@ -18,8 +18,6 @@ import api from "./api/api";
 const App: FC = () => {
   const { user, loading } = useSelector(selectUser);
 
-  console.log("app");
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {

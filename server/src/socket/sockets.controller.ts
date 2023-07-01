@@ -17,7 +17,7 @@ export class SocketsController {
 
     const savedMessage = await messagesRepo.save(message);
 
-    await chatsService.updateLastRead(this.user.username, message);
+    await chatsService.updateLastRead(this.user.id, message);
 
     const chat = await chatsRepo.findOne((ch) => ch.id === message.chatId);
 
@@ -26,7 +26,7 @@ export class SocketsController {
     }
 
     chat.members.forEach(async (member) => {
-      const memberSocketId = await userService.getUserSocketId(member.username);
+      const memberSocketId = await userService.getUserSocketId(member.userId);
 
       if (!memberSocketId) {
         return;
@@ -39,19 +39,23 @@ export class SocketsController {
   }
 
   @SocketEventHandler()
-  public async onRead(data: { message: Message; username: string }) {
-    const { message, username } = data;
+  public async onRead(data: {
+    message: Message;
+    username: string;
+    userId: string;
+  }) {
+    const { message, userId, username } = data;
 
-    await chatsService.updateLastRead(username, message);
-    await messagesRepo.updateSeen(username, message);
+    await chatsService.updateLastRead(parseInt(userId), message);
+    await messagesRepo.updateSeen(parseInt(userId), message);
 
-    const authorSocketId = await userService.getUserSocketId(message.author);
+    const authorSocketId = await userService.getUserSocketId(message.authorId);
 
     if (!authorSocketId) {
       return;
     }
 
-    this.emitEventTo(authorSocketId, "seen", { message, username });
+    this.emitEventTo(authorSocketId, "seen", { message, userId, username });
   }
 
   @SocketEventHandler()
@@ -68,7 +72,7 @@ export class SocketsController {
   }
 
   public async notifyContactsOnConnectionChange(online: boolean) {
-    const contacts = await userService.findUserContacts(this.user);
+    const contacts = await userService.findUserContacts(this.user.id);
 
     contacts.forEach((contact) => {
       if (!contact.user.socketId) {

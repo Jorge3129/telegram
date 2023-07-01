@@ -38,6 +38,7 @@ export const useSocket = () => {
     username,
   }: {
     message: IMessage;
+    userId: number;
     username: string;
   }) => {
     //console.log(chatId)
@@ -53,7 +54,7 @@ export const useSocket = () => {
     }
 
     const newSocket = io(`${SERVER_WS_URL}`, {
-      query: { username: user.username, userId: user.id },
+      query: { userId: user.id },
     });
 
     newSocket.on("message-to-client", onMessage);
