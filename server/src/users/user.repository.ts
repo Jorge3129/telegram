@@ -23,6 +23,12 @@ export class UserRepository {
     return this.users.find(predicate) ?? null;
   }
 
+  public async findOneByUsername(
+    predicate: (user: User) => boolean
+  ): Promise<User | null> {
+    return this.users.find(predicate) ?? null;
+  }
+
   public async find(predicate: (user: User) => boolean): Promise<User[]> {
     return this.users.filter(predicate);
   }

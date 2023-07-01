@@ -5,16 +5,9 @@ import multer from "multer";
 import path from "path";
 
 import { Server } from "socket.io";
-import { onConnect } from "./socket/onConnect";
-import {
-  ClientToServerEvents,
-  InterServerEvents,
-  ServerToClientEvents,
-  SocketData,
-} from "./socket/socket.types";
-
 import { authRouter } from "./routes/auth.router";
 import { chatsRouter } from "./routes/chats.router";
+import { socketsGateway } from "./socket/sockets.gateway";
 
 const app = express();
 
@@ -71,12 +64,7 @@ app.post("/media", upload.single("file"), (req: Request, res: Response) => {
 });
 
 const server = require("http").createServer(app);
-const io = new Server<
-  ClientToServerEvents,
-  ServerToClientEvents,
-  InterServerEvents,
-  SocketData
->(server, {
+const io = new Server(server, {
   cors: {
     origin: ["http://localhost:3000", "https://telegram-xd.herokuapp.com"],
     methods: ["GET", "POST"],
@@ -86,6 +74,6 @@ const io = new Server<
 app.use("/auth", authRouter);
 app.use("/", chatsRouter);
 
-io.on("connection", onConnect);
+io.on("connection", socketsGateway.onConnect);
 
 server.listen(PORT, () => console.log(`Server on http://localhost:${PORT}`));

@@ -1,3 +1,4 @@
+import { ChatUser } from "../chats/chat.type";
 import { ChatsRepository, chatsRepo } from "../chats/chats.repository";
 import { UserRepository, userRepository } from "./user.repository";
 import { User } from "./user.type";
@@ -8,25 +9,38 @@ export class UserService {
     private chatsRepo: ChatsRepository
   ) {}
 
-  public async getUserSocketId(username: string): Promise<string> {
+  public async getUserSocketId(username: string): Promise<string | undefined> {
     const userReceiver = await userRepository.findOne(
       (u) => u.username === username
     );
 
-    return userReceiver?.socketId || "";
+    return userReceiver?.socketId;
   }
 
   public async findUserContacts(
-    user: User
-  ): Promise<{ username?: string; chatId: number }[]> {
+    targetUser: User
+  ): Promise<{ chatUser: ChatUser; user: User; chatId: number }[]> {
     const chats = await this.chatsRepo.find(
-      (ch) => !!ch.members.find((u) => u.username === user.username)
+      (ch) => !!ch.members.find((u) => u.username === targetUser.username)
     );
 
-    return chats.map((ch) => ({
-      username: ch.members.find((u) => u.username !== user.username)?.username,
-      chatId: ch.id,
-    }));
+    const contacts = chats.map(async (ch) => {
+      const contactChatUser = ch.members.filter(
+        (u) => u.username !== targetUser.username
+      )[0];
+
+      const contactUser = await this.userRepo
+        .find((u) => u.username === contactChatUser.username)
+        .then((res) => res[0]);
+
+      return {
+        chatUser: contactChatUser,
+        user: contactUser,
+        chatId: ch.id,
+      };
+    });
+
+    return Promise.all(contacts);
   }
 }
 
