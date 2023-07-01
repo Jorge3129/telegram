@@ -1,11 +1,11 @@
 import { Media } from "./media.type";
 
 export interface Message {
+  id: number;
   text: string;
   timestamp: string;
   author: string;
   chatId: number;
-  messageId: number;
   seen?: boolean;
   seenBy?: string[];
   media?: Media;

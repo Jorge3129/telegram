@@ -1,36 +1,14 @@
 import { mockUsers } from "../mocks/mock.users";
-import { User } from "./user.type";
+import { BaseRepository } from "../shared/base-repository";
+import { User, UserKey } from "./user.type";
 
-export class UserRepository {
-  private readonly users: User[] = [];
-  private idSequence = 0;
+export class UserRepository extends BaseRepository<User> {
+  protected rows: User[] = [];
 
   constructor() {
-    this.users.push(...mockUsers);
-  }
+    super();
 
-  public async save(userDto: Omit<User, "id">): Promise<User> {
-    const savedUser = { ...userDto, id: ++this.idSequence };
-
-    this.users.push(savedUser);
-
-    return savedUser;
-  }
-
-  public async findOne(
-    predicate: (user: User) => boolean
-  ): Promise<User | null> {
-    return this.users.find(predicate) ?? null;
-  }
-
-  public async findOneByUsername(
-    predicate: (user: User) => boolean
-  ): Promise<User | null> {
-    return this.users.find(predicate) ?? null;
-  }
-
-  public async find(predicate: (user: User) => boolean): Promise<User[]> {
-    return this.users.filter(predicate);
+    this.saveMany(mockUsers);
   }
 }
 

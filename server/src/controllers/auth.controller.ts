@@ -13,9 +13,10 @@ export class AuthController {
   public async login(req: Request, res: Response) {
     const { username, password } = req.body;
 
-    const user = await userRepository.findOne(
-      (u) => u.username === username && u.password === password
-    );
+    const user = await userRepository.findOne({
+      username,
+      password,
+    });
 
     if (user) {
       res.json({ success: true, username });

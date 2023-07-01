@@ -16,8 +16,13 @@ export class SocketsGateway {
       throw new Error(`No user with name ${username}`);
     }
 
-    user.online = true;
-    user.socketId = socket.id;
+    await userRepository.update(
+      { id: user.id },
+      {
+        online: true,
+        socketId: socket.id,
+      }
+    );
 
     const controller = new SocketsController(socket, user);
 

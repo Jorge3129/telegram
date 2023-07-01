@@ -1,30 +1,14 @@
 import { mockMessages } from "../mocks/mock.messages";
+import { BaseRepository } from "../shared/base-repository";
 import { Message } from "./models/message.type";
 
-export class MessagesRepository {
-  private readonly messages: Message[] = [];
-  private idSequence = 0;
+export class MessagesRepository extends BaseRepository<Message> {
+  protected rows: Message[] = [];
 
   constructor() {
-    this.messages.push(...mockMessages);
-  }
+    super();
 
-  public async save(messageDto: Omit<Message, "id">): Promise<Message> {
-    const savedMessage = { ...messageDto, id: ++this.idSequence };
-
-    this.messages.push(savedMessage);
-
-    return savedMessage;
-  }
-
-  public async findOne(
-    predicate: (chat: Message) => boolean
-  ): Promise<Message | null> {
-    return this.messages.find(predicate) ?? null;
-  }
-
-  public async find(predicate: (chat: Message) => boolean): Promise<Message[]> {
-    return this.messages.filter(predicate);
+    this.saveMany(mockMessages);
   }
 
   public updateSeen(username: string, { chatId, timestamp, author }: Message) {
@@ -32,7 +16,7 @@ export class MessagesRepository {
       return;
     }
 
-    const matchingMessages = this.messages.filter(
+    const matchingMessages = this.rows.filter(
       (m) =>
         m.chatId === chatId &&
         new Date(m.timestamp) <= new Date(timestamp) &&

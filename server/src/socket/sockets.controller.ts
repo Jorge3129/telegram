@@ -6,6 +6,7 @@ import { userService } from "../users/user.service";
 import { User } from "../users/user.type";
 import { Message } from "../messages/models/message.type";
 import { SocketEventHandler } from "./decorators/socket-handler.decorator";
+import { userRepository } from "../users/user.repository";
 
 export class SocketsController {
   constructor(private readonly socket: Socket, private readonly user: User) {}
@@ -16,7 +17,7 @@ export class SocketsController {
 
     const savedMessage = await messagesRepo.save(message);
 
-    await chatsService.updateLastRead(this.user?.username || "", message);
+    await chatsService.updateLastRead(this.user.username, message);
 
     const chat = await chatsRepo.findOne((ch) => ch.id === message.chatId);
 
@@ -55,12 +56,15 @@ export class SocketsController {
 
   @SocketEventHandler()
   public async onDisconnect(reason: any) {
-    if (this.user) {
-      this.user.online = false;
-      this.user.socketId = undefined;
+    await userRepository.update(
+      { id: this.user.id },
+      {
+        online: false,
+        socketId: undefined,
+      }
+    );
 
-      await this.notifyContactsOnConnectionChange(false);
-    }
+    await this.notifyContactsOnConnectionChange(false);
   }
 
   public async notifyContactsOnConnectionChange(online: boolean) {
@@ -83,6 +87,6 @@ export class SocketsController {
     eventName: string,
     ...args: any[]
   ) {
-    this.socket.to(targetSocketId).emit(eventName, args);
+    this.socket.to(targetSocketId).emit(eventName, ...args);
   }
 }
