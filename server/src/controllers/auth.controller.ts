@@ -1,23 +1,28 @@
-import {Request, Response} from "express";
-import {users} from "../db/db.functions";
-import {IUser} from "../types/types";
+import { Request, Response } from "express";
+import { userRepository } from "../users/user.repository";
 
-class AuthController {
-    async register(req: Request, res: Response) {
-        const {username, password} = req.body;
-        users.push({username, password, id: users.length + 1});
-        res.send({success: true});
-    }
+export class AuthController {
+  public async register(req: Request, res: Response) {
+    const { username, password } = req.body;
 
-    async login(req: Request, res: Response) {
-        const {username, password} = req.body;
-        console.log('LOGIN!', username, password)
-        const user: IUser | undefined = users
-            .find(u => u.username === username
-                && u.password === password);
-        if (user) res.json({success: true, username});
-        else res.status(403).json({success: false});
+    await userRepository.save({ username, password });
+
+    res.send({ success: true });
+  }
+
+  public async login(req: Request, res: Response) {
+    const { username, password } = req.body;
+
+    const user = await userRepository.findOne(
+      (u) => u.username === username && u.password === password
+    );
+
+    if (user) {
+      res.json({ success: true, username });
+    } else {
+      res.status(403).json({ success: false });
     }
+  }
 }
 
-module.exports = new AuthController()
+export const authController = new AuthController();
