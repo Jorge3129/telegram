@@ -1,5 +1,7 @@
+import { chatUserRepository } from "../chat-users/chat-user.repository";
 import { messageService } from "../messages/message.service";
 import { Message } from "../messages/models/message.type";
+import { userRepository } from "../users/user.repository";
 import { Chat, ChatForView } from "./chat.type";
 import { ChatsRepository, chatsRepo } from "./chats.repository";
 import dayjs from "dayjs";
@@ -7,22 +9,26 @@ import dayjs from "dayjs";
 export class ChatsService {
   constructor(private readonly chatsRepo: ChatsRepository) {}
 
-  public async getUserChats(username: string): Promise<ChatForView[]> {
-    const rawChats = await this.chatsRepo.findByUserName(username);
+  public async getUserChats(userId: number): Promise<ChatForView[]> {
+    const rawChats = await this.chatsRepo.findByUserId(userId);
 
-    return Promise.all(
-      rawChats.map((ch) => this.mapChatToClient(ch, username))
+    await Promise.all(
+      rawChats.map(async (chat) => {
+        chat.members = await chatUserRepository.find({ chatId: chat.id });
+      })
     );
+
+    return Promise.all(rawChats.map((ch) => this.mapChatToClient(ch, userId)));
   }
 
-  public async updateLastRead(user: string, message: Message) {
+  public async updateLastRead(userId: number, message: Message) {
     const chat = await this.chatsRepo.findOne((ch) => ch.id === message.chatId);
 
     if (!chat) {
       return { success: false };
     }
 
-    const searchedUser = chat.members.find((u) => u.username === user);
+    const searchedUser = chat.members.find((u) => u.userId === userId);
 
     if (searchedUser) {
       searchedUser.lastRead = message.timestamp;
@@ -33,10 +39,12 @@ export class ChatsService {
 
   private async mapChatToClient(
     { id, members, type, title }: Chat,
-    username: string
+    userId: number
   ): Promise<ChatForView> {
     let unreadCount = 0;
-    const user = members.find((u) => u.username === username);
+
+    const user = members.find((u) => u.userId === userId);
+
     const lastRead = user?.lastRead;
 
     const msgs = await messageService.getMessagesByChat(id);
@@ -47,8 +55,14 @@ export class ChatsService {
       ).length;
     }
 
-    const receiverName =
-      members.find((u) => u.username !== username)?.username || "";
+    if (!members.filter((u) => u.userId !== userId)[0]) {
+      console.log(members);
+    }
+
+    const receiverId = members.filter((u) => u.userId !== userId)[0].userId;
+
+    const receiverName = (await userRepository.find({ id: receiverId }))[0]
+      .username;
 
     return {
       id,

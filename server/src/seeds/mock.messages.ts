@@ -1,6 +1,6 @@
 import { Message } from "../messages/models/message.type";
 
-export const mockMessages: Message[] = [
+export const mockMessages: Omit<Message, "authorId">[] = [
   {
     text: "yo",
     timestamp: "2022-03-19T00:20:46+02:00",

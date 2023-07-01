@@ -1,4 +1,4 @@
-export abstract class BaseRepository<Entity extends { id: number }> {
+export abstract class BaseRepository<Entity> {
   protected abstract rows: Entity[];
 
   private idSequence = 0;

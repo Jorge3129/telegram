@@ -8,6 +8,7 @@ import { Server } from "socket.io";
 import { authRouter } from "./routes/auth.router";
 import { chatsRouter } from "./routes/chats.router";
 import { socketsGateway } from "./socket/sockets.gateway";
+import { seedsService } from "./seeds/seeds-service";
 
 const app = express();
 
@@ -75,5 +76,7 @@ app.use("/auth", authRouter);
 app.use("/", chatsRouter);
 
 io.on("connection", socketsGateway.onConnect);
+
+seedsService.seed();
 
 server.listen(PORT, () => console.log(`Server on http://localhost:${PORT}`));

@@ -1,10 +1,8 @@
-import { type } from "os";
-
 export interface User {
+  id: number;
   username: string;
   password: string;
   online?: boolean;
-  id: number;
   socketId?: string;
 }
 

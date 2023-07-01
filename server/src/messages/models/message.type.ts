@@ -5,14 +5,15 @@ export interface Message {
   text: string;
   timestamp: string;
   author: string;
+  authorId: number;
   chatId: number;
   seen?: boolean;
-  seenBy?: string[];
+  seenBy?: number[];
   media?: Media;
 }
 
 export interface PersonalMessage extends Message {}
 
 export interface GroupMessage extends Message {
-  seenBy?: string[];
+  seenBy?: number[];
 }
