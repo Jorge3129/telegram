@@ -25,13 +25,13 @@ export const useSend = (socket: Socket) => {
     timestamp: new Date().toISOString(),
     author: localStorage.getItem("user") || "",
     chatId: chatId || 0,
-    messageId: id,
+    id: id,
     media,
   });
 
   const handleSend = () => {
     const lastMsg = messages.at(-1);
-    const id = lastMsg ? lastMsg.messageId + 1 : messages.length;
+    const id = lastMsg ? lastMsg.id + 1 : messages.length;
     const message = createMessage(id);
 
     socket.emit("message", { message }, (savedMessage: IMessage) => {

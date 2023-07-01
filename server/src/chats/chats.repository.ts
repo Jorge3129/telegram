@@ -1,27 +1,20 @@
 import { mockChats } from "../mocks/mock.chats";
+import { BaseRepository } from "../shared/base-repository";
 import { Chat } from "./chat.type";
 
-export class ChatsRepository {
-  private readonly chats: Chat[] = [];
+export class ChatsRepository extends BaseRepository<Chat> {
+  protected rows: Chat[] = [];
 
   constructor() {
-    this.chats.push(...mockChats);
+    super();
+
+    this.saveMany(mockChats);
   }
 
   public async findByUserName(username: string): Promise<Chat[]> {
-    return this.chats.filter(
+    return this.rows.filter(
       (c) => !!c.members.find((u) => u.username === username)
     );
-  }
-
-  public async findOne(
-    predicate: (chat: Chat) => boolean
-  ): Promise<Chat | null> {
-    return this.chats.find(predicate) ?? null;
-  }
-
-  public async find(predicate: (chat: Chat) => boolean): Promise<Chat[]> {
-    return this.chats.filter(predicate);
   }
 }
 

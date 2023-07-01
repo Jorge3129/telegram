@@ -1,3 +1,5 @@
+import { type } from "os";
+
 export interface User {
   username: string;
   password: string;
@@ -5,3 +7,5 @@ export interface User {
   id: number;
   socketId?: string;
 }
+
+export type UserKey = keyof User;
