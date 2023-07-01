@@ -90,10 +90,10 @@ export const {
 
 export const chatThunk = createAsyncThunk(
   "/chats/get",
-  async (user: string, thunkApi) => {
+  async (userId: number, thunkApi) => {
     try {
       thunkApi.dispatch(setLoading(true));
-      const response = await api.getChats(user);
+      const response = await api.getChats(userId);
       const messages = response.data;
       thunkApi.dispatch(setChats(messages));
     } catch (e) {

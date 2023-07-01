@@ -11,6 +11,7 @@ import { useAppDispatch } from "../../redux/store";
 import MessageAvatar from "../reuse/MessageAvatar";
 import LoadSpinner from "../reuse/LoadSpinner";
 import wallpaper from "../../assets/telegram_background.png";
+import { selectUser } from "../../redux/user-reducer";
 
 interface IMessageList {
   socket: Socket;
@@ -26,6 +27,8 @@ const MessageList: FC<IMessageList> = ({ socket }) => {
     messages
   );
   const dispatch = useAppDispatch();
+
+  const { user } = useSelector(selectUser);
 
   useEffect(() => {
     dispatch(messageThunk(chatId || -1));
@@ -44,7 +47,9 @@ const MessageList: FC<IMessageList> = ({ socket }) => {
         >
           {messages.map((msg, i, { length }) => (
             <li
-              className={"message_list_item" + (isSelf(msg) ? " self" : "")}
+              className={
+                "message_list_item" + (isSelf(msg, user) ? " self" : "")
+              }
               key={msg.id}
               id={"message-" + msg.id}
             >

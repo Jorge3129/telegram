@@ -19,7 +19,7 @@ export class AuthController {
     });
 
     if (user) {
-      res.json({ success: true, username });
+      res.json({ success: true, username, userId: user.id });
     } else {
       res.status(403).json({ success: false });
     }

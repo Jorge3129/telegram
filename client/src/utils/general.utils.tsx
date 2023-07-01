@@ -1,7 +1,7 @@
-import { IMedia, IMessage } from "../types/types";
+import { IMedia, IMessage, User } from "../types/types";
 
-export const isSelf = (msg: IMessage) =>
-  msg && msg.author === localStorage.getItem("user");
+export const isSelf = (msg: IMessage, user: User | null) =>
+  msg && msg.author === user?.username;
 
 export const getMsgById = (
   messageId: number,

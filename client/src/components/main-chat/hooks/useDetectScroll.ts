@@ -1,23 +1,26 @@
-import { MutableRefObject, UIEvent, useEffect, useRef } from "react";
-import { calculateUnread, getVisibleHeight } from "./scrollUtils";
+import { MutableRefObject, UIEvent, useRef } from "react";
+import { getVisibleHeight } from "./scrollUtils";
 import { selectChats, setUnread } from "../../chat-sidebar/chats.reducer";
 import { useSelector } from "react-redux";
-import { IChat, IMessage } from "../../../types/types";
+import { IMessage } from "../../../types/types";
 import { useAppDispatch } from "../../../redux/store";
 import { Socket } from "socket.io-client";
 import { selectMainChat } from "../reducers/main.chat.reducer";
 import { alreadySeen, getMsgById } from "../../../utils/general.utils";
+import { selectUser } from "../../../redux/user-reducer";
 
 export const useDetectScroll = (
   socket: Socket | null,
   scrollRef: MutableRefObject<HTMLUListElement | null>,
   messages: IMessage[]
 ) => {
-  const { chats, loading } = useSelector(selectChats);
+  const { chats } = useSelector(selectChats);
   const { chatId, mainChat } = useSelector(selectMainChat);
   const dispatch = useAppDispatch();
   const readRef = useRef<number[]>([]);
   const topRef = useRef<number>(scrollRef.current?.scrollTop || 0);
+
+  const { user } = useSelector(selectUser);
 
   const getVisibleMessages = () => {
     const divs = Array.from(document.querySelectorAll(".message_list_item"));
@@ -36,22 +39,29 @@ export const useDetectScroll = (
 
   const emitReadEvent = (searchedId: number) => {
     const msgRead = messages.find((msg) => msg.id === searchedId);
-    if (msgRead) {
-      //console.log('read event' + msgRead.messageId)
-      const ind = messages.indexOf(msgRead);
-      //console.log('setUnread scroll')
-      dispatch(
-        setUnread({
-          unread: messages.slice(ind + 1).length,
-          chatId: chatId || -1,
-        })
-      );
-      if (!socket) return;
-      socket.emit("read", {
-        message: msgRead,
-        username: localStorage.getItem("user"),
-      });
+
+    if (!msgRead) {
+      return;
     }
+
+    //console.log('read event' + msgRead.messageId)
+    const ind = messages.indexOf(msgRead);
+    //console.log('setUnread scroll')
+    dispatch(
+      setUnread({
+        unread: messages.slice(ind + 1).length,
+        chatId: chatId || -1,
+      })
+    );
+
+    if (!socket || !user) {
+      return;
+    }
+
+    socket.emit("read", {
+      message: msgRead,
+      userId: user.id,
+    });
   };
 
   const onMessagesFirstRendered = () => {

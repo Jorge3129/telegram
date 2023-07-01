@@ -3,6 +3,7 @@ export interface IMessage {
   text: string;
   timestamp: string;
   author: string;
+  authorId: number;
   chatId: number;
   seen?: boolean;
   seenBy?: string[];
@@ -16,6 +17,12 @@ export interface IMedia {
 }
 
 export interface IUser {
+  username: string;
+  password: string;
+}
+
+export interface User {
+  id: number;
   username: string;
   password: string;
 }
