@@ -40,6 +40,7 @@ export const mockChats: (Omit<Chat, "members"> & {
         muted: true,
       },
     ],
+    title: "GIJ",
     type: "group",
   },
   // {
