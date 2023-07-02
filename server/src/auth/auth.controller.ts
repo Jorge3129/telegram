@@ -16,7 +16,7 @@ export class AuthController {
   public async login(req: Request, res: Response) {
     const { username, password } = req.body;
 
-    const user = await userRepository.findOne({
+    const user = await userRepository.findOneBy({
       username,
       password,
     });

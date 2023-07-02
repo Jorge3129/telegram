@@ -10,7 +10,7 @@ export class UserController {
   public async getUser(req: Request, res: Response) {
     const userId = parseInt(req.params.userId);
 
-    const user = await this.userRepository.findOne({ id: userId });
+    const user = await this.userRepository.findOneBy({ id: userId });
 
     if (!user) {
       throw new HttpException("No user", 404);

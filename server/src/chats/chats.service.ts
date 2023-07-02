@@ -61,7 +61,7 @@ export class ChatsService {
 
     const receiverId = members.filter((u) => u.userId !== userId)[0].userId;
 
-    const receiverName = (await userRepository.find({ id: receiverId }))[0]
+    const receiverName = (await userRepository.findBy({ id: receiverId }))[0]
       .username;
 
     return {

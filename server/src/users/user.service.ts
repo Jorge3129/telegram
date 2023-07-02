@@ -10,7 +10,7 @@ export class UserService {
   ) {}
 
   public async getUserSocketId(userId: number): Promise<string | undefined> {
-    const userReceiver = await userRepository.findOne({ id: userId });
+    const userReceiver = await userRepository.findOneBy({ id: userId });
 
     return userReceiver?.socketId;
   }
@@ -28,7 +28,7 @@ export class UserService {
       }
 
       const contactUser = await this.userRepo
-        .find({ id: contactChatUser.userId })
+        .findBy({ id: contactChatUser.userId })
         .then((res) => res[0]);
 
       return [

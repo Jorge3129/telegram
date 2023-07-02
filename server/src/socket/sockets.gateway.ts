@@ -6,7 +6,7 @@ export class SocketsGateway {
   public async onConnect(socket: Socket): Promise<void> {
     const userId = parseInt((socket.handshake.query.userId as string) || "");
 
-    const user = await userRepository.findOne({ id: userId });
+    const user = await userRepository.findOneBy({ id: userId });
 
     if (!user) {
       throw new Error(`No user with id ${userId}`);
@@ -17,7 +17,6 @@ export class SocketsGateway {
     await userRepository.update(
       { id: user.id },
       {
-        online: true,
         socketId: socket.id,
       }
     );
