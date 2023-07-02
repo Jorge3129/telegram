@@ -12,8 +12,8 @@ export class UserEntity {
   @Column({ select: false })
   password: string;
 
-  @Column({ type: "text", array: true })
-  socketIds: string[];
+  @Column()
+  socketId: string;
 
   @OneToMany(() => ChatUserEntity, (ch) => ch.user)
   chatMemberships: ChatUserEntity[];
