@@ -21,7 +21,11 @@ export const useAutoScroll = (unread: number) => {
   useEffect(() => {
     const messageId = messages[messages.length - unread - 1]?.id;
     const last = document.getElementById("message-" + messageId);
-    if (!last) return;
+
+    if (!last) {
+      return;
+    }
+
     //last.setAttribute('style', 'background-color: #ffa099')
     last.scrollIntoView();
   }, [loading]);

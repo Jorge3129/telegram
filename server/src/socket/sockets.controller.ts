@@ -28,11 +28,13 @@ export class SocketsController {
       message.authorId
     );
 
+    const messageResponse = messageToModel(savedMessage);
+
     members.forEach(async ({ socketId }) => {
-      this.emitEventTo(socketId, "message-to-client", message);
+      this.emitEventTo(socketId, "message-to-client", messageResponse);
     });
 
-    return messageToModel(savedMessage);
+    return messageResponse;
   }
 
   @SocketEventHandler()

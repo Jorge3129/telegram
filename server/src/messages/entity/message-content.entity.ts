@@ -53,3 +53,8 @@ export const isTextContent = (
   value: MessageContentEntity
 ): value is TextMessageContentEntity =>
   value.type === MessageContentType.TEXT_MESSAGE;
+
+export const isMediaContent = (
+  value: MessageContentEntity
+): value is MediaMessageContentEntity =>
+  value.type === MessageContentType.MEDIA_MESSAGE;
