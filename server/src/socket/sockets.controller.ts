@@ -7,6 +7,11 @@ import { User } from "../users/user.type";
 import { Message } from "../messages/models/message.type";
 import { SocketEventHandler } from "./decorators/socket-handler.decorator";
 import { userRepository } from "../users/user.repository";
+import {
+  MessageContentType,
+  isTextContent,
+} from "../messages/entity/message-content.entity";
+import { messageToModel } from "../messages/entity/utils";
 
 export class SocketsController {
   constructor(private readonly socket: Socket, private readonly user: User) {}
@@ -35,7 +40,7 @@ export class SocketsController {
       this.emitEventTo(memberSocketId, "message-to-client", message);
     });
 
-    return savedMessage;
+    return messageToModel(savedMessage);
   }
 
   @SocketEventHandler()

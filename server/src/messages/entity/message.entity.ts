@@ -34,7 +34,7 @@ export abstract class MessageEntity {
   @Column()
   authorId: number;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, { eager: true })
   author: UserEntity;
 
   @Column()

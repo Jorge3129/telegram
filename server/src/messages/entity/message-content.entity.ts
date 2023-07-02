@@ -45,3 +45,8 @@ export class MediaMessageContentEntity extends MessageContentEntity {
   @OneToMany(() => MediaEntity, (media) => media.messageContent)
   media: MediaEntity[];
 }
+
+export const isTextContent = (
+  value: MessageContentEntity
+): value is TextMessageContentEntity =>
+  value.type === MessageContentType.TEXT_MESSAGE;

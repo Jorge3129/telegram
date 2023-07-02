@@ -35,6 +35,8 @@ export class SeedsService {
     await messagesRepo.saveMany(
       mockMessages.map((message) => ({
         ...message,
+        id: message.id + "",
+        author: users.filter((u) => u.username === message.author)[0],
         authorId: users.filter((u) => u.username === message.author)[0].id,
       }))
     );

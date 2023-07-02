@@ -1,7 +1,7 @@
 import { Media } from "./media.type";
 
 export interface Message {
-  id: number;
+  id: string;
   text: string;
   timestamp: string;
   author: string;
