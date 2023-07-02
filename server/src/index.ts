@@ -10,20 +10,19 @@ import { Server } from "socket.io";
 import { authRouter } from "./auth/auth.router";
 import { chatsRouter } from "./chats/chats.router";
 import { socketsGateway } from "./socket/sockets.gateway";
-import { seedsService } from "./seeds/seeds-service";
 import { uploadsRouter } from "./uploads/uploads.router";
 import { userRouter } from "./users/user.router";
 import { errorHandler } from "./shared/errors";
 import appDataSource from "./data-source";
 
-// appDataSource
-//   .initialize()
-//   .then(() => {
-//     console.log("Data Source has been initialized!");
-//   })
-//   .catch((err) => {
-//     console.error("Error during Data Source initialization:", err);
-//   });
+appDataSource
+  .initialize()
+  .then(() => {
+    console.log("Data Source has been initialized!");
+  })
+  .catch((err) => {
+    console.error("Error during Data Source initialization:", err);
+  });
 
 const app = express();
 
@@ -56,7 +55,5 @@ app.use("/", chatsRouter);
 app.use(errorHandler());
 
 io.on("connection", socketsGateway.onConnect);
-
-seedsService.seed();
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
