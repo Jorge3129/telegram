@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { userRepository } from "../users/user.repository";
+import { ExpressHandler } from "../shared/decorators/express-handler.decorator";
 
 export class AuthController {
+  @ExpressHandler()
   public async register(req: Request, res: Response) {
     const { username, password } = req.body;
 
@@ -10,6 +12,7 @@ export class AuthController {
     res.send({ success: true });
   }
 
+  @ExpressHandler()
   public async login(req: Request, res: Response) {
     const { username, password } = req.body;
 
@@ -19,7 +22,7 @@ export class AuthController {
     });
 
     if (user) {
-      res.json({ success: true, username, userId: user.id });
+      res.json({ username, userId: user.id });
     } else {
       res.status(403).json({ success: false });
     }
