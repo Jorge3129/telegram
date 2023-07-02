@@ -2,9 +2,11 @@ import {
   ChildEntity,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   TableInheritance,
 } from "typeorm";
+import { ChatUserEntity } from "../../chat-users/entity/chat-user.entity";
 
 export enum ChatType {
   PERSONAL = "personal",
@@ -15,10 +17,13 @@ export enum ChatType {
 @Entity("chats")
 @TableInheritance({ column: { name: "type", type: "varchar" } })
 export abstract class ChatEntity {
+  type: ChatType;
+
   @PrimaryGeneratedColumn()
   id: number;
 
-  type: ChatType;
+  @OneToMany(() => ChatUserEntity, (ch) => ch.chat)
+  members: ChatUserEntity[];
 }
 
 @ChildEntity(ChatType.PERSONAL)
