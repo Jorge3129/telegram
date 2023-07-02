@@ -15,15 +15,6 @@ import { userRouter } from "./users/user.router";
 import { errorHandler } from "./shared/errors";
 import appDataSource from "./data-source";
 
-appDataSource
-  .initialize()
-  .then(() => {
-    console.log("Data Source has been initialized!");
-  })
-  .catch((err) => {
-    console.error("Error during Data Source initialization:", err);
-  });
-
 const app = express();
 
 const PORT = process.env.PORT || 9000;
@@ -56,4 +47,12 @@ app.use(errorHandler());
 
 io.on("connection", socketsGateway.onConnect);
 
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+appDataSource
+  .initialize()
+  .then(() => {
+    console.log("Data Source has been initialized!");
+    server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch((err) => {
+    console.error("Error during Data Source initialization:", err);
+  });

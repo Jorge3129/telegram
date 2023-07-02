@@ -22,6 +22,12 @@ export class UserRepository {
     return this.userRepo.findOneBy(where);
   }
 
+  public findOneByOrFail(
+    where: FindOptionsWhere<UserEntity>
+  ): Promise<UserEntity> {
+    return this.userRepo.findOneByOrFail(where);
+  }
+
   public findBy(where: FindOptionsWhere<UserEntity>): Promise<UserEntity[]> {
     return this.userRepo.findBy(where);
   }

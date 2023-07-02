@@ -10,6 +10,8 @@ export interface IMessage {
   media?: IMedia;
 }
 
+export type CreateMessageDto = Omit<IMessage, "id">;
+
 export interface IMedia {
   filename: string;
   type: string;

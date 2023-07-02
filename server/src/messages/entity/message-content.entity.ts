@@ -42,7 +42,10 @@ export class MediaMessageContentEntity extends MessageContentEntity {
   @Column({ type: "text", nullable: true })
   textContent?: string;
 
-  @OneToMany(() => MediaEntity, (media) => media.messageContent)
+  @OneToMany(() => MediaEntity, (media) => media.messageContent, {
+    eager: true,
+    cascade: true,
+  })
   media: MediaEntity[];
 }
 

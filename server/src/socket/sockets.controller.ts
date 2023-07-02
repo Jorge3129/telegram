@@ -64,7 +64,7 @@ export class SocketsController {
     await userRepository.update(
       { id: this.user.id },
       {
-        socketId: undefined,
+        socketId: null as any,
       }
     );
 

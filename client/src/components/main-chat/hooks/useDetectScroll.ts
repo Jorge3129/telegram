@@ -22,7 +22,7 @@ export const useDetectScroll = (
 
   const { user } = useSelector(selectUser);
 
-  const getVisibleMessages = () => {
+  const getVisibleMessages = (): string[] => {
     const divs = Array.from(document.querySelectorAll(".message_list_item"));
 
     const visible = divs
@@ -30,7 +30,7 @@ export const useDetectScroll = (
         const seen = getVisibleHeight(el, scrollRef.current);
         return seen > 0 && seen === el.clientHeight;
       })
-      .map((el) => parseInt(el.id.split("-")[1]));
+      .map((el) => el.id.replace(/message-/, ""));
 
     return visible;
   };
@@ -38,6 +38,7 @@ export const useDetectScroll = (
   const getLastVisibleMessage = () => [...getVisibleMessages()].pop();
 
   const emitReadEvent = (searchedId: number) => {
+    console.log("emitReadEvent");
     const msgRead = messages.find((msg) => msg.id === searchedId);
 
     if (!msgRead) {

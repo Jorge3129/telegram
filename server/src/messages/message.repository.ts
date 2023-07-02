@@ -9,19 +9,31 @@ import {
   TextMessageContentEntity,
 } from "./entity/message-content.entity";
 import { MediaEntity } from "./entity/media.entity";
+import { userRepository } from "../users/user.repository";
 
 export class MessagesRepository {
   constructor(
     private readonly messageRepo: Repository<MessageEntity>,
-    private readonly messageReadRepo: Repository<MessageReadEntity>
+    private readonly messageReadRepo: Repository<MessageReadEntity>,
+    private readonly messageContentRepo: Repository<MessageContentEntity>
   ) {}
 
   public save(dto: Partial<MessageEntity>): Promise<MessageEntity> {
     return this.messageRepo.save({ ...dto });
   }
 
-  public saveFromDto(dto: Message): Promise<MessageEntity> {
-    return this.messageRepo.save(this.createMessage(dto));
+  public async saveFromDto(dto: Message): Promise<MessageEntity> {
+    const message = this.createMessage(dto);
+
+    const content = await this.messageContentRepo.save(message.content);
+
+    const savedMessage = await this.messageRepo.save({ ...message, content });
+
+    savedMessage.author = await userRepository.findOneByOrFail({
+      id: message.authorId,
+    });
+
+    return savedMessage;
   }
 
   private createMessage(dto: Message): MessageEntity {
@@ -35,7 +47,7 @@ export class MessagesRepository {
   }
 
   private createMessageContent(dto: Message): MessageContentEntity {
-    if (!dto.media) {
+    if (!dto.media?.filename) {
       const textContent = new TextMessageContentEntity();
       textContent.textContent = dto.text;
 
@@ -78,14 +90,14 @@ export class MessagesRepository {
       .leftJoin(
         MessageReadEntity,
         "readsByUser",
-        "readsByUser.messageId = message.id AND readsByUser.userId = :readByUserId",
+        '"readsByUser"."messageId" = message.id AND "readsByUser"."userId" = :readByUserId',
         { readByUserId }
       )
       .where("message.chatId = :chatId", { chatId: message.chatId })
       .andWhere("message.timestamp <= :timestamp", {
         timestamp: message.timestamp,
       })
-      .andWhere("readsByUser IS NULL")
+      .andWhere("readsByUser.id IS NULL")
       .select(`message.id AS "messageId"`)
       .getRawMany<{ messageId: string }>();
 
@@ -102,5 +114,6 @@ export class MessagesRepository {
 
 export const messagesRepo = new MessagesRepository(
   dataSource.getRepository(MessageEntity),
-  dataSource.getRepository(MessageReadEntity)
+  dataSource.getRepository(MessageReadEntity),
+  dataSource.getRepository(MessageContentEntity)
 );

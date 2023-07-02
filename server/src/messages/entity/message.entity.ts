@@ -43,7 +43,10 @@ export abstract class MessageEntity {
   @ManyToOne(() => ChatEntity)
   chat: ChatEntity;
 
-  @OneToOne(() => MessageContentEntity, (c) => c.message, { eager: true })
+  @OneToOne(() => MessageContentEntity, (c) => c.message, {
+    eager: true,
+    cascade: true,
+  })
   @JoinColumn()
   content: MessageContentEntity;
 
