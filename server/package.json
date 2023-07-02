@@ -15,7 +15,14 @@
   },
   "scripts": {
     "start:dev": "nodemon src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "db:up": "docker-compose -f docker-compose.yml up -d",
+    "db:down": "docker-compose -f docker-compose.yml down",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "mg:new": "npm run typeorm -- migration:create",
+    "mg:gen": "npm run typeorm -- migration:generate -d src/data-source.ts",
+    "mg:up": "npm run typeorm -- migration:run -d src/data-source.ts",
+    "mg:down": "npm run typeorm -- migration:revert -d src/data-source.ts"
   },
   "author": "Heorhii Sanchenko",
   "license": "ISC",
