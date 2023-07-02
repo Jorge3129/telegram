@@ -1,5 +1,4 @@
 import { FindOptionsWhere, Repository } from "typeorm";
-import { chatUserRepository } from "../chat-users/chat-user.repository";
 import { Chat } from "./chat.type";
 import { ChatEntity } from "./entity/chat.entity";
 import dataSource from "../data-source";
@@ -8,7 +7,7 @@ import { ChatUserEntity } from "../chat-users/entity/chat-user.entity";
 export class ChatsRepository {
   constructor(private readonly chatRepo: Repository<ChatEntity>) {}
 
-  public async findByUserId(userId: number): Promise<Chat[]> {
+  public async findByUserId(userId: number): Promise<ChatEntity[]> {
     return this.chatRepo
       .createQueryBuilder("chat")
       .innerJoin(ChatUserEntity, "chatUser", "chatUser.chatId = chat.id")

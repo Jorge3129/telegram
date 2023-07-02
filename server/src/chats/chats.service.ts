@@ -14,7 +14,7 @@ export class ChatsService {
 
     await Promise.all(
       rawChats.map(async (chat) => {
-        chat.members = await chatUserRepository.find({ chatId: chat.id });
+        chat.members = await chatUserRepository.findBy({ chatId: chat.id });
       })
     );
 
