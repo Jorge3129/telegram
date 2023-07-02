@@ -22,7 +22,7 @@ export class ChatsService {
   }
 
   public async updateLastRead(userId: number, message: Message) {
-    const chat = await this.chatsRepo.findOne((ch) => ch.id === message.chatId);
+    const chat = await this.chatsRepo.findOneBy({ id: message.chatId });
 
     if (!chat) {
       return { success: false };

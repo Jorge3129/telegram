@@ -19,7 +19,7 @@ export class SocketsController {
 
     await chatsService.updateLastRead(this.user.id, message);
 
-    const chat = await chatsRepo.findOne((ch) => ch.id === message.chatId);
+    const chat = await chatsRepo.findOneBy({ id: message.chatId });
 
     if (!chat) {
       return null;
