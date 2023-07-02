@@ -1,43 +1,35 @@
 import { Socket } from "socket.io";
-import { chatsRepo } from "../chats/chats.repository";
-import { chatsService } from "../chats/chats.service";
 import { messagesRepo } from "../messages/message.repository";
 import { userService } from "../users/user.service";
 import { User } from "../users/user.type";
 import { Message } from "../messages/models/message.type";
 import { SocketEventHandler } from "./decorators/socket-handler.decorator";
 import { userRepository } from "../users/user.repository";
-import {
-  MessageContentType,
-  isTextContent,
-} from "../messages/entity/message-content.entity";
 import { messageToModel } from "../messages/entity/utils";
+import { chatUserRepository } from "../chat-users/chat-user.repository";
 
 export class SocketsController {
   constructor(private readonly socket: Socket, private readonly user: User) {}
 
   @SocketEventHandler()
-  public async onMessage(data: any): Promise<Message | null> {
+  public async onMessage(data: { message: Message }): Promise<Message | null> {
     const { message } = data;
 
-    const savedMessage = await messagesRepo.save(message);
+    const savedMessage = await messagesRepo.saveFromDto(message);
 
-    await chatsService.updateLastRead(this.user.id, message);
+    await chatUserRepository.updateLastRead(
+      this.user.id,
+      message.chatId,
+      message.timestamp
+    );
 
-    const chat = await chatsRepo.findOneBy({ id: message.chatId });
+    const members = await chatUserRepository.findChatRecipientSockets(
+      message.chatId,
+      message.authorId
+    );
 
-    if (!chat) {
-      return null;
-    }
-
-    chat.members.forEach(async (member) => {
-      const memberSocketId = await userService.getUserSocketId(member.userId);
-
-      if (!memberSocketId) {
-        return;
-      }
-
-      this.emitEventTo(memberSocketId, "message-to-client", message);
+    members.forEach(async ({ socketId }) => {
+      this.emitEventTo(socketId, "message-to-client", message);
     });
 
     return messageToModel(savedMessage);
@@ -51,7 +43,11 @@ export class SocketsController {
   }) {
     const { message, userId, username } = data;
 
-    await chatsService.updateLastRead(parseInt(userId), message);
+    await chatUserRepository.updateLastRead(
+      parseInt(userId),
+      message.chatId,
+      message.timestamp
+    );
     await messagesRepo.updateSeen(parseInt(userId), message);
 
     const authorSocketId = await userService.getUserSocketId(message.authorId);
@@ -76,16 +72,14 @@ export class SocketsController {
   }
 
   public async notifyContactsOnConnectionChange(online: boolean) {
-    const contacts = await userService.findUserContacts(this.user.id);
+    const socketIds = await chatUserRepository.findAllUserContactSockets(
+      this.user.id
+    );
 
-    contacts.forEach((contact) => {
-      if (!contact.user.socketId) {
-        return;
-      }
-
-      this.emitEventTo(contact.user.socketId, "online-change", {
+    socketIds.forEach(({ socketId, chatId }) => {
+      this.emitEventTo(socketId, "online-change", {
         online: online,
-        chatId: contact.chatId,
+        chatId: chatId,
       });
     });
   }

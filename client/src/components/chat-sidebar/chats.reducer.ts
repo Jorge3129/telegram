@@ -69,7 +69,10 @@ const chatSlice = createSlice({
     ) => {
       const { online, chatId } = payload;
       const chat = state.chats.find((chat) => chat.id === chatId);
-      if (chat) chat.online = online;
+
+      if (chat && chat.type === "personal") {
+        chat.online = online;
+      }
     },
     setChatsWidth: (state, { payload }: PayloadAction<string>) => {
       state.width = payload;

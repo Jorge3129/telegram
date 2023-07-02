@@ -9,11 +9,11 @@ export class UserRepository {
   constructor(private readonly userRepo: Repository<UserEntity>) {}
 
   public save(dto: Partial<UserEntity>): Promise<UserEntity> {
-    return this.userRepo.save({ ...dto, socketIds: [] });
+    return this.userRepo.save({ ...dto });
   }
 
   public saveMany(dtos: Partial<UserEntity>[]): Promise<UserEntity[]> {
-    return this.userRepo.save(dtos.map((dto) => ({ ...dto, socketIds: [] })));
+    return this.userRepo.save(dtos.map((dto) => ({ ...dto })));
   }
 
   public findOneBy(

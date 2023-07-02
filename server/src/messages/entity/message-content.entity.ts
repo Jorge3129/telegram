@@ -18,7 +18,7 @@ export enum MessageContentType {
 @Entity("message_contents")
 @TableInheritance({ column: { name: "type", type: "varchar" } })
 export abstract class MessageContentEntity {
-  type: MessageContentType;
+  readonly type: MessageContentType;
 
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -29,7 +29,7 @@ export abstract class MessageContentEntity {
 
 @ChildEntity("text")
 export class TextMessageContentEntity extends MessageContentEntity {
-  type = MessageContentType.TEXT_MESSAGE;
+  readonly type = MessageContentType.TEXT_MESSAGE;
 
   @Column({ type: "text" })
   textContent: string;
@@ -37,7 +37,7 @@ export class TextMessageContentEntity extends MessageContentEntity {
 
 @ChildEntity("media")
 export class MediaMessageContentEntity extends MessageContentEntity {
-  type = MessageContentType.MEDIA_MESSAGE;
+  readonly type = MessageContentType.MEDIA_MESSAGE;
 
   @Column({ type: "text", nullable: true })
   textContent?: string;

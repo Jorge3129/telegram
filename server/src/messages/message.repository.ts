@@ -1,8 +1,14 @@
 import { FindOptionsWhere, Repository } from "typeorm";
 import { Message } from "./models/message.type";
-import { MessageEntity } from "./entity/message.entity";
+import { MessageEntity, PersonalMessageEntity } from "./entity/message.entity";
 import dataSource from "../data-source";
 import { MessageReadEntity } from "./entity/message-read.entity";
+import {
+  MediaMessageContentEntity,
+  MessageContentEntity,
+  TextMessageContentEntity,
+} from "./entity/message-content.entity";
+import { MediaEntity } from "./entity/media.entity";
 
 export class MessagesRepository {
   constructor(
@@ -11,13 +17,44 @@ export class MessagesRepository {
   ) {}
 
   public save(dto: Partial<MessageEntity>): Promise<MessageEntity> {
-    return this.messageRepo.save({ ...dto, socketIds: [] });
+    return this.messageRepo.save({ ...dto });
+  }
+
+  public saveFromDto(dto: Message): Promise<MessageEntity> {
+    return this.messageRepo.save(this.createMessage(dto));
+  }
+
+  private createMessage(dto: Message): MessageEntity {
+    const message = new PersonalMessageEntity();
+    message.authorId = dto.authorId;
+    message.chatId = dto.chatId;
+    message.content = this.createMessageContent(dto);
+    message.timestamp = dto.timestamp;
+
+    return message;
+  }
+
+  private createMessageContent(dto: Message): MessageContentEntity {
+    if (!dto.media) {
+      const textContent = new TextMessageContentEntity();
+      textContent.textContent = dto.text;
+
+      return textContent;
+    }
+
+    const media = new MediaEntity();
+    media.fileName = dto.media.filename;
+    media.mimeType = dto.media.type;
+
+    const mediaContent = new MediaMessageContentEntity();
+    mediaContent.media = [media];
+    mediaContent.textContent = dto.text;
+
+    return mediaContent;
   }
 
   public saveMany(dtos: Partial<MessageEntity>[]): Promise<MessageEntity[]> {
-    return this.messageRepo.save(
-      dtos.map((dto) => ({ ...dto, socketIds: [] }))
-    );
+    return this.messageRepo.save(dtos.map((dto) => ({ ...dto })));
   }
 
   public findOneBy(

@@ -53,15 +53,15 @@ export abstract class MessageEntity {
 
 @ChildEntity(MessageType.PERSONAL_MESSAGE)
 export class PersonalMessageEntity extends MessageEntity {
-  type = MessageType.PERSONAL_MESSAGE;
+  readonly type = MessageType.PERSONAL_MESSAGE;
 }
 
 @ChildEntity(MessageType.GROUP_MESSAGE)
 export class GroupMessageEntity extends MessageEntity {
-  type = MessageType.GROUP_MESSAGE;
+  readonly type = MessageType.GROUP_MESSAGE;
 }
 
 @ChildEntity(MessageType.CHANNEL_POST)
 export class ChannelPostEntity extends MessageEntity {
-  type = MessageType.CHANNEL_POST;
+  readonly type = MessageType.CHANNEL_POST;
 }

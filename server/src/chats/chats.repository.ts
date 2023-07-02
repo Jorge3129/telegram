@@ -1,5 +1,4 @@
 import { FindOptionsWhere, Repository } from "typeorm";
-import { Chat } from "./chat.type";
 import { ChatEntity } from "./entity/chat.entity";
 import dataSource from "../data-source";
 import { ChatUserEntity } from "../chat-users/entity/chat-user.entity";
@@ -16,11 +15,11 @@ export class ChatsRepository {
   }
 
   public save(dto: Partial<ChatEntity>): Promise<ChatEntity> {
-    return this.chatRepo.save({ ...dto, socketIds: [] });
+    return this.chatRepo.save({ ...dto });
   }
 
   public saveMany(dtos: Partial<ChatEntity>[]): Promise<ChatEntity[]> {
-    return this.chatRepo.save(dtos.map((dto) => ({ ...dto, socketIds: [] })));
+    return this.chatRepo.save(dtos.map((dto) => ({ ...dto })));
   }
 
   public findOneBy(

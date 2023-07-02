@@ -21,22 +21,6 @@ export class ChatsService {
     return Promise.all(rawChats.map((ch) => this.mapChatToClient(ch, userId)));
   }
 
-  public async updateLastRead(userId: number, message: Message) {
-    const chat = await this.chatsRepo.findOneBy({ id: message.chatId });
-
-    if (!chat) {
-      return { success: false };
-    }
-
-    const searchedUser = chat.members.find((u) => u.userId === userId);
-
-    if (searchedUser) {
-      searchedUser.lastRead = message.timestamp;
-    }
-
-    return { success: true };
-  }
-
   private async mapChatToClient(
     { id, members, type, title }: Chat,
     userId: number
