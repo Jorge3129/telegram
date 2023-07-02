@@ -11,9 +11,3 @@ export interface Message {
   seenBy?: number[];
   media?: Media;
 }
-
-export interface PersonalMessage extends Message {}
-
-export interface GroupMessage extends Message {
-  seenBy?: number[];
-}
