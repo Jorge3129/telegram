@@ -6,14 +6,14 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column({ select: false })
   password: string;
 
-  @Column()
-  socketId: string;
+  @Column({ nullable: true })
+  socketId?: string;
 
   @OneToMany(() => ChatUserEntity, (ch) => ch.user)
   chatMemberships: ChatUserEntity[];

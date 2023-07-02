@@ -27,7 +27,7 @@ const Login: FC<LoginProps> = () => {
     e.preventDefault();
     const response = await api.login(state);
 
-    if (response.data.success) {
+    if (response.data.userId) {
       const user = await api.getUser(response.data.userId);
       localStorage.setItem("userId", response.data.userId + "");
       dispatch(setUser(user));

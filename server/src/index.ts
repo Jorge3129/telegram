@@ -16,14 +16,14 @@ import { userRouter } from "./users/user.router";
 import { errorHandler } from "./shared/errors";
 import appDataSource from "./data-source";
 
-appDataSource
-  .initialize()
-  .then(() => {
-    console.log("Data Source has been initialized!");
-  })
-  .catch((err) => {
-    console.error("Error during Data Source initialization:", err);
-  });
+// appDataSource
+//   .initialize()
+//   .then(() => {
+//     console.log("Data Source has been initialized!");
+//   })
+//   .catch((err) => {
+//     console.error("Error during Data Source initialization:", err);
+//   });
 
 const app = express();
 
