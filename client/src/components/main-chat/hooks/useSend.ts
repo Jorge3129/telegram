@@ -4,7 +4,7 @@ import { selectMainChat, setText } from "../reducers/main.chat.reducer";
 import { useAppDispatch } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
-import { IMessage } from "../../../types/types";
+import { CreateMessageDto, IMessage } from "../../../types/types";
 import { selectUser } from "../../../redux/user-reducer";
 
 export const useSend = (socket: Socket) => {
@@ -22,29 +22,27 @@ export const useSend = (socket: Socket) => {
     dispatch(setUnread({ unread: 0, chatId: message.chatId }));
   };
 
-  const handleSend = () => {
-    const lastMsg = messages.at(-1);
-    const id = lastMsg ? lastMsg.id + 1 : messages.length;
-
+  const handleSend = async () => {
     if (!user) {
       return;
     }
 
-    const message: IMessage = {
+    const message: CreateMessageDto = {
       text,
       timestamp: new Date().toISOString(),
       authorId: user.id,
       author: user.username,
       chatId: chatId || 0,
-      id: id,
       media,
     };
 
-    socket.emit("message", { message }, (savedMessage: IMessage) => {
-      console.log({ savedMessage });
+    const response = await new Promise<IMessage>((res) => {
+      socket.emit("message", { message }, (savedMessage: IMessage) => {
+        res(savedMessage);
+      });
     });
 
-    dispatchSendMessage(message);
+    dispatchSendMessage(response);
   };
 
   return handleSend;

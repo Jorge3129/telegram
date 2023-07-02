@@ -6,7 +6,7 @@ export function SocketEventHandler(): MethodDecorator {
     propertyName: string | symbol,
     descriptor: PropertyDescriptor
   ): PropertyDescriptor {
-    const originalMethod = descriptor.value;
+    const originalMethod = descriptor.value as Function;
 
     const adjustedDescriptor: PropertyDescriptor = {
       configurable: true,
@@ -17,13 +17,18 @@ export function SocketEventHandler(): MethodDecorator {
 
           const ackFunction = args.at(-1);
 
-          const returnValue = await originalMethod.bind(instance)(...args);
+          try {
+            console.log(originalMethod.name.toUpperCase());
+            const returnValue = await originalMethod.bind(instance)(...args);
 
-          if (typeof ackFunction === "function") {
-            ackFunction(returnValue);
+            if (typeof ackFunction === "function") {
+              ackFunction(returnValue);
+            }
+
+            return returnValue;
+          } catch (e) {
+            throw e;
           }
-
-          return returnValue;
         }.bind(this);
 
         return boundFn;

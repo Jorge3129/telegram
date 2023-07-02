@@ -1,5 +1,5 @@
 export interface IMessage {
-  id: number;
+  id: string;
   text: string;
   timestamp: string;
   author: string;
@@ -9,6 +9,8 @@ export interface IMessage {
   seenBy?: string[];
   media?: IMedia;
 }
+
+export type CreateMessageDto = Omit<IMessage, "id">;
 
 export interface IMedia {
   filename: string;
@@ -37,4 +39,4 @@ export interface IChat {
   online?: boolean;
 }
 
-export type IContextMenu = { x: number; y: number; messageId: number } | null;
+export type IContextMenu = { x: number; y: number; messageId: string } | null;

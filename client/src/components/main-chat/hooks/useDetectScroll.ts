@@ -17,12 +17,12 @@ export const useDetectScroll = (
   const { chats } = useSelector(selectChats);
   const { chatId, mainChat } = useSelector(selectMainChat);
   const dispatch = useAppDispatch();
-  const readRef = useRef<number[]>([]);
+  const readRef = useRef<string[]>([]);
   const topRef = useRef<number>(scrollRef.current?.scrollTop || 0);
 
   const { user } = useSelector(selectUser);
 
-  const getVisibleMessages = () => {
+  const getVisibleMessageIds = (): string[] => {
     const divs = Array.from(document.querySelectorAll(".message_list_item"));
 
     const visible = divs
@@ -30,14 +30,15 @@ export const useDetectScroll = (
         const seen = getVisibleHeight(el, scrollRef.current);
         return seen > 0 && seen === el.clientHeight;
       })
-      .map((el) => parseInt(el.id.split("-")[1]));
+      .map((el) => el.id.replace(/message-/, ""));
 
     return visible;
   };
 
-  const getLastVisibleMessage = () => [...getVisibleMessages()].pop();
+  const getLastVisibleMessage = (): string | undefined =>
+    [...getVisibleMessageIds()].pop();
 
-  const emitReadEvent = (searchedId: number) => {
+  const emitReadEvent = (searchedId: string) => {
     const msgRead = messages.find((msg) => msg.id === searchedId);
 
     if (!msgRead) {
@@ -67,8 +68,13 @@ export const useDetectScroll = (
   const onMessagesFirstRendered = () => {
     //console.log('onFirstRendered')
     const last = getLastVisibleMessage();
-    if (!mainChat || (!last && last !== 0)) return;
+
+    if (!mainChat || !last) {
+      return;
+    }
+
     const msg = getMsgById(last, chatId || 0, messages);
+
     if (!msg) return;
     if (!alreadySeen(msg.timestamp, mainChat?.unread, messages)) {
       //console.log('read this')

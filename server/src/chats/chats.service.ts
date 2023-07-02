@@ -14,27 +14,11 @@ export class ChatsService {
 
     await Promise.all(
       rawChats.map(async (chat) => {
-        chat.members = await chatUserRepository.find({ chatId: chat.id });
+        chat.members = await chatUserRepository.findBy({ chatId: chat.id });
       })
     );
 
     return Promise.all(rawChats.map((ch) => this.mapChatToClient(ch, userId)));
-  }
-
-  public async updateLastRead(userId: number, message: Message) {
-    const chat = await this.chatsRepo.findOne((ch) => ch.id === message.chatId);
-
-    if (!chat) {
-      return { success: false };
-    }
-
-    const searchedUser = chat.members.find((u) => u.userId === userId);
-
-    if (searchedUser) {
-      searchedUser.lastRead = message.timestamp;
-    }
-
-    return { success: true };
   }
 
   private async mapChatToClient(
@@ -61,7 +45,7 @@ export class ChatsService {
 
     const receiverId = members.filter((u) => u.userId !== userId)[0].userId;
 
-    const receiverName = (await userRepository.find({ id: receiverId }))[0]
+    const receiverName = (await userRepository.findBy({ id: receiverId }))[0]
       .username;
 
     return {

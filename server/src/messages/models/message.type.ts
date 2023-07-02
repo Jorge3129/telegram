@@ -1,7 +1,7 @@
 import { Media } from "./media.type";
 
 export interface Message {
-  id: number;
+  id: string;
   text: string;
   timestamp: string;
   author: string;
@@ -10,10 +10,4 @@ export interface Message {
   seen?: boolean;
   seenBy?: number[];
   media?: Media;
-}
-
-export interface PersonalMessage extends Message {}
-
-export interface GroupMessage extends Message {
-  seenBy?: number[];
 }

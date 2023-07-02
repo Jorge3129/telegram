@@ -4,7 +4,7 @@ export const isSelf = (msg: IMessage, user: User | null) =>
   msg && msg.author === user?.username;
 
 export const getMsgById = (
-  messageId: number,
+  messageId: string,
   chatId: number,
   messages: IMessage[]
 ) => {

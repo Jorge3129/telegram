@@ -6,13 +6,23 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dayjs": "^1.11.9",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "multer": "^1.4.5-lts.1",
-    "socket.io": "^4.7.1"
+    "pg": "^8.11.1",
+    "socket.io": "^4.7.1",
+    "typeorm": "^0.3.17"
   },
   "scripts": {
     "start:dev": "nodemon src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "db:up": "docker-compose -f docker-compose.yml up -d",
+    "db:down": "docker-compose -f docker-compose.yml down",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "mg:new": "npm run typeorm -- migration:create",
+    "mg:gen": "npm run typeorm -- migration:generate -d src/data-source.ts",
+    "mg:up": "npm run typeorm -- migration:run -d src/data-source.ts",
+    "mg:down": "npm run typeorm -- migration:revert -d src/data-source.ts"
   },
   "author": "Heorhii Sanchenko",
   "license": "ISC",
