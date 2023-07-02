@@ -9,6 +9,7 @@ import { socketsGateway } from "./socket/sockets.gateway";
 import { seedsService } from "./seeds/seeds-service";
 import { uploadsRouter } from "./uploads/uploads.router";
 import { userRouter } from "./users/user.router";
+import { errorHandler } from "./shared/errors";
 
 const app = express();
 
@@ -37,6 +38,8 @@ const io = new Server(server, {
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/", chatsRouter);
+
+app.use(errorHandler());
 
 io.on("connection", socketsGateway.onConnect);
 

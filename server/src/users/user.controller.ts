@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserRepository, userRepository } from "./user.repository";
 import { ExpressHandler } from "../shared/decorators/express-handler.decorator";
+import { HttpException } from "../shared/errors";
 
 export class UserController {
   constructor(private readonly userRepository: UserRepository) {}
@@ -12,7 +13,7 @@ export class UserController {
     const user = await this.userRepository.findOne({ id: userId });
 
     if (!user) {
-      throw new Error("No user");
+      throw new HttpException("No user", 404);
     }
 
     res.json({ ...user, password: undefined });
