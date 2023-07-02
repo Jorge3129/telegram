@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   TableInheritance,
@@ -11,6 +12,7 @@ import {
 import { UserEntity } from "../../users/entity/user.entity";
 import { ChatEntity } from "../../chats/entity/chat.entity";
 import { MessageContentEntity } from "./message-content.entity";
+import { MessageReadEntity } from "./message-read.entity";
 
 export enum MessageType {
   PERSONAL_MESSAGE = "personal-message",
@@ -44,6 +46,9 @@ export abstract class MessageEntity {
   @OneToOne(() => MessageContentEntity, (c) => c.message, { eager: true })
   @JoinColumn()
   content: MessageContentEntity;
+
+  @OneToMany(() => MessageReadEntity, (read) => read.message)
+  reads: MessageReadEntity[];
 }
 
 @ChildEntity(MessageType.PERSONAL_MESSAGE)
