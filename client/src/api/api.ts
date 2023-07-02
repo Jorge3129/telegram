@@ -4,7 +4,9 @@ import { SERVER_URL } from "../config";
 
 export class Api {
   static async getMessages(chatId: number) {
-    return await axios.get<IMessage[]>(SERVER_URL + "/messages/" + chatId);
+    return await axios.get<IMessage[]>(
+      SERVER_URL + `/chats/${chatId}/messages`
+    );
   }
 
   static async getChats(userId: number) {
@@ -25,7 +27,7 @@ export class Api {
   }
 
   static async getUser(userId: number): Promise<User> {
-    return (await axios.get<User>(SERVER_URL + "/auth/users/" + userId)).data;
+    return (await axios.get<User>(SERVER_URL + "/users/" + userId)).data;
   }
 }
 
