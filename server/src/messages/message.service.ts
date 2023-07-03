@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { MessagesRepository, messagesRepo } from "./message.repository";
 import { Message } from "./models/message.type";
 import { messageToModel } from "./entity/utils";
@@ -20,6 +19,20 @@ export class MessageService {
     await messagesRepo.updateSeen(user.id, message);
 
     return messageToModel(savedMessage);
+  }
+
+  public countUnreadsForChat(chatId: number, userId: number): Promise<number> {
+    return this.messageRepo.countUnreadMessages(chatId, userId);
+  }
+
+  public async getLatestChatMessage(chatId: number): Promise<Message | null> {
+    const message = await this.messageRepo.getLatestMessage(chatId);
+
+    if (!message) {
+      return null;
+    }
+
+    return messageToModel(message);
   }
 
   public async getMessagesForChat(chatId: number): Promise<Message[]> {

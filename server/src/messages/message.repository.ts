@@ -100,6 +100,46 @@ export class MessagesRepository {
     });
   }
 
+  public async getLatestMessage(chatId: number): Promise<MessageEntity | null> {
+    const message = await this.messageRepo.findOne({
+      where: {
+        chatId,
+      },
+      order: {
+        timestamp: "desc",
+      },
+    });
+
+    return message;
+  }
+
+  public async countUnreadMessages(
+    chatId: number,
+    userId: number
+  ): Promise<number> {
+    const latestReadSubquery = this.messageReadRepo
+      .createQueryBuilder("read")
+      .innerJoin("read.message", "message")
+      .where("read.userId = :userId", { userId })
+      .select("MAX(message.timestamp)", "latestRead");
+
+    const count = await this.messageRepo
+      .createQueryBuilder("message")
+      .leftJoin(
+        MessageReadEntity,
+        "read",
+        "read.messageId = message.id AND read.userId = :userId",
+        { userId }
+      )
+      .where("message.chatId = :chatId", { chatId })
+      .andWhere("message.timestamp > (" + latestReadSubquery.getQuery() + ")")
+      .andWhere("read.id IS NULL")
+      .setParameters(latestReadSubquery.getParameters())
+      .getCount();
+
+    return count;
+  }
+
   public async updateSeen(
     readByUserId: number,
     message: Message
