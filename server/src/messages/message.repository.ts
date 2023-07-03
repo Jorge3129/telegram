@@ -1,5 +1,5 @@
 import { FindOptionsWhere, Repository } from "typeorm";
-import { Message } from "./models/message.type";
+import { CreateMessageDto, Message } from "./models/message.type";
 import { MessageEntity, PersonalMessageEntity } from "./entity/message.entity";
 import dataSource from "../data-source";
 import { MessageReadEntity } from "./entity/message-read.entity";
@@ -22,7 +22,7 @@ export class MessagesRepository {
     return this.messageRepo.save({ ...dto });
   }
 
-  public async saveFromDto(dto: Message): Promise<MessageEntity> {
+  public async saveFromDto(dto: CreateMessageDto): Promise<MessageEntity> {
     const message = this.createMessage(dto);
 
     const content = await this.messageContentRepo.save(message.content);
@@ -36,7 +36,7 @@ export class MessagesRepository {
     return savedMessage;
   }
 
-  private createMessage(dto: Message): MessageEntity {
+  private createMessage(dto: CreateMessageDto): MessageEntity {
     const message = new PersonalMessageEntity();
     message.authorId = dto.authorId;
     message.chatId = dto.chatId;
@@ -46,7 +46,7 @@ export class MessagesRepository {
     return message;
   }
 
-  private createMessageContent(dto: Message): MessageContentEntity {
+  private createMessageContent(dto: CreateMessageDto): MessageContentEntity {
     if (!dto.media?.filename) {
       const textContent = new TextMessageContentEntity();
       textContent.textContent = dto.text;
@@ -86,6 +86,60 @@ export class MessagesRepository {
     });
   }
 
+  public getMessagesForChat(chatId: number): Promise<MessageEntity[]> {
+    return this.messageRepo.find({
+      where: {
+        chatId,
+      },
+      relations: {
+        reads: true,
+      },
+      order: {
+        timestamp: "asc",
+      },
+    });
+  }
+
+  public async getLatestMessage(chatId: number): Promise<MessageEntity | null> {
+    const message = await this.messageRepo.findOne({
+      where: {
+        chatId,
+      },
+      order: {
+        timestamp: "desc",
+      },
+    });
+
+    return message;
+  }
+
+  public async countUnreadMessages(
+    chatId: number,
+    userId: number
+  ): Promise<number> {
+    const latestReadSubquery = this.messageReadRepo
+      .createQueryBuilder("read")
+      .innerJoin("read.message", "message")
+      .where("read.userId = :userId", { userId })
+      .select("MAX(message.timestamp)", "latestRead");
+
+    const count = await this.messageRepo
+      .createQueryBuilder("message")
+      .leftJoin(
+        "message.reads",
+        "read",
+        "read.messageId = message.id AND read.userId = :userId",
+        { userId }
+      )
+      .where("message.chatId = :chatId", { chatId })
+      .andWhere("message.timestamp > (" + latestReadSubquery.getQuery() + ")")
+      .andWhere("read.id IS NULL")
+      .setParameters(latestReadSubquery.getParameters())
+      .getCount();
+
+    return count;
+  }
+
   public async updateSeen(
     readByUserId: number,
     message: Message
@@ -93,7 +147,7 @@ export class MessagesRepository {
     const qb = this.messageRepo
       .createQueryBuilder("message")
       .leftJoin(
-        MessageReadEntity,
+        "message.reads",
         "readsByUser",
         '"readsByUser"."messageId" = message.id AND "readsByUser"."userId" = :readByUserId',
         { readByUserId }

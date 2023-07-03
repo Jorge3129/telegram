@@ -13,7 +13,7 @@ export interface ChatForView {
   id: number;
   unread: number;
   title: string;
-  lastMessage: Message;
+  lastMessage?: Message;
   muted: boolean;
   type: ChatType;
   online?: boolean;

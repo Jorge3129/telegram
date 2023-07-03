@@ -13,7 +13,7 @@ export class ChatsController {
   public async getMessages(req: Request, res: Response) {
     const chatId = parseInt(req.params.chatId);
 
-    const messages = await this.messageService.getMessagesByChat(chatId);
+    const messages = await this.messageService.getMessagesForChat(chatId);
 
     res.json(messages);
   }

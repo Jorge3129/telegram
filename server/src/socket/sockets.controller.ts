@@ -5,30 +5,29 @@ import { User } from "../users/user.type";
 import { Message } from "../messages/models/message.type";
 import { SocketEventHandler } from "./decorators/socket-handler.decorator";
 import { userRepository } from "../users/user.repository";
-import { messageToModel } from "../messages/entity/utils";
 import { chatUserRepository } from "../chat-users/chat-user.repository";
+import { MessageService } from "../messages/message.service";
 
 export class SocketsController {
-  constructor(private readonly socket: Socket, private readonly user: User) {}
+  constructor(
+    private readonly socket: Socket,
+    private readonly user: User,
+    private readonly messageService: MessageService
+  ) {}
 
   @SocketEventHandler()
   public async onMessage(data: { message: Message }): Promise<Message | null> {
     const { message } = data;
 
-    const savedMessage = await messagesRepo.saveFromDto(message);
-
-    await chatUserRepository.updateLastRead(
-      this.user.id,
-      message.chatId,
-      message.timestamp
+    const messageResponse = await this.messageService.create(
+      message,
+      this.user
     );
 
     const members = await chatUserRepository.findChatRecipientSockets(
       message.chatId,
       message.authorId
     );
-
-    const messageResponse = messageToModel(savedMessage);
 
     members.forEach(async ({ socketId }) => {
       this.emitEventTo(socketId, "message-to-client", messageResponse);

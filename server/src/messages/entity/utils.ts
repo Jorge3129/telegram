@@ -13,7 +13,9 @@ export const messageToModel = (entity: MessageEntity): Message => {
     author: entity.author.username,
     media: getMedia(entity.content),
     seen: !!entity.reads?.find((read) => read.userId !== entity.authorId),
-    seenBy: entity.reads?.map((read) => read.userId),
+    seenBy: entity.reads
+      ?.filter((read) => read.userId !== entity.authorId)
+      .map((read) => read.userId),
   };
 };
 

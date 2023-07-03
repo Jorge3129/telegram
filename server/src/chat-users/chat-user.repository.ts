@@ -45,6 +45,20 @@ export class ChatUserRepository {
     );
   }
 
+  public async getOtherChatMember(
+    chatId: number,
+    currentUserId: number
+  ): Promise<ChatUserEntity> {
+    const otherMember = await this.chatUserRepo
+      .createQueryBuilder("chat_user")
+      .leftJoinAndSelect("chat_user.user", "u")
+      .where('chat_user."chatId" = :chatId', { chatId })
+      .andWhere('chat_user."userId" != :currentUserId', { currentUserId })
+      .getOneOrFail();
+
+    return otherMember;
+  }
+
   public async findAllUserContactSockets(
     userId: number
   ): Promise<UserChatSocket[]> {
