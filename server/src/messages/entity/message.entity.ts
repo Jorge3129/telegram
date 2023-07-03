@@ -28,7 +28,7 @@ export abstract class MessageEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ type: "timestamp" })
+  @Column({ type: "timestamp with time zone" })
   timestamp: string;
 
   @Column()
