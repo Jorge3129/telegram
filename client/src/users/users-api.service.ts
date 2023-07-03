@@ -1,6 +1,6 @@
 import environment from "../environment/environment";
 import { HttpClient, httpClient } from "../shared/http/http-client";
-import { User } from "../types/types";
+import { User } from "./models/user.model";
 
 export class UsersApiService {
   constructor(private readonly http: HttpClient) {}

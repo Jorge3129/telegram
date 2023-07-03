@@ -1,16 +1,17 @@
 import environment from "../environment/environment";
 import { HttpClient, httpClient } from "../shared/http/http-client";
-import { IChat, IMessage } from "../types/types";
+import { Chat } from "./models/chat.model";
+import { Message } from "../messages/message.model";
 
 export class ChatsApiService {
   constructor(private readonly http: HttpClient) {}
 
-  public async getChats(userId: number): Promise<IChat[]> {
-    return await this.http.get<IChat[]>(`${environment.apiUrl}/chats`);
+  public async getChats(): Promise<Chat[]> {
+    return await this.http.get<Chat[]>(`${environment.apiUrl}/chats`);
   }
 
-  public async getMessages(chatId: number) {
-    return await this.http.get<IMessage[]>(
+  public async getMessages(chatId: number): Promise<Message[]> {
+    return await this.http.get<Message[]>(
       `${environment.apiUrl}/chats/${chatId}/messages`
     );
   }

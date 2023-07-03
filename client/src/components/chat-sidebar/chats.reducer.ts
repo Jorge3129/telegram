@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IChat, IMessage } from "../../types/types";
 import { RootState } from "../../redux/rootReducer";
 import { chatsApiService } from "../../chats/chats-api.service";
+import { Chat } from "../../chats/models/chat.model";
+import { Message } from "../../messages/message.model";
 
 interface ChatState {
-  chats: IChat[];
+  chats: Chat[];
   loading: boolean;
   error: boolean;
   width: string;
@@ -24,12 +25,12 @@ const chatSlice = createSlice({
     setLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.loading = payload;
     },
-    setChats: (state, { payload }: PayloadAction<IChat[]>) => {
+    setChats: (state, { payload }: PayloadAction<Chat[]>) => {
       state.chats = payload;
     },
     setLastMessage: (
       state,
-      { payload }: PayloadAction<{ message: IMessage; chatId: number }>
+      { payload }: PayloadAction<{ message: Message; chatId: number }>
     ) => {
       const { message, chatId } = payload;
       const chat = state.chats.find((chat) => chat.id === chatId);
@@ -37,7 +38,7 @@ const chatSlice = createSlice({
     },
     setSeenLastMessage: (
       state,
-      { payload }: PayloadAction<{ message: IMessage }>
+      { payload }: PayloadAction<{ message: Message }>
     ) => {
       const { message } = payload;
       //console.log(message, chatId)
@@ -96,7 +97,7 @@ export const chatThunk = createAsyncThunk(
   async (userId: number, thunkApi) => {
     try {
       thunkApi.dispatch(setLoading(true));
-      const messages = await chatsApiService.getChats(userId);
+      const messages = await chatsApiService.getChats();
 
       thunkApi.dispatch(setChats(messages));
     } catch (e) {

@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent } from "react";
+import { FC, MouseEvent } from "react";
 import "./styles/MediaModal.css";
 import { useSelector } from "react-redux";
 import { clearMedia, selectMainChat } from "./reducers/main.chat.reducer";
@@ -30,10 +30,10 @@ const MediaModal: FC<IMediaModal> = ({ socket }) => {
   };
 
   //TODO
-  const handleAdd = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    dispatch(clearMedia());
-  };
+  // const handleAdd = (e: MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   dispatch(clearMedia());
+  // };
 
   if (!media.filename) return null;
 

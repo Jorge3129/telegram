@@ -2,20 +2,20 @@ import { MutableRefObject, UIEvent, useRef } from "react";
 import { getVisibleHeight } from "./scrollUtils";
 import { selectChats, setUnread } from "../../chat-sidebar/chats.reducer";
 import { useSelector } from "react-redux";
-import { IMessage } from "../../../types/types";
 import { useAppDispatch } from "../../../redux/store";
 import { Socket } from "socket.io-client";
 import { selectMainChat } from "../reducers/main.chat.reducer";
 import { alreadySeen, getMsgById } from "../../../utils/general.utils";
 import { selectUser } from "../../../redux/user-reducer";
+import { Message } from "../../../messages/message.model";
 
 export const useDetectScroll = (
   socket: Socket | null,
   scrollRef: MutableRefObject<HTMLUListElement | null>,
-  messages: IMessage[]
+  messages: Message[]
 ) => {
   const { chats } = useSelector(selectChats);
-  const { chatId, mainChat } = useSelector(selectMainChat);
+  const { currentChatId, mainChat } = useSelector(selectMainChat);
   const dispatch = useAppDispatch();
   const readRef = useRef<string[]>([]);
   const topRef = useRef<number>(scrollRef.current?.scrollTop || 0);
@@ -51,7 +51,7 @@ export const useDetectScroll = (
     dispatch(
       setUnread({
         unread: messages.slice(ind + 1).length,
-        chatId: chatId || -1,
+        chatId: currentChatId || -1,
       })
     );
 
@@ -73,7 +73,7 @@ export const useDetectScroll = (
       return;
     }
 
-    const msg = getMsgById(last, chatId || 0, messages);
+    const msg = getMsgById(last, currentChatId || 0, messages);
 
     if (!msg) return;
     if (!alreadySeen(msg.timestamp, mainChat?.unread, messages)) {
@@ -84,7 +84,7 @@ export const useDetectScroll = (
 
   const handleScroll = (e: UIEvent<HTMLUListElement>) => {
     //console.log('handleScroll')
-    const unr = chats.find((ch) => ch.id === chatId)?.unread;
+    const unr = chats.find((ch) => ch.id === currentChatId)?.unread;
     if (!unr) return;
 
     if (

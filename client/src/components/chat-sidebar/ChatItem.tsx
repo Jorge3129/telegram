@@ -1,16 +1,17 @@
 import { FC } from "react";
-import { IChat, IMessage } from "../../types/types";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { formatTimestamp, getSeenIcon } from "./chats.utils";
 import Avatar from "../reuse/Avatar";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
+import { Chat } from "../../chats/models/chat.model";
+import { Message } from "../../messages/message.model";
 
 dayjs.extend(isBetween);
 
 interface IChatItem {
-  chat: IChat;
+  chat: Chat;
 }
 
 const ChatItem: FC<IChatItem> = ({ chat }) => {
@@ -19,7 +20,7 @@ const ChatItem: FC<IChatItem> = ({ chat }) => {
   const { user } = useSelector(selectUser);
 
   const formatChatAuthor = (
-    message: IMessage | undefined,
+    message: Message | undefined,
     type: "personal" | "group"
   ): string => {
     if (!message || type === "personal") return "";

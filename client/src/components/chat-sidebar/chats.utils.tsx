@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-import { IMessage, User } from "../../types/types";
+import { Message } from "../../messages/message.model";
+import { User } from "../../users/models/user.model";
 
 export const initials = (title: string) => {
   const tokens = title.split(" ");
@@ -20,7 +21,7 @@ export const formatTimestamp = (timestamp: string | undefined): string => {
 };
 
 export const getSeenIcon = (
-  msg: IMessage | undefined,
+  msg: Message | undefined,
   currentUser: User | null
 ) => {
   if (!msg || msg.author !== currentUser?.username) {

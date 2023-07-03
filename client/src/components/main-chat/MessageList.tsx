@@ -1,5 +1,5 @@
-import Message from "./Message";
-import React, { FC, useEffect } from "react";
+import MessageComponent from "./MessageComponent";
+import { FC, useEffect } from "react";
 import { isSelf } from "../../utils/general.utils";
 import { useSelector } from "react-redux";
 import { messageThunk, selectMessages } from "./reducers/messages.reducer";
@@ -19,7 +19,7 @@ interface IMessageList {
 
 const MessageList: FC<IMessageList> = ({ socket }) => {
   const { messages, loading } = useSelector(selectMessages);
-  const { chatId, mainChat } = useSelector(selectMainChat);
+  const { currentChatId, mainChat } = useSelector(selectMainChat);
   const scrollRef = useAutoScroll(mainChat?.unread || 0);
   const { onMessagesFirstRendered, handleScroll } = useDetectScroll(
     socket,
@@ -31,8 +31,8 @@ const MessageList: FC<IMessageList> = ({ socket }) => {
   const { user } = useSelector(selectUser);
 
   useEffect(() => {
-    dispatch(messageThunk(chatId || -1));
-  }, [chatId]);
+    dispatch(messageThunk(currentChatId || -1));
+  }, [currentChatId]);
 
   return (
     <div className="message_list_wrapper">
@@ -56,7 +56,7 @@ const MessageList: FC<IMessageList> = ({ socket }) => {
               <MessageAvatar
                 data={{ mainChat, msg, nextMsg: messages[i + 1] }}
               />
-              <Message
+              <MessageComponent
                 msg={msg}
                 callback={i === length - 1 ? onMessagesFirstRendered : null}
                 type={mainChat?.type || "personal"}

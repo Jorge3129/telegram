@@ -1,6 +1,6 @@
 import environment from "../../environment/environment";
 import { HttpClient, httpClient } from "../../shared/http/http-client";
-import { User } from "../../types/types";
+import { User } from "../../users/models/user.model";
 import { usersApiService } from "../../users/users-api.service";
 import { LoginDto } from "../dto/login-dto";
 import { SignedTokens } from "../dto/login-response.dto";

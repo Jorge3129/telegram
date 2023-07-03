@@ -1,15 +1,16 @@
 import React, { FC } from "react";
-import { IChat, IMessage } from "../../types/types";
 import { isSelf } from "../../utils/general.utils";
 import Avatar from "./Avatar";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
+import { Chat } from "../../chats/models/chat.model";
+import { Message } from "../../messages/message.model";
 
 interface IMessageAvatar {
   data: {
-    mainChat: IChat | null;
-    msg: IMessage;
-    nextMsg: IMessage;
+    mainChat: Chat | null;
+    msg: Message;
+    nextMsg: Message;
   };
 }
 

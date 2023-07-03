@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IMessage } from "../../../types/types";
 import { RootState } from "../../../redux/rootReducer";
 import { chatsApiService } from "../../../chats/chats-api.service";
+import { Message } from "../../../messages/message.model";
 
 interface MessageState {
-  messages: IMessage[];
+  messages: Message[];
   loading: boolean;
   error: boolean;
 }
@@ -22,15 +22,15 @@ const messageSlice = createSlice({
     setLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.loading = payload;
     },
-    setMessages: (state, { payload }: PayloadAction<IMessage[]>) => {
+    setMessages: (state, { payload }: PayloadAction<Message[]>) => {
       state.messages = payload;
     },
-    addMessage: (state, { payload }: PayloadAction<IMessage>) => {
+    addMessage: (state, { payload }: PayloadAction<Message>) => {
       state.messages.push(payload);
     },
     setSeenMessage: (
       state,
-      { payload }: PayloadAction<{ message: IMessage; username: string }>
+      { payload }: PayloadAction<{ message: Message; username: string }>
     ) => {
       const username = payload.username;
 
