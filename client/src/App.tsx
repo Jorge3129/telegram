@@ -1,4 +1,4 @@
-import React, { FC, useState, MouseEvent, useEffect } from "react";
+import { FC, useEffect } from "react";
 import "./App.css";
 import "./components/reuse/styles/Avatar.css";
 import Main from "./components/Main";
@@ -13,7 +13,7 @@ import ErrorBoundary from "./components/reuse/ErrorBoundary";
 import { useSelector } from "react-redux";
 import { selectUser, setUser, setUserLoading } from "./redux/user-reducer";
 import { useAppDispatch } from "./redux/store";
-import api from "./api/api";
+import { usersApiService } from "./users/users-api.service";
 
 const App: FC = () => {
   const { user, loading } = useSelector(selectUser);
@@ -28,7 +28,7 @@ const App: FC = () => {
       return;
     }
 
-    api.getUser(userId).then((user) => {
+    usersApiService.getUser(userId).then((user) => {
       localStorage.setItem("userId", user.id + "");
       dispatch(setUser(user));
       dispatch(setUserLoading(false));
