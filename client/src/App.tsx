@@ -13,7 +13,7 @@ import ErrorBoundary from "./components/reuse/ErrorBoundary";
 import { useSelector } from "react-redux";
 import { selectUser, setUser, setUserLoading } from "./redux/user-reducer";
 import { useAppDispatch } from "./redux/store";
-import { usersApiService } from "./users/users-api.service";
+import { authService } from "./auth/services/auth.service";
 
 const App: FC = () => {
   const { user, loading } = useSelector(selectUser);
@@ -21,18 +21,16 @@ const App: FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const userId = parseInt(localStorage.getItem("userId") || "");
-
-    if (!userId) {
-      dispatch(setUserLoading(false));
-      return;
-    }
-
-    usersApiService.getUser(userId).then((user) => {
-      localStorage.setItem("userId", user.id + "");
-      dispatch(setUser(user));
-      dispatch(setUserLoading(false));
-    });
+    authService
+      .loadStoredUser()
+      .then((user) => {
+        if (user) {
+          dispatch(setUser(user));
+        }
+      })
+      .finally(() => {
+        dispatch(setUserLoading(false));
+      });
   }, [dispatch]);
 
   if (loading) {

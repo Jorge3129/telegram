@@ -9,6 +9,6 @@ export const wrapResponse = <T = any>(
     .catch((err) => {
       const { response } = err as Required<AxiosError>;
 
-      throw new HttpError(response.status, response.data);
+      throw new HttpError(response?.status, response?.data);
     });
 };

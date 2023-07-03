@@ -2,10 +2,10 @@ import { ChangeEvent, MouseEvent, FC, useState } from "react";
 import "./Login.css";
 import { useNavigate } from "react-router";
 import { IUser } from "../../types/types";
-import api from "../../api/api";
 import { setUser } from "../../redux/user-reducer";
 import { useAppDispatch } from "../../redux/store";
 import { usersApiService } from "../../users/users-api.service";
+import { authService } from "../../auth/services/auth.service";
 
 interface LoginProps {}
 
@@ -26,11 +26,11 @@ const Login: FC<LoginProps> = () => {
 
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const response = await api.login(state);
+    const userId = await authService.login(state);
 
-    if (response.data.userId) {
-      const user = await usersApiService.getUser(response.data.userId);
-      localStorage.setItem("userId", response.data.userId + "");
+    if (userId) {
+      const user = await usersApiService.getUser(userId);
+
       dispatch(setUser(user));
     }
 

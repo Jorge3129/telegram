@@ -6,9 +6,7 @@ export class ChatsApiService {
   constructor(private readonly http: HttpClient) {}
 
   public async getChats(userId: number): Promise<IChat[]> {
-    return await this.http.get<IChat[]>(
-      `${environment.apiUrl}/chats/${userId}`
-    );
+    return await this.http.get<IChat[]>(`${environment.apiUrl}/chats`);
   }
 
   public async getMessages(chatId: number) {

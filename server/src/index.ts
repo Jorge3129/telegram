@@ -14,6 +14,7 @@ import { uploadsRouter } from "./uploads/uploads.router";
 import { userRouter } from "./users/user.router";
 import { errorHandler } from "./shared/errors";
 import appDataSource from "./data-source";
+import { authMiddleware } from "./auth/auth.middleware";
 
 const app = express();
 
@@ -38,10 +39,10 @@ const io = new Server(server, {
   },
 });
 
-app.use("/media", uploadsRouter);
 app.use("/auth", authRouter);
-app.use("/users", userRouter);
-app.use("/", chatsRouter);
+app.use("/media", authMiddleware, uploadsRouter);
+app.use("/users", authMiddleware, userRouter);
+app.use("/chats", authMiddleware, chatsRouter);
 
 app.use(errorHandler());
 
