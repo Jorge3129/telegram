@@ -5,6 +5,7 @@ import { IUser } from "../../types/types";
 import api from "../../api/api";
 import { setUser } from "../../redux/user-reducer";
 import { useAppDispatch } from "../../redux/store";
+import { usersApiService } from "../../users/users-api.service";
 
 interface LoginProps {}
 
@@ -28,7 +29,7 @@ const Login: FC<LoginProps> = () => {
     const response = await api.login(state);
 
     if (response.data.userId) {
-      const user = await api.getUser(response.data.userId);
+      const user = await usersApiService.getUser(response.data.userId);
       localStorage.setItem("userId", response.data.userId + "");
       dispatch(setUser(user));
     }

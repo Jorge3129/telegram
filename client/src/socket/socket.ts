@@ -5,7 +5,6 @@ import {
   setSeenMessage,
 } from "../components/main-chat/reducers/messages.reducer";
 import { useAppDispatch } from "../redux/store";
-import { SERVER_WS_URL } from "../config";
 import { IMessage } from "../types/types";
 import {
   incrementUnread,
@@ -16,6 +15,7 @@ import {
 import { useSelector } from "react-redux";
 import { selectMainChat } from "../components/main-chat/reducers/main.chat.reducer";
 import { selectUser } from "../redux/user-reducer";
+import environment from "../environment/environment";
 
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -53,7 +53,7 @@ export const useSocket = () => {
       return;
     }
 
-    const newSocket = io(`${SERVER_WS_URL}`, {
+    const newSocket = io(`${environment.wsUrl}`, {
       query: { userId: user.id },
     });
 

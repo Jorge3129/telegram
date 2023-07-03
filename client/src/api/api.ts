@@ -1,21 +1,11 @@
 import axios from "axios";
 import { IChat, IMessage, IUser, User } from "../types/types";
-import { SERVER_URL } from "../config";
+import environment from "../environment/environment";
 
 export class Api {
-  static async getMessages(chatId: number) {
-    return await axios.get<IMessage[]>(
-      SERVER_URL + `/chats/${chatId}/messages`
-    );
-  }
-
-  static async getChats(userId: number) {
-    return await axios.get<IChat[]>(SERVER_URL + "/chats/" + userId);
-  }
-
   static async login(login: IUser) {
     try {
-      return await axios.post(SERVER_URL + "/auth/login", login);
+      return await axios.post(`${environment.apiUrl}/auth/login`, login);
     } catch (e) {
       return {
         data: {
@@ -24,10 +14,6 @@ export class Api {
         error: e,
       };
     }
-  }
-
-  static async getUser(userId: number): Promise<User> {
-    return (await axios.get<User>(SERVER_URL + "/users/" + userId)).data;
   }
 }
 
