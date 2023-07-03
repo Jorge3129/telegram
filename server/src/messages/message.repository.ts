@@ -78,14 +78,19 @@ export class MessagesRepository {
   public findBy(
     where: FindOptionsWhere<MessageEntity>
   ): Promise<MessageEntity[]> {
-    return this.messageRepo.findBy(where);
+    return this.messageRepo.find({
+      where,
+      relations: {
+        reads: true,
+      },
+    });
   }
 
   public async updateSeen(
     readByUserId: number,
     message: Message
   ): Promise<void> {
-    const messagesToUpdate = await this.messageRepo
+    const qb = this.messageRepo
       .createQueryBuilder("message")
       .leftJoin(
         MessageReadEntity,
@@ -95,11 +100,12 @@ export class MessagesRepository {
       )
       .where("message.chatId = :chatId", { chatId: message.chatId })
       .andWhere("message.timestamp <= :timestamp", {
-        timestamp: message.timestamp,
+        timestamp: new Date(message.timestamp),
       })
       .andWhere("readsByUser.id IS NULL")
-      .select(`message.id AS "messageId"`)
-      .getRawMany<{ messageId: string }>();
+      .select(`message.id AS "messageId"`);
+
+    const messagesToUpdate = await qb.getRawMany<{ messageId: string }>();
 
     const values = messagesToUpdate.map(
       ({ messageId }): Partial<MessageReadEntity> => ({
@@ -108,7 +114,9 @@ export class MessagesRepository {
       })
     );
 
-    await this.messageReadRepo.save(values);
+    await this.messageReadRepo.save(values).catch((e) => {
+      console.log(e);
+    });
   }
 }
 
