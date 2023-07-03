@@ -1,12 +1,12 @@
-import { IMedia, IMessage, User } from "../types/types";
+import { Media, Message, User } from "../types/types";
 
-export const isSelf = (msg: IMessage, user: User | null) =>
+export const isSelf = (msg: Message, user: User | null) =>
   msg && msg.author === user?.username;
 
 export const getMsgById = (
   messageId: string,
   chatId: number,
-  messages: IMessage[]
+  messages: Message[]
 ) => {
   return messages
     .filter((msg) => msg.chatId === chatId)
@@ -16,7 +16,7 @@ export const getMsgById = (
 export const alreadySeen = (
   timestamp: string,
   unread: number,
-  messages: IMessage[]
+  messages: Message[]
 ) => {
   const lastMessageSeen = messages.at(-(unread + 1));
   if (!lastMessageSeen) return false;
@@ -25,7 +25,7 @@ export const alreadySeen = (
   return new Date(lastMessageSeen.timestamp) >= new Date(timestamp);
 };
 
-export const getMediaByType = (media: IMedia, className: string) => {
+export const getMediaByType = (media: Media, className: string) => {
   const type = media.type.split("/")[0];
   switch (type) {
     case "image":
@@ -39,7 +39,7 @@ export const getMediaByType = (media: IMedia, className: string) => {
   }
 };
 
-export const convertFileToMedia = (file: File): IMedia => {
+export const convertFileToMedia = (file: File): Media => {
   return {
     filename: file.name,
     type: file.type,

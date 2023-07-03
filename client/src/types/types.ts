@@ -1,4 +1,4 @@
-export interface IMessage {
+export interface Message {
   id: string;
   text: string;
   timestamp: string;
@@ -7,20 +7,15 @@ export interface IMessage {
   chatId: number;
   seen?: boolean;
   seenBy?: string[];
-  media?: IMedia;
+  media?: Media;
 }
 
-export type CreateMessageDto = Omit<IMessage, "id">;
+export type CreateMessageDto = Omit<Message, "id">;
 
-export interface IMedia {
+export interface Media {
   filename: string;
   type: string;
   src?: string;
-}
-
-export interface IUser {
-  username: string;
-  password: string;
 }
 
 export interface User {
@@ -29,11 +24,11 @@ export interface User {
   password: string;
 }
 
-export interface IChat {
+export interface Chat {
   id: number;
   unread: number;
   title: string;
-  lastMessage?: IMessage;
+  lastMessage?: Message;
   muted: boolean;
   type: "personal" | "group";
   online?: boolean;

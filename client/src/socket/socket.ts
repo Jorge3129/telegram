@@ -5,7 +5,7 @@ import {
   setSeenMessage,
 } from "../components/main-chat/reducers/messages.reducer";
 import { useAppDispatch } from "../redux/store";
-import { IMessage } from "../types/types";
+import { Message } from "../types/types";
 import {
   incrementUnread,
   setLastMessage,
@@ -24,7 +24,7 @@ export const useSocket = () => {
 
   const { user } = useSelector(selectUser);
 
-  const onMessage = (msg: IMessage) => {
+  const onMessage = (msg: Message) => {
     //console.log('message')
     if (chatId === msg.chatId) {
       dispatch(addMessage(msg));
@@ -37,7 +37,7 @@ export const useSocket = () => {
     message,
     username,
   }: {
-    message: IMessage;
+    message: Message;
     userId: number;
     username: string;
   }) => {

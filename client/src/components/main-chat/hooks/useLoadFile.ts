@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { IMedia } from "../../../types/types";
+import { Media } from "../../../types/types";
 import { uploadsApiService } from "../../../uploads/uploads-api.service";
 
 export const useLoadFile = (
-  media: IMedia | undefined,
-  setFile: Dispatch<SetStateAction<IMedia | null>>
+  media: Media | undefined,
+  setFile: Dispatch<SetStateAction<Media | null>>
 ) => {
   useEffect(() => {
     if (!media?.filename) return;

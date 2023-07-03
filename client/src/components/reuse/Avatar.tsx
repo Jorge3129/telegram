@@ -1,9 +1,9 @@
 import { initials } from "../chat-sidebar/chats.utils";
 import { CSSProperties, FC } from "react";
-import { IChat } from "../../types/types";
+import { Chat } from "../../types/types";
 
 interface IAvatar {
-  chat?: IChat;
+  chat?: Chat;
   hide?: boolean;
   title: string;
   prefix: string;

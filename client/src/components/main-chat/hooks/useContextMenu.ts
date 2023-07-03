@@ -2,9 +2,9 @@ import { useSelector } from "react-redux";
 import { selectContextMenu, setContextMenu } from "../reducers/menu.reducer";
 import { useAppDispatch } from "../../../redux/store";
 import { MouseEvent } from "react";
-import { IMessage } from "../../../types/types";
+import { Message } from "../../../types/types";
 
-export const useContextMenu = (msg: IMessage) => {
+export const useContextMenu = (msg: Message) => {
   const { contextMenu } = useSelector(selectContextMenu);
   const dispatch = useAppDispatch();
 

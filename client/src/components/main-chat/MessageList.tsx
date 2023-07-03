@@ -1,5 +1,5 @@
-import Message from "./Message";
-import React, { FC, useEffect } from "react";
+import MessageComponent from "./Message";
+import { FC, useEffect } from "react";
 import { isSelf } from "../../utils/general.utils";
 import { useSelector } from "react-redux";
 import { messageThunk, selectMessages } from "./reducers/messages.reducer";
@@ -56,7 +56,7 @@ const MessageList: FC<IMessageList> = ({ socket }) => {
               <MessageAvatar
                 data={{ mainChat, msg, nextMsg: messages[i + 1] }}
               />
-              <Message
+              <MessageComponent
                 msg={msg}
                 callback={i === length - 1 ? onMessagesFirstRendered : null}
                 type={mainChat?.type || "personal"}

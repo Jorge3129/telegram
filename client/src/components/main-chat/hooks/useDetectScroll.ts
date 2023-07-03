@@ -2,7 +2,7 @@ import { MutableRefObject, UIEvent, useRef } from "react";
 import { getVisibleHeight } from "./scrollUtils";
 import { selectChats, setUnread } from "../../chat-sidebar/chats.reducer";
 import { useSelector } from "react-redux";
-import { IMessage } from "../../../types/types";
+import { Message } from "../../../types/types";
 import { useAppDispatch } from "../../../redux/store";
 import { Socket } from "socket.io-client";
 import { selectMainChat } from "../reducers/main.chat.reducer";
@@ -12,7 +12,7 @@ import { selectUser } from "../../../redux/user-reducer";
 export const useDetectScroll = (
   socket: Socket | null,
   scrollRef: MutableRefObject<HTMLUListElement | null>,
-  messages: IMessage[]
+  messages: Message[]
 ) => {
   const { chats } = useSelector(selectChats);
   const { chatId, mainChat } = useSelector(selectMainChat);

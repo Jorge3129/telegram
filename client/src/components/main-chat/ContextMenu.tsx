@@ -1,12 +1,12 @@
 import React, { FC } from "react";
-import { IContextMenu, IMessage } from "../../types/types";
+import { IContextMenu, Message } from "../../types/types";
 import { isSelf } from "../../utils/general.utils";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
 
 interface IContextMenuProps {
   contextMenu: IContextMenu;
-  msg: IMessage;
+  msg: Message;
   type: "personal" | "group";
 }
 

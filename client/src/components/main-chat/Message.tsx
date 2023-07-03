@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { IMedia, IMessage } from "../../types/types";
+import { Media, Message } from "../../types/types";
 import dayjs from "dayjs";
 import { useContextMenu } from "./hooks/useContextMenu";
 import { getSeenIcon } from "../chat-sidebar/chats.utils";
@@ -10,19 +10,19 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
 
 interface IPropsMessage {
-  msg: IMessage;
+  msg: Message;
   callback: null | (() => void);
   type: "personal" | "group";
 }
 
-const Message: FC<IPropsMessage> = ({ msg, callback, type }) => {
+const MessageComponent: FC<IPropsMessage> = ({ msg, callback, type }) => {
   const { text, timestamp, author, media } = msg;
 
   useEffect(() => {
     if (callback && !msg.seen) callback();
   }, []);
 
-  const [file, setFile] = useState<IMedia | null>(null);
+  const [file, setFile] = useState<Media | null>(null);
 
   const { user } = useSelector(selectUser);
 
@@ -51,4 +51,4 @@ const Message: FC<IPropsMessage> = ({ msg, callback, type }) => {
   );
 };
 
-export default Message;
+export default MessageComponent;

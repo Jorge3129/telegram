@@ -4,7 +4,7 @@ import { selectMainChat, setText } from "../reducers/main.chat.reducer";
 import { useAppDispatch } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
-import { CreateMessageDto, IMessage } from "../../../types/types";
+import { CreateMessageDto, Message } from "../../../types/types";
 import { selectUser } from "../../../redux/user-reducer";
 
 export const useSend = (socket: Socket) => {
@@ -14,7 +14,7 @@ export const useSend = (socket: Socket) => {
 
   const { user } = useSelector(selectUser);
 
-  const dispatchSendMessage = (message: IMessage) => {
+  const dispatchSendMessage = (message: Message) => {
     dispatch(addMessage(message));
     dispatch(setLastMessage({ message, chatId: message.chatId }));
     dispatch(setText(""));
@@ -36,8 +36,8 @@ export const useSend = (socket: Socket) => {
       media,
     };
 
-    const response = await new Promise<IMessage>((res) => {
-      socket.emit("message", { message }, (savedMessage: IMessage) => {
+    const response = await new Promise<Message>((res) => {
+      socket.emit("message", { message }, (savedMessage: Message) => {
         res(savedMessage);
       });
     });
