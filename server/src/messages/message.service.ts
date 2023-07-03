@@ -22,15 +22,10 @@ export class MessageService {
     return messageToModel(savedMessage);
   }
 
-  public async getMessagesByChat(chatId: number): Promise<Message[]> {
-    const messages = await this.messageRepo.findBy({ chatId });
+  public async getMessagesForChat(chatId: number): Promise<Message[]> {
+    const messages = await this.messageRepo.getMessagesForChat(chatId);
 
-    // TODO order by
-    return messages
-      .sort((a, b) =>
-        Math.sign(dayjs(a.timestamp).diff(dayjs(b.timestamp), "millisecond"))
-      )
-      .map(messageToModel);
+    return messages.map(messageToModel);
   }
 }
 

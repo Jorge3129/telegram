@@ -86,6 +86,20 @@ export class MessagesRepository {
     });
   }
 
+  public getMessagesForChat(chatId: number): Promise<MessageEntity[]> {
+    return this.messageRepo.find({
+      where: {
+        chatId,
+      },
+      relations: {
+        reads: true,
+      },
+      order: {
+        timestamp: "asc",
+      },
+    });
+  }
+
   public async updateSeen(
     readByUserId: number,
     message: Message

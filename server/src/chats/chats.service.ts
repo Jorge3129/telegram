@@ -31,7 +31,7 @@ export class ChatsService {
 
     const lastRead = user?.lastRead;
 
-    const msgs = await messageService.getMessagesByChat(id);
+    const msgs = await messageService.getMessagesForChat(id);
 
     if (lastRead) {
       unreadCount = msgs.filter(
