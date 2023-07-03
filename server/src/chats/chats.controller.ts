@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ChatsService, chatsService } from "./chats.service";
 import { MessageService, messageService } from "../messages/message.service";
 import { ExpressHandler } from "../shared/decorators/express-handler.decorator";
+import { User } from "../users/user.type";
 
 export class ChatsController {
   constructor(
@@ -20,9 +21,7 @@ export class ChatsController {
 
   @ExpressHandler()
   public async getChats(req: Request, res: Response) {
-    const chats = await this.chatsService.getUserChats(
-      parseInt(req.params.userId)
-    );
+    const chats = await this.chatsService.getUserChats(<User>req.user);
 
     res.json(chats);
   }

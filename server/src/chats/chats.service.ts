@@ -3,6 +3,7 @@ import {
   chatUserRepository,
 } from "../chat-users/chat-user.repository";
 import { MessageService, messageService } from "../messages/message.service";
+import { User } from "../users/user.type";
 import { Chat, ChatForView } from "./chat.type";
 import { ChatsRepository, chatsRepo } from "./chats.repository";
 
@@ -13,8 +14,8 @@ export class ChatsService {
     private readonly chatUsersRepo: ChatUserRepository
   ) {}
 
-  public async getUserChats(userId: number): Promise<ChatForView[]> {
-    const rawChats = await this.chatsRepo.findByUserId(userId);
+  public async getUserChats(user: User): Promise<ChatForView[]> {
+    const rawChats = await this.chatsRepo.findByUserId(user.id);
 
     await Promise.all(
       rawChats.map(async (chat) => {
@@ -22,7 +23,7 @@ export class ChatsService {
       })
     );
 
-    return Promise.all(rawChats.map((ch) => this.mapChatToClient(ch, userId)));
+    return Promise.all(rawChats.map((ch) => this.mapChatToClient(ch, user.id)));
   }
 
   private async mapChatToClient(

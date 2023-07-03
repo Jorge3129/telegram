@@ -42,7 +42,7 @@ const io = new Server(server, {
 app.use("/auth", authRouter);
 app.use("/media", authMiddleware, uploadsRouter);
 app.use("/users", authMiddleware, userRouter);
-app.use("/", authMiddleware, chatsRouter);
+app.use("/chats", authMiddleware, chatsRouter);
 
 app.use(errorHandler());
 
