@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Chat, Media } from "../../../types/types";
+import { Media } from "../../../types/types";
 import { RootState } from "../../../redux/rootReducer";
+import { Chat } from "../../../chats/models/chat.model";
 
 interface MainChatState {
   chatId: number | null;

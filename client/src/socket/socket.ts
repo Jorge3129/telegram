@@ -5,7 +5,6 @@ import {
   setSeenMessage,
 } from "../components/main-chat/reducers/messages.reducer";
 import { useAppDispatch } from "../redux/store";
-import { Message } from "../types/types";
 import {
   incrementUnread,
   setLastMessage,
@@ -16,6 +15,7 @@ import { useSelector } from "react-redux";
 import { selectMainChat } from "../components/main-chat/reducers/main.chat.reducer";
 import { selectUser } from "../redux/user-reducer";
 import environment from "../environment/environment";
+import { Message } from "../chats/models/message.model";
 
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);

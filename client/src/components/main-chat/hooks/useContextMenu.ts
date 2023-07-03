@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { selectContextMenu, setContextMenu } from "../reducers/menu.reducer";
 import { useAppDispatch } from "../../../redux/store";
 import { MouseEvent } from "react";
-import { Message } from "../../../types/types";
+import { Message } from "../../../chats/models/message.model";
 
 export const useContextMenu = (msg: Message) => {
   const { contextMenu } = useSelector(selectContextMenu);

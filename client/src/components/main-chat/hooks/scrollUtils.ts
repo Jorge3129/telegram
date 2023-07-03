@@ -1,4 +1,4 @@
-import { Message } from "../../../types/types";
+import { Message } from "../../../chats/models/message.model";
 
 export const getVisibleHeight = (
   element: Element,

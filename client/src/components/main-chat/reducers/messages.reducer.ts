@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Message } from "../../../types/types";
 import { RootState } from "../../../redux/rootReducer";
 import { chatsApiService } from "../../../chats/chats-api.service";
+import { Message } from "../../../chats/models/message.model";
 
 interface MessageState {
   messages: Message[];

@@ -1,4 +1,4 @@
-import MessageComponent from "./Message";
+import MessageComponent from "./MessageComponent";
 import { FC, useEffect } from "react";
 import { isSelf } from "../../utils/general.utils";
 import { useSelector } from "react-redux";

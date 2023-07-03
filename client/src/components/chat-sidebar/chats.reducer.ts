@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Chat, Message } from "../../types/types";
 import { RootState } from "../../redux/rootReducer";
 import { chatsApiService } from "../../chats/chats-api.service";
+import { Chat } from "../../chats/models/chat.model";
+import { Message } from "../../chats/models/message.model";
 
 interface ChatState {
   chats: Chat[];
@@ -96,7 +97,7 @@ export const chatThunk = createAsyncThunk(
   async (userId: number, thunkApi) => {
     try {
       thunkApi.dispatch(setLoading(true));
-      const messages = await chatsApiService.getChats(userId);
+      const messages = await chatsApiService.getChats();
 
       thunkApi.dispatch(setChats(messages));
     } catch (e) {

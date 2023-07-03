@@ -1,7 +1,6 @@
 import { ChangeEvent, FC, MouseEvent, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectChats } from "./chats.reducer";
-import { Chat } from "../../types/types";
 import ChatItem from "./ChatItem";
 import "./styles/Chats.css";
 import * as _ from "lodash";
@@ -13,6 +12,7 @@ import {
 } from "../main-chat/reducers/main.chat.reducer";
 import ChatsSearchBar from "./ChatsSearchBar";
 import LoadSpinner from "../reuse/LoadSpinner";
+import { Chat } from "../../chats/models/chat.model";
 
 interface IChatsContainer {}
 
