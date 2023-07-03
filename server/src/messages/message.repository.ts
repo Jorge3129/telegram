@@ -126,7 +126,7 @@ export class MessagesRepository {
     const count = await this.messageRepo
       .createQueryBuilder("message")
       .leftJoin(
-        MessageReadEntity,
+        "message.reads",
         "read",
         "read.messageId = message.id AND read.userId = :userId",
         { userId }
@@ -147,7 +147,7 @@ export class MessagesRepository {
     const qb = this.messageRepo
       .createQueryBuilder("message")
       .leftJoin(
-        MessageReadEntity,
+        "message.reads",
         "readsByUser",
         '"readsByUser"."messageId" = message.id AND "readsByUser"."userId" = :readByUserId',
         { readByUserId }

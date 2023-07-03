@@ -1,13 +1,16 @@
-import { chatUserRepository } from "../chat-users/chat-user.repository";
+import {
+  ChatUserRepository,
+  chatUserRepository,
+} from "../chat-users/chat-user.repository";
 import { MessageService, messageService } from "../messages/message.service";
-import { userRepository } from "../users/user.repository";
 import { Chat, ChatForView } from "./chat.type";
 import { ChatsRepository, chatsRepo } from "./chats.repository";
 
 export class ChatsService {
   constructor(
     private readonly chatsRepo: ChatsRepository,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly chatUsersRepo: ChatUserRepository
   ) {}
 
   public async getUserChats(userId: number): Promise<ChatForView[]> {
@@ -35,22 +38,25 @@ export class ChatsService {
 
     const lastMessage = await this.messageService.getLatestChatMessage(chat.id);
 
-    const receiverId = chat.members.filter((u) => u.userId !== userId)[0]
-      .userId;
-
-    const receiverName = (await userRepository.findBy({ id: receiverId }))[0]
-      .username;
+    const otherMember = await this.chatUsersRepo.getOtherChatMember(
+      chat.id,
+      userId
+    );
 
     return {
       id: chat.id,
-      title: chat.title || receiverName,
+      title: chat.title || otherMember.user.username,
       lastMessage: lastMessage ?? undefined,
       unread: unreadCount,
       muted: !!user?.muted,
       type: chat.type,
-      //online: users.find(u => u.username === receiverName)?.online
+      online: !!otherMember.user.socketId,
     };
   }
 }
 
-export const chatsService = new ChatsService(chatsRepo, messageService);
+export const chatsService = new ChatsService(
+  chatsRepo,
+  messageService,
+  chatUserRepository
+);
