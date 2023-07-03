@@ -18,7 +18,7 @@ interface IChatsContainer {}
 
 const ChatsContainer: FC<IChatsContainer> = () => {
   const { chats, loading, width } = useSelector(selectChats);
-  const { chatId, mainChat } = useSelector(selectMainChat);
+  const { currentChatId, mainChat } = useSelector(selectMainChat);
   const dispatch = useAppDispatch();
 
   const handleChat = (e: MouseEvent<HTMLButtonElement>) => {
@@ -52,7 +52,8 @@ const ChatsContainer: FC<IChatsContainer> = () => {
       <li key={ch.id + ""} className="chat_list_item">
         <button
           className={
-            "chat_item_button " + (chatId === ch.id ? " selected_chat" : "")
+            "chat_item_button " +
+            (currentChatId === ch.id ? " selected_chat" : "")
           }
           id={ch.id + ""}
           onClick={handleChat}

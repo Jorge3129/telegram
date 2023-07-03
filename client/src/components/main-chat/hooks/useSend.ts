@@ -8,7 +8,7 @@ import { selectUser } from "../../../redux/user-reducer";
 import { CreateMessageDto, Message } from "../../../messages/message.model";
 
 export const useSend = (socket: Socket) => {
-  const { chatId, text, media } = useSelector(selectMainChat);
+  const { currentChatId, text, media } = useSelector(selectMainChat);
   const dispatch = useAppDispatch();
 
   const { user } = useSelector(selectUser);
@@ -31,7 +31,7 @@ export const useSend = (socket: Socket) => {
       timestamp: new Date().toISOString(),
       authorId: user.id,
       author: user.username,
-      chatId: chatId || 0,
+      chatId: currentChatId || 0,
       media,
     };
 

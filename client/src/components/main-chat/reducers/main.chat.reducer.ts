@@ -4,14 +4,14 @@ import { Chat } from "../../../chats/models/chat.model";
 import { Media } from "../../../messages/message.model";
 
 interface MainChatState {
-  chatId: number | null;
+  currentChatId: number | null;
   mainChat: Chat | null;
   text: string;
   media: Media;
 }
 
 const initialState: MainChatState = {
-  chatId: null,
+  currentChatId: null,
   mainChat: null,
   text: "",
   media: {
@@ -25,7 +25,7 @@ const mainChatSlice = createSlice({
   initialState,
   reducers: {
     setChatId: (state, { payload }: PayloadAction<number>) => {
-      state.chatId = payload;
+      state.currentChatId = payload;
       state.text = "";
     },
     setChat: (state, { payload }: PayloadAction<Chat>) => {

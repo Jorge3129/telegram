@@ -19,7 +19,7 @@ interface IMessageList {
 
 const MessageList: FC<IMessageList> = ({ socket }) => {
   const { messages, loading } = useSelector(selectMessages);
-  const { chatId, mainChat } = useSelector(selectMainChat);
+  const { currentChatId, mainChat } = useSelector(selectMainChat);
   const scrollRef = useAutoScroll(mainChat?.unread || 0);
   const { onMessagesFirstRendered, handleScroll } = useDetectScroll(
     socket,
@@ -31,8 +31,8 @@ const MessageList: FC<IMessageList> = ({ socket }) => {
   const { user } = useSelector(selectUser);
 
   useEffect(() => {
-    dispatch(messageThunk(chatId || -1));
-  }, [chatId]);
+    dispatch(messageThunk(currentChatId || -1));
+  }, [currentChatId]);
 
   return (
     <div className="message_list_wrapper">
