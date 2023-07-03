@@ -1,5 +1,5 @@
 import { FindOptionsWhere, Repository } from "typeorm";
-import { Message } from "./models/message.type";
+import { CreateMessageDto, Message } from "./models/message.type";
 import { MessageEntity, PersonalMessageEntity } from "./entity/message.entity";
 import dataSource from "../data-source";
 import { MessageReadEntity } from "./entity/message-read.entity";
@@ -22,7 +22,7 @@ export class MessagesRepository {
     return this.messageRepo.save({ ...dto });
   }
 
-  public async saveFromDto(dto: Message): Promise<MessageEntity> {
+  public async saveFromDto(dto: CreateMessageDto): Promise<MessageEntity> {
     const message = this.createMessage(dto);
 
     const content = await this.messageContentRepo.save(message.content);
@@ -36,7 +36,7 @@ export class MessagesRepository {
     return savedMessage;
   }
 
-  private createMessage(dto: Message): MessageEntity {
+  private createMessage(dto: CreateMessageDto): MessageEntity {
     const message = new PersonalMessageEntity();
     message.authorId = dto.authorId;
     message.chatId = dto.chatId;
@@ -46,7 +46,7 @@ export class MessagesRepository {
     return message;
   }
 
-  private createMessageContent(dto: Message): MessageContentEntity {
+  private createMessageContent(dto: CreateMessageDto): MessageContentEntity {
     if (!dto.media?.filename) {
       const textContent = new TextMessageContentEntity();
       textContent.textContent = dto.text;

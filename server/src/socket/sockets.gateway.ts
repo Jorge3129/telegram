@@ -1,3 +1,4 @@
+import { messageService } from "../messages/message.service";
 import { userRepository } from "../users/user.repository";
 import { SocketsController } from "./sockets.controller";
 import { Socket } from "socket.io";
@@ -21,7 +22,7 @@ export class SocketsGateway {
       }
     );
 
-    const controller = new SocketsController(socket, user);
+    const controller = new SocketsController(socket, user, messageService);
 
     await controller.notifyContactsOnConnectionChange(true);
 
