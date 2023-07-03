@@ -105,6 +105,9 @@ export class MessagesRepository {
       where: {
         chatId,
       },
+      relations: {
+        reads: true,
+      },
       order: {
         timestamp: "desc",
       },
