@@ -1,4 +1,8 @@
-import { Media } from "../../types/types";
+export interface Media {
+  filename: string;
+  type: string;
+  src?: string;
+}
 
 export interface Message {
   id: string;

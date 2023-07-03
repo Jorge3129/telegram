@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, MouseEvent, useMemo, useState } from "react";
+import { FC, MouseEvent, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectChats } from "./chats.reducer";
 import ChatItem from "./ChatItem";
@@ -16,7 +16,7 @@ import { Chat } from "../../chats/models/chat.model";
 
 interface IChatsContainer {}
 
-const ChatsContainer: FC<IChatsContainer> = ({}) => {
+const ChatsContainer: FC<IChatsContainer> = () => {
   const { chats, loading, width } = useSelector(selectChats);
   const { chatId, mainChat } = useSelector(selectMainChat);
   const dispatch = useAppDispatch();

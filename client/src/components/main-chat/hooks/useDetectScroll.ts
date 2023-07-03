@@ -7,7 +7,7 @@ import { Socket } from "socket.io-client";
 import { selectMainChat } from "../reducers/main.chat.reducer";
 import { alreadySeen, getMsgById } from "../../../utils/general.utils";
 import { selectUser } from "../../../redux/user-reducer";
-import { Message } from "../../../chats/models/message.model";
+import { Message } from "../../../messages/message.model";
 
 export const useDetectScroll = (
   socket: Socket | null,

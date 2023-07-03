@@ -4,7 +4,7 @@ import Avatar from "./Avatar";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
 import { Chat } from "../../chats/models/chat.model";
-import { Message } from "../../chats/models/message.model";
+import { Message } from "../../messages/message.model";
 
 interface IMessageAvatar {
   data: {

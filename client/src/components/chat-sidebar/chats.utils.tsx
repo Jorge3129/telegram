@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import { User } from "../../types/types";
-import { Message } from "../../chats/models/message.model";
+import { Message } from "../../messages/message.model";
+import { User } from "../../users/models/user.model";
 
 export const initials = (title: string) => {
   const tokens = title.split(" ");

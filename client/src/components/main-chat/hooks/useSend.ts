@@ -1,14 +1,13 @@
-import { addMessage, selectMessages } from "../reducers/messages.reducer";
+import { addMessage } from "../reducers/messages.reducer";
 import { setLastMessage, setUnread } from "../../chat-sidebar/chats.reducer";
 import { selectMainChat, setText } from "../reducers/main.chat.reducer";
 import { useAppDispatch } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { selectUser } from "../../../redux/user-reducer";
-import { CreateMessageDto, Message } from "../../../chats/models/message.model";
+import { CreateMessageDto, Message } from "../../../messages/message.model";
 
 export const useSend = (socket: Socket) => {
-  const { messages } = useSelector(selectMessages);
   const { chatId, text, media } = useSelector(selectMainChat);
   const dispatch = useAppDispatch();
 

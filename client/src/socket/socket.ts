@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { selectMainChat } from "../components/main-chat/reducers/main.chat.reducer";
 import { selectUser } from "../redux/user-reducer";
 import environment from "../environment/environment";
-import { Message } from "../chats/models/message.model";
+import { Message } from "../messages/message.model";
 
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);

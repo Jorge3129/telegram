@@ -1,5 +1,5 @@
-import { Message } from "../chats/models/message.model";
-import { Media, User } from "../types/types";
+import { Media, Message } from "../messages/message.model";
+import { User } from "../users/models/user.model";
 
 export const isSelf = (msg: Message, user: User | null) =>
   msg && msg.author === user?.username;

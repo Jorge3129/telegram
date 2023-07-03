@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import { Media } from "../../types/types";
 import dayjs from "dayjs";
 import { useContextMenu } from "./hooks/useContextMenu";
 import { getSeenIcon } from "../chat-sidebar/chats.utils";
@@ -8,7 +7,7 @@ import { getMediaByType } from "../../utils/general.utils";
 import { useLoadFile } from "./hooks/useLoadFile";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
-import { Message } from "../../chats/models/message.model";
+import { Media, Message } from "../../messages/message.model";
 
 interface IPropsMessage {
   msg: Message;

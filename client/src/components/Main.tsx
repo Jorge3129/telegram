@@ -9,7 +9,7 @@ import { selectMainChat } from "./main-chat/reducers/main.chat.reducer";
 import MediaSidebar from "./media-sidebar/MediaSidebar";
 import { setContextMenu } from "./main-chat/reducers/menu.reducer";
 import MainPlaceholder from "./MainPlaceholder";
-import { User } from "../types/types";
+import { User } from "../users/models/user.model";
 
 interface MainProps {
   user: User;

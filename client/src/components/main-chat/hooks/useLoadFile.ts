@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { Media } from "../../../types/types";
 import { uploadsApiService } from "../../../uploads/uploads-api.service";
+import { Media } from "../../../messages/message.model";
 
 export const useLoadFile = (
   media: Media | undefined,
