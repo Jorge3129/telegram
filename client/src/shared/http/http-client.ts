@@ -1,11 +1,14 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { wrapResponse as wrap } from "./wrap-response";
+import { authRequestInterceptor } from "./auth-request-interceptor";
 
 export class HttpClient {
   private readonly axios: AxiosInstance;
 
   constructor(baseURL?: string) {
     this.axios = axios.create({ baseURL });
+
+    this.axios.interceptors.request.use(authRequestInterceptor);
   }
 
   public get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
