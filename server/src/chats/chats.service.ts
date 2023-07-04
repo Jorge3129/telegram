@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import {
-  ChatUserRepository,
-  chatUserRepository,
-} from '../chat-users/chat-user.repository';
-import { MessageService, messageService } from '../messages/message.service';
+import { ChatUserRepository } from '../chat-users/chat-user.repository';
+import { MessageService } from '../messages/message.service';
 import { User } from '../users/user.type';
 import { Chat, ChatForView } from './chat.type';
 import { ChatsRepository } from './chats.repository';
@@ -21,7 +18,7 @@ export class ChatsService {
 
     await Promise.all(
       rawChats.map(async (chat) => {
-        chat.members = await chatUserRepository.findBy({ chatId: chat.id });
+        chat.members = await this.chatUsersRepo.findBy({ chatId: chat.id });
       }),
     );
 
@@ -34,7 +31,7 @@ export class ChatsService {
   ): Promise<ChatForView> {
     const user = chat.members.filter((u) => u.userId === userId)[0];
 
-    const unreadCount = await messageService.countUnreadsForChat(
+    const unreadCount = await this.messageService.countUnreadsForChat(
       chat.id,
       userId,
     );

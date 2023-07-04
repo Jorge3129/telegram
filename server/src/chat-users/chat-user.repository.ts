@@ -1,5 +1,4 @@
 import { FindOptionsWhere, Repository } from 'typeorm';
-import dataSource from '../data-source';
 import { ChatUserEntity } from './entity/chat-user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -108,7 +107,3 @@ export class ChatUserRepository {
     return result;
   }
 }
-
-export const chatUserRepository = new ChatUserRepository(
-  dataSource.getRepository(ChatUserEntity),
-);

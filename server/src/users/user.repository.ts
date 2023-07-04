@@ -2,7 +2,6 @@ import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import dataSource from 'src/data-source';
 
 @Injectable()
 export class UserRepository {
@@ -42,7 +41,3 @@ export class UserRepository {
     await this.userRepo.update(where, value);
   }
 }
-
-export const userRepository = new UserRepository(
-  dataSource.getRepository(UserEntity),
-);

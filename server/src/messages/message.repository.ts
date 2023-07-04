@@ -1,7 +1,6 @@
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateMessageDto, Message } from './models/message.type';
 import { MessageEntity, PersonalMessageEntity } from './entity/message.entity';
-import dataSource from '../data-source';
 import { MessageReadEntity } from './entity/message-read.entity';
 import {
   MediaMessageContentEntity,
@@ -9,21 +8,23 @@ import {
   TextMessageContentEntity,
 } from './entity/message-content.entity';
 import { MediaEntity } from './entity/media.entity';
-import { userRepository } from '../users/user.repository';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserRepository } from 'src/users/user.repository';
 
 @Injectable()
 export class MessagesRepository {
   constructor(
     @InjectRepository(MessageEntity)
-    private readonly messageRepo: Repository<MessageEntity>,
+    private messageRepo: Repository<MessageEntity>,
 
     @InjectRepository(MessageReadEntity)
-    private readonly messageReadRepo: Repository<MessageReadEntity>,
+    private messageReadRepo: Repository<MessageReadEntity>,
 
     @InjectRepository(MessageContentEntity)
-    private readonly messageContentRepo: Repository<MessageContentEntity>,
+    private messageContentRepo: Repository<MessageContentEntity>,
+
+    private userRepo: UserRepository,
   ) {}
 
   public save(dto: Partial<MessageEntity>): Promise<MessageEntity> {
@@ -37,7 +38,7 @@ export class MessagesRepository {
 
     const savedMessage = await this.messageRepo.save({ ...message, content });
 
-    savedMessage.author = await userRepository.findOneByOrFail({
+    savedMessage.author = await this.userRepo.findOneByOrFail({
       id: message.authorId,
     });
 
@@ -184,9 +185,3 @@ export class MessagesRepository {
     });
   }
 }
-
-export const messagesRepo = new MessagesRepository(
-  dataSource.getRepository(MessageEntity),
-  dataSource.getRepository(MessageReadEntity),
-  dataSource.getRepository(MessageContentEntity),
-);

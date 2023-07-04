@@ -7,7 +7,6 @@ import path from 'path';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
-import { socketsGateway } from './socket/sockets.gateway';
 import { uploadsRouter } from './uploads/uploads.router';
 import { errorHandler } from './shared/errors';
 import appDataSource from './data-source';
@@ -40,7 +39,9 @@ app.use('/media', authMiddleware, uploadsRouter);
 
 app.use(errorHandler());
 
-io.on('connection', socketsGateway.onConnect);
+io.on('connection', () => {
+  console.log();
+});
 
 appDataSource
   .initialize()

@@ -15,6 +15,7 @@ export class ChatsController {
 
   @Get('/')
   public getChats(@Req() req: Request): Promise<ChatForView[]> {
+    console.log(req.user);
     return this.chatsService.getUserChats(<User>req.user);
   }
 

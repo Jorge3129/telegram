@@ -1,18 +1,22 @@
 import { Socket } from 'socket.io';
-import { messagesRepo } from '../messages/message.repository';
-import { userService } from '../users/user.service';
 import { User } from '../users/user.type';
 import { Message } from '../messages/models/message.type';
 import { SocketEventHandler } from './decorators/socket-handler.decorator';
-import { userRepository } from '../users/user.repository';
-import { chatUserRepository } from '../chat-users/chat-user.repository';
 import { MessageService } from '../messages/message.service';
+import { UserRepository } from 'src/users/user.repository';
+import { UserService } from 'src/users/user.service';
+import { MessagesRepository } from 'src/messages/message.repository';
+import { ChatUserRepository } from 'src/chat-users/chat-user.repository';
 
 export class SocketsController {
   constructor(
     private readonly socket: Socket,
     private readonly user: User,
     private readonly messageService: MessageService,
+    private readonly messageRepo: MessagesRepository,
+    private readonly userRepo: UserRepository,
+    private readonly userService: UserService,
+    private readonly chatUserRepo: ChatUserRepository,
   ) {}
 
   @SocketEventHandler()
@@ -24,7 +28,7 @@ export class SocketsController {
       this.user,
     );
 
-    const members = await chatUserRepository.findChatRecipientSockets(
+    const members = await this.chatUserRepo.findChatRecipientSockets(
       message.chatId,
       message.authorId,
     );
@@ -44,14 +48,16 @@ export class SocketsController {
   }) {
     const { message, userId, username } = data;
 
-    await chatUserRepository.updateLastRead(
+    await this.chatUserRepo.updateLastRead(
       parseInt(userId),
       message.chatId,
       message.timestamp,
     );
-    await messagesRepo.updateSeen(parseInt(userId), message);
+    await this.messageRepo.updateSeen(parseInt(userId), message);
 
-    const authorSocketId = await userService.getUserSocketId(message.authorId);
+    const authorSocketId = await this.userService.getUserSocketId(
+      message.authorId,
+    );
 
     if (!authorSocketId) {
       return;
@@ -61,8 +67,8 @@ export class SocketsController {
   }
 
   @SocketEventHandler()
-  public async onDisconnect(reason: any) {
-    await userRepository.update(
+  public async onDisconnect() {
+    await this.userRepo.update(
       { id: this.user.id },
       {
         socketId: null as any,
@@ -73,7 +79,7 @@ export class SocketsController {
   }
 
   public async notifyContactsOnConnectionChange(online: boolean) {
-    const socketIds = await chatUserRepository.findAllUserContactSockets(
+    const socketIds = await this.chatUserRepo.findAllUserContactSockets(
       this.user.id,
     );
 

@@ -9,6 +9,9 @@ import { ChatUsersModule } from './chat-users/chat-users.module';
 import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
 import ormConfig from './config/orm-config';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/auth.guard';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -21,8 +24,15 @@ import ormConfig from './config/orm-config';
     ChatUsersModule,
     ChatsModule,
     AuthModule,
+    SocketModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

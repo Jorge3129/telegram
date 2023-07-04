@@ -1,10 +1,7 @@
-import { MessagesRepository, messagesRepo } from './message.repository';
+import { MessagesRepository } from './message.repository';
 import { Message } from './models/message.type';
 import { messageToModel } from './entity/utils';
-import {
-  ChatUserRepository,
-  chatUserRepository,
-} from '../chat-users/chat-user.repository';
+import { ChatUserRepository } from '../chat-users/chat-user.repository';
 import { User } from '../users/user.type';
 import { Injectable } from '@nestjs/common';
 
@@ -16,7 +13,7 @@ export class MessageService {
   ) {}
 
   public async create(message: Message, user: User): Promise<Message> {
-    const savedMessage = await messagesRepo.saveFromDto(message);
+    const savedMessage = await this.messageRepo.saveFromDto(message);
 
     await this.chatUserRepo.updateLastRead(
       user.id,
@@ -24,7 +21,7 @@ export class MessageService {
       message.timestamp,
     );
 
-    await messagesRepo.updateSeen(user.id, message);
+    await this.messageRepo.updateSeen(user.id, message);
 
     return messageToModel(savedMessage);
   }
@@ -49,8 +46,3 @@ export class MessageService {
     return messages.map(messageToModel);
   }
 }
-
-export const messageService = new MessageService(
-  messagesRepo,
-  chatUserRepository,
-);
