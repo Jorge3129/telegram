@@ -1,23 +1,27 @@
-import { Request, Response } from 'express';
-import { UserRepository, userRepository } from './user.repository';
-import { ExpressHandler } from '../shared/decorators/express-handler.decorator';
-import { HttpException } from '../shared/errors';
+import { UserRepository } from './user.repository';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
+import { User } from './user.type';
 
+@Controller('users')
 export class UserController {
   constructor(private readonly userRepository: UserRepository) {}
 
-  @ExpressHandler()
-  public async getUser(req: Request, res: Response) {
-    const userId = parseInt(req.params.userId);
-
+  @Get('/:userId')
+  public async getUser(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<User> {
     const user = await this.userRepository.findOneBy({ id: userId });
 
     if (!user) {
-      throw new HttpException('No user', 404);
+      throw new NotFoundException('No user');
     }
 
-    res.json({ ...user, password: undefined });
+    return { ...user, password: '' };
   }
 }
-
-export const userController = new UserController(userRepository);

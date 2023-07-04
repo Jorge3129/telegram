@@ -11,7 +11,6 @@ import { authRouter } from './auth/auth.router';
 import { chatsRouter } from './chats/chats.router';
 import { socketsGateway } from './socket/sockets.gateway';
 import { uploadsRouter } from './uploads/uploads.router';
-import { userRouter } from './users/user.router';
 import { errorHandler } from './shared/errors';
 import appDataSource from './data-source';
 import { authMiddleware } from './auth/auth.middleware';
@@ -41,7 +40,6 @@ const io = new Server(server, {
 
 app.use('/auth', authRouter);
 app.use('/media', authMiddleware, uploadsRouter);
-app.use('/users', authMiddleware, userRouter);
 app.use('/chats', authMiddleware, chatsRouter);
 
 app.use(errorHandler());
