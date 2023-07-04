@@ -1,10 +1,16 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
+
 import { ChatEntity } from './entity/chat.entity';
-import dataSource from '../data-source';
 import { ChatUserEntity } from '../chat-users/entity/chat-user.entity';
 
+@Injectable()
 export class ChatsRepository {
-  constructor(private readonly chatRepo: Repository<ChatEntity>) {}
+  constructor(
+    @InjectRepository(ChatEntity)
+    private readonly chatRepo: Repository<ChatEntity>,
+  ) {}
 
   public async findByUserId(userId: number): Promise<ChatEntity[]> {
     return this.chatRepo
@@ -32,7 +38,3 @@ export class ChatsRepository {
     return this.chatRepo.findBy(where);
   }
 }
-
-export const chatsRepo = new ChatsRepository(
-  dataSource.getRepository(ChatEntity),
-);

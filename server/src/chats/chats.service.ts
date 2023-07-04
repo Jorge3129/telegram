@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import {
   ChatUserRepository,
   chatUserRepository,
@@ -5,8 +6,9 @@ import {
 import { MessageService, messageService } from '../messages/message.service';
 import { User } from '../users/user.type';
 import { Chat, ChatForView } from './chat.type';
-import { ChatsRepository, chatsRepo } from './chats.repository';
+import { ChatsRepository } from './chats.repository';
 
+@Injectable()
 export class ChatsService {
   constructor(
     private readonly chatsRepo: ChatsRepository,
@@ -55,9 +57,3 @@ export class ChatsService {
     };
   }
 }
-
-export const chatsService = new ChatsService(
-  chatsRepo,
-  messageService,
-  chatUserRepository,
-);

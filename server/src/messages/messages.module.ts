@@ -17,5 +17,6 @@ import { ChatUsersModule } from 'src/chat-users/chat-users.module';
     ChatUsersModule,
   ],
   providers: [MessagesRepository, MessageService],
+  exports: [MessageService],
 })
 export class MessagesModule {}
