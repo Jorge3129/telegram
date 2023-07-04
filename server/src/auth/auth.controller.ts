@@ -1,27 +1,22 @@
-import { Request, Response } from 'express';
-import { ExpressHandler } from '../shared/decorators/express-handler.decorator';
-import { AuthService, authService } from './auth.service';
+import { Body, Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import { AuthService, SignedTokens } from './auth.service';
 
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ExpressHandler()
-  public async register(req: Request, res: Response) {
-    const { username, password } = req.body;
+  @HttpCode(HttpStatus.CREATED)
+  @Get('register')
+  public async register(@Body() userData: any): Promise<void> {
+    const { username, password } = userData;
 
     await this.authService.register({ username, password });
-
-    res.status(201).send();
   }
 
-  @ExpressHandler()
-  public async login(req: Request, res: Response) {
-    const { username, password } = req.body;
+  @Get('login')
+  public async login(@Body() loginData: any): Promise<SignedTokens> {
+    const { username, password } = loginData;
 
-    const tokens = await this.authService.login({ username, password });
-
-    res.json(tokens);
+    return await this.authService.login({ username, password });
   }
 }
-
-export const authController = new AuthController(authService);
