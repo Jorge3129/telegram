@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { UserEntity } from "../../users/entity/user.entity";
 import { ChatEntity } from "../../chats/entity/chat.entity";
 
-@Entity('chat_users')
+@Entity("chat_users")
 export class ChatUserEntity {
   @PrimaryColumn({ type: "int", name: "userId" })
   userId: number;
