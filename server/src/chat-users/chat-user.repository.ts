@@ -1,6 +1,8 @@
 import { FindOptionsWhere, Repository } from 'typeorm';
 import dataSource from '../data-source';
 import { ChatUserEntity } from './entity/chat-user.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
 export type UserChatSocket = {
   userId: number;
@@ -8,8 +10,12 @@ export type UserChatSocket = {
   chatId: number;
 };
 
+@Injectable()
 export class ChatUserRepository {
-  constructor(private readonly chatUserRepo: Repository<ChatUserEntity>) {}
+  constructor(
+    @InjectRepository(ChatUserEntity)
+    private readonly chatUserRepo: Repository<ChatUserEntity>,
+  ) {}
 
   public save(dto: Partial<ChatUserEntity>): Promise<ChatUserEntity> {
     return this.chatUserRepo.save({ ...dto });

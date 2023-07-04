@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { UserModule } from './users/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MessagesModule } from './messages/messages.module';
+import { ChatUsersModule } from './chat-users/chat-users.module';
 import ormConfig from './config/orm-config';
 
 @Module({
@@ -15,6 +16,7 @@ import ormConfig from './config/orm-config';
     TypeOrmModule.forRoot(ormConfig),
     UserModule,
     MessagesModule,
+    ChatUsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

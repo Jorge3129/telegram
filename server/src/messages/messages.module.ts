@@ -5,6 +5,7 @@ import { MessageContentEntity } from './entity/message-content.entity';
 import { MessageReadEntity } from './entity/message-read.entity';
 import { MessagesRepository } from './message.repository';
 import { MessageService } from './message.service';
+import { ChatUsersModule } from 'src/chat-users/chat-users.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { MessageService } from './message.service';
       MessageContentEntity,
       MessageReadEntity,
     ]),
+    ChatUsersModule,
   ],
   providers: [MessagesRepository, MessageService],
 })
