@@ -3,7 +3,9 @@ import { Message } from './models/message.type';
 import { messageToModel } from './entity/utils';
 import { chatUserRepository } from '../chat-users/chat-user.repository';
 import { User } from '../users/user.type';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class MessageService {
   constructor(private readonly messageRepo: MessagesRepository) {}
 

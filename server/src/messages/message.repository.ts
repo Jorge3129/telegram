@@ -10,11 +10,19 @@ import {
 } from './entity/message-content.entity';
 import { MediaEntity } from './entity/media.entity';
 import { userRepository } from '../users/user.repository';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
+@Injectable()
 export class MessagesRepository {
   constructor(
+    @InjectRepository(MessageEntity)
     private readonly messageRepo: Repository<MessageEntity>,
+
+    @InjectRepository(MessageReadEntity)
     private readonly messageReadRepo: Repository<MessageReadEntity>,
+
+    @InjectRepository(MessageContentEntity)
     private readonly messageContentRepo: Repository<MessageContentEntity>,
   ) {}
 
