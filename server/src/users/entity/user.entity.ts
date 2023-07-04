@@ -1,7 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ChatUserEntity } from "../../chat-users/entity/chat-user.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ChatUserEntity } from '../../chat-users/entity/chat-user.entity';
 
-@Entity("users")
+@Entity('users')
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;

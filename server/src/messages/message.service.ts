@@ -1,8 +1,8 @@
-import { MessagesRepository, messagesRepo } from "./message.repository";
-import { Message } from "./models/message.type";
-import { messageToModel } from "./entity/utils";
-import { chatUserRepository } from "../chat-users/chat-user.repository";
-import { User } from "../users/user.type";
+import { MessagesRepository, messagesRepo } from './message.repository';
+import { Message } from './models/message.type';
+import { messageToModel } from './entity/utils';
+import { chatUserRepository } from '../chat-users/chat-user.repository';
+import { User } from '../users/user.type';
 
 export class MessageService {
   constructor(private readonly messageRepo: MessagesRepository) {}
@@ -13,7 +13,7 @@ export class MessageService {
     await chatUserRepository.updateLastRead(
       user.id,
       message.chatId,
-      message.timestamp
+      message.timestamp,
     );
 
     await messagesRepo.updateSeen(user.id, message);

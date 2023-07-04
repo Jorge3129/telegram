@@ -1,4 +1,4 @@
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler } from 'express';
 
 export const errorHandler =
   (): ErrorRequestHandler => (err, req, res, next) => {

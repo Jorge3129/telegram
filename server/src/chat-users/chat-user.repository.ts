@@ -1,6 +1,6 @@
-import { FindOptionsWhere, Repository } from "typeorm";
-import dataSource from "../data-source";
-import { ChatUserEntity } from "./entity/chat-user.entity";
+import { FindOptionsWhere, Repository } from 'typeorm';
+import dataSource from '../data-source';
+import { ChatUserEntity } from './entity/chat-user.entity';
 
 export type UserChatSocket = {
   userId: number;
@@ -20,13 +20,13 @@ export class ChatUserRepository {
   }
 
   public findOneBy(
-    where: FindOptionsWhere<ChatUserEntity>
+    where: FindOptionsWhere<ChatUserEntity>,
   ): Promise<ChatUserEntity | null> {
     return this.chatUserRepo.findOneBy(where);
   }
 
   public findBy(
-    where: FindOptionsWhere<ChatUserEntity>
+    where: FindOptionsWhere<ChatUserEntity>,
   ): Promise<ChatUserEntity[]> {
     return this.chatUserRepo.findBy(where);
   }
@@ -34,24 +34,24 @@ export class ChatUserRepository {
   public async updateLastRead(
     userId: number,
     chatId: number,
-    timestamp: string
+    timestamp: string,
   ): Promise<void> {
     await this.chatUserRepo.update(
       {
         userId,
         chatId,
       },
-      { lastRead: timestamp }
+      { lastRead: timestamp },
     );
   }
 
   public async getOtherChatMember(
     chatId: number,
-    currentUserId: number
+    currentUserId: number,
   ): Promise<ChatUserEntity> {
     const otherMember = await this.chatUserRepo
-      .createQueryBuilder("chat_user")
-      .leftJoinAndSelect("chat_user.user", "u")
+      .createQueryBuilder('chat_user')
+      .leftJoinAndSelect('chat_user.user', 'u')
       .where('chat_user."chatId" = :chatId', { chatId })
       .andWhere('chat_user."userId" != :currentUserId', { currentUserId })
       .getOneOrFail();
@@ -60,21 +60,21 @@ export class ChatUserRepository {
   }
 
   public async findAllUserContactSockets(
-    userId: number
+    userId: number,
   ): Promise<UserChatSocket[]> {
     const result = await this.chatUserRepo
-      .createQueryBuilder("member")
+      .createQueryBuilder('member')
       .select([
         'member.userId AS "userId"',
         'member.chatId AS "chatId"',
         'user.socketId AS "socketId"',
       ])
-      .innerJoin("member.user", "user")
-      .innerJoin("member.chat", "chat")
-      .innerJoin("chat.members", "targetUser")
-      .where("targetUser.userId = :userId", { userId })
-      .andWhere("member.userId != :userId", { userId })
-      .andWhere("user.socketId IS NOT NULL")
+      .innerJoin('member.user', 'user')
+      .innerJoin('member.chat', 'chat')
+      .innerJoin('chat.members', 'targetUser')
+      .where('targetUser.userId = :userId', { userId })
+      .andWhere('member.userId != :userId', { userId })
+      .andWhere('user.socketId IS NOT NULL')
       .distinct()
       .getRawMany<UserChatSocket>();
 
@@ -83,20 +83,20 @@ export class ChatUserRepository {
 
   public async findChatRecipientSockets(
     chatId: number,
-    senderUserId: number
+    senderUserId: number,
   ): Promise<UserChatSocket[]> {
     const result = await this.chatUserRepo
-      .createQueryBuilder("member")
+      .createQueryBuilder('member')
       .select([
         'member.userId AS "userId"',
         'member.chatId AS "chatId"',
         'user.socketId AS "socketId"',
       ])
-      .innerJoin("member.user", "user")
-      .innerJoin("member.chat", "chat")
-      .where("chat.id = :chatId", { chatId })
-      .andWhere("member.userId != :senderUserId", { senderUserId })
-      .andWhere("user.socketId IS NOT NULL")
+      .innerJoin('member.user', 'user')
+      .innerJoin('member.chat', 'chat')
+      .where('chat.id = :chatId', { chatId })
+      .andWhere('member.userId != :senderUserId', { senderUserId })
+      .andWhere('user.socketId IS NOT NULL')
       .getRawMany<UserChatSocket>();
 
     return result;
@@ -104,5 +104,5 @@ export class ChatUserRepository {
 }
 
 export const chatUserRepository = new ChatUserRepository(
-  dataSource.getRepository(ChatUserEntity)
+  dataSource.getRepository(ChatUserEntity),
 );

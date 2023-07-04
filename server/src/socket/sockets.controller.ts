@@ -1,18 +1,18 @@
-import { Socket } from "socket.io";
-import { messagesRepo } from "../messages/message.repository";
-import { userService } from "../users/user.service";
-import { User } from "../users/user.type";
-import { Message } from "../messages/models/message.type";
-import { SocketEventHandler } from "./decorators/socket-handler.decorator";
-import { userRepository } from "../users/user.repository";
-import { chatUserRepository } from "../chat-users/chat-user.repository";
-import { MessageService } from "../messages/message.service";
+import { Socket } from 'socket.io';
+import { messagesRepo } from '../messages/message.repository';
+import { userService } from '../users/user.service';
+import { User } from '../users/user.type';
+import { Message } from '../messages/models/message.type';
+import { SocketEventHandler } from './decorators/socket-handler.decorator';
+import { userRepository } from '../users/user.repository';
+import { chatUserRepository } from '../chat-users/chat-user.repository';
+import { MessageService } from '../messages/message.service';
 
 export class SocketsController {
   constructor(
     private readonly socket: Socket,
     private readonly user: User,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
   ) {}
 
   @SocketEventHandler()
@@ -21,16 +21,16 @@ export class SocketsController {
 
     const messageResponse = await this.messageService.create(
       message,
-      this.user
+      this.user,
     );
 
     const members = await chatUserRepository.findChatRecipientSockets(
       message.chatId,
-      message.authorId
+      message.authorId,
     );
 
     members.forEach(async ({ socketId }) => {
-      this.emitEventTo(socketId, "message-to-client", messageResponse);
+      this.emitEventTo(socketId, 'message-to-client', messageResponse);
     });
 
     return messageResponse;
@@ -47,7 +47,7 @@ export class SocketsController {
     await chatUserRepository.updateLastRead(
       parseInt(userId),
       message.chatId,
-      message.timestamp
+      message.timestamp,
     );
     await messagesRepo.updateSeen(parseInt(userId), message);
 
@@ -57,7 +57,7 @@ export class SocketsController {
       return;
     }
 
-    this.emitEventTo(authorSocketId, "seen", { message, userId, username });
+    this.emitEventTo(authorSocketId, 'seen', { message, userId, username });
   }
 
   @SocketEventHandler()
@@ -66,7 +66,7 @@ export class SocketsController {
       { id: this.user.id },
       {
         socketId: null as any,
-      }
+      },
     );
 
     await this.notifyContactsOnConnectionChange(false);
@@ -74,11 +74,11 @@ export class SocketsController {
 
   public async notifyContactsOnConnectionChange(online: boolean) {
     const socketIds = await chatUserRepository.findAllUserContactSockets(
-      this.user.id
+      this.user.id,
     );
 
     socketIds.forEach(({ socketId, chatId }) => {
-      this.emitEventTo(socketId, "online-change", {
+      this.emitEventTo(socketId, 'online-change', {
         online: online,
         chatId: chatId,
       });

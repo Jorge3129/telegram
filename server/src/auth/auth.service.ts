@@ -1,15 +1,15 @@
-import { Repository } from "typeorm";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { User } from "../users/user.type";
-import { UserEntity } from "../users/entity/user.entity";
-import { HttpException } from "../shared/errors";
+import { Repository } from 'typeorm';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { User } from '../users/user.type';
+import { UserEntity } from '../users/entity/user.entity';
+import { HttpException } from '../shared/errors';
 import {
   SECRET_KEY,
   ACCESS_TOKEN_EXPIRATION_TIME,
   REFRESH_TOKEN_EXPIRATION_TIME,
-} from "../config/constants";
-import dataSource from "../data-source";
+} from '../config/constants';
+import dataSource from '../data-source';
 
 export type SignedTokens = {
   accessToken: string;
@@ -47,12 +47,12 @@ export class AuthService {
     const isPasswordValid = await bcrypt.compare(loginPassword, user.password);
 
     if (!isPasswordValid) {
-      throw new HttpException("Invalid credentials", 401);
+      throw new HttpException('Invalid credentials', 401);
     }
   }
 
   private signTokens(user: User): SignedTokens {
-    const payload = { id: user.id, role: "user" };
+    const payload = { id: user.id, role: 'user' };
 
     const accessToken = jwt.sign(payload, SECRET_KEY, {
       expiresIn: ACCESS_TOKEN_EXPIRATION_TIME,
@@ -70,5 +70,5 @@ export class AuthService {
 }
 
 export const authService = new AuthService(
-  dataSource.getRepository(UserEntity)
+  dataSource.getRepository(UserEntity),
 );

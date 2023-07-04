@@ -1,10 +1,10 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 
 export function SocketEventHandler(): MethodDecorator {
   return function (
     target: Object,
     propertyName: string | symbol,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ): PropertyDescriptor {
     const originalMethod = descriptor.value as Function;
 
@@ -21,7 +21,7 @@ export function SocketEventHandler(): MethodDecorator {
             console.log(originalMethod.name.toUpperCase());
             const returnValue = await originalMethod.bind(instance)(...args);
 
-            if (typeof ackFunction === "function") {
+            if (typeof ackFunction === 'function') {
               ackFunction(returnValue);
             }
 

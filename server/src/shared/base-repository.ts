@@ -5,11 +5,11 @@ export abstract class BaseRepository<Entity> {
 
   constructor() {}
 
-  public saveMany(dtos: Omit<Entity, "id">[]): Promise<Entity[]> {
+  public saveMany(dtos: Omit<Entity, 'id'>[]): Promise<Entity[]> {
     return Promise.all(dtos.map((dto) => this.save(dto)));
   }
 
-  public async save(userDto: Omit<Entity, "id">): Promise<Entity> {
+  public async save(userDto: Omit<Entity, 'id'>): Promise<Entity> {
     const savedRow = { ...userDto, id: ++this.idSequence } as any;
 
     this.rows.push(savedRow);
@@ -18,9 +18,9 @@ export abstract class BaseRepository<Entity> {
   }
 
   public async find(
-    predicate: ((row: Entity) => boolean) | Partial<Entity>
+    predicate: ((row: Entity) => boolean) | Partial<Entity>,
   ): Promise<Entity[]> {
-    if (typeof predicate === "function") {
+    if (typeof predicate === 'function') {
       return this.rows.filter(predicate);
     }
 
@@ -40,7 +40,7 @@ export abstract class BaseRepository<Entity> {
   }
 
   public async findOne(
-    predicate: ((user: Entity) => boolean) | Partial<Entity>
+    predicate: ((user: Entity) => boolean) | Partial<Entity>,
   ): Promise<Entity | null> {
     return (await this.find(predicate)).at(-1) ?? null;
   }

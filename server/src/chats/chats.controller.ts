@@ -1,13 +1,13 @@
-import { Request, Response } from "express";
-import { ChatsService, chatsService } from "./chats.service";
-import { MessageService, messageService } from "../messages/message.service";
-import { ExpressHandler } from "../shared/decorators/express-handler.decorator";
-import { User } from "../users/user.type";
+import { Request, Response } from 'express';
+import { ChatsService, chatsService } from './chats.service';
+import { MessageService, messageService } from '../messages/message.service';
+import { ExpressHandler } from '../shared/decorators/express-handler.decorator';
+import { User } from '../users/user.type';
 
 export class ChatsController {
   constructor(
     private readonly chatsService: ChatsService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
   ) {}
 
   @ExpressHandler()
@@ -29,5 +29,5 @@ export class ChatsController {
 
 export const chatsController = new ChatsController(
   chatsService,
-  messageService
+  messageService,
 );

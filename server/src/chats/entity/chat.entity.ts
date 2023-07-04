@@ -5,17 +5,17 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   TableInheritance,
-} from "typeorm";
-import { ChatUserEntity } from "../../chat-users/entity/chat-user.entity";
+} from 'typeorm';
+import { ChatUserEntity } from '../../chat-users/entity/chat-user.entity';
 
 export enum ChatType {
-  PERSONAL = "personal",
-  GROUP = "group",
-  CHANNEL = "channel",
+  PERSONAL = 'personal',
+  GROUP = 'group',
+  CHANNEL = 'channel',
 }
 
-@Entity("chats")
-@TableInheritance({ column: { name: "type", type: "varchar" } })
+@Entity('chats')
+@TableInheritance({ column: { name: 'type', type: 'varchar' } })
 export abstract class ChatEntity {
   type: ChatType;
 

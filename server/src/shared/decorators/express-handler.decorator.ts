@@ -1,10 +1,10 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 
 export function ExpressHandler(): MethodDecorator {
   return function (
     target: Object,
     propertyName: string | symbol,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ): PropertyDescriptor {
     const originalMethod = descriptor.value;
 
@@ -14,7 +14,7 @@ export function ExpressHandler(): MethodDecorator {
         const boundFn: RequestHandler = async function (
           req: Request,
           res: Response,
-          next: NextFunction
+          next: NextFunction,
         ) {
           // @ts-ignore
           const instance = this as any;

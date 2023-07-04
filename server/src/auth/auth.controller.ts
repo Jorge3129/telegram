@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import { ExpressHandler } from "../shared/decorators/express-handler.decorator";
-import { AuthService, authService } from "./auth.service";
+import { Request, Response } from 'express';
+import { ExpressHandler } from '../shared/decorators/express-handler.decorator';
+import { AuthService, authService } from './auth.service';
 
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
