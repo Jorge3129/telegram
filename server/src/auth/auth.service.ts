@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 import { User } from '../users/user.type';
 import { UserEntity } from '../users/entity/user.entity';
 import {

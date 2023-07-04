@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService, SignedTokens } from './auth.service';
 import { Public } from './public.decorator';
 
@@ -8,7 +8,7 @@ export class AuthController {
 
   @Public()
   @HttpCode(HttpStatus.CREATED)
-  @Get('register')
+  @Post('register')
   public async register(@Body() userData: any): Promise<void> {
     const { username, password } = userData;
 
@@ -16,7 +16,7 @@ export class AuthController {
   }
 
   @Public()
-  @Get('login')
+  @Post('login')
   public async login(@Body() loginData: any): Promise<SignedTokens> {
     const { username, password } = loginData;
 
