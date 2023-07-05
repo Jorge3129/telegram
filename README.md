@@ -1,19 +1,13 @@
 ## Telegram clone
 
-This is my pet project aimed at implementing the main functionality of Telegram.
-
-DISLAIMER! This project is only on the initial stage of development, so there are few Telegram features that actually work.
-
-See the app live: [https://telegram-xd.herokuapp.com](https://telegram-xd.herokuapp.com)
-
-Login, password: a, a.
+This is my pet project aimed at implementing the basic features of Telegram.
 
 ### Scripts
 
 To run the client:
 
 ```
-cd client 
+cd client
 npm install
 npm start
 ```
@@ -23,7 +17,7 @@ To run the server:
 ```
 cd server
 npm install
-ts-node index
+npm run start:dev
 ```
 
 ### Client
@@ -44,6 +38,4 @@ Photo sending form:
 
 ### Server
 
-On the server, I use Express, Socket.io and Typescript.
-
-As for the database, I am currently storing data locally, but I am planning to add MySQL soon.
+On the server, I use NestJS, TypeORM, Postgres and Socket.io.
