@@ -1,6 +1,6 @@
-import { ChatUser } from "../chat-users/chat-user.type";
-import { Message } from "../messages/models/message.type";
-import { ChatType } from "./entity/chat.entity";
+import { ChatUser } from '../chat-users/chat-user.type';
+import { Message } from '../messages/models/message.type';
+import { ChatType } from './entity/chat.entity';
 
 export interface Chat {
   id: number;

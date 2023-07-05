@@ -1,4 +1,4 @@
-import { Media } from "./media.type";
+import { Media } from './media.type';
 
 export interface Message {
   id: string;
@@ -12,4 +12,4 @@ export interface Message {
   media?: Media;
 }
 
-export type CreateMessageDto = Omit<Message, "id">;
+export type CreateMessageDto = Omit<Message, 'id'>;

@@ -1,15 +1,15 @@
-import { Repository } from "typeorm";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { User } from "../users/user.type";
-import { UserEntity } from "../users/entity/user.entity";
-import { HttpException } from "../shared/errors";
+import { Repository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
+import { User } from '../users/user.type';
+import { UserEntity } from '../users/entity/user.entity';
 import {
   SECRET_KEY,
   ACCESS_TOKEN_EXPIRATION_TIME,
   REFRESH_TOKEN_EXPIRATION_TIME,
-} from "../config/constants";
-import dataSource from "../data-source";
+} from '../config/constants';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
 export type SignedTokens = {
   accessToken: string;
@@ -21,8 +21,12 @@ export type UserPass = {
   username: string;
 };
 
+@Injectable()
 export class AuthService {
-  constructor(private readonly userRepo: Repository<UserEntity>) {}
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
+  ) {}
 
   public async register(loginData: UserPass): Promise<void> {
     const hash = await bcrypt.hash(loginData.password, 7);
@@ -47,12 +51,12 @@ export class AuthService {
     const isPasswordValid = await bcrypt.compare(loginPassword, user.password);
 
     if (!isPasswordValid) {
-      throw new HttpException("Invalid credentials", 401);
+      throw new UnauthorizedException('Invalid credentials');
     }
   }
 
   private signTokens(user: User): SignedTokens {
-    const payload = { id: user.id, role: "user" };
+    const payload = { id: user.id, role: 'user' };
 
     const accessToken = jwt.sign(payload, SECRET_KEY, {
       expiresIn: ACCESS_TOKEN_EXPIRATION_TIME,
@@ -68,7 +72,3 @@ export class AuthService {
     };
   }
 }
-
-export const authService = new AuthService(
-  dataSource.getRepository(UserEntity)
-);

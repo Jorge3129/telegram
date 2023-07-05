@@ -1,12 +1,14 @@
-import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
-import { User } from "./user.type";
-import { UserEntity } from "./entity/user.entity";
-import dataSource from "../data-source";
+import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
+import { UserEntity } from './entity/user.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
+@Injectable()
 export class UserRepository {
-  protected rows: User[] = [];
-
-  constructor(private readonly userRepo: Repository<UserEntity>) {}
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
+  ) {}
 
   public save(dto: Partial<UserEntity>): Promise<UserEntity> {
     return this.userRepo.save({ ...dto });
@@ -17,13 +19,13 @@ export class UserRepository {
   }
 
   public findOneBy(
-    where: FindOptionsWhere<UserEntity>
+    where: FindOptionsWhere<UserEntity>,
   ): Promise<UserEntity | null> {
     return this.userRepo.findOneBy(where);
   }
 
   public findOneByOrFail(
-    where: FindOptionsWhere<UserEntity>
+    where: FindOptionsWhere<UserEntity>,
   ): Promise<UserEntity> {
     return this.userRepo.findOneByOrFail(where);
   }
@@ -34,12 +36,8 @@ export class UserRepository {
 
   public async update(
     where: FindOptionsWhere<UserEntity>,
-    value: DeepPartial<UserEntity>
+    value: DeepPartial<UserEntity>,
   ) {
     await this.userRepo.update(where, value);
   }
 }
-
-export const userRepository = new UserRepository(
-  dataSource.getRepository(UserEntity)
-);

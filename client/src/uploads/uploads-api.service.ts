@@ -8,7 +8,7 @@ export class UploadsApiService {
 
   public async getFile(filename: string): Promise<Blob> {
     const response = await this.http.get(
-      `${environment.apiUrl}/media/${filename}`,
+      `${environment.apiUrl}/uploads/${filename}`,
       {
         responseType: "blob",
       }
@@ -21,9 +21,12 @@ export class UploadsApiService {
   }
 
   public async postFile() {
-    return await fetch(`${environment.apiUrl}/media`, {
-      method: "POST",
-      body: this.fileFormData,
+    const form = this.fileFormData;
+
+    await this.http.post(`${environment.apiUrl}/uploads`, form, {
+      headers: {
+        "Content-Type": `multipart/form-data`,
+      },
     });
   }
 }

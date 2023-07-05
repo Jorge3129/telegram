@@ -1,5 +1,7 @@
-import { UserRepository, userRepository } from "./user.repository";
+import { Injectable } from '@nestjs/common';
+import { UserRepository } from './user.repository';
 
+@Injectable()
 export class UserService {
   constructor(private readonly userRepo: UserRepository) {}
 
@@ -9,5 +11,3 @@ export class UserService {
     return userReceiver?.socketId;
   }
 }
-
-export const userService = new UserService(userRepository);

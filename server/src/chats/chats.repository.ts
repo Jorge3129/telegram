@@ -1,16 +1,22 @@
-import { FindOptionsWhere, Repository } from "typeorm";
-import { ChatEntity } from "./entity/chat.entity";
-import dataSource from "../data-source";
-import { ChatUserEntity } from "../chat-users/entity/chat-user.entity";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 
+import { ChatEntity } from './entity/chat.entity';
+import { ChatUserEntity } from '../chat-users/entity/chat-user.entity';
+
+@Injectable()
 export class ChatsRepository {
-  constructor(private readonly chatRepo: Repository<ChatEntity>) {}
+  constructor(
+    @InjectRepository(ChatEntity)
+    private readonly chatRepo: Repository<ChatEntity>,
+  ) {}
 
   public async findByUserId(userId: number): Promise<ChatEntity[]> {
     return this.chatRepo
-      .createQueryBuilder("chat")
-      .innerJoin(ChatUserEntity, "chatUser", "chatUser.chatId = chat.id")
-      .where("chatUser.userId = :userId", { userId })
+      .createQueryBuilder('chat')
+      .innerJoin(ChatUserEntity, 'chatUser', 'chatUser.chatId = chat.id')
+      .where('chatUser.userId = :userId', { userId })
       .getMany();
   }
 
@@ -23,7 +29,7 @@ export class ChatsRepository {
   }
 
   public findOneBy(
-    where: FindOptionsWhere<ChatEntity>
+    where: FindOptionsWhere<ChatEntity>,
   ): Promise<ChatEntity | null> {
     return this.chatRepo.findOneBy(where);
   }
@@ -32,7 +38,3 @@ export class ChatsRepository {
     return this.chatRepo.findBy(where);
   }
 }
-
-export const chatsRepo = new ChatsRepository(
-  dataSource.getRepository(ChatEntity)
-);

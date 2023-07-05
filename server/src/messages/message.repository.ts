@@ -1,21 +1,30 @@
-import { FindOptionsWhere, Repository } from "typeorm";
-import { CreateMessageDto, Message } from "./models/message.type";
-import { MessageEntity, PersonalMessageEntity } from "./entity/message.entity";
-import dataSource from "../data-source";
-import { MessageReadEntity } from "./entity/message-read.entity";
+import { FindOptionsWhere, Repository } from 'typeorm';
+import { CreateMessageDto, Message } from './models/message.type';
+import { MessageEntity, PersonalMessageEntity } from './entity/message.entity';
+import { MessageReadEntity } from './entity/message-read.entity';
 import {
   MediaMessageContentEntity,
   MessageContentEntity,
   TextMessageContentEntity,
-} from "./entity/message-content.entity";
-import { MediaEntity } from "./entity/media.entity";
-import { userRepository } from "../users/user.repository";
+} from './entity/message-content.entity';
+import { MediaEntity } from './entity/media.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserRepository } from 'src/users/user.repository';
 
+@Injectable()
 export class MessagesRepository {
   constructor(
-    private readonly messageRepo: Repository<MessageEntity>,
-    private readonly messageReadRepo: Repository<MessageReadEntity>,
-    private readonly messageContentRepo: Repository<MessageContentEntity>
+    @InjectRepository(MessageEntity)
+    private messageRepo: Repository<MessageEntity>,
+
+    @InjectRepository(MessageReadEntity)
+    private messageReadRepo: Repository<MessageReadEntity>,
+
+    @InjectRepository(MessageContentEntity)
+    private messageContentRepo: Repository<MessageContentEntity>,
+
+    private userRepo: UserRepository,
   ) {}
 
   public save(dto: Partial<MessageEntity>): Promise<MessageEntity> {
@@ -29,7 +38,7 @@ export class MessagesRepository {
 
     const savedMessage = await this.messageRepo.save({ ...message, content });
 
-    savedMessage.author = await userRepository.findOneByOrFail({
+    savedMessage.author = await this.userRepo.findOneByOrFail({
       id: message.authorId,
     });
 
@@ -70,13 +79,13 @@ export class MessagesRepository {
   }
 
   public findOneBy(
-    where: FindOptionsWhere<MessageEntity>
+    where: FindOptionsWhere<MessageEntity>,
   ): Promise<MessageEntity | null> {
     return this.messageRepo.findOneBy(where);
   }
 
   public findBy(
-    where: FindOptionsWhere<MessageEntity>
+    where: FindOptionsWhere<MessageEntity>,
   ): Promise<MessageEntity[]> {
     return this.messageRepo.find({
       where,
@@ -95,7 +104,7 @@ export class MessagesRepository {
         reads: true,
       },
       order: {
-        timestamp: "asc",
+        timestamp: 'asc',
       },
     });
   }
@@ -109,7 +118,7 @@ export class MessagesRepository {
         reads: true,
       },
       order: {
-        timestamp: "desc",
+        timestamp: 'desc',
       },
     });
 
@@ -118,25 +127,25 @@ export class MessagesRepository {
 
   public async countUnreadMessages(
     chatId: number,
-    userId: number
+    userId: number,
   ): Promise<number> {
     const latestReadSubquery = this.messageReadRepo
-      .createQueryBuilder("read")
-      .innerJoin("read.message", "message")
-      .where("read.userId = :userId", { userId })
-      .select("MAX(message.timestamp)", "latestRead");
+      .createQueryBuilder('read')
+      .innerJoin('read.message', 'message')
+      .where('read.userId = :userId', { userId })
+      .select('MAX(message.timestamp)', 'latestRead');
 
     const count = await this.messageRepo
-      .createQueryBuilder("message")
+      .createQueryBuilder('message')
       .leftJoin(
-        "message.reads",
-        "read",
-        "read.messageId = message.id AND read.userId = :userId",
-        { userId }
+        'message.reads',
+        'read',
+        'read.messageId = message.id AND read.userId = :userId',
+        { userId },
       )
-      .where("message.chatId = :chatId", { chatId })
-      .andWhere("message.timestamp > (" + latestReadSubquery.getQuery() + ")")
-      .andWhere("read.id IS NULL")
+      .where('message.chatId = :chatId', { chatId })
+      .andWhere('message.timestamp > (' + latestReadSubquery.getQuery() + ')')
+      .andWhere('read.id IS NULL')
       .setParameters(latestReadSubquery.getParameters())
       .getCount();
 
@@ -145,21 +154,21 @@ export class MessagesRepository {
 
   public async updateSeen(
     readByUserId: number,
-    message: Message
+    message: Message,
   ): Promise<void> {
     const qb = this.messageRepo
-      .createQueryBuilder("message")
+      .createQueryBuilder('message')
       .leftJoin(
-        "message.reads",
-        "readsByUser",
+        'message.reads',
+        'readsByUser',
         '"readsByUser"."messageId" = message.id AND "readsByUser"."userId" = :readByUserId',
-        { readByUserId }
+        { readByUserId },
       )
-      .where("message.chatId = :chatId", { chatId: message.chatId })
-      .andWhere("message.timestamp <= :timestamp", {
+      .where('message.chatId = :chatId', { chatId: message.chatId })
+      .andWhere('message.timestamp <= :timestamp', {
         timestamp: new Date(message.timestamp),
       })
-      .andWhere("readsByUser.id IS NULL")
+      .andWhere('readsByUser.id IS NULL')
       .select(`message.id AS "messageId"`);
 
     const messagesToUpdate = await qb.getRawMany<{ messageId: string }>();
@@ -168,7 +177,7 @@ export class MessagesRepository {
       ({ messageId }): Partial<MessageReadEntity> => ({
         messageId,
         userId: readByUserId,
-      })
+      }),
     );
 
     await this.messageReadRepo.save(values).catch((e) => {
@@ -176,9 +185,3 @@ export class MessagesRepository {
     });
   }
 }
-
-export const messagesRepo = new MessagesRepository(
-  dataSource.getRepository(MessageEntity),
-  dataSource.getRepository(MessageReadEntity),
-  dataSource.getRepository(MessageContentEntity)
-);

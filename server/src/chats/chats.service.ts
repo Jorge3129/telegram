@@ -1,17 +1,16 @@
-import {
-  ChatUserRepository,
-  chatUserRepository,
-} from "../chat-users/chat-user.repository";
-import { MessageService, messageService } from "../messages/message.service";
-import { User } from "../users/user.type";
-import { Chat, ChatForView } from "./chat.type";
-import { ChatsRepository, chatsRepo } from "./chats.repository";
+import { Injectable } from '@nestjs/common';
+import { ChatUserRepository } from '../chat-users/chat-user.repository';
+import { MessageService } from '../messages/message.service';
+import { User } from '../users/user.type';
+import { Chat, ChatForView } from './chat.type';
+import { ChatsRepository } from './chats.repository';
 
+@Injectable()
 export class ChatsService {
   constructor(
     private readonly chatsRepo: ChatsRepository,
     private readonly messageService: MessageService,
-    private readonly chatUsersRepo: ChatUserRepository
+    private readonly chatUsersRepo: ChatUserRepository,
   ) {}
 
   public async getUserChats(user: User): Promise<ChatForView[]> {
@@ -19,8 +18,8 @@ export class ChatsService {
 
     await Promise.all(
       rawChats.map(async (chat) => {
-        chat.members = await chatUserRepository.findBy({ chatId: chat.id });
-      })
+        chat.members = await this.chatUsersRepo.findBy({ chatId: chat.id });
+      }),
     );
 
     return Promise.all(rawChats.map((ch) => this.mapChatToClient(ch, user.id)));
@@ -28,20 +27,20 @@ export class ChatsService {
 
   private async mapChatToClient(
     chat: Chat,
-    userId: number
+    userId: number,
   ): Promise<ChatForView> {
     const user = chat.members.filter((u) => u.userId === userId)[0];
 
-    const unreadCount = await messageService.countUnreadsForChat(
+    const unreadCount = await this.messageService.countUnreadsForChat(
       chat.id,
-      userId
+      userId,
     );
 
     const lastMessage = await this.messageService.getLatestChatMessage(chat.id);
 
     const otherMember = await this.chatUsersRepo.getOtherChatMember(
       chat.id,
-      userId
+      userId,
     );
 
     return {
@@ -55,9 +54,3 @@ export class ChatsService {
     };
   }
 }
-
-export const chatsService = new ChatsService(
-  chatsRepo,
-  messageService,
-  chatUserRepository
-);

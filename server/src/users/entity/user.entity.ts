@@ -1,7 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ChatUserEntity } from "../../chat-users/entity/chat-user.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ChatUserEntity } from '../../chat-users/entity/chat-user.entity';
 
-@Entity("users")
+@Entity('users')
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -9,7 +9,7 @@ export class UserEntity {
   @Column({ unique: true })
   username: string;
 
-  @Column({})
+  @Column({ select: true })
   password: string;
 
   @Column({ nullable: true })
