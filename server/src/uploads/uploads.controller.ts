@@ -16,6 +16,7 @@ import * as path from 'path';
 import { UPLOAD_PATH } from './upload-path.const';
 import { Response } from 'express';
 import { StreamResponseStats } from './streaming/stream-response.type';
+import * as mime from 'mime-types';
 
 @Controller('uploads')
 export class UploadsController {
@@ -41,7 +42,10 @@ export class UploadsController {
 
     const result = await this.streamingService.streamFile(filePath, range);
 
-    const headers = this.createHeaders(result.fileStats);
+    const headers = this.createHeaders(
+      result.fileStats,
+      mime.lookup(fileName) || '',
+    );
     const status = this.getStatus(result.fileStats);
 
     res.status(status).set(headers);
@@ -49,9 +53,12 @@ export class UploadsController {
     return new StreamableFile(result.fileStream);
   }
 
-  private createHeaders(fileStats: StreamResponseStats): Record<string, any> {
+  private createHeaders(
+    fileStats: StreamResponseStats,
+    contentType: string,
+  ): Record<string, any> {
     const headers: Record<string, any> = {
-      'Content-Type': 'video/mp4',
+      'Content-Type': contentType,
       'Content-Length': fileStats.contentSize,
     };
 

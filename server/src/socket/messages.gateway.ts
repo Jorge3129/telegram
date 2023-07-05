@@ -44,7 +44,9 @@ export class MessagesGateway
       },
     );
 
-    await this.notifyContactsOnConnectionChange(true, socket);
+    await this.notifyContactsOnConnectionChange(true, socket).catch((e) => {
+      console.log(e);
+    });
   }
 
   public async handleDisconnect(socket: Socket) {
