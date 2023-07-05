@@ -1,12 +1,13 @@
 import { FC } from "react";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import { formatTimestamp, getSeenIcon } from "./chats.utils";
 import Avatar from "../reuse/Avatar";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
 import { Chat } from "../../chats/models/chat.model";
-import { Message } from "../../messages/message.model";
+import MessageStatusWrapper from "../../ui/message/message-status/MessageStatusWrapper";
+import LastMessageTimestamp from "../../ui/chats/LastMessageTimestamp";
+import LastMessageAuthor from "../../ui/chats/LastMessageAuthor";
 
 dayjs.extend(isBetween);
 
@@ -19,28 +20,20 @@ const ChatItem: FC<IChatItem> = ({ chat }) => {
 
   const { user } = useSelector(selectUser);
 
-  const formatChatAuthor = (
-    message: Message | undefined,
-    type: "personal" | "group"
-  ): string => {
-    if (!message || type === "personal") return "";
-
-    const { author } = message;
-
-    return author === user?.username ? "You: " : author + ": ";
-  };
-
   const upperSection = (
     <ul className="chat_body_upper">
       <li className="chat_title_container hide_overflow">
         <div className="chat_title text_ellipsis">{title}</div>
       </li>
+
       <li className="chat_timestamp_container grey_text info_container">
         <div className="chat_timestamp">
           <span style={{ paddingRight: "0.3em" }}>
-            {getSeenIcon(lastMessage, user)}
+            <MessageStatusWrapper message={lastMessage} currentUser={user} />
           </span>
-          {formatTimestamp(lastMessage?.timestamp)}
+          {!!lastMessage && (
+            <LastMessageTimestamp timestamp={lastMessage.timestamp} />
+          )}
         </div>
       </li>
     </ul>
@@ -51,7 +44,9 @@ const ChatItem: FC<IChatItem> = ({ chat }) => {
       <div className="chat_last_message_container grey_text hide_overflow">
         <div className="chat_last_message text_ellipsis">
           <span className="chat_last_message_author">
-            {formatChatAuthor(lastMessage, type)}
+            {!!lastMessage && (
+              <LastMessageAuthor message={lastMessage} chatType={type} />
+            )}
           </span>
           <span className="chat_last_message_text">{lastMessage?.text}</span>
         </div>

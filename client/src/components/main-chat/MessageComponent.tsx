@@ -1,53 +1,61 @@
 import { FC, useEffect, useState } from "react";
-import dayjs from "dayjs";
 import { useContextMenu } from "./hooks/useContextMenu";
-import { getSeenIcon } from "../chat-sidebar/chats.utils";
 import ContextMenu from "./ContextMenu";
 import { getMediaByType } from "../../utils/general.utils";
 import { useLoadFile } from "./hooks/useLoadFile";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
 import { Media, Message } from "../../messages/message.model";
+import MessageTimestamp from "../../ui/message/MessageTimestamp";
+import MessageStatusWrapper from "../../ui/message/message-status/MessageStatusWrapper";
 
 interface IPropsMessage {
-  msg: Message;
+  message: Message;
   callback: null | (() => void);
-  type: "personal" | "group";
+  chatType: "personal" | "group";
 }
 
-const MessageComponent: FC<IPropsMessage> = ({ msg, callback, type }) => {
-  const { text, timestamp, author, media } = msg;
-
+const MessageComponent: FC<IPropsMessage> = ({
+  message,
+  chatType,
+  callback,
+}) => {
   useEffect(() => {
-    if (callback && !msg.seen) callback();
+    if (callback && !message.seen) {
+      callback();
+    }
   }, []);
 
   const [file, setFile] = useState<Media | null>(null);
 
   const { user } = useSelector(selectUser);
 
-  useLoadFile(media, setFile);
+  useLoadFile(message.media, setFile);
 
-  const { contextMenu, handleContextMenu } = useContextMenu(msg);
+  const { contextMenu, handleContextMenu } = useContextMenu(message);
 
-  const showAuthor = type === "group" && author !== user?.username;
+  const showAuthor = chatType === "group" && message.author !== user?.username;
 
   return (
-    <ul className="message_item" onContextMenu={handleContextMenu}>
-      <li className="message_author">{showAuthor && author}</li>
+    <div className="message_item" onContextMenu={handleContextMenu}>
+      <div className="message_author">{showAuthor && message.author}</div>
       {file && (
-        <li className="message_media">{getMediaByType(file, "message_img")}</li>
+        <div className="message_media">
+          {getMediaByType(file, "message_img")}
+        </div>
       )}
-      <li className="message_text">{text}</li>
-      <li className="message_info">
-        {getSeenIcon(msg, user)}
-        <span className="message_timestamp">
-          {dayjs(timestamp).format("HH:mm")}
-        </span>
-      </li>
+
+      <div className="message_text">{message.text}</div>
+
+      <div className="message_info">
+        <MessageStatusWrapper message={message} currentUser={user} />
+        <MessageTimestamp timestamp={message.timestamp} />
+      </div>
+
       <div className="clearfix"></div>
-      <ContextMenu msg={msg} type={type} contextMenu={contextMenu} />
-    </ul>
+
+      <ContextMenu msg={message} type={chatType} contextMenu={contextMenu} />
+    </div>
   );
 };
 

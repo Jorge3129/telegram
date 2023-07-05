@@ -45,24 +45,22 @@ const MessageList: FC<IMessageList> = ({ socket }) => {
           ref={scrollRef}
           onScroll={handleScroll}
         >
-          {messages.map((msg, i, { length }) => (
+          {messages.map((message, i, { length }) => (
             <li
               className={
-                "message_list_item" + (isSelf(msg, user) ? " self" : "")
+                "message_list_item" + (isSelf(message, user) ? " self" : "")
               }
-              key={msg.id}
-              id={"message-" + msg.id}
+              key={message.id}
+              id={"message-" + message.id}
             >
               <MessageAvatar
-                data={{ mainChat, msg, nextMsg: messages[i + 1] }}
+                data={{ mainChat, msg: message, nextMsg: messages[i + 1] }}
               />
               <MessageComponent
-                msg={msg}
+                message={message}
                 callback={i === length - 1 ? onMessagesFirstRendered : null}
-                type={mainChat?.type || "personal"}
+                chatType={mainChat?.type || "personal"}
               />
-              {false && msg.id}
-              {false && msg.author.split("")[0]}
             </li>
           ))}
         </ul>
