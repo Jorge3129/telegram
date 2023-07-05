@@ -48,14 +48,16 @@ export class MessagesGateway
   }
 
   public async handleDisconnect(socket: Socket) {
-    await this.notifyContactsOnConnectionChange(false, socket);
+    try {
+      await this.notifyContactsOnConnectionChange(false, socket);
 
-    await this.userRepo.update(
-      { id: (await this.getUser(socket.id)).id },
-      {
-        socketId: null as any,
-      },
-    );
+      await this.userRepo.update(
+        { id: (await this.getUser(socket.id)).id },
+        {
+          socketId: null as any,
+        },
+      );
+    } catch (e) {}
   }
 
   private getUser(socketId: string) {

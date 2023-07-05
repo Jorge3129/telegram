@@ -12,6 +12,7 @@ import ormConfig from './config/orm-config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { SocketModule } from './socket/socket.module';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SocketModule } from './socket/socket.module';
     ChatsModule,
     AuthModule,
     SocketModule,
+    UploadsModule,
   ],
   controllers: [AppController],
   providers: [
