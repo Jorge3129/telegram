@@ -1,6 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import { useContextMenu } from "./hooks/useContextMenu";
-import ContextMenu from "./ContextMenu";
 import { getMediaByType } from "../../utils/general.utils";
 import { useLoadFile } from "./hooks/useLoadFile";
 import { useSelector } from "react-redux";
@@ -32,12 +30,10 @@ const MessageComponent: FC<IPropsMessage> = ({
 
   useLoadFile(message.media, setFile);
 
-  const { contextMenu, handleContextMenu } = useContextMenu(message);
-
   const showAuthor = chatType === "group" && message.author !== user?.username;
 
   return (
-    <div className="message_item" onContextMenu={handleContextMenu}>
+    <div className="message_item">
       <div className="message_author">{showAuthor && message.author}</div>
       {file && (
         <div className="message_media">
@@ -53,8 +49,6 @@ const MessageComponent: FC<IPropsMessage> = ({
       </div>
 
       <div className="clearfix"></div>
-
-      <ContextMenu msg={message} type={chatType} contextMenu={contextMenu} />
     </div>
   );
 };

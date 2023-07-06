@@ -7,7 +7,6 @@ import ChatsContainer from "./chat-sidebar/ChatsContainer";
 import { useSelector } from "react-redux";
 import { selectMainChat } from "./main-chat/reducers/main.chat.reducer";
 import MediaSidebar from "./media-sidebar/MediaSidebar";
-import { setContextMenu } from "./main-chat/reducers/menu.reducer";
 import MainPlaceholder from "./MainPlaceholder";
 import { User } from "../users/models/user.model";
 
@@ -25,7 +24,7 @@ const Main: FC<MainProps> = ({ user }) => {
   }, []);
 
   return (
-    <div className="main" onClick={(e) => dispatch(setContextMenu(null))}>
+    <div className="main">
       <ChatsContainer />
       {currentChatId ? (
         <div className="main_chat_media_container">
