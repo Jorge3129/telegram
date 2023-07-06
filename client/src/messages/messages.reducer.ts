@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../redux/rootReducer";
-import { chatsApiService } from "../../chats/chats-api.service";
-import { Message } from "../../messages/message.model";
+import { RootState } from "../redux/rootReducer";
+import { chatsApiService } from "../chats/chats-api.service";
+import { Message } from "./message.model";
 
 interface MessageState {
   messages: Message[];
@@ -22,44 +22,46 @@ const messageSlice = createSlice({
     setLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.loading = payload;
     },
+
     setMessages: (state, { payload }: PayloadAction<Message[]>) => {
       state.messages = payload;
     },
+
     addMessage: (state, { payload }: PayloadAction<Message>) => {
       state.messages.push(payload);
     },
+
     setSeenMessage: (
       state,
-      { payload }: PayloadAction<{ message: Message; username: string }>
+      { payload }: PayloadAction<{ message: Message; userId: number }>
     ) => {
-      const username = payload.username;
+      const userId = payload.userId;
 
       state.messages
         .filter(
-          (msg) =>
-            msg.author === payload.message.author &&
-            new Date(msg.timestamp) <= new Date(payload.message.timestamp)
+          (message) =>
+            new Date(message.timestamp) <= new Date(payload.message.timestamp)
         )
         .forEach((msg) => {
-          //console.log(msg.seenBy)
-          if (!msg.seenBy) msg.seenBy = [username];
-          if (!msg.seenBy.includes(username)) msg.seenBy.push(username);
-          //console.log(msg.seenBy)
-          if (msg.seen) return;
+          const seenList = msg.seenBy ?? [];
+
+          if (!seenList.includes(userId)) {
+            msg.seenBy = [...seenList, userId];
+          }
+
           msg.seen = true;
         });
     },
   },
 });
 
-export const { setLoading, setMessages, addMessage, setSeenMessage } =
-  messageSlice.actions;
+export const MessageActions = messageSlice.actions;
 
 export const messageThunk = createAsyncThunk(
   "/messages/get",
   async (id: number, thunkApi) => {
     try {
-      thunkApi.dispatch(setLoading(true));
+      thunkApi.dispatch(MessageActions.setLoading(true));
 
       await (async () => {
         return new Promise((resolve) => {
@@ -68,11 +70,11 @@ export const messageThunk = createAsyncThunk(
       })();
 
       const messages = await chatsApiService.getMessages(id);
-      thunkApi.dispatch(setMessages(messages));
+      thunkApi.dispatch(MessageActions.setMessages(messages));
     } catch (e) {
       console.log(e);
     } finally {
-      thunkApi.dispatch(setLoading(false));
+      thunkApi.dispatch(MessageActions.setLoading(false));
     }
   }
 );

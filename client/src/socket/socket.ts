@@ -6,10 +6,7 @@ import {
   useState,
 } from "react";
 import { io, Socket } from "socket.io-client";
-import {
-  addMessage,
-  setSeenMessage,
-} from "../current-chat/reducers/messages.reducer";
+import { MessageActions } from "../messages/messages.reducer";
 import { useAppDispatch } from "../redux/store";
 import { ChatActions } from "../chats/chats.reducer";
 import { useSelector } from "react-redux";
@@ -28,7 +25,7 @@ export const useSocket = () => {
   const onMessage = useCallback(
     (message: Message) => {
       if (currentChatId === message.chatId) {
-        dispatch(addMessage(message));
+        dispatch(MessageActions.addMessage(message));
       }
 
       dispatch(ChatActions.setLastMessage({ message, chatId: message.chatId }));
@@ -40,14 +37,14 @@ export const useSocket = () => {
   const onSeen = useCallback(
     ({
       message,
-      username,
+      userId,
     }: {
       message: Message;
       userId: number;
       username: string;
     }) => {
       if (currentChatId === message.chatId) {
-        dispatch(setSeenMessage({ message, username }));
+        dispatch(MessageActions.setSeenMessage({ message, userId }));
       }
       dispatch(ChatActions.setSeenLastMessage({ message }));
     },

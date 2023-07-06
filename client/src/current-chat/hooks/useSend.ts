@@ -1,4 +1,4 @@
-import { addMessage } from "../reducers/messages.reducer";
+import { MessageActions } from "../../messages/messages.reducer";
 import { ChatActions } from "../../chats/chats.reducer";
 import {
   selectCurrentChat,
@@ -17,10 +17,11 @@ export const useSend = (socket: Socket) => {
   const { user } = useSelector(selectUser);
 
   const dispatchSendMessage = (message: Message) => {
-    dispatch(addMessage(message));
+    dispatch(MessageActions.addMessage(message));
+
     dispatch(ChatActions.setLastMessage({ message, chatId: message.chatId }));
-    dispatch(CurrentChatActions.setText(""));
     //dispatch(setSrc(''))
+
     dispatch(ChatActions.setUnread({ unread: 0, chatId: message.chatId }));
   };
 
@@ -37,6 +38,8 @@ export const useSend = (socket: Socket) => {
       chatId: currentChatId || 0,
       media,
     };
+
+    dispatch(CurrentChatActions.setText(""));
 
     const response = await new Promise<Message>((res) => {
       socket.emit("message", { message }, (savedMessage: Message) => {

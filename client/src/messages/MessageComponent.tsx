@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Message, Media } from "../messages/message.model";
+import { Message, Media } from "./message.model";
 import { selectUser } from "../redux/user-reducer";
 import MessageTimestamp from "../ui/message/MessageTimestamp";
 import MessageStatusWrapper from "../ui/message/message-status/MessageStatusWrapper";
 import { getMediaByType } from "../utils/general.utils";
-import { useLoadFile } from "./hooks/useLoadFile";
+import { useLoadFile } from "../current-chat/hooks/useLoadFile";
 
 interface IPropsMessage {
   message: Message;

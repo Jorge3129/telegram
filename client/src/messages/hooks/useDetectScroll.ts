@@ -1,13 +1,13 @@
 import { MutableRefObject, UIEvent, useRef } from "react";
-import { getVisibleHeight } from "./scrollUtils";
 import { selectChats, ChatActions } from "../../chats/chats.reducer";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../redux/store";
 import { Socket } from "socket.io-client";
-import { selectCurrentChat } from "../reducers/main.chat.reducer";
 import { alreadySeen, getMsgById } from "../../utils/general.utils";
 import { selectUser } from "../../redux/user-reducer";
 import { Message } from "../../messages/message.model";
+import { selectCurrentChat } from "../../current-chat/reducers/main.chat.reducer";
+import { getVisibleElementHeight } from "../utils/get-visible-element-height";
 
 export const useDetectScroll = (
   socket: Socket | null,
@@ -27,7 +27,7 @@ export const useDetectScroll = (
 
     const visible = divs
       .filter((el, i) => {
-        const seen = getVisibleHeight(el, scrollRef.current);
+        const seen = getVisibleElementHeight(el, scrollRef.current);
         return seen > 0 && seen === el.clientHeight;
       })
       .map((el) => el.id.replace(/message-/, ""));

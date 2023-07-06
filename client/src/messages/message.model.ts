@@ -12,7 +12,7 @@ export interface Message {
   authorId: number;
   chatId: number;
   seen?: boolean;
-  seenBy?: string[];
+  seenBy?: number[];
   media?: Media;
 }
 

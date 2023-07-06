@@ -7,11 +7,11 @@ import { useAppDispatch } from "../redux/store";
 import { selectUser } from "../redux/user-reducer";
 import { isSelf } from "../utils/general.utils";
 import MessageComponent from "./MessageComponent";
-import { useAutoScroll } from "./hooks/useAutoScroll";
-import { useDetectScroll } from "./hooks/useDetectScroll";
-import { selectCurrentChat } from "./reducers/main.chat.reducer";
-import { selectMessages, messageThunk } from "./reducers/messages.reducer";
 import wallpaper from "../assets/telegram_background.png";
+import { useAutoScroll } from "./hooks/useAutoScroll";
+import { selectCurrentChat } from "../current-chat/reducers/main.chat.reducer";
+import { selectMessages, messageThunk } from "./messages.reducer";
+import { useDetectScroll } from "./hooks/useDetectScroll";
 
 interface IMessageList {
   socket: Socket;
