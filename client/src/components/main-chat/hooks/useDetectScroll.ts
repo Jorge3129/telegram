@@ -1,6 +1,6 @@
 import { MutableRefObject, UIEvent, useRef } from "react";
 import { getVisibleHeight } from "./scrollUtils";
-import { selectChats, setUnread } from "../../../chats/chats.reducer";
+import { selectChats, ChatActions } from "../../../chats/chats.reducer";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../redux/store";
 import { Socket } from "socket.io-client";
@@ -49,7 +49,7 @@ export const useDetectScroll = (
     const ind = messages.indexOf(msgRead);
     //console.log('setUnread scroll')
     dispatch(
-      setUnread({
+      ChatActions.setUnread({
         unread: messages.slice(ind + 1).length,
         chatId: currentChatId || -1,
       })

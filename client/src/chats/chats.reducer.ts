@@ -18,6 +18,18 @@ const initialState: ChatState = {
   width: "",
 };
 
+const updateChat = (
+  state: ChatState,
+  chatId: number,
+  action: (chat: Chat) => void
+) => {
+  const chat = state.chats.find((chat) => chat.id === chatId);
+
+  if (chat) {
+    action(chat);
+  }
+};
+
 const chatSlice = createSlice({
   name: "chats",
   initialState,
@@ -25,85 +37,76 @@ const chatSlice = createSlice({
     setLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.loading = payload;
     },
+
     setChats: (state, { payload }: PayloadAction<Chat[]>) => {
       state.chats = payload;
     },
+
     setLastMessage: (
       state,
       { payload }: PayloadAction<{ message: Message; chatId: number }>
     ) => {
-      const { message, chatId } = payload;
-      const chat = state.chats.find((chat) => chat.id === chatId);
-      if (chat) chat.lastMessage = message;
+      updateChat(state, payload.chatId, (chat) => {
+        chat.lastMessage = payload.message;
+      });
     },
+
     setSeenLastMessage: (
       state,
       { payload }: PayloadAction<{ message: Message }>
     ) => {
       const { message } = payload;
-      //console.log(message, chatId)
-      const chat = state.chats.find((chat) => chat.id === message.chatId);
-      if (chat?.lastMessage) {
-        //console.log(chat.lastMessage.messageId, message.messageId)
-        if (chat.lastMessage.id === message.id) chat.lastMessage.seen = true;
-      }
+
+      updateChat(state, message.chatId, (chat) => {
+        if (chat.lastMessage?.id === message.id) {
+          chat.lastMessage.seen = true;
+        }
+      });
     },
+
     setUnread: (
       state,
       { payload }: PayloadAction<{ unread: number; chatId: number }>
     ) => {
-      const { unread, chatId } = payload;
-      const chat = state.chats.find((chat) => chat.id === chatId);
-      if (chat) chat.unread = unread;
+      updateChat(state, payload.chatId, (chat) => {
+        chat.unread = payload.unread;
+      });
     },
+
     incrementUnread: (
       state,
       { payload }: PayloadAction<{ chatId: number }>
     ) => {
-      const { chatId } = payload;
-      const chat = state.chats.find((chat) => chat.id === chatId);
-      if (chat) chat.unread = chat.unread + 1;
+      updateChat(state, payload.chatId, (chat) => {
+        chat.unread = chat.unread + 1;
+      });
     },
+
     setOnline: (
       state,
       { payload }: PayloadAction<{ online: boolean; chatId: number }>
     ) => {
-      const { online, chatId } = payload;
-      const chat = state.chats.find((chat) => chat.id === chatId);
-
-      if (chat && chat.type === "personal") {
-        chat.online = online;
-      }
-    },
-    setChatsWidth: (state, { payload }: PayloadAction<string>) => {
-      state.width = payload;
+      updateChat(state, payload.chatId, (chat) => {
+        chat.online = payload.online;
+      });
     },
   },
 });
 
-export const {
-  setLoading,
-  setChats,
-  setLastMessage,
-  setSeenLastMessage,
-  setUnread,
-  incrementUnread,
-  setOnline,
-  setChatsWidth,
-} = chatSlice.actions;
+export const ChatActions = chatSlice.actions;
 
 export const chatThunk = createAsyncThunk(
   "/chats/get",
   async (userId: number, thunkApi) => {
     try {
-      thunkApi.dispatch(setLoading(true));
+      thunkApi.dispatch(ChatActions.setLoading(true));
       const messages = await chatsApiService.getChats();
 
-      thunkApi.dispatch(setChats(messages));
+      thunkApi.dispatch(ChatActions.setChats(messages));
     } catch (e) {
       console.log(e);
     } finally {
-      thunkApi.dispatch(setLoading(false));
+      thunkApi.dispatch(ChatActions.setLoading(false));
     }
   }
 );

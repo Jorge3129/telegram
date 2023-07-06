@@ -11,12 +11,7 @@ import {
   setSeenMessage,
 } from "../components/main-chat/reducers/messages.reducer";
 import { useAppDispatch } from "../redux/store";
-import {
-  incrementUnread,
-  setLastMessage,
-  setOnline,
-  setSeenLastMessage,
-} from "../chats/chats.reducer";
+import { ChatActions } from "../chats/chats.reducer";
 import { useSelector } from "react-redux";
 import { selectMainChat } from "../components/main-chat/reducers/main.chat.reducer";
 import { selectUser } from "../redux/user-reducer";
@@ -26,20 +21,20 @@ import { Message } from "../messages/message.model";
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const dispatch = useAppDispatch();
-  const { currentChatId: chatId } = useSelector(selectMainChat);
+  const { currentChatId } = useSelector(selectMainChat);
 
   const { user } = useSelector(selectUser);
 
   const onMessage = useCallback(
     (message: Message) => {
-      if (chatId === message.chatId) {
+      if (currentChatId === message.chatId) {
         dispatch(addMessage(message));
       }
 
-      dispatch(setLastMessage({ message, chatId: message.chatId }));
-      dispatch(incrementUnread({ chatId: message.chatId }));
+      dispatch(ChatActions.setLastMessage({ message, chatId: message.chatId }));
+      dispatch(ChatActions.incrementUnread({ chatId: message.chatId }));
     },
-    [chatId, dispatch]
+    [currentChatId, dispatch]
   );
 
   const onSeen = useCallback(
@@ -51,12 +46,12 @@ export const useSocket = () => {
       userId: number;
       username: string;
     }) => {
-      if (chatId === message.chatId) {
+      if (currentChatId === message.chatId) {
         dispatch(setSeenMessage({ message, username }));
       }
-      dispatch(setSeenLastMessage({ message }));
+      dispatch(ChatActions.setSeenLastMessage({ message }));
     },
-    [chatId, dispatch]
+    [currentChatId, dispatch]
   );
 
   useEffect(() => {
@@ -81,7 +76,7 @@ export const useSocket = () => {
     }
 
     socket.on("online-change", ({ online, chatId }) => {
-      dispatch(setOnline({ online, chatId }));
+      dispatch(ChatActions.setOnline({ online, chatId }));
     });
     socket.on("message-to-client", onMessage);
     socket.on("seen", onSeen);
@@ -91,7 +86,7 @@ export const useSocket = () => {
       socket.off("seen");
       socket.off("online-change");
     };
-  }, [chatId, dispatch, onMessage, onSeen, socket]);
+  }, [currentChatId, dispatch, onMessage, onSeen, socket]);
 
   return [socket, setSocket] as [
     Socket | null,

@@ -1,5 +1,5 @@
 import { addMessage } from "../reducers/messages.reducer";
-import { setLastMessage, setUnread } from "../../../chats/chats.reducer";
+import { ChatActions } from "../../../chats/chats.reducer";
 import { selectMainChat, setText } from "../reducers/main.chat.reducer";
 import { useAppDispatch } from "../../../redux/store";
 import { useSelector } from "react-redux";
@@ -15,10 +15,10 @@ export const useSend = (socket: Socket) => {
 
   const dispatchSendMessage = (message: Message) => {
     dispatch(addMessage(message));
-    dispatch(setLastMessage({ message, chatId: message.chatId }));
+    dispatch(ChatActions.setLastMessage({ message, chatId: message.chatId }));
     dispatch(setText(""));
     //dispatch(setSrc(''))
-    dispatch(setUnread({ unread: 0, chatId: message.chatId }));
+    dispatch(ChatActions.setUnread({ unread: 0, chatId: message.chatId }));
   };
 
   const handleSend = async () => {
