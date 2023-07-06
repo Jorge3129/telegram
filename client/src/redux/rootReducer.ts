@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import messageReducer from "../components/main-chat/reducers/messages.reducer";
-import chatReducer from "../components/chat-sidebar/chats.reducer";
+import chatReducer from "../chats/chats.reducer";
 import mainChatReducer from "../components/main-chat/reducers/main.chat.reducer";
 import userReducer from "./user-reducer";
 

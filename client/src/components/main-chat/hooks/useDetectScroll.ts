@@ -1,6 +1,6 @@
 import { MutableRefObject, UIEvent, useRef } from "react";
 import { getVisibleHeight } from "./scrollUtils";
-import { selectChats, setUnread } from "../../chat-sidebar/chats.reducer";
+import { selectChats, setUnread } from "../../../chats/chats.reducer";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../redux/store";
 import { Socket } from "socket.io-client";

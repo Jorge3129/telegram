@@ -2,13 +2,13 @@ import { FC, useEffect } from "react";
 import MainChat from "./main-chat/MainChat";
 import { useSocket } from "../socket/socket";
 import { useAppDispatch } from "../redux/store";
-import { chatThunk } from "./chat-sidebar/chats.reducer";
-import ChatsContainer from "./chat-sidebar/ChatsContainer";
+import { chatThunk } from "../chats/chats.reducer";
 import { useSelector } from "react-redux";
 import { selectMainChat } from "./main-chat/reducers/main.chat.reducer";
 import MediaSidebar from "./media-sidebar/MediaSidebar";
 import MainPlaceholder from "./MainPlaceholder";
 import { User } from "../users/models/user.model";
+import ChatsContainer from "../chats/components/ChatsContainer";
 
 interface MainProps {
   user: User;

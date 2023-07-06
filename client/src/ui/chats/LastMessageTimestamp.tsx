@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { formatChatMessageTimestamp } from "../../components/chat-sidebar/chats.utils";
+import { formatChatMessageTimestamp } from "../../chats/utils/format-timestamp";
 
 interface Props {
   timestamp: string;

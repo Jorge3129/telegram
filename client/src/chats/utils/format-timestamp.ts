@@ -1,14 +1,5 @@
 import dayjs from "dayjs";
 
-export const initials = (title: string) => {
-  const tokens = title.split(" ");
-  return tokens
-    .slice(0, 2)
-    .map((t) => t.split("")[0])
-    .join("")
-    .toUpperCase();
-};
-
 export const formatChatMessageTimestamp = (timestamp: string): string => {
   const date = dayjs(timestamp);
 

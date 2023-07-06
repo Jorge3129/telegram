@@ -16,7 +16,7 @@ import {
   setLastMessage,
   setOnline,
   setSeenLastMessage,
-} from "../components/chat-sidebar/chats.reducer";
+} from "../chats/chats.reducer";
 import { useSelector } from "react-redux";
 import { selectMainChat } from "../components/main-chat/reducers/main.chat.reducer";
 import { selectUser } from "../redux/user-reducer";

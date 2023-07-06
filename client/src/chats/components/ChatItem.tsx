@@ -1,13 +1,14 @@
 import { FC } from "react";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import Avatar from "../reuse/Avatar";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
 import { Chat } from "../../chats/models/chat.model";
 import MessageStatusWrapper from "../../ui/message/message-status/MessageStatusWrapper";
 import LastMessageTimestamp from "../../ui/chats/LastMessageTimestamp";
 import LastMessageAuthor from "../../ui/chats/LastMessageAuthor";
+import Avatar from "../../components/reuse/Avatar";
+import "./ChatItem.css";
 
 dayjs.extend(isBetween);
 

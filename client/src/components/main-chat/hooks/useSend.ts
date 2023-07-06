@@ -1,5 +1,5 @@
 import { addMessage } from "../reducers/messages.reducer";
-import { setLastMessage, setUnread } from "../../chat-sidebar/chats.reducer";
+import { setLastMessage, setUnread } from "../../../chats/chats.reducer";
 import { selectMainChat, setText } from "../reducers/main.chat.reducer";
 import { useAppDispatch } from "../../../redux/store";
 import { useSelector } from "react-redux";

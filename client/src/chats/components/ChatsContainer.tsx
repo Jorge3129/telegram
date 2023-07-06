@@ -1,18 +1,19 @@
-import { FC, MouseEvent, useMemo, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { selectChats } from "./chats.reducer";
+import { selectChats } from "../../chats/chats.reducer";
 import ChatItem from "./ChatItem";
 import "./styles/Chats.css";
 import * as _ from "lodash";
 import { useAppDispatch } from "../../redux/store";
+
+import ChatsSearchBar from "./ChatsSearchBar";
+import { Chat } from "../../chats/models/chat.model";
+import LoadSpinner from "../../components/reuse/LoadSpinner";
 import {
   selectMainChat,
   setChat,
   setChatId,
-} from "../main-chat/reducers/main.chat.reducer";
-import ChatsSearchBar from "./ChatsSearchBar";
-import LoadSpinner from "../reuse/LoadSpinner";
-import { Chat } from "../../chats/models/chat.model";
+} from "../../components/main-chat/reducers/main.chat.reducer";
 
 interface IChatsContainer {}
 
@@ -21,11 +22,9 @@ const ChatsContainer: FC<IChatsContainer> = () => {
   const { currentChatId, mainChat } = useSelector(selectMainChat);
   const dispatch = useAppDispatch();
 
-  const handleChat = (e: MouseEvent<HTMLButtonElement>) => {
-    const chatId = parseInt(e.currentTarget.id);
-    const chatObject = chats.find((ch) => ch.id === chatId);
-    if (chatObject) dispatch(setChat(chatObject));
-    dispatch(setChatId(chatId));
+  const handleSelectChat = (chat: Chat) => {
+    dispatch(setChat(chat));
+    dispatch(setChatId(chat.id));
   };
 
   const sortedChats = useMemo(() => {
@@ -39,7 +38,10 @@ const ChatsContainer: FC<IChatsContainer> = () => {
   const [searchItem, setSearchItem] = useState<string>("");
 
   const filteredChats = useMemo(() => {
-    if (!searchItem) return sortedChats;
+    if (!searchItem) {
+      return sortedChats;
+    }
+
     return sortedChats.filter((chat) =>
       chat.title.toLowerCase().split("").includes(searchItem.toLowerCase())
     );
@@ -56,7 +58,7 @@ const ChatsContainer: FC<IChatsContainer> = () => {
             (currentChatId === ch.id ? " selected_chat" : "")
           }
           id={ch.id + ""}
-          onClick={handleChat}
+          onClick={() => handleSelectChat(ch)}
         >
           <ChatItem chat={ch} />
         </button>
