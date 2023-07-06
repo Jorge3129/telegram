@@ -1,14 +1,17 @@
 import { MouseEvent } from "react";
 import { useSelector } from "react-redux";
-import { clearMainChat, selectMainChat } from "./reducers/main.chat.reducer";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch } from "../redux/store";
+import {
+  selectCurrentChat,
+  CurrentChatActions,
+} from "./reducers/main.chat.reducer";
 
 const MainTopBar = () => {
-  const { mainChat } = useSelector(selectMainChat);
+  const { currentChat } = useSelector(selectCurrentChat);
   const dispatch = useAppDispatch();
 
   const backToChats = (e: MouseEvent) => {
-    dispatch(clearMainChat());
+    dispatch(CurrentChatActions.clearCurrentChat());
   };
 
   return (
@@ -20,7 +23,7 @@ const MainTopBar = () => {
         <i className="fa-solid fa-arrow-left main_chat_icon_top" />
       </li>
       <li className="chat_top_bar_title_container">
-        <div className="chat_top_bar_title">{mainChat?.title || ""}</div>
+        <div className="chat_top_bar_title">{currentChat?.title || ""}</div>
         <div className="chat_top_bar_members">Last seen</div>
       </li>
       <li className="chat_top_bar_separator"></li>

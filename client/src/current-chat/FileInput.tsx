@@ -1,9 +1,9 @@
-import React, { ChangeEvent, FC } from "react";
+import { ChangeEvent, FC } from "react";
 import { Socket } from "socket.io-client";
-import { setMedia } from "./reducers/main.chat.reducer";
+import { CurrentChatActions } from "./reducers/main.chat.reducer";
 import { useDispatch } from "react-redux";
-import { convertFileToMedia } from "../../utils/general.utils";
-import { uploadsApiService } from "../../uploads/uploads-api.service";
+import { convertFileToMedia } from "../utils/general.utils";
+import { uploadsApiService } from "../uploads/uploads-api.service";
 
 interface IFileInput {
   socket: Socket;
@@ -20,7 +20,7 @@ const FileInput: FC<IFileInput> = ({ socket }) => {
 
   const saveToRedux = (file: File) => {
     const mediaObject = convertFileToMedia(file);
-    dispatch(setMedia(mediaObject));
+    dispatch(CurrentChatActions.setMedia(mediaObject));
   };
 
   const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {

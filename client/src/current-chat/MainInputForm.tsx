@@ -1,17 +1,20 @@
 import { FC, useEffect, useRef, MouseEvent } from "react";
 import { Socket } from "socket.io-client";
-import { useAppDispatch } from "../../redux/store";
 import { useSelector } from "react-redux";
-import { selectMainChat, setText } from "./reducers/main.chat.reducer";
 import FileInput from "./FileInput";
+import { useAppDispatch } from "../redux/store";
 import { useSend } from "./hooks/useSend";
+import {
+  selectCurrentChat,
+  CurrentChatActions,
+} from "./reducers/main.chat.reducer";
 
 interface IMainInput {
   socket: Socket;
 }
 
 const MainInputForm: FC<IMainInput> = ({ socket }) => {
-  const { text } = useSelector(selectMainChat);
+  const { text } = useSelector(selectCurrentChat);
   const dispatch = useAppDispatch();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -37,7 +40,7 @@ const MainInputForm: FC<IMainInput> = ({ socket }) => {
           placeholder=" Write a message..."
           value={text}
           ref={inputRef}
-          onChange={(e) => dispatch(setText(e.target.value))}
+          onChange={(e) => dispatch(CurrentChatActions.setText(e.target.value))}
         />
         <div className="input_icon_container">
           <i className="fa-solid fa-face-smile main_chat_icon" />

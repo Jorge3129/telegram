@@ -1,12 +1,15 @@
 import { FC, MouseEvent } from "react";
 import "./styles/MediaModal.css";
 import { useSelector } from "react-redux";
-import { clearMedia, selectMainChat } from "./reducers/main.chat.reducer";
-import { getMediaByType } from "../../utils/general.utils";
-import { useSend } from "./hooks/useSend";
 import { Socket } from "socket.io-client";
-import { useAppDispatch } from "../../redux/store";
-import { uploadsApiService } from "../../uploads/uploads-api.service";
+import { useAppDispatch } from "../redux/store";
+import { uploadsApiService } from "../uploads/uploads-api.service";
+import { getMediaByType } from "../utils/general.utils";
+import { useSend } from "./hooks/useSend";
+import {
+  selectCurrentChat,
+  CurrentChatActions,
+} from "./reducers/main.chat.reducer";
 
 interface IMediaModal {
   socket: Socket;
@@ -14,19 +17,19 @@ interface IMediaModal {
 
 const MediaModal: FC<IMediaModal> = ({ socket }) => {
   const dispatch = useAppDispatch();
-  const { media } = useSelector(selectMainChat);
+  const { media } = useSelector(selectCurrentChat);
   const sendMessage = useSend(socket);
 
   const handleSend = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     sendMessage();
-    dispatch(clearMedia());
+    dispatch(CurrentChatActions.clearMedia());
     await uploadsApiService.postFile();
   };
 
   const handleCancel = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    dispatch(clearMedia());
+    dispatch(CurrentChatActions.clearMedia());
   };
 
   //TODO

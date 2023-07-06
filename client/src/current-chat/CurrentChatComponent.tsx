@@ -1,5 +1,5 @@
 import { FC } from "react";
-import "./styles/MainChat.css";
+import "./styles/CurrentChat.css";
 import "./styles/Messages.css";
 import MainInputForm from "./MainInputForm";
 import { Socket } from "socket.io-client";
@@ -7,11 +7,11 @@ import MessageList from "./MessageList";
 import MediaModal from "./MediaModal";
 import MainTopBar from "./MainTopBar";
 
-interface IMainChat {
+interface Props {
   socket: Socket | null;
 }
 
-const MainChat: FC<IMainChat> = ({ socket }) => {
+const CurrentChatComponent: FC<Props> = ({ socket }) => {
   if (!socket)
     return (
       <div className="error_message">
@@ -29,4 +29,4 @@ const MainChat: FC<IMainChat> = ({ socket }) => {
   );
 };
 
-export default MainChat;
+export default CurrentChatComponent;

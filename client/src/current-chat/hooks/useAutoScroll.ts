@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectMessages } from "../reducers/messages.reducer";
-import { isSelf } from "../../../utils/general.utils";
-import { selectUser } from "../../../redux/user-reducer";
+import { isSelf } from "../../utils/general.utils";
+import { selectUser } from "../../redux/user-reducer";
 
 export const useAutoScroll = (unread: number) => {
   const { messages, loading } = useSelector(selectMessages);

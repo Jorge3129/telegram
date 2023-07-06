@@ -8,18 +8,20 @@ import { Message } from "../../messages/message.model";
 
 interface IMessageAvatar {
   data: {
-    mainChat: Chat | null;
+    currentChat: Chat | null;
     msg: Message;
     nextMsg: Message;
   };
 }
 
 const MessageAvatar: FC<IMessageAvatar> = ({ data }) => {
-  const { mainChat, msg, nextMsg } = data;
+  const { currentChat, msg, nextMsg } = data;
 
   const { user } = useSelector(selectUser);
 
-  if (mainChat?.type !== "group" || isSelf(msg, user)) return null;
+  if (currentChat?.type !== "group" || isSelf(msg, user)) {
+    return null;
+  }
 
   return (
     <Avatar

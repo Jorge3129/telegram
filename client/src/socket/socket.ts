@@ -9,11 +9,11 @@ import { io, Socket } from "socket.io-client";
 import {
   addMessage,
   setSeenMessage,
-} from "../components/main-chat/reducers/messages.reducer";
+} from "../current-chat/reducers/messages.reducer";
 import { useAppDispatch } from "../redux/store";
 import { ChatActions } from "../chats/chats.reducer";
 import { useSelector } from "react-redux";
-import { selectMainChat } from "../components/main-chat/reducers/main.chat.reducer";
+import { selectCurrentChat } from "../current-chat/reducers/main.chat.reducer";
 import { selectUser } from "../redux/user-reducer";
 import environment from "../environment/environment";
 import { Message } from "../messages/message.model";
@@ -21,7 +21,7 @@ import { Message } from "../messages/message.model";
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const dispatch = useAppDispatch();
-  const { currentChatId } = useSelector(selectMainChat);
+  const { currentChatId } = useSelector(selectCurrentChat);
 
   const { user } = useSelector(selectUser);
 

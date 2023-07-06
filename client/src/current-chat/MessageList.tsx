@@ -1,17 +1,17 @@
-import MessageComponent from "./MessageComponent";
 import { FC, useEffect } from "react";
-import { isSelf } from "../../utils/general.utils";
 import { useSelector } from "react-redux";
-import { messageThunk, selectMessages } from "./reducers/messages.reducer";
-import { selectMainChat } from "./reducers/main.chat.reducer";
+import { Socket } from "socket.io-client";
+import LoadSpinner from "../components/reuse/LoadSpinner";
+import MessageAvatar from "../components/reuse/MessageAvatar";
+import { useAppDispatch } from "../redux/store";
+import { selectUser } from "../redux/user-reducer";
+import { isSelf } from "../utils/general.utils";
+import MessageComponent from "./MessageComponent";
 import { useAutoScroll } from "./hooks/useAutoScroll";
 import { useDetectScroll } from "./hooks/useDetectScroll";
-import { Socket } from "socket.io-client";
-import { useAppDispatch } from "../../redux/store";
-import MessageAvatar from "../reuse/MessageAvatar";
-import LoadSpinner from "../reuse/LoadSpinner";
-import wallpaper from "../../assets/telegram_background.png";
-import { selectUser } from "../../redux/user-reducer";
+import { selectCurrentChat } from "./reducers/main.chat.reducer";
+import { selectMessages, messageThunk } from "./reducers/messages.reducer";
+import wallpaper from "../assets/telegram_background.png";
 
 interface IMessageList {
   socket: Socket;
@@ -19,8 +19,10 @@ interface IMessageList {
 
 const MessageList: FC<IMessageList> = ({ socket }) => {
   const { messages, loading } = useSelector(selectMessages);
-  const { currentChatId, mainChat } = useSelector(selectMainChat);
-  const scrollRef = useAutoScroll(mainChat?.unread || 0);
+  const { currentChatId, currentChat } = useSelector(selectCurrentChat);
+
+  const scrollRef = useAutoScroll(currentChat?.unread || 0);
+
   const { onMessagesFirstRendered, handleScroll } = useDetectScroll(
     socket,
     scrollRef,
@@ -54,12 +56,16 @@ const MessageList: FC<IMessageList> = ({ socket }) => {
               id={"message-" + message.id}
             >
               <MessageAvatar
-                data={{ mainChat, msg: message, nextMsg: messages[i + 1] }}
+                data={{
+                  currentChat: currentChat,
+                  msg: message,
+                  nextMsg: messages[i + 1],
+                }}
               />
               <MessageComponent
                 message={message}
                 callback={i === length - 1 ? onMessagesFirstRendered : null}
-                chatType={mainChat?.type || "personal"}
+                chatType={currentChat?.type || "personal"}
               />
             </li>
           ))}

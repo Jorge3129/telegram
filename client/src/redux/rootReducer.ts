@@ -1,13 +1,13 @@
 import { combineReducers } from "redux";
-import messageReducer from "../components/main-chat/reducers/messages.reducer";
+import messageReducer from "../current-chat/reducers/messages.reducer";
 import chatReducer from "../chats/chats.reducer";
-import mainChatReducer from "../components/main-chat/reducers/main.chat.reducer";
+import currentChatReducer from "../current-chat/reducers/main.chat.reducer";
 import userReducer from "./user-reducer";
 
 const rootReducer = combineReducers({
   messages: messageReducer,
   chats: chatReducer,
-  mainChat: mainChatReducer,
+  currentChat: currentChatReducer,
   user: userReducer,
 });
 

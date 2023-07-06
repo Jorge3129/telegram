@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from "react";
-import { getMediaByType } from "../../utils/general.utils";
-import { useLoadFile } from "./hooks/useLoadFile";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../redux/user-reducer";
-import { Media, Message } from "../../messages/message.model";
-import MessageTimestamp from "../../ui/message/MessageTimestamp";
-import MessageStatusWrapper from "../../ui/message/message-status/MessageStatusWrapper";
+import { Message, Media } from "../messages/message.model";
+import { selectUser } from "../redux/user-reducer";
+import MessageTimestamp from "../ui/message/MessageTimestamp";
+import MessageStatusWrapper from "../ui/message/message-status/MessageStatusWrapper";
+import { getMediaByType } from "../utils/general.utils";
+import { useLoadFile } from "./hooks/useLoadFile";
 
 interface IPropsMessage {
   message: Message;

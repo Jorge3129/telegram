@@ -10,21 +10,21 @@ import ChatsSearchBar from "./ChatsSearchBar";
 import { Chat } from "../../chats/models/chat.model";
 import LoadSpinner from "../../components/reuse/LoadSpinner";
 import {
-  selectMainChat,
-  setChat,
-  setChatId,
-} from "../../components/main-chat/reducers/main.chat.reducer";
+  selectCurrentChat,
+  CurrentChatActions,
+} from "../../current-chat/reducers/main.chat.reducer";
 
 interface IChatsContainer {}
 
 const ChatsContainer: FC<IChatsContainer> = () => {
   const { chats, loading, width } = useSelector(selectChats);
-  const { currentChatId, mainChat } = useSelector(selectMainChat);
+  const { currentChatId, currentChat } = useSelector(selectCurrentChat);
+
   const dispatch = useAppDispatch();
 
   const handleSelectChat = (chat: Chat) => {
-    dispatch(setChat(chat));
-    dispatch(setChatId(chat.id));
+    dispatch(CurrentChatActions.setChat(chat));
+    dispatch(CurrentChatActions.setChatId(chat.id));
   };
 
   const sortedChats = useMemo(() => {
@@ -66,7 +66,7 @@ const ChatsContainer: FC<IChatsContainer> = () => {
     ))
   );
 
-  const chatClass = () => (mainChat ? " main_chat_active" : "");
+  const chatClass = () => (currentChat ? " main_chat_active" : "");
 
   return (
     <div
