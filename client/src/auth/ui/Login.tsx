@@ -4,12 +4,12 @@ import { useNavigate } from "react-router";
 import { setUser } from "../../redux/user-reducer";
 import { useAppDispatch } from "../../redux/store";
 import { usersApiService } from "../../users/users-api.service";
-import { authService } from "../../auth/services/auth.service";
-import { LoginDto } from "../../auth/dto/login-dto";
+import { authService } from "../services/auth.service";
+import { LoginDto } from "../dto/login-dto";
 
 interface LoginProps {}
 
-const Login: FC<LoginProps> = () => {
+const LoginPage: FC<LoginProps> = () => {
   const navigate = useNavigate();
 
   const [state, setState] = useState<LoginDto>({ username: "", password: "" });
@@ -61,4 +61,4 @@ const Login: FC<LoginProps> = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
