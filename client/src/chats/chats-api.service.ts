@@ -1,7 +1,7 @@
 import environment from "../environment/environment";
 import { HttpClient, httpClient } from "../shared/http/http-client";
 import { Chat } from "./models/chat.model";
-import { Message } from "../messages/message.model";
+import { Message } from "../messages/models/message.model";
 
 export class ChatsApiService {
   constructor(private readonly http: HttpClient) {}

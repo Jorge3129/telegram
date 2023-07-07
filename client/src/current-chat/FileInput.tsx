@@ -2,8 +2,8 @@ import { ChangeEvent, FC } from "react";
 import { Socket } from "socket.io-client";
 import { CurrentChatActions } from "./reducers/main.chat.reducer";
 import { useDispatch } from "react-redux";
-import { convertFileToMedia } from "../utils/general.utils";
 import { uploadsApiService } from "../uploads/uploads-api.service";
+import { convertFileToMedia } from "../utils/convert-file-to-media";
 
 interface IFileInput {
   socket: Socket;

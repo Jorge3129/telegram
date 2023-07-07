@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/rootReducer";
 import { Chat } from "../../chats/models/chat.model";
-import { Media } from "../../messages/message.model";
+import { Media } from "../../messages/models/message.model";
 
 interface CurrentChatState {
   currentChatId: number | null;
@@ -50,7 +50,7 @@ const currentChatSlice = createSlice({
     },
 
     clearCurrentChat: (state: CurrentChatState, { payload }: PayloadAction) => {
-      state = initialState;
+      return initialState;
     },
   },
 });

@@ -4,12 +4,12 @@ import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { useAppDispatch } from "../redux/store";
 import { uploadsApiService } from "../uploads/uploads-api.service";
-import { getMediaByType } from "../utils/general.utils";
 import { useSend } from "./hooks/useSend";
 import {
   selectCurrentChat,
   CurrentChatActions,
 } from "./reducers/main.chat.reducer";
+import MediaContainer from "../media/MediaContainer";
 
 interface IMediaModal {
   socket: Socket;
@@ -44,8 +44,9 @@ const MediaModal: FC<IMediaModal> = ({ socket }) => {
     <div className="media_modal_container">
       <form className="media_modal">
         <li className="media_modal_file_container">
-          {getMediaByType(media, "media_modal_img")}
+          <MediaContainer media={media} className="media_modal_img" />
         </li>
+
         <div className="media_modal_buttons">
           <button
             className="media_modal_add_button media_modal_button"

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import MessageStatus from "./MessageStatus";
-import { Message } from "../../../messages/message.model";
 import { User } from "../../../users/models/user.model";
+import { Message } from "../../../messages/models/message.model";
 
 interface Props {
   message: Message | undefined;

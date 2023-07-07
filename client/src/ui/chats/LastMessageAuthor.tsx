@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Message } from "../../messages/message.model";
+import { Message } from "../../messages/models/message.model";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
 

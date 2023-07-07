@@ -1,4 +1,4 @@
-import { Message } from "../../messages/message.model";
+import { Message } from "../../messages/models/message.model";
 
 export interface Chat {
   id: number;

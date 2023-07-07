@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentChat } from "../current-chat/reducers/main.chat.reducer";
 import { selectUser } from "../redux/user-reducer";
 import environment from "../environment/environment";
-import { Message } from "../messages/message.model";
+import { Message } from "../messages/models/message.model";
 
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);

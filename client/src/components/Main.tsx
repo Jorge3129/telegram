@@ -15,7 +15,7 @@ interface MainProps {
 }
 
 const Main: FC<MainProps> = ({ user }) => {
-  const { currentChatId } = useSelector(selectCurrentChat);
+  const { currentChat } = useSelector(selectCurrentChat);
   const [socket] = useSocket();
   const dispatch = useAppDispatch();
 
@@ -26,9 +26,9 @@ const Main: FC<MainProps> = ({ user }) => {
   return (
     <div className="main">
       <ChatsContainer />
-      {currentChatId ? (
+      {currentChat ? (
         <div className="main_chat_media_container">
-          <CurrentChatComponent socket={socket} />
+          <CurrentChatComponent socket={socket} currentChat={currentChat} />
           <MediaSidebar />
         </div>
       ) : (

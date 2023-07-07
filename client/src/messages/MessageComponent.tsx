@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Message, Media } from "./message.model";
+import { Message, Media } from "./models/message.model";
 import { selectUser } from "../redux/user-reducer";
 import MessageTimestamp from "../ui/message/MessageTimestamp";
 import MessageStatusWrapper from "../ui/message/message-status/MessageStatusWrapper";
-import { getMediaByType } from "../utils/general.utils";
 import { useLoadFile } from "../current-chat/hooks/useLoadFile";
+import MediaContainer from "../media/MediaContainer";
 
 interface IPropsMessage {
   message: Message;
@@ -37,7 +37,7 @@ const MessageComponent: FC<IPropsMessage> = ({
       <div className="message_author">{showAuthor && message.author}</div>
       {file && (
         <div className="message_media">
-          {getMediaByType(file, "message_img")}
+          <MediaContainer media={file} className="message_img" />
         </div>
       )}
 

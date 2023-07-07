@@ -1,4 +1,3 @@
-import { MouseEvent } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../redux/store";
 import {
@@ -10,7 +9,7 @@ const MainTopBar = () => {
   const { currentChat } = useSelector(selectCurrentChat);
   const dispatch = useAppDispatch();
 
-  const backToChats = (e: MouseEvent) => {
+  const backToChats = () => {
     dispatch(CurrentChatActions.clearCurrentChat());
   };
 

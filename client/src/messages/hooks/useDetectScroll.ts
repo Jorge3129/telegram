@@ -3,11 +3,12 @@ import { selectChats, ChatActions } from "../../chats/chats.reducer";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../redux/store";
 import { Socket } from "socket.io-client";
-import { alreadySeen, getMsgById } from "../../utils/general.utils";
 import { selectUser } from "../../redux/user-reducer";
-import { Message } from "../../messages/message.model";
+import { Message } from "../models/message.model";
 import { selectCurrentChat } from "../../current-chat/reducers/main.chat.reducer";
 import { getVisibleElementHeight } from "../utils/get-visible-element-height";
+import { findMessageById } from "../../utils/find-message-by-id";
+import { isMessageSeen } from "../../utils/is-message-seen";
 
 export const useDetectScroll = (
   socket: Socket | null,
@@ -38,19 +39,19 @@ export const useDetectScroll = (
   const getLastVisibleMessage = (): string | undefined =>
     [...getVisibleMessageIds()].pop();
 
-  const emitReadEvent = (searchedId: string) => {
-    const msgRead = messages.find((msg) => msg.id === searchedId);
-
-    if (!msgRead) {
+  const emitReadEvent = (message: Message): void => {
+    if (
+      !currentChat ||
+      isMessageSeen(message.timestamp, currentChat.unread, messages)
+    ) {
       return;
     }
 
-    //console.log('read event' + msgRead.messageId)
-    const ind = messages.indexOf(msgRead);
-    //console.log('setUnread scroll')
+    const index = messages.indexOf(message);
+
     dispatch(
       ChatActions.setUnread({
-        unread: messages.slice(ind + 1).length,
+        unread: messages.slice(index + 1).length,
         chatId: currentChatId || -1,
       })
     );
@@ -60,34 +61,30 @@ export const useDetectScroll = (
     }
 
     socket.emit("read", {
-      message: msgRead,
+      message: message,
       userId: user.id,
     });
   };
 
   const onMessagesFirstRendered = () => {
-    //console.log('onFirstRendered')
     const last = getLastVisibleMessage();
 
     if (!currentChat || !last) {
       return;
     }
 
-    const msg = getMsgById(last, currentChatId || 0, messages);
+    const message = findMessageById(last, currentChat.id, messages);
 
-    if (!msg) return;
-    if (!alreadySeen(msg.timestamp, currentChat?.unread, messages)) {
-      //console.log('read this')
-      emitReadEvent(last);
+    if (message) {
+      emitReadEvent(message);
     }
   };
 
   const handleScroll = (e: UIEvent<HTMLUListElement>) => {
-    //console.log('handleScroll')
-    const unr = chats.find((ch) => ch.id === currentChatId)?.unread;
-    if (!unr) return;
+    const unreadCount = chats.find((ch) => ch.id === currentChatId)?.unread;
 
     if (
+      !unreadCount ||
       !scrollRef.current?.scrollTop ||
       topRef.current > scrollRef.current?.scrollTop
     ) {
@@ -97,11 +94,16 @@ export const useDetectScroll = (
 
     topRef.current = scrollRef.current?.scrollTop || 0;
 
-    const last = getLastVisibleMessage();
+    const lastMessageId = getLastVisibleMessage();
 
-    if (last && last !== [...readRef.current].pop()) {
-      readRef.current.push(last);
-      emitReadEvent(last);
+    if (lastMessageId && lastMessageId !== [...readRef.current].pop()) {
+      readRef.current.push(lastMessageId);
+
+      const message = messages.find((msg) => msg.id === lastMessageId);
+
+      if (message) {
+        emitReadEvent(message);
+      }
     }
   };
 

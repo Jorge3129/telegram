@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectMessages } from "../messages.reducer";
-import { isSelf } from "../../utils/general.utils";
 import { selectUser } from "../../redux/user-reducer";
+import { isOwnMessage } from "../../utils/is-own-message";
 
 export const useAutoScroll = (unread: number) => {
   const { messages, loading } = useSelector(selectMessages);
@@ -32,9 +32,9 @@ export const useAutoScroll = (unread: number) => {
 
   // jump to bottom when new message is added
   useEffect(() => {
-    //console.log(messageLength)
     const list = scrollRef.current;
-    if (list && messages && isSelf(messages.slice(-1)[0], user)) {
+
+    if (list && messages && isOwnMessage(messages.slice(-1)[0], user)) {
       list.scrollTop = list.scrollHeight;
     }
   }, [messageLength]);
