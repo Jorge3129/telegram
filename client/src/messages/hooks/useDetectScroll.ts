@@ -62,7 +62,6 @@ export const useDetectScroll = (
 
     socket.emit("read", {
       message: message,
-      userId: user.id,
     });
   };
 

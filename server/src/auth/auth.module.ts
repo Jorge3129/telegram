@@ -6,6 +6,7 @@ import { UserEntity } from 'src/users/entity/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ACCESS_TOKEN_EXPIRATION_TIME, SECRET_KEY } from 'src/config/constants';
 import { UserModule } from 'src/users/user.module';
+import { AuthTokenService } from './auth-token.service';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserModule } from 'src/users/user.module';
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, AuthTokenService],
+  exports: [AuthTokenService],
 })
 export class AuthModule {}

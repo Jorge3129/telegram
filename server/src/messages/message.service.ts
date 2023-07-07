@@ -3,13 +3,21 @@ import { MessagesRepository } from './message.repository';
 import { Message } from './models/message.type';
 import { messageToModel } from './entity/utils';
 import { User } from '../users/user.type';
+import { CreateMessageService } from './create-message.service';
+import { CreateMessageDto } from './dto/create-message.dto';
 
 @Injectable()
 export class MessageService {
-  constructor(private readonly messageRepo: MessagesRepository) {}
+  constructor(
+    private messageRepo: MessagesRepository,
+    private createMessageService: CreateMessageService,
+  ) {}
 
-  public async create(message: Message, user: User): Promise<Message> {
-    const savedMessage = await this.messageRepo.saveFromDto(message);
+  public async create(message: CreateMessageDto, user: User): Promise<Message> {
+    const savedMessage = await this.createMessageService.saveFromDto(
+      message,
+      user,
+    );
 
     await this.messageRepo.updateSeen(user.id, message);
 

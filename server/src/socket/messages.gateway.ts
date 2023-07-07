@@ -14,26 +14,27 @@ import { UserService } from 'src/users/user.service';
 import { Socket } from 'socket.io';
 import { CatchError } from './decorators/catch-error.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
+import { AuthTokenService } from 'src/auth/auth-token.service';
+import { CreateMessageDto } from 'src/messages/dto/create-message.dto';
 
 @WebSocketGateway(8000, { cors: true })
 export class MessagesGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
-    private readonly messageService: MessageService,
-    private readonly userRepo: UserRepository,
-    private readonly userService: UserService,
-    private readonly chatUserRepo: ChatUserRepository,
+    private messageService: MessageService,
+    private userRepo: UserRepository,
+    private userService: UserService,
+    private chatUserRepo: ChatUserRepository,
+    private authTokenService: AuthTokenService,
   ) {}
 
   @CatchError()
   public async handleConnection(socket: Socket) {
-    const userId = parseInt((socket.handshake.query.userId as string) || '');
-
-    const user = await this.userRepo.findOneBy({ id: userId });
+    const user = await this.getUserFromSocket(socket);
 
     if (!user) {
-      throw new Error(`No user with id ${userId}`);
+      throw new Error(`No user`);
     }
 
     console.log('CONNECTED ' + user.username);
@@ -60,32 +61,38 @@ export class MessagesGateway
 
   @SubscribeMessage('message')
   public async onMessage(
-    @MessageBody() data: { message: Message },
+    @MessageBody() data: { message: CreateMessageDto },
     @ConnectedSocket() socket: Socket,
   ): Promise<Message | null> {
-    const { message } = data;
-
-    const user = await this.getUser(socket.id);
+    const user = await this.getUserFromSocket(socket);
 
     if (!user) {
       return null;
     }
 
-    const messageResponse = await this.messageService.create(message, user);
+    const { message: messageDto } = data;
 
-    await this.sendMessageToRecipients(message, socket);
+    const messageResponse = await this.messageService.create(messageDto, user);
+
+    await this.sendMessageToRecipients(messageResponse, socket);
 
     return messageResponse;
   }
 
   @SubscribeMessage('read')
   public async onRead(
-    @MessageBody() data: { message: Message; userId: string },
+    @MessageBody() data: { message: Message },
     @ConnectedSocket() socket: Socket,
   ) {
-    const { message, userId } = data;
+    const user = await this.getUserFromSocket(socket);
 
-    await this.messageService.updateSeenStatus(parseInt(userId), message);
+    if (!user) {
+      return;
+    }
+
+    const { message } = data;
+
+    await this.messageService.updateSeenStatus(user.id, message);
 
     const authorSocketId = await this.userService.getUserSocketId(
       message.authorId,
@@ -97,8 +104,17 @@ export class MessagesGateway
 
     this.emitEventTo(socket, authorSocketId, 'seen', {
       message,
-      userId,
+      userId: user.id,
     });
+  }
+
+  public emitEventTo(
+    currentSocket: Socket,
+    targetSocketId: string,
+    eventName: string,
+    ...args: any[]
+  ) {
+    currentSocket.to(targetSocketId).emit(eventName, ...args);
   }
 
   private async notifyUserContactsOnConnectionChange(
@@ -127,12 +143,15 @@ export class MessagesGateway
     });
   }
 
-  public emitEventTo(
-    currentSocket: Socket,
-    targetSocketId: string,
-    eventName: string,
-    ...args: any[]
-  ) {
-    currentSocket.to(targetSocketId).emit(eventName, ...args);
+  private async getUserFromSocket(socket: Socket): Promise<UserEntity | null> {
+    try {
+      const authHeader = socket.handshake.headers.authorization ?? '';
+
+      return await this.authTokenService.getUserFromAuthHeader(authHeader);
+    } catch (e) {
+      socket.disconnect();
+
+      return null;
+    }
   }
 }

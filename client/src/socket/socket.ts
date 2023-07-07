@@ -14,6 +14,7 @@ import { selectCurrentChat } from "../current-chat/reducers/main.chat.reducer";
 import { selectUser } from "../redux/user-reducer";
 import environment from "../environment/environment";
 import { Message } from "../messages/models/message.model";
+import { tokenService } from "../auth/services/token.service";
 
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -50,7 +51,9 @@ export const useSocket = () => {
     }
 
     const newSocket = io(`${environment.wsUrl}`, {
-      query: { userId: user.id },
+      extraHeaders: {
+        authorization: tokenService.getBearer(),
+      },
     });
 
     setSocket(newSocket);
