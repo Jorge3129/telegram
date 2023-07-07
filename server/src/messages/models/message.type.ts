@@ -11,5 +11,3 @@ export interface Message {
   seenBy?: number[];
   media?: Media;
 }
-
-export type CreateMessageDto = Omit<Message, 'id'>;

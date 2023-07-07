@@ -1,24 +1,22 @@
+import { Injectable } from '@nestjs/common';
 import { MessagesRepository } from './message.repository';
 import { Message } from './models/message.type';
 import { messageToModel } from './entity/utils';
-import { ChatUserRepository } from '../chat-users/chat-user.repository';
 import { User } from '../users/user.type';
-import { Injectable } from '@nestjs/common';
+import { CreateMessageService } from './create-message.service';
+import { CreateMessageDto } from './dto/create-message.dto';
 
 @Injectable()
 export class MessageService {
   constructor(
-    private readonly messageRepo: MessagesRepository,
-    private readonly chatUserRepo: ChatUserRepository,
+    private messageRepo: MessagesRepository,
+    private createMessageService: CreateMessageService,
   ) {}
 
-  public async create(message: Message, user: User): Promise<Message> {
-    const savedMessage = await this.messageRepo.saveFromDto(message);
-
-    await this.chatUserRepo.updateLastRead(
-      user.id,
-      message.chatId,
-      message.timestamp,
+  public async create(message: CreateMessageDto, user: User): Promise<Message> {
+    const savedMessage = await this.createMessageService.saveFromDto(
+      message,
+      user,
     );
 
     await this.messageRepo.updateSeen(user.id, message);
@@ -28,6 +26,10 @@ export class MessageService {
 
   public countUnreadsForChat(chatId: number, userId: number): Promise<number> {
     return this.messageRepo.countUnreadMessages(chatId, userId);
+  }
+
+  public async updateSeenStatus(readByUserId: number, message: Message) {
+    await this.messageRepo.updateSeen(readByUserId, message);
   }
 
   public async getLatestChatMessage(chatId: number): Promise<Message | null> {

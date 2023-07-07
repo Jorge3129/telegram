@@ -16,4 +16,9 @@ export interface Message {
   media?: Media;
 }
 
-export type CreateMessageDto = Omit<Message, "id">;
+export type CreateMessageDto = {
+  text: string;
+  timestamp: string;
+  chatId: number;
+  media?: Media;
+};

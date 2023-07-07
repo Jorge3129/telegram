@@ -5,6 +5,10 @@ export class TokenService {
     return localStorage.getItem(this.ACCESS_TOKEN_KEY);
   }
 
+  public getBearer(): string {
+    return `Bearer ${this.getAccessToken()}`;
+  }
+
   public setAccessToken(value: string): void {
     localStorage.setItem(this.ACCESS_TOKEN_KEY, value);
   }

@@ -33,8 +33,6 @@ export const useSend = (socket: Socket) => {
     const message: CreateMessageDto = {
       text,
       timestamp: new Date().toISOString(),
-      authorId: user.id,
-      author: user.username,
       chatId: currentChatId || 0,
       media,
     };

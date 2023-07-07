@@ -7,6 +7,7 @@ import { MessagesRepository } from './message.repository';
 import { MessageService } from './message.service';
 import { ChatUsersModule } from 'src/chat-users/chat-users.module';
 import { UserModule } from 'src/users/user.module';
+import { CreateMessageService } from './create-message.service';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { UserModule } from 'src/users/user.module';
     ChatUsersModule,
     UserModule,
   ],
-  providers: [MessagesRepository, MessageService],
+  providers: [MessagesRepository, MessageService, CreateMessageService],
   exports: [MessageService, MessagesRepository],
 })
 export class MessagesModule {}

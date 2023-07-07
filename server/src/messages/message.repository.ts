@@ -1,16 +1,9 @@
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { CreateMessageDto, Message } from './models/message.type';
-import { MessageEntity, PersonalMessageEntity } from './entity/message.entity';
+import { MessageEntity } from './entity/message.entity';
 import { MessageReadEntity } from './entity/message-read.entity';
-import {
-  MediaMessageContentEntity,
-  MessageContentEntity,
-  TextMessageContentEntity,
-} from './entity/message-content.entity';
-import { MediaEntity } from './entity/media.entity';
+
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from 'src/users/user.repository';
 
 @Injectable()
 export class MessagesRepository {
@@ -20,58 +13,10 @@ export class MessagesRepository {
 
     @InjectRepository(MessageReadEntity)
     private messageReadRepo: Repository<MessageReadEntity>,
-
-    @InjectRepository(MessageContentEntity)
-    private messageContentRepo: Repository<MessageContentEntity>,
-
-    private userRepo: UserRepository,
   ) {}
 
   public save(dto: Partial<MessageEntity>): Promise<MessageEntity> {
     return this.messageRepo.save({ ...dto });
-  }
-
-  public async saveFromDto(dto: CreateMessageDto): Promise<MessageEntity> {
-    const message = this.createMessage(dto);
-
-    const content = await this.messageContentRepo.save(message.content);
-
-    const savedMessage = await this.messageRepo.save({ ...message, content });
-
-    savedMessage.author = await this.userRepo.findOneByOrFail({
-      id: message.authorId,
-    });
-
-    return savedMessage;
-  }
-
-  private createMessage(dto: CreateMessageDto): MessageEntity {
-    const message = new PersonalMessageEntity();
-    message.authorId = dto.authorId;
-    message.chatId = dto.chatId;
-    message.content = this.createMessageContent(dto);
-    message.timestamp = dto.timestamp;
-
-    return message;
-  }
-
-  private createMessageContent(dto: CreateMessageDto): MessageContentEntity {
-    if (!dto.media?.filename) {
-      const textContent = new TextMessageContentEntity();
-      textContent.textContent = dto.text;
-
-      return textContent;
-    }
-
-    const media = new MediaEntity();
-    media.fileName = dto.media.filename;
-    media.mimeType = dto.media.type;
-
-    const mediaContent = new MediaMessageContentEntity();
-    mediaContent.media = [media];
-    mediaContent.textContent = dto.text;
-
-    return mediaContent;
   }
 
   public saveMany(dtos: Partial<MessageEntity>[]): Promise<MessageEntity[]> {
@@ -154,7 +99,10 @@ export class MessagesRepository {
 
   public async updateSeen(
     readByUserId: number,
-    message: Message,
+    message: {
+      chatId: number;
+      timestamp: string;
+    },
   ): Promise<void> {
     const qb = this.messageRepo
       .createQueryBuilder('message')
