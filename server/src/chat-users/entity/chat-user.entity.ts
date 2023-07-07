@@ -16,9 +16,6 @@ export class ChatUserEntity {
   @ManyToOne(() => ChatEntity, (chat) => chat.members)
   chat: ChatEntity;
 
-  @Column({ type: 'timestamp' })
-  lastRead: string;
-
   @Column()
   muted: boolean;
 }

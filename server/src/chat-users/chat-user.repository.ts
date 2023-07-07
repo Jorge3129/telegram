@@ -36,20 +36,6 @@ export class ChatUserRepository {
     return this.chatUserRepo.findBy(where);
   }
 
-  public async updateLastRead(
-    userId: number,
-    chatId: number,
-    timestamp: string,
-  ): Promise<void> {
-    await this.chatUserRepo.update(
-      {
-        userId,
-        chatId,
-      },
-      { lastRead: timestamp },
-    );
-  }
-
   public async getOtherChatMember(
     chatId: number,
     currentUserId: number,

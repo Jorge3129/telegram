@@ -1,25 +1,15 @@
+import { Injectable } from '@nestjs/common';
 import { MessagesRepository } from './message.repository';
 import { Message } from './models/message.type';
 import { messageToModel } from './entity/utils';
-import { ChatUserRepository } from '../chat-users/chat-user.repository';
 import { User } from '../users/user.type';
-import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MessageService {
-  constructor(
-    private readonly messageRepo: MessagesRepository,
-    private readonly chatUserRepo: ChatUserRepository,
-  ) {}
+  constructor(private readonly messageRepo: MessagesRepository) {}
 
   public async create(message: Message, user: User): Promise<Message> {
     const savedMessage = await this.messageRepo.saveFromDto(message);
-
-    await this.chatUserRepo.updateLastRead(
-      user.id,
-      message.chatId,
-      message.timestamp,
-    );
 
     await this.messageRepo.updateSeen(user.id, message);
 
@@ -30,7 +20,7 @@ export class MessageService {
     return this.messageRepo.countUnreadMessages(chatId, userId);
   }
 
-  public async updateSeen(readByUserId: number, message: Message) {
+  public async updateSeenStatus(readByUserId: number, message: Message) {
     await this.messageRepo.updateSeen(readByUserId, message);
   }
 

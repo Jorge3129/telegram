@@ -85,12 +85,7 @@ export class MessagesGateway
   ) {
     const { message, userId } = data;
 
-    await this.chatUserRepo.updateLastRead(
-      parseInt(userId),
-      message.chatId,
-      message.timestamp,
-    );
-    await this.messageService.updateSeen(parseInt(userId), message);
+    await this.messageService.updateSeenStatus(parseInt(userId), message);
 
     const authorSocketId = await this.userService.getUserSocketId(
       message.authorId,
