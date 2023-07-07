@@ -40,7 +40,7 @@ export const useSend = (socket: Socket) => {
 
     dispatch(CurrentChatActions.setText(""));
 
-    const response = await messageApiService.createMessage(message);
+    const response = await messageApiService.create(message);
 
     dispatchSendMessage(response);
   };

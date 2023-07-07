@@ -5,8 +5,12 @@ import { CreateMessageDto, Message } from "../messages/models/message.model";
 export class MessageApiService {
   constructor(private readonly http: HttpClient) {}
 
-  public async createMessage(dto: CreateMessageDto): Promise<Message> {
+  public async create(dto: CreateMessageDto): Promise<Message> {
     return await this.http.post<Message>(`${environment.apiUrl}/messages`, dto);
+  }
+
+  public async delete(id: string): Promise<void> {
+    await this.http.delete<void>(`${environment.apiUrl}/messages/${id}`);
   }
 
   public async updateMessageReads(message: Message): Promise<void> {

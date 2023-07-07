@@ -45,6 +45,13 @@ export const useSocket = () => {
     [currentChatId, dispatch]
   );
 
+  const onDeleted = useCallback(
+    (messageId: string) => {
+      dispatch(MessageActions.deleteMessage(messageId));
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     if (!user) {
       return;
@@ -73,13 +80,14 @@ export const useSocket = () => {
     });
     socket.on("message-to-client", onMessage);
     socket.on("seen", onSeen);
+    socket.on("message-deleted", onDeleted);
 
     return () => {
       socket.off("message-to-client");
       socket.off("seen");
       socket.off("online-change");
     };
-  }, [currentChatId, dispatch, onMessage, onSeen, socket]);
+  }, [currentChatId, dispatch, onMessage, onSeen, onDeleted, socket]);
 
   return [socket, setSocket] as [
     Socket | null,

@@ -68,14 +68,19 @@ export class MessagesGateway
     });
   }
 
-  public async sendMessageToRecipients(message: Message) {
+  public async sendMessageToRecipients<T>(
+    chatId: number,
+    userId: number,
+    eventName: string,
+    data: T,
+  ) {
     const members = await this.chatUserRepo.findChatRecipientSockets(
-      message.chatId,
-      message.authorId,
+      chatId,
+      userId,
     );
 
     members.forEach(({ socketId }) => {
-      this.emitEventTo(socketId, 'message-to-client', message);
+      this.emitEventTo(socketId, eventName, data);
     });
   }
 }

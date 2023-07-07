@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Put } from '@nestjs/common';
+import { Controller, Post, Body, Put, Delete, Param } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { RequestUser } from 'src/users/decorators/user.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
@@ -20,12 +20,32 @@ export class MessagesController {
   public async create(
     @Body() messageDto: CreateMessageDto,
     @RequestUser() user: UserEntity,
-  ): Promise<Message | null> {
+  ): Promise<Message> {
     const messageResponse = await this.messageService.create(messageDto, user);
 
-    await this.messagesGateway.sendMessageToRecipients(messageResponse);
+    await this.messagesGateway.sendMessageToRecipients(
+      messageDto.chatId,
+      user.id,
+      'message-to-client',
+      messageResponse,
+    );
 
     return messageResponse;
+  }
+
+  @Delete(':id')
+  public async delete(
+    @Param('id') messageId: string,
+    @RequestUser() user: UserEntity,
+  ): Promise<void> {
+    const deletedMessage = await this.messageService.delete(messageId, user);
+
+    await this.messagesGateway.sendMessageToRecipients(
+      deletedMessage.chatId,
+      user.id,
+      'message-deleted',
+      messageId,
+    );
   }
 
   @Put()

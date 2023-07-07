@@ -31,6 +31,12 @@ const messageSlice = createSlice({
       state.messages.push(payload);
     },
 
+    deleteMessage: (state, { payload: deletedId }: PayloadAction<string>) => {
+      state.messages = state.messages.filter(
+        (message) => message.id !== deletedId
+      );
+    },
+
     setSeenMessage: (
       state,
       { payload }: PayloadAction<{ message: Message; userId: number }>

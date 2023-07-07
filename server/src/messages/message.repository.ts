@@ -23,6 +23,12 @@ export class MessagesRepository {
     return this.messageRepo.save(dtos.map((dto) => ({ ...dto })));
   }
 
+  public async delete(messageId: string): Promise<void> {
+    await this.messageReadRepo.delete({ messageId });
+
+    await this.messageRepo.delete(messageId);
+  }
+
   public findOneBy(
     where: FindOptionsWhere<MessageEntity>,
   ): Promise<MessageEntity | null> {
