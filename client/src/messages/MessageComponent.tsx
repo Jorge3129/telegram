@@ -4,7 +4,7 @@ import { Message, Media } from "./models/message.model";
 import { selectUser } from "../redux/user-reducer";
 import MessageTimestamp from "../ui/message/MessageTimestamp";
 import MessageStatusWrapper from "../ui/message/message-status/MessageStatusWrapper";
-import { useLoadFile } from "../current-chat/hooks/useLoadFile";
+import { useLoadFile } from "../media/hooks/useLoadFile";
 import MediaContainer from "../media/MediaContainer";
 
 interface IPropsMessage {

@@ -1,15 +1,15 @@
 import { FC, MouseEvent } from "react";
-import "./styles/MediaModal.css";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { useAppDispatch } from "../redux/store";
 import { uploadsApiService } from "../uploads/uploads-api.service";
-import { useSend } from "./hooks/useSend";
+import { useSend } from "../current-chat/hooks/useSend";
 import {
   selectCurrentChat,
   CurrentChatActions,
-} from "./reducers/main.chat.reducer";
-import MediaContainer from "../media/MediaContainer";
+} from "../current-chat/reducers/main.chat.reducer";
+import MediaContainer from "./MediaContainer";
+import "./styles/MediaModal.css";
 
 interface IMediaModal {
   socket: Socket;

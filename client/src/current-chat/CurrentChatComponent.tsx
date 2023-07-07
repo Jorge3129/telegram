@@ -1,11 +1,11 @@
 import { FC } from "react";
-import "./styles/CurrentChat.css";
 import MainInputForm from "./MainInputForm";
 import { Socket } from "socket.io-client";
-import MediaModal from "./MediaModal";
+import MediaModal from "../media/MediaModal";
 import MainTopBar from "./MainTopBar";
 import { Chat } from "../chats/models/chat.model";
 import MessageListWrapper from "../messages/MessageListWrapper";
+import "./styles/CurrentChat.css";
 
 interface Props {
   socket: Socket | null;

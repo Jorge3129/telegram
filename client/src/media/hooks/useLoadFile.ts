@@ -7,15 +7,17 @@ export const useLoadFile = (
   setFile: Dispatch<SetStateAction<Media | null>>
 ) => {
   useEffect(() => {
-    if (!media?.filename) return;
-    (async () => {
-      const respFile = await uploadsApiService.getFile(media.filename);
+    if (!media?.filename) {
+      return;
+    }
+
+    uploadsApiService.getFile(media.filename).then((respFile) => {
       console.log(respFile);
       setFile({
         type: respFile.type,
         filename: media.filename,
         src: URL.createObjectURL(respFile),
       });
-    })();
+    });
   }, []);
 };
