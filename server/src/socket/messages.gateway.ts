@@ -9,13 +9,13 @@ import {
 import { ChatUserRepository } from 'src/chat-users/chat-user.repository';
 import { MessageService } from 'src/messages/message.service';
 import { Message } from 'src/messages/models/message.type';
-import { UserRepository } from 'src/users/user.repository';
 import { UserService } from 'src/users/user.service';
 import { Socket } from 'socket.io';
 import { CatchError } from './decorators/catch-error.decorator';
-import { UserEntity } from 'src/users/entity/user.entity';
-import { AuthTokenService } from 'src/auth/auth-token.service';
 import { CreateMessageDto } from 'src/messages/dto/create-message.dto';
+import { SocketAuthGuard, SocketWithUser } from './guards/socket-auth.guard';
+import { UseGuards } from '@nestjs/common';
+import { SocketAuthService } from './services/socket-auth.service';
 
 @WebSocketGateway(8000, { cors: true })
 export class MessagesGateway
@@ -23,52 +23,38 @@ export class MessagesGateway
 {
   constructor(
     private messageService: MessageService,
-    private userRepo: UserRepository,
     private userService: UserService,
     private chatUserRepo: ChatUserRepository,
-    private authTokenService: AuthTokenService,
+    private socketAuthService: SocketAuthService,
   ) {}
 
   @CatchError()
   public async handleConnection(socket: Socket) {
-    const user = await this.getUserFromSocket(socket);
-
-    if (!user) {
-      throw new Error(`No user`);
-    }
-
-    console.log('CONNECTED ' + user.username);
+    const user = await this.socketAuthService.getUserFromSocket(socket);
 
     await this.userService.setUserSocketId(user.id, socket.id);
     await this.notifyUserContactsOnConnectionChange(user.id, true, socket);
+
+    console.log('CONNECTED ' + user.username);
   }
 
   @CatchError()
-  public async handleDisconnect(socket: Socket) {
-    const user = await this.getUser(socket.id);
-
-    if (!user) {
-      return;
-    }
+  @UseGuards(SocketAuthGuard)
+  public async handleDisconnect(socket: SocketWithUser) {
+    const user = await this.socketAuthService.getUserFromSocket(socket);
 
     await this.notifyUserContactsOnConnectionChange(user.id, false, socket);
     await this.userService.setUserSocketId(user.id, null);
-  }
-
-  private getUser(socketId: string): Promise<UserEntity | null> {
-    return this.userRepo.findOneBy({ socketId });
+    console.log(`disconnected user ${user.username} successfully`);
   }
 
   @SubscribeMessage('message')
+  @UseGuards(SocketAuthGuard)
   public async onMessage(
     @MessageBody() data: { message: CreateMessageDto },
-    @ConnectedSocket() socket: Socket,
+    @ConnectedSocket() socket: SocketWithUser,
   ): Promise<Message | null> {
-    const user = await this.getUserFromSocket(socket);
-
-    if (!user) {
-      return null;
-    }
+    const user = socket.user;
 
     const { message: messageDto } = data;
 
@@ -80,15 +66,12 @@ export class MessagesGateway
   }
 
   @SubscribeMessage('read')
+  @UseGuards(SocketAuthGuard)
   public async onRead(
     @MessageBody() data: { message: Message },
-    @ConnectedSocket() socket: Socket,
+    @ConnectedSocket() socket: SocketWithUser,
   ) {
-    const user = await this.getUserFromSocket(socket);
-
-    if (!user) {
-      return;
-    }
+    const user = socket.user;
 
     const { message } = data;
 
@@ -138,20 +121,8 @@ export class MessagesGateway
       message.authorId,
     );
 
-    members.forEach(async ({ socketId }) => {
+    members.forEach(({ socketId }) => {
       this.emitEventTo(socket, socketId, 'message-to-client', message);
     });
-  }
-
-  private async getUserFromSocket(socket: Socket): Promise<UserEntity | null> {
-    try {
-      const authHeader = socket.handshake.headers.authorization ?? '';
-
-      return await this.authTokenService.getUserFromAuthHeader(authHeader);
-    } catch (e) {
-      socket.disconnect();
-
-      return null;
-    }
   }
 }
