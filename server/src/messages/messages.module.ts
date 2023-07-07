@@ -8,6 +8,8 @@ import { MessageService } from './message.service';
 import { ChatUsersModule } from 'src/chat-users/chat-users.module';
 import { UserModule } from 'src/users/user.module';
 import { CreateMessageService } from './create-message.service';
+import { MessagesController } from './messages.controller';
+import { SocketModule } from 'src/socket/socket.module';
 
 @Module({
   imports: [
@@ -18,8 +20,10 @@ import { CreateMessageService } from './create-message.service';
     ]),
     ChatUsersModule,
     UserModule,
+    SocketModule,
   ],
   providers: [MessagesRepository, MessageService, CreateMessageService],
   exports: [MessageService, MessagesRepository],
+  controllers: [MessagesController],
 })
 export class MessagesModule {}

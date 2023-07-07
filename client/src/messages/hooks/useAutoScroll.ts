@@ -13,7 +13,9 @@ export const useAutoScroll = (unread: number) => {
   const { user } = useSelector(selectUser);
 
   useEffect(() => {
-    if (messages.length === messageLength) return;
+    if (messages.length === messageLength) {
+      return;
+    }
     setMessageLength(messages.length);
   }, [messages]);
 
@@ -31,13 +33,13 @@ export const useAutoScroll = (unread: number) => {
   }, [loading]);
 
   // jump to bottom when new message is added
-  useEffect(() => {
-    const list = scrollRef.current;
+  // useEffect(() => {
+  //   const list = scrollRef.current;
 
-    if (list && messages && isOwnMessage(messages.slice(-1)[0], user)) {
-      list.scrollTop = list.scrollHeight;
-    }
-  }, [messageLength]);
+  //   if (list && messages && isOwnMessage(messages.slice(-1)[0], user)) {
+  //     list.scrollTop = list.scrollHeight;
+  //   }
+  // }, [messageLength]);
 
   return scrollRef;
 };
