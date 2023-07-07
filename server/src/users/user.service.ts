@@ -10,4 +10,16 @@ export class UserService {
 
     return userReceiver?.socketId;
   }
+
+  public async setUserSocketId(
+    userId: number,
+    socketId: string | null,
+  ): Promise<void> {
+    await this.userRepo.update(
+      { id: userId },
+      {
+        socketId: <string | undefined>socketId,
+      },
+    );
+  }
 }

@@ -35,14 +35,7 @@ export const useSocket = () => {
   );
 
   const onSeen = useCallback(
-    ({
-      message,
-      userId,
-    }: {
-      message: Message;
-      userId: number;
-      username: string;
-    }) => {
+    ({ message, userId }: { message: Message; userId: number }) => {
       if (currentChatId === message.chatId) {
         dispatch(MessageActions.setSeenMessage({ message, userId }));
       }

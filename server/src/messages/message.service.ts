@@ -30,6 +30,10 @@ export class MessageService {
     return this.messageRepo.countUnreadMessages(chatId, userId);
   }
 
+  public async updateSeen(readByUserId: number, message: Message) {
+    await this.messageRepo.updateSeen(readByUserId, message);
+  }
+
   public async getLatestChatMessage(chatId: number): Promise<Message | null> {
     const message = await this.messageRepo.getLatestMessage(chatId);
 
