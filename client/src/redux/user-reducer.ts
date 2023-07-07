@@ -13,7 +13,7 @@ const initialState: UserState = {
 };
 
 const userSlice = createSlice({
-  name: "mainChat",
+  name: "users",
   initialState,
   reducers: {
     setUser: (state, { payload }: PayloadAction<User>) => {

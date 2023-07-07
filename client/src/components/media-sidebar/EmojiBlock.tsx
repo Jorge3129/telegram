@@ -1,9 +1,9 @@
 import React, { FC, MouseEvent } from "react";
 import { useAppDispatch } from "../../redux/store";
 import {
-  addText,
-  selectMainChat,
-} from "../main-chat/reducers/main.chat.reducer";
+  CurrentChatActions,
+  selectCurrentChat,
+} from "../../current-chat/reducers/main.chat.reducer";
 import { useSelector } from "react-redux";
 
 export interface IEmojiBlock {
@@ -17,11 +17,13 @@ interface IEmojiBlockProps {
 
 const EmojiBlock: FC<IEmojiBlockProps> = ({ emojiBlock }) => {
   const { title, data } = emojiBlock;
-  const { currentChatId } = useSelector(selectMainChat);
+  const { currentChatId } = useSelector(selectCurrentChat);
   const dispatch = useAppDispatch();
 
   const handleClick = (e: MouseEvent<HTMLElement>) => {
-    if (currentChatId) dispatch(addText(e.currentTarget.innerText));
+    if (currentChatId) {
+      dispatch(CurrentChatActions.addText(e.currentTarget.innerText));
+    }
   };
 
   return (

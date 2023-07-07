@@ -8,7 +8,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Login from "./components/auth/Login";
+import LoginPage from "./auth/ui/Login";
 import ErrorBoundary from "./components/reuse/ErrorBoundary";
 import { useSelector } from "react-redux";
 import { selectUser, setUser, setUserLoading } from "./redux/user-reducer";
@@ -48,7 +48,7 @@ const App: FC = () => {
                 !!user ? <Main user={user} /> : <Navigate to={"/login"} />
               }
             />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<LoginPage />} />
           </Routes>
         </Router>
       </ErrorBoundary>

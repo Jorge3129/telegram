@@ -6,57 +6,49 @@ import {
   useState,
 } from "react";
 import { io, Socket } from "socket.io-client";
-import {
-  addMessage,
-  setSeenMessage,
-} from "../components/main-chat/reducers/messages.reducer";
+import { MessageActions } from "../messages/messages.reducer";
 import { useAppDispatch } from "../redux/store";
-import {
-  incrementUnread,
-  setLastMessage,
-  setOnline,
-  setSeenLastMessage,
-} from "../components/chat-sidebar/chats.reducer";
+import { ChatActions } from "../chats/chats.reducer";
 import { useSelector } from "react-redux";
-import { selectMainChat } from "../components/main-chat/reducers/main.chat.reducer";
+import { selectCurrentChat } from "../current-chat/reducers/main.chat.reducer";
 import { selectUser } from "../redux/user-reducer";
 import environment from "../environment/environment";
-import { Message } from "../messages/message.model";
+import { Message } from "../messages/models/message.model";
 
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const dispatch = useAppDispatch();
-  const { currentChatId: chatId } = useSelector(selectMainChat);
+  const { currentChatId } = useSelector(selectCurrentChat);
 
   const { user } = useSelector(selectUser);
 
   const onMessage = useCallback(
     (message: Message) => {
-      if (chatId === message.chatId) {
-        dispatch(addMessage(message));
+      if (currentChatId === message.chatId) {
+        dispatch(MessageActions.addMessage(message));
       }
 
-      dispatch(setLastMessage({ message, chatId: message.chatId }));
-      dispatch(incrementUnread({ chatId: message.chatId }));
+      dispatch(ChatActions.setLastMessage({ message, chatId: message.chatId }));
+      dispatch(ChatActions.incrementUnread({ chatId: message.chatId }));
     },
-    [chatId, dispatch]
+    [currentChatId, dispatch]
   );
 
   const onSeen = useCallback(
     ({
       message,
-      username,
+      userId,
     }: {
       message: Message;
       userId: number;
       username: string;
     }) => {
-      if (chatId === message.chatId) {
-        dispatch(setSeenMessage({ message, username }));
+      if (currentChatId === message.chatId) {
+        dispatch(MessageActions.setSeenMessage({ message, userId }));
       }
-      dispatch(setSeenLastMessage({ message }));
+      dispatch(ChatActions.setSeenLastMessage({ message }));
     },
-    [chatId, dispatch]
+    [currentChatId, dispatch]
   );
 
   useEffect(() => {
@@ -81,7 +73,7 @@ export const useSocket = () => {
     }
 
     socket.on("online-change", ({ online, chatId }) => {
-      dispatch(setOnline({ online, chatId }));
+      dispatch(ChatActions.setOnline({ online, chatId }));
     });
     socket.on("message-to-client", onMessage);
     socket.on("seen", onSeen);
@@ -91,7 +83,7 @@ export const useSocket = () => {
       socket.off("seen");
       socket.off("online-change");
     };
-  }, [chatId, dispatch, onMessage, onSeen, socket]);
+  }, [currentChatId, dispatch, onMessage, onSeen, socket]);
 
   return [socket, setSocket] as [
     Socket | null,

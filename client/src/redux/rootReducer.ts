@@ -1,16 +1,14 @@
 import { combineReducers } from "redux";
-import messageReducer from "../components/main-chat/reducers/messages.reducer";
-import chatReducer from "../components/chat-sidebar/chats.reducer";
-import mainChatReducer from "../components/main-chat/reducers/main.chat.reducer";
-import menuReducer from "../components/main-chat/reducers/menu.reducer";
+import messageReducer from "../messages/messages.reducer";
+import chatReducer from "../chats/chats.reducer";
+import currentChatReducer from "../current-chat/reducers/main.chat.reducer";
 import userReducer from "./user-reducer";
 
 const rootReducer = combineReducers({
   messages: messageReducer,
   chats: chatReducer,
-  mainChat: mainChatReducer,
+  currentChat: currentChatReducer,
   user: userReducer,
-  contextMenu: menuReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

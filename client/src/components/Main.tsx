@@ -1,22 +1,21 @@
 import { FC, useEffect } from "react";
-import MainChat from "./main-chat/MainChat";
 import { useSocket } from "../socket/socket";
 import { useAppDispatch } from "../redux/store";
-import { chatThunk } from "./chat-sidebar/chats.reducer";
-import ChatsContainer from "./chat-sidebar/ChatsContainer";
+import { chatThunk } from "../chats/chats.reducer";
 import { useSelector } from "react-redux";
-import { selectMainChat } from "./main-chat/reducers/main.chat.reducer";
+import { selectCurrentChat } from "../current-chat/reducers/main.chat.reducer";
 import MediaSidebar from "./media-sidebar/MediaSidebar";
-import { setContextMenu } from "./main-chat/reducers/menu.reducer";
 import MainPlaceholder from "./MainPlaceholder";
 import { User } from "../users/models/user.model";
+import ChatsContainer from "../chats/components/ChatsContainer";
+import CurrentChatComponent from "../current-chat/CurrentChatComponent";
 
 interface MainProps {
   user: User;
 }
 
 const Main: FC<MainProps> = ({ user }) => {
-  const { currentChatId } = useSelector(selectMainChat);
+  const { currentChat } = useSelector(selectCurrentChat);
   const [socket] = useSocket();
   const dispatch = useAppDispatch();
 
@@ -25,11 +24,11 @@ const Main: FC<MainProps> = ({ user }) => {
   }, []);
 
   return (
-    <div className="main" onClick={(e) => dispatch(setContextMenu(null))}>
+    <div className="main">
       <ChatsContainer />
-      {currentChatId ? (
+      {currentChat ? (
         <div className="main_chat_media_container">
-          <MainChat socket={socket} />
+          <CurrentChatComponent socket={socket} currentChat={currentChat} />
           <MediaSidebar />
         </div>
       ) : (
