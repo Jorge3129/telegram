@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { selectUser } from "../../redux/user-reducer";
 import { CreateMessageDto, Message } from "../../messages/models/message.model";
+import { messageApiService } from "../../messages/messages-api.service";
 
 export const useSend = (socket: Socket) => {
   const { currentChatId, text, media } = useSelector(selectCurrentChat);
@@ -39,11 +40,7 @@ export const useSend = (socket: Socket) => {
 
     dispatch(CurrentChatActions.setText(""));
 
-    const response = await new Promise<Message>((res) => {
-      socket.emit("message", { message }, (savedMessage: Message) => {
-        res(savedMessage);
-      });
-    });
+    const response = await messageApiService.createMessage(message);
 
     dispatchSendMessage(response);
   };

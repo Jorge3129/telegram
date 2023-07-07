@@ -9,6 +9,7 @@ import { selectCurrentChat } from "../../current-chat/reducers/main.chat.reducer
 import { getVisibleElementHeight } from "../utils/get-visible-element-height";
 import { findMessageById } from "../../utils/find-message-by-id";
 import { isMessageSeen } from "../../utils/is-message-seen";
+import { messageApiService } from "../messages-api.service";
 
 export const useDetectScroll = (
   socket: Socket | null,
@@ -60,9 +61,7 @@ export const useDetectScroll = (
       return;
     }
 
-    socket.emit("read", {
-      message: message,
-    });
+    messageApiService.updateMessageReads(message);
   };
 
   const onMessagesFirstRendered = () => {
