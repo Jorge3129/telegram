@@ -7,7 +7,7 @@ export interface Message {
   author: string;
   authorId: number;
   chatId: number;
-  seen?: boolean;
-  seenBy?: number[];
+  seen: boolean;
+  edited: boolean;
   media?: Media;
 }

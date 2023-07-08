@@ -1,10 +1,10 @@
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { MessageEntity } from './entity/message.entity';
-import { MessageReadEntity } from './entity/message-read.entity';
+import { MessageEntity } from '../entity/message.entity';
+import { MessageReadEntity } from '../entity/message-read.entity';
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TextMessageContentEntity } from './entity/message-content.entity';
+import { TextMessageContentEntity } from '../entity/message-content.entity';
 
 @Injectable()
 export class MessagesRepository {
@@ -51,11 +51,15 @@ export class MessagesRepository {
   }
 
   public async updateMessageText(
-    messageContentId: string,
+    message: MessageEntity,
     textContent: string,
   ): Promise<void> {
-    await this.messageContentRepo.update(messageContentId, {
+    await this.messageContentRepo.update(message.content.id, {
       textContent,
+    });
+
+    await this.messageRepo.update(message.id, {
+      edited: true,
     });
   }
 

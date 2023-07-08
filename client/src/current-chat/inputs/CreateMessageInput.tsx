@@ -29,6 +29,7 @@ const CreateMessageInput: FC<Props> = () => {
   const handleSubmit = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
     sendMessage();
+    setText("");
   };
 
   return (

@@ -31,6 +31,9 @@ export abstract class MessageEntity {
   @Column({ type: 'timestamp with time zone' })
   timestamp: string;
 
+  @Column({ default: false })
+  edited: boolean;
+
   @Column()
   authorId: number;
 

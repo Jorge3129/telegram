@@ -91,15 +91,14 @@
 }
 
 .message_info {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
   float: right;
   color: var(--blue-gray);
-  font-size: 0.75em;
+  font-size: 0.8em;
   font-weight: 500;
   margin: 0.5em 0 0 0.5em;
-}
-
-.message_timestamp {
-  padding-left: 0.5em;
 }
 
 .clearfix {

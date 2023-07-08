@@ -3,11 +3,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { MessagesRepository } from './message.repository';
+import { MessagesRepository } from './services/message.repository';
 import { Message } from './models/message.type';
 import { messageToModel } from './entity/utils';
 import { User } from '../users/user.type';
-import { CreateMessageService } from './create-message.service';
+import { CreateMessageService } from './services/create-message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageEntity } from './entity/message.entity';
 import { MessageReadsService } from './services/message-reads.service';

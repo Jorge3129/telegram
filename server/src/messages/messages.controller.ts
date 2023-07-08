@@ -6,7 +6,6 @@ import {
   Delete,
   Param,
   Patch,
-  NotFoundException,
 } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { RequestUser } from 'src/users/decorators/user.decorator';
@@ -18,7 +17,7 @@ import { MessageService } from './message.service';
 import { MessagesGateway } from 'src/socket/messages.gateway';
 import { MessageReadsService } from './services/message-reads.service';
 import { EditMessageDto } from './dto/edit-message.dto';
-import { MessagesRepository } from './message.repository';
+import { EditMessageService } from './services/edit-message.service';
 
 @Controller('messages')
 export class MessagesController {
@@ -27,7 +26,7 @@ export class MessagesController {
     private messageReadsService: MessageReadsService,
     private userService: UserService,
     private messagesGateway: MessagesGateway,
-    private messageRepo: MessagesRepository,
+    private editMessageService: EditMessageService,
   ) {}
 
   @Post()
@@ -53,27 +52,7 @@ export class MessagesController {
     @Body() dto: EditMessageDto,
     @RequestUser() user: UserEntity,
   ): Promise<void> {
-    const message = await this.messageRepo.findOneBy({ id: messageId });
-
-    if (!message) {
-      throw new NotFoundException('No message');
-    }
-
-    await this.messageRepo.updateMessageText(
-      message.content.id,
-      dto.textContent,
-    );
-
-    await this.messagesGateway.sendMessageToRecipients(
-      message.chatId,
-      user.id,
-      'message-edit',
-      {
-        messageId,
-        chatId: message.chatId,
-        text: dto.textContent,
-      },
-    );
+    await this.editMessageService.editMessage(messageId, dto, user);
   }
 
   @Delete(':id')

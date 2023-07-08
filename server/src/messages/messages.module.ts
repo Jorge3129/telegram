@@ -6,14 +6,15 @@ import {
   TextMessageContentEntity,
 } from './entity/message-content.entity';
 import { MessageReadEntity } from './entity/message-read.entity';
-import { MessagesRepository } from './message.repository';
+import { MessagesRepository } from './services/message.repository';
 import { MessageService } from './message.service';
 import { ChatUsersModule } from 'src/chat-users/chat-users.module';
 import { UserModule } from 'src/users/user.module';
-import { CreateMessageService } from './create-message.service';
+import { CreateMessageService } from './services/create-message.service';
 import { MessagesController } from './messages.controller';
 import { SocketModule } from 'src/socket/socket.module';
 import { MessageReadsService } from './services/message-reads.service';
+import { EditMessageService } from './services/edit-message.service';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MessageReadsService } from './services/message-reads.service';
     MessageService,
     CreateMessageService,
     MessageReadsService,
+    EditMessageService,
   ],
   exports: [MessageService, MessagesRepository, MessageReadsService],
   controllers: [MessagesController],
