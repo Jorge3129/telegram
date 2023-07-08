@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { MessagesRepository } from './message.repository';
 import { MessagesGateway } from 'src/socket/messages.gateway';
 import { EditMessageDto } from '../dto/edit-message.dto';
@@ -20,6 +24,10 @@ export class EditMessageService {
 
     if (!message) {
       throw new NotFoundException('No message');
+    }
+
+    if (message.author.id !== user.id) {
+      throw new ForbiddenException('Cannot edit this message');
     }
 
     await this.messageRepo.updateMessageText(message, dto.textContent);

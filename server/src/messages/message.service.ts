@@ -11,6 +11,8 @@ import { CreateMessageService } from './services/create-message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageEntity } from './entity/message.entity';
 import { MessageReadsService } from './services/message-reads.service';
+import { UserEntity } from 'src/users/entity/user.entity';
+import { ChatMembershipService } from 'src/chat-users/services/chat-membership.service';
 
 @Injectable()
 export class MessageService {
@@ -18,9 +20,15 @@ export class MessageService {
     private messageRepo: MessagesRepository,
     private messageReadsService: MessageReadsService,
     private createMessageService: CreateMessageService,
+    private membershipService: ChatMembershipService,
   ) {}
 
   public async create(message: CreateMessageDto, user: User): Promise<Message> {
+    await this.membershipService.checkUserChatMembership(
+      user.id,
+      message.chatId,
+    );
+
     const savedMessage = await this.createMessageService.saveFromDto(
       message,
       user,
@@ -57,7 +65,12 @@ export class MessageService {
     return messageToModel(message);
   }
 
-  public async getMessagesForChat(chatId: number): Promise<Message[]> {
+  public async getMessagesForChat(
+    chatId: number,
+    user: UserEntity,
+  ): Promise<Message[]> {
+    await this.membershipService.checkUserChatMembership(user.id, chatId);
+
     const messages = await this.messageRepo.getMessagesForChat(chatId);
 
     return messages.map(messageToModel);

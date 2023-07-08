@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ChatUserRepository } from '../chat-users/chat-user.repository';
+import { ChatUserRepository } from '../chat-users/services/chat-user.repository';
 import { MessageService } from '../messages/message.service';
 import { User } from '../users/user.type';
 import { Chat, ChatForView } from './chat.type';
