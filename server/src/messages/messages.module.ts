@@ -14,6 +14,7 @@ import { CreateMessageService } from './services/create-message.service';
 import { MessagesController } from './messages.controller';
 import { MessageReadsService } from './services/message-reads.service';
 import { EditMessageService } from './services/edit-message.service';
+import { MessageMapperService } from './services/message-mapper.service';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { EditMessageService } from './services/edit-message.service';
     CreateMessageService,
     MessageReadsService,
     EditMessageService,
+    MessageMapperService,
   ],
   exports: [MessageService, MessagesRepository, MessageReadsService],
   controllers: [MessagesController],

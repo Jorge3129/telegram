@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../redux/rootReducer";
 import { chatsApiService } from "../chats/chats-api.service";
-import { Message } from "./models/message.model";
+import { isTextMessage, Message } from "./models/message.model";
 
 interface MessageState {
   messages: Message[];
@@ -38,8 +38,10 @@ const messageSlice = createSlice({
       state.messages
         .filter((message) => message.id === payload.messageId)
         .forEach((message) => {
-          message.text = payload.text;
-          message.edited = true;
+          if (isTextMessage(message)) {
+            message.text = payload.text;
+            message.edited = true;
+          }
         });
     },
 
@@ -72,12 +74,6 @@ export const messageThunk = createAsyncThunk(
   async (id: number, thunkApi) => {
     try {
       thunkApi.dispatch(MessageActions.setLoading(true));
-
-      await (async () => {
-        return new Promise((resolve) => {
-          setTimeout(() => resolve(""), 200);
-        });
-      })();
 
       const messages = await chatsApiService.getMessages(id);
       thunkApi.dispatch(MessageActions.setMessages(messages));

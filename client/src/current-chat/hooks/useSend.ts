@@ -7,8 +7,9 @@ import {
 import { useAppDispatch } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/user-reducer";
-import { CreateMessageDto, Message } from "../../messages/models/message.model";
+import { Message } from "../../messages/models/message.model";
 import { messageApiService } from "../../messages/messages-api.service";
+import { CreateMessageDto } from "../../messages/models/create-message.dto";
 
 export const useSend = (inputText: string) => {
   const { currentChatId, media } = useSelector(selectCurrentChat);
