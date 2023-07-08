@@ -39,6 +39,7 @@ const messageSlice = createSlice({
         .filter((message) => message.id === payload.messageId)
         .forEach((message) => {
           message.text = payload.text;
+          message.edited = true;
         });
     },
 
@@ -52,20 +53,12 @@ const messageSlice = createSlice({
       state,
       { payload }: PayloadAction<{ message: Message; userId: number }>
     ) => {
-      const userId = payload.userId;
-
       state.messages
         .filter(
           (message) =>
             new Date(message.timestamp) <= new Date(payload.message.timestamp)
         )
         .forEach((msg) => {
-          const seenList = msg.seenBy ?? [];
-
-          if (!seenList.includes(userId)) {
-            msg.seenBy = [...seenList, userId];
-          }
-
           msg.seen = true;
         });
     },

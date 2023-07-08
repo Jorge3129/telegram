@@ -7,6 +7,7 @@ import MessageStatusWrapper from "../ui/message/message-status/MessageStatusWrap
 import { useLoadFile } from "../media/hooks/useLoadFile";
 import MediaContainer from "../media/MediaContainer";
 import MessageContextMenu from "./MessageContextMenu";
+import "./styles/MessageComponent.css";
 
 interface IPropsMessage {
   message: Message;
@@ -46,8 +47,9 @@ const MessageComponent: FC<IPropsMessage> = ({
         <div className="message_text">{message.text}</div>
 
         <div className="message_info">
-          <MessageStatusWrapper message={message} currentUser={user} />
+          {message.edited && <div className="message-edited-label">edited</div>}
           <MessageTimestamp timestamp={message.timestamp} />
+          <MessageStatusWrapper message={message} currentUser={user} />
         </div>
 
         <div className="clearfix"></div>
