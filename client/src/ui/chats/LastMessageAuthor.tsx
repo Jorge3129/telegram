@@ -15,9 +15,9 @@ const LastMessageAuthor: FC<Props> = ({ message, chatType }) => {
     return null;
   }
 
-  const { author } = message;
+  const { authorName, authorId } = message;
 
-  const displayName = author === currentUser?.username ? "You" : author;
+  const displayName = authorId === currentUser?.id ? "You" : authorName;
 
   return <>{`${displayName}: `}</>;
 };

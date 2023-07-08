@@ -9,7 +9,7 @@ interface Props {
 }
 
 const MessageStatusWrapper: FC<Props> = ({ message: msg, currentUser }) => {
-  if (!msg || msg.author !== currentUser?.username) {
+  if (!msg || msg.authorId !== currentUser?.id) {
     return null;
   }
 

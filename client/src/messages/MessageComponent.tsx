@@ -9,6 +9,7 @@ import MediaContainer from "../media/MediaContainer";
 import MessageContextMenu from "./MessageContextMenu";
 import "./styles/MessageComponent.css";
 import { Media } from "./models/media.model";
+import { isOwnMessage } from "../utils/is-own-message";
 
 interface IPropsMessage {
   message: Message;
@@ -33,12 +34,12 @@ const MessageComponent: FC<IPropsMessage> = ({
 
   useLoadFile(message.media, setFile);
 
-  const showAuthor = chatType === "group" && message.author !== user?.username;
+  const showAuthor = chatType === "group" && !isOwnMessage(message, user);
 
   return (
     <MessageContextMenu message={message}>
       <div className="message_item">
-        <div className="message_author">{showAuthor && message.author}</div>
+        <div className="message_author">{showAuthor && message.authorName}</div>
         {file && (
           <div className="message_media">
             <MediaContainer media={file} className="message_img" />
