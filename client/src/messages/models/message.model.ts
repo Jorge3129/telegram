@@ -1,8 +1,4 @@
-export interface Media {
-  filename: string;
-  type: string;
-  src?: string;
-}
+import { Media } from "./media.model";
 
 export interface Message {
   id: string;

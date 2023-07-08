@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/rootReducer";
 import { Chat } from "../../chats/models/chat.model";
-import { Media } from "../../messages/models/message.model";
 import { ChatInputState, CurrentChatState } from "./current-chat-state.type";
+import { Media } from "../../messages/models/media.model";
 
 const initialState: CurrentChatState = {
   currentChatId: null,

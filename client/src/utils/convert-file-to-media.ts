@@ -1,4 +1,4 @@
-import { Media } from "../messages/models/message.model";
+import { Media } from "../messages/models/media.model";
 
 export const convertFileToMedia = (file: File): Media => {
   return {
