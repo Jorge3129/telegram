@@ -4,13 +4,13 @@ import { Socket } from "socket.io-client";
 import LoadSpinner from "../components/reuse/LoadSpinner";
 import MessageAvatar from "./MessageAvatar";
 import { selectUser } from "../redux/user-reducer";
-import MessageComponent from "./MessageComponent";
 import { useAutoScroll } from "./hooks/useAutoScroll";
 import { selectMessages } from "./messages.reducer";
 import { useDetectScroll } from "./hooks/useDetectScroll";
 import "./styles/Messages.css";
 import { Chat } from "../chats/models/chat.model";
 import { isOwnMessage } from "../utils/is-own-message";
+import MessageComponent from "./MessageComponent";
 
 interface MessageListProps {
   socket: Socket;

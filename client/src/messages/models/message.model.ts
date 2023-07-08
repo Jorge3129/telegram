@@ -1,20 +1,29 @@
+import { User } from "../../users/models/user.model";
 import { Media } from "./media.model";
 
-export interface Message {
+export interface BaseMessage {
   id: string;
   text: string;
   timestamp: string;
   authorName: string;
   authorId: number;
+  author: User;
   chatId: number;
   seen: boolean;
-  edited: boolean;
-  media?: Media;
 }
 
-export type CreateMessageDto = {
+export interface TextMessage extends BaseMessage {
+  type: "text-message";
+  edited: boolean;
   text: string;
-  timestamp: string;
-  chatId: number;
-  media?: Media;
-};
+  media: Media[];
+}
+
+export interface PollMessage extends BaseMessage {
+  type: "poll-message";
+}
+
+export type Message = TextMessage | PollMessage;
+
+export const isTextMessage = (message: Message): message is TextMessage =>
+  message.type === "text-message";
