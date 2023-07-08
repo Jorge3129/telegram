@@ -1,5 +1,5 @@
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { ChatUserEntity } from './entity/chat-user.entity';
+import { ChatUserEntity } from '../entity/chat-user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 

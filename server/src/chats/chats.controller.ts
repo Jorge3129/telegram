@@ -5,6 +5,8 @@ import { User } from '../users/user.type';
 import { Controller, Get, Param, ParseIntPipe, Req } from '@nestjs/common';
 import { ChatForView } from './chat.type';
 import { Message } from 'src/messages/models/message.type';
+import { RequestUser } from 'src/users/decorators/user.decorator';
+import { UserEntity } from 'src/users/entity/user.entity';
 
 @Controller('chats')
 export class ChatsController {
@@ -21,7 +23,8 @@ export class ChatsController {
   @Get('/:chatId/messages')
   public getMessages(
     @Param('chatId', ParseIntPipe) chatId: number,
+    @RequestUser() user: UserEntity,
   ): Promise<Message[]> {
-    return this.messageService.getMessagesForChat(chatId);
+    return this.messageService.getMessagesForChat(chatId, user);
   }
 }
