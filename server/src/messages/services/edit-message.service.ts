@@ -4,15 +4,17 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { MessagesRepository } from './message.repository';
-import { MessagesGateway } from 'src/socket/messages.gateway';
 import { EditMessageDto } from '../dto/edit-message.dto';
 import { User } from 'src/users/user.type';
+import { AppEventEmitter } from 'src/shared/services/app-event-emitter.service';
+import { AppMessageEvent } from '../events';
+import { EditMessageEvent } from '../events/edit-message.event';
 
 @Injectable()
 export class EditMessageService {
   constructor(
     private messageRepo: MessagesRepository,
-    private messagesGateway: MessagesGateway,
+    private eventEmitter: AppEventEmitter<AppMessageEvent>,
   ) {}
 
   public async editMessage(
@@ -32,15 +34,12 @@ export class EditMessageService {
 
     await this.messageRepo.updateMessageText(message, dto.textContent);
 
-    await this.messagesGateway.sendMessageToRecipients(
-      message.chatId,
-      user.id,
-      'message-edit',
-      {
-        messageId,
-        chatId: message.chatId,
-        text: dto.textContent,
-      },
+    this.eventEmitter.emit(
+      new EditMessageEvent({
+        message,
+        user,
+        editedText: dto.textContent,
+      }),
     );
   }
 }

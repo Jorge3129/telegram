@@ -9,10 +9,14 @@ import { messageToModel } from './entity/utils';
 import { User } from '../users/user.type';
 import { CreateMessageService } from './services/create-message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { MessageEntity } from './entity/message.entity';
 import { MessageReadsService } from './services/message-reads.service';
 import { UserEntity } from 'src/users/entity/user.entity';
 import { ChatMembershipService } from 'src/chat-users/services/chat-membership.service';
+import { AppEventEmitter } from 'src/shared/services/app-event-emitter.service';
+import { AppMessageEvent } from './events';
+import { CreateMessageEvent } from './events/create-message.event';
+import { DeleteMessageEvent } from './events/delete-message.event';
+import { ReadMessageEvent } from './events/read-message.event';
 
 @Injectable()
 export class MessageService {
@@ -21,6 +25,7 @@ export class MessageService {
     private messageReadsService: MessageReadsService,
     private createMessageService: CreateMessageService,
     private membershipService: ChatMembershipService,
+    private eventEmitter: AppEventEmitter<AppMessageEvent>,
   ) {}
 
   public async create(message: CreateMessageDto, user: User): Promise<Message> {
@@ -36,10 +41,20 @@ export class MessageService {
 
     await this.messageReadsService.updateSeen(user.id, message);
 
-    return messageToModel(savedMessage);
+    const messageResponse = messageToModel(savedMessage);
+
+    this.eventEmitter.emit(
+      new CreateMessageEvent({
+        message: savedMessage,
+        messageResponse,
+        user,
+      }),
+    );
+
+    return messageResponse;
   }
 
-  public async delete(messageId: string, user: User): Promise<MessageEntity> {
+  public async delete(messageId: string, user: User): Promise<void> {
     const message = await this.messageRepo.findOneBy({ id: messageId });
 
     if (!message) {
@@ -52,7 +67,13 @@ export class MessageService {
 
     await this.messageRepo.delete(messageId);
 
-    return message;
+    this.eventEmitter.emit(new DeleteMessageEvent({ message, user }));
+  }
+
+  public async readMessage(message: Message, user: UserEntity): Promise<void> {
+    await this.messageReadsService.updateSeen(user.id, message);
+
+    this.eventEmitter.emit(new ReadMessageEvent({ message, user }));
   }
 
   public async getLatestChatMessage(chatId: number): Promise<Message | null> {
