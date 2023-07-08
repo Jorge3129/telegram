@@ -10,11 +10,13 @@ import { User } from '../users/user.type';
 import { CreateMessageService } from './create-message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageEntity } from './entity/message.entity';
+import { MessageReadsService } from './services/message-reads.service';
 
 @Injectable()
 export class MessageService {
   constructor(
     private messageRepo: MessagesRepository,
+    private messageReadsService: MessageReadsService,
     private createMessageService: CreateMessageService,
   ) {}
 
@@ -24,7 +26,7 @@ export class MessageService {
       user,
     );
 
-    await this.messageRepo.updateSeen(user.id, message);
+    await this.messageReadsService.updateSeen(user.id, message);
 
     return messageToModel(savedMessage);
   }
@@ -43,14 +45,6 @@ export class MessageService {
     await this.messageRepo.delete(messageId);
 
     return message;
-  }
-
-  public countUnreadsForChat(chatId: number, userId: number): Promise<number> {
-    return this.messageRepo.countUnreadMessages(chatId, userId);
-  }
-
-  public async updateSeenStatus(readByUserId: number, message: Message) {
-    await this.messageRepo.updateSeen(readByUserId, message);
   }
 
   public async getLatestChatMessage(chatId: number): Promise<Message | null> {

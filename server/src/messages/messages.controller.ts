@@ -7,11 +7,13 @@ import { Message } from './models/message.type';
 import { UserService } from 'src/users/user.service';
 import { MessageService } from './message.service';
 import { MessagesGateway } from 'src/socket/messages.gateway';
+import { MessageReadsService } from './services/message-reads.service';
 
 @Controller('messages')
 export class MessagesController {
   constructor(
     private messageService: MessageService,
+    private messageReadsService: MessageReadsService,
     private userService: UserService,
     private messagesGateway: MessagesGateway,
   ) {}
@@ -53,7 +55,7 @@ export class MessagesController {
     @Body() message: Message,
     @RequestUser() user: UserEntity,
   ) {
-    await this.messageService.updateSeenStatus(user.id, message);
+    await this.messageReadsService.updateSeen(user.id, message);
 
     const authorSocketId = await this.userService.getUserSocketId(
       message.authorId,

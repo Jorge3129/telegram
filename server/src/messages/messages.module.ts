@@ -10,6 +10,7 @@ import { UserModule } from 'src/users/user.module';
 import { CreateMessageService } from './create-message.service';
 import { MessagesController } from './messages.controller';
 import { SocketModule } from 'src/socket/socket.module';
+import { MessageReadsService } from './services/message-reads.service';
 
 @Module({
   imports: [
@@ -22,8 +23,13 @@ import { SocketModule } from 'src/socket/socket.module';
     UserModule,
     SocketModule,
   ],
-  providers: [MessagesRepository, MessageService, CreateMessageService],
-  exports: [MessageService, MessagesRepository],
+  providers: [
+    MessagesRepository,
+    MessageService,
+    CreateMessageService,
+    MessageReadsService,
+  ],
+  exports: [MessageService, MessagesRepository, MessageReadsService],
   controllers: [MessagesController],
 })
 export class MessagesModule {}

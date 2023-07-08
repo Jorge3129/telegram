@@ -4,12 +4,14 @@ import { MessageService } from '../messages/message.service';
 import { User } from '../users/user.type';
 import { Chat, ChatForView } from './chat.type';
 import { ChatsRepository } from './chats.repository';
+import { MessageReadsService } from 'src/messages/services/message-reads.service';
 
 @Injectable()
 export class ChatsService {
   constructor(
     private readonly chatsRepo: ChatsRepository,
     private readonly messageService: MessageService,
+    private readonly messageReadsService: MessageReadsService,
     private readonly chatUsersRepo: ChatUserRepository,
   ) {}
 
@@ -31,7 +33,7 @@ export class ChatsService {
   ): Promise<ChatForView> {
     const user = chat.members.filter((u) => u.userId === userId)[0];
 
-    const unreadCount = await this.messageService.countUnreadsForChat(
+    const unreadCount = await this.messageReadsService.countUnreadMessages(
       chat.id,
       userId,
     );
