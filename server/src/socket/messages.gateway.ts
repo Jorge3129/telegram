@@ -5,7 +5,6 @@ import {
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { ChatUserRepository } from 'src/chat-users/services/chat-user.repository';
-import { Message } from 'src/messages/models/message.type';
 import { UserService } from 'src/users/user.service';
 import { Server, Socket } from 'socket.io';
 import { CatchError } from './decorators/catch-error.decorator';

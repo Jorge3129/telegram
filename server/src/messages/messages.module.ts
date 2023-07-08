@@ -12,7 +12,6 @@ import { ChatUsersModule } from 'src/chat-users/chat-users.module';
 import { UserModule } from 'src/users/user.module';
 import { CreateMessageService } from './services/create-message.service';
 import { MessagesController } from './messages.controller';
-import { SocketModule } from 'src/socket/socket.module';
 import { MessageReadsService } from './services/message-reads.service';
 import { EditMessageService } from './services/edit-message.service';
 
@@ -26,7 +25,6 @@ import { EditMessageService } from './services/edit-message.service';
     ]),
     ChatUsersModule,
     UserModule,
-    SocketModule,
   ],
   providers: [
     MessagesRepository,

@@ -12,10 +12,7 @@ import { RequestUser } from 'src/users/decorators/user.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
 
 import { Message } from './models/message.type';
-import { UserService } from 'src/users/user.service';
 import { MessageService } from './message.service';
-import { MessagesGateway } from 'src/socket/messages.gateway';
-import { MessageReadsService } from './services/message-reads.service';
 import { EditMessageDto } from './dto/edit-message.dto';
 import { EditMessageService } from './services/edit-message.service';
 
@@ -23,9 +20,6 @@ import { EditMessageService } from './services/edit-message.service';
 export class MessagesController {
   constructor(
     private messageService: MessageService,
-    private messageReadsService: MessageReadsService,
-    private userService: UserService,
-    private messagesGateway: MessagesGateway,
     private editMessageService: EditMessageService,
   ) {}
 
@@ -34,16 +28,7 @@ export class MessagesController {
     @Body() messageDto: CreateMessageDto,
     @RequestUser() user: UserEntity,
   ): Promise<Message> {
-    const messageResponse = await this.messageService.create(messageDto, user);
-
-    await this.messagesGateway.sendMessageToRecipients(
-      messageDto.chatId,
-      user.id,
-      'message-to-client',
-      messageResponse,
-    );
-
-    return messageResponse;
+    return this.messageService.create(messageDto, user);
   }
 
   @Patch(':id')
@@ -60,14 +45,7 @@ export class MessagesController {
     @Param('id') messageId: string,
     @RequestUser() user: UserEntity,
   ): Promise<void> {
-    const deletedMessage = await this.messageService.delete(messageId, user);
-
-    await this.messagesGateway.sendMessageToRecipients(
-      deletedMessage.chatId,
-      user.id,
-      'message-deleted',
-      messageId,
-    );
+    await this.messageService.delete(messageId, user);
   }
 
   @Put()
@@ -75,19 +53,6 @@ export class MessagesController {
     @Body() message: Message,
     @RequestUser() user: UserEntity,
   ) {
-    await this.messageReadsService.updateSeen(user.id, message);
-
-    const authorSocketId = await this.userService.getUserSocketId(
-      message.authorId,
-    );
-
-    if (!authorSocketId) {
-      return;
-    }
-
-    this.messagesGateway.emitEventTo(authorSocketId, 'seen', {
-      message,
-      userId: user.id,
-    });
+    await this.messageService.readMessage(message, user);
   }
 }

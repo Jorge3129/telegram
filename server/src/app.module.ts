@@ -13,11 +13,17 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { SocketModule } from './socket/socket.module';
 import { UploadsModule } from './uploads/uploads.module';
+import { SharedModule } from './shared/shared.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    EventEmitterModule.forRoot({
+      wildcard: true,
+      delimiter: '.',
     }),
     TypeOrmModule.forRoot(ormConfig),
     UserModule,
@@ -27,6 +33,7 @@ import { UploadsModule } from './uploads/uploads.module';
     AuthModule,
     SocketModule,
     UploadsModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [
