@@ -10,7 +10,7 @@ export const messageToModel = (entity: MessageEntity): Message => {
   return {
     ...entity,
     text: isTextContent(entity.content) ? entity.content.textContent : '',
-    author: entity.author.username,
+    authorName: entity.author.username,
     media: getMedia(entity.content),
     seen: !!entity.reads?.find((read) => read.userId !== entity.authorId),
   };
