@@ -12,7 +12,6 @@ export const useLoadFile = (
     }
 
     uploadsApiService.getFile(media.filename).then((respFile) => {
-      console.log(respFile);
       setFile({
         type: respFile.type,
         filename: media.filename,

@@ -51,6 +51,19 @@ const chatSlice = createSlice({
       });
     },
 
+    editLastMessage: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{ messageId: string; text: string; chatId: number }>
+    ) => {
+      updateChat(state, payload.chatId, (chat) => {
+        if (chat.lastMessage?.id === payload.messageId) {
+          chat.lastMessage.text = payload.text;
+        }
+      });
+    },
+
     setSeenLastMessage: (
       state,
       { payload }: PayloadAction<{ message: Message }>

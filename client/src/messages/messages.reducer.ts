@@ -31,6 +31,17 @@ const messageSlice = createSlice({
       state.messages.push(payload);
     },
 
+    editMessage: (
+      state,
+      { payload }: PayloadAction<{ messageId: string; text: string }>
+    ) => {
+      state.messages
+        .filter((message) => message.id === payload.messageId)
+        .forEach((message) => {
+          message.text = payload.text;
+        });
+    },
+
     deleteMessage: (state, { payload: deletedId }: PayloadAction<string>) => {
       state.messages = state.messages.filter(
         (message) => message.id !== deletedId

@@ -13,6 +13,12 @@ export class MessageApiService {
     await this.http.delete<void>(`${environment.apiUrl}/messages/${id}`);
   }
 
+  public async edit(id: string, textContent: string): Promise<void> {
+    await this.http.patch<void>(`${environment.apiUrl}/messages/${id}`, {
+      textContent,
+    });
+  }
+
   public async updateMessageReads(message: Message): Promise<void> {
     await this.http.put(`${environment.apiUrl}/messages`, message);
   }

@@ -12,7 +12,7 @@ import LoadSpinner from "../../components/reuse/LoadSpinner";
 import {
   selectCurrentChat,
   CurrentChatActions,
-} from "../../current-chat/reducers/main.chat.reducer";
+} from "../../current-chat/reducers/current-chat.reducer";
 
 interface IChatsContainer {}
 

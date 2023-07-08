@@ -3,7 +3,7 @@ import { useSocket } from "../socket/socket";
 import { useAppDispatch } from "../redux/store";
 import { chatThunk } from "../chats/chats.reducer";
 import { useSelector } from "react-redux";
-import { selectCurrentChat } from "../current-chat/reducers/main.chat.reducer";
+import { selectCurrentChat } from "../current-chat/reducers/current-chat.reducer";
 import MediaSidebar from "./media-sidebar/MediaSidebar";
 import MainPlaceholder from "./MainPlaceholder";
 import { User } from "../users/models/user.model";

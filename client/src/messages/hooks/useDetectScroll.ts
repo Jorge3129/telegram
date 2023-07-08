@@ -5,7 +5,7 @@ import { useAppDispatch } from "../../redux/store";
 import { Socket } from "socket.io-client";
 import { selectUser } from "../../redux/user-reducer";
 import { Message } from "../models/message.model";
-import { selectCurrentChat } from "../../current-chat/reducers/main.chat.reducer";
+import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
 import { getVisibleElementHeight } from "../utils/get-visible-element-height";
 import { findMessageById } from "../../utils/find-message-by-id";
 import { isMessageSeen } from "../../utils/is-message-seen";

@@ -1,29 +1,30 @@
-import { FC, useEffect, useRef, MouseEvent } from "react";
-import { Socket } from "socket.io-client";
-import { useSelector } from "react-redux";
-import FileInput from "./FileInput";
-import { useAppDispatch } from "../redux/store";
-import { useSend } from "./hooks/useSend";
-import {
-  selectCurrentChat,
-  CurrentChatActions,
-} from "./reducers/main.chat.reducer";
+import { FC, useEffect, useRef, MouseEvent, useState } from "react";
+import FileInput from "../FileInput";
+import { useSend } from "../hooks/useSend";
 
-interface IMainInput {
-  socket: Socket;
+import { CreateMessageInputState } from "../reducers/current-chat-state.type";
+import { useEmojiInput } from "../../components/media-sidebar/use-emoji-input";
+import { useSelector } from "react-redux";
+import { selectCurrentChat } from "../reducers/current-chat.reducer";
+
+interface Props {
+  inputState: CreateMessageInputState;
 }
 
-const MainInputForm: FC<IMainInput> = ({ socket }) => {
-  const { text } = useSelector(selectCurrentChat);
-  const dispatch = useAppDispatch();
+const CreateMessageInput: FC<Props> = () => {
+  const [text, setText] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEmojiInput((emoji) => setText((text) => text + emoji));
+
+  const { currentChatId } = useSelector(selectCurrentChat);
+
   useEffect(() => {
     inputRef.current?.focus();
-  }, [text]);
+  }, [text, currentChatId]);
 
-  const sendMessage = useSend(socket);
+  const sendMessage = useSend(text);
 
   const handleSubmit = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -33,18 +34,21 @@ const MainInputForm: FC<IMainInput> = ({ socket }) => {
   return (
     <div className="main_chat_input_container">
       <form className="main_chat_input_form">
-        <FileInput socket={socket} />
+        <FileInput />
+
         <input
           className="main_chat_input"
           type="text"
           placeholder=" Write a message..."
           value={text}
           ref={inputRef}
-          onChange={(e) => dispatch(CurrentChatActions.setText(e.target.value))}
+          onChange={(e) => setText(e.target.value)}
         />
+
         <div className="input_icon_container">
           <i className="fa-solid fa-face-smile main_chat_icon" />
         </div>
+
         {text ? (
           <div className="input_icon_container">
             <button
@@ -65,4 +69,4 @@ const MainInputForm: FC<IMainInput> = ({ socket }) => {
   );
 };
 
-export default MainInputForm;
+export default CreateMessageInput;

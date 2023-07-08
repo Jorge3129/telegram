@@ -2,18 +2,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/rootReducer";
 import { Chat } from "../../chats/models/chat.model";
 import { Media } from "../../messages/models/message.model";
-
-interface CurrentChatState {
-  currentChatId: number | null;
-  currentChat: Chat | null;
-  text: string;
-  media: Media;
-}
+import { ChatInputState, CurrentChatState } from "./current-chat-state.type";
 
 const initialState: CurrentChatState = {
   currentChatId: null,
   currentChat: null,
-  text: "",
+  inputState: {
+    type: "create",
+  },
+  // inputText: "",
   media: {
     filename: "",
     type: "",
@@ -26,30 +23,38 @@ const currentChatSlice = createSlice({
   reducers: {
     setChatId: (state, { payload }: PayloadAction<number>) => {
       state.currentChatId = payload;
-      state.text = "";
+      state.inputState = initialState.inputState;
     },
 
     setChat: (state, { payload }: PayloadAction<Chat>) => {
       state.currentChat = payload;
     },
 
-    setText: (state, { payload }: PayloadAction<string>) => {
-      state.text = payload;
+    // setText: (state, { payload }: PayloadAction<string>) => {
+    //   state.inputText = payload;
+    // },
+
+    setInput: (state, { payload }: PayloadAction<ChatInputState>) => {
+      state.inputState = payload;
     },
 
-    addText: (state, { payload }: PayloadAction<string>) => {
-      state.text += payload;
+    clearInput: (state) => {
+      state.inputState = initialState.inputState;
     },
+
+    // addText: (state, { payload }: PayloadAction<string>) => {
+    //   state.inputText += payload;
+    // },
 
     setMedia: (state: CurrentChatState, { payload }: PayloadAction<Media>) => {
       state.media = payload;
     },
 
-    clearMedia: (state: CurrentChatState, { payload }: PayloadAction) => {
+    clearMedia: (state: CurrentChatState) => {
       state.media = { ...initialState.media };
     },
 
-    clearCurrentChat: (state: CurrentChatState, { payload }: PayloadAction) => {
+    clearCurrentChat: () => {
       return initialState;
     },
   },

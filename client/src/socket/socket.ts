@@ -10,7 +10,7 @@ import { MessageActions } from "../messages/messages.reducer";
 import { useAppDispatch } from "../redux/store";
 import { ChatActions } from "../chats/chats.reducer";
 import { useSelector } from "react-redux";
-import { selectCurrentChat } from "../current-chat/reducers/main.chat.reducer";
+import { selectCurrentChat } from "../current-chat/reducers/current-chat.reducer";
 import { selectUser } from "../redux/user-reducer";
 import environment from "../environment/environment";
 import { Message } from "../messages/models/message.model";
@@ -52,6 +52,14 @@ export const useSocket = () => {
     [dispatch]
   );
 
+  const onEdit = useCallback(
+    (payload: { messageId: string; text: string; chatId: number }) => {
+      dispatch(MessageActions.editMessage(payload));
+      dispatch(ChatActions.editLastMessage(payload));
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     if (!user) {
       return;
@@ -81,13 +89,16 @@ export const useSocket = () => {
     socket.on("message-to-client", onMessage);
     socket.on("seen", onSeen);
     socket.on("message-deleted", onDeleted);
+    socket.on("message-edit", onEdit);
 
     return () => {
       socket.off("message-to-client");
       socket.off("seen");
       socket.off("online-change");
+      socket.off("message-deleted");
+      socket.off("message-edit");
     };
-  }, [currentChatId, dispatch, onMessage, onSeen, onDeleted, socket]);
+  }, [currentChatId, dispatch, onMessage, onSeen, onDeleted, onEdit, socket]);
 
   return [socket, setSocket] as [
     Socket | null,

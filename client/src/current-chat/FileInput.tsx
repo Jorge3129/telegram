@@ -1,15 +1,12 @@
 import { ChangeEvent, FC } from "react";
-import { Socket } from "socket.io-client";
-import { CurrentChatActions } from "./reducers/main.chat.reducer";
+import { CurrentChatActions } from "./reducers/current-chat.reducer";
 import { useDispatch } from "react-redux";
 import { uploadsApiService } from "../uploads/uploads-api.service";
 import { convertFileToMedia } from "../utils/convert-file-to-media";
 
-interface IFileInput {
-  socket: Socket;
-}
+interface IFileInput {}
 
-const FileInput: FC<IFileInput> = ({ socket }) => {
+const FileInput: FC<IFileInput> = () => {
   const dispatch = useDispatch();
 
   const saveToApi = (file: File) => {
