@@ -4,6 +4,7 @@ import { MessageReadEntity } from './entity/message-read.entity';
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TextMessageContentEntity } from './entity/message-content.entity';
 
 @Injectable()
 export class MessagesRepository {
@@ -13,6 +14,9 @@ export class MessagesRepository {
 
     @InjectRepository(MessageReadEntity)
     private messageReadRepo: Repository<MessageReadEntity>,
+
+    @InjectRepository(TextMessageContentEntity)
+    private messageContentRepo: Repository<TextMessageContentEntity>,
   ) {}
 
   public save(dto: Partial<MessageEntity>): Promise<MessageEntity> {
@@ -43,6 +47,15 @@ export class MessagesRepository {
       relations: {
         reads: true,
       },
+    });
+  }
+
+  public async updateMessageText(
+    messageContentId: string,
+    textContent: string,
+  ): Promise<void> {
+    await this.messageContentRepo.update(messageContentId, {
+      textContent,
     });
   }
 
