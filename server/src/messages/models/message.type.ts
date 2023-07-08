@@ -1,7 +1,7 @@
 import { User } from 'src/users/user.type';
 import { Media } from './media.type';
 
-export interface Message {
+export interface BaseMessage {
   id: string;
   text: string;
   timestamp: string;
@@ -10,6 +10,16 @@ export interface Message {
   author: User;
   chatId: number;
   seen: boolean;
-  edited: boolean;
-  media?: Media;
 }
+
+export interface TextMessage extends BaseMessage {
+  type: 'text-message';
+  edited: boolean;
+  text: string;
+  media: Media[];
+}
+
+export type Message = TextMessage;
+
+export const isTextMessage = (message: Message): message is TextMessage =>
+  message.type === 'text-message';

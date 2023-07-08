@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { MessagesRepository } from './services/message.repository';
 import { Message } from './models/message.type';
-import { messageToModel } from './entity/utils';
 import { User } from '../users/user.type';
 import { CreateMessageService } from './services/create-message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -17,6 +16,7 @@ import { AppMessageEvent } from './events';
 import { CreateMessageEvent } from './events/create-message.event';
 import { DeleteMessageEvent } from './events/delete-message.event';
 import { ReadMessageEvent } from './events/read-message.event';
+import { MessageMapperService } from './services/message-mapper.service';
 
 @Injectable()
 export class MessageService {
@@ -26,6 +26,7 @@ export class MessageService {
     private createMessageService: CreateMessageService,
     private membershipService: ChatMembershipService,
     private eventEmitter: AppEventEmitter<AppMessageEvent>,
+    private messageMapper: MessageMapperService,
   ) {}
 
   public async create(message: CreateMessageDto, user: User): Promise<Message> {
@@ -41,7 +42,7 @@ export class MessageService {
 
     await this.messageReadsService.updateSeen(user.id, message);
 
-    const messageResponse = messageToModel(savedMessage);
+    const messageResponse = this.messageMapper.mapEntityToModel(savedMessage);
 
     this.eventEmitter.emit(
       new CreateMessageEvent({
@@ -83,7 +84,7 @@ export class MessageService {
       return null;
     }
 
-    return messageToModel(message);
+    return this.messageMapper.mapEntityToModel(message);
   }
 
   public async getMessagesForChat(
@@ -94,6 +95,8 @@ export class MessageService {
 
     const messages = await this.messageRepo.getMessagesForChat(chatId);
 
-    return messages.map(messageToModel);
+    return messages.map((message) =>
+      this.messageMapper.mapEntityToModel(message),
+    );
   }
 }
