@@ -1,5 +1,6 @@
 import { Chat } from "../../chats/models/chat.model";
-import { Message, Media } from "../../messages/models/message.model";
+import { Media } from "../../messages/models/media.model";
+import { Message } from "../../messages/models/message.model";
 
 export type CreateMessageInputState = {
   type: "create";

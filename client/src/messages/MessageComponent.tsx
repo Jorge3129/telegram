@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Message, Media } from "./models/message.model";
+import { Message } from "./models/message.model";
 import { selectUser } from "../redux/user-reducer";
 import MessageTimestamp from "../ui/message/MessageTimestamp";
 import MessageStatusWrapper from "../ui/message/message-status/MessageStatusWrapper";
@@ -8,6 +8,8 @@ import { useLoadFile } from "../media/hooks/useLoadFile";
 import MediaContainer from "../media/MediaContainer";
 import MessageContextMenu from "./MessageContextMenu";
 import "./styles/MessageComponent.css";
+import { Media } from "./models/media.model";
+import { isOwnMessage } from "../utils/is-own-message";
 
 interface IPropsMessage {
   message: Message;
@@ -32,12 +34,12 @@ const MessageComponent: FC<IPropsMessage> = ({
 
   useLoadFile(message.media, setFile);
 
-  const showAuthor = chatType === "group" && message.author !== user?.username;
+  const showAuthor = chatType === "group" && !isOwnMessage(message, user);
 
   return (
     <MessageContextMenu message={message}>
       <div className="message_item">
-        <div className="message_author">{showAuthor && message.author}</div>
+        <div className="message_author">{showAuthor && message.authorName}</div>
         {file && (
           <div className="message_media">
             <MediaContainer media={file} className="message_img" />

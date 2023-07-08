@@ -26,8 +26,8 @@ const MessageAvatar: FC<IMessageAvatar> = ({ data }) => {
   return (
     <Avatar
       prefix="message"
-      title={message.author}
-      hide={nextMessage && nextMessage.author === message.author}
+      title={message.authorName}
+      hide={nextMessage && nextMessage.authorId === message.authorId}
     />
   );
 };

@@ -1,14 +1,10 @@
-export interface Media {
-  filename: string;
-  type: string;
-  src?: string;
-}
+import { Media } from "./media.model";
 
 export interface Message {
   id: string;
   text: string;
   timestamp: string;
-  author: string;
+  authorName: string;
   authorId: number;
   chatId: number;
   seen: boolean;

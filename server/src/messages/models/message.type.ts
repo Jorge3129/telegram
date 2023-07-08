@@ -1,11 +1,13 @@
+import { User } from 'src/users/user.type';
 import { Media } from './media.type';
 
 export interface Message {
   id: string;
   text: string;
   timestamp: string;
-  author: string;
+  authorName: string;
   authorId: number;
+  author: User;
   chatId: number;
   seen: boolean;
   edited: boolean;
