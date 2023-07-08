@@ -7,18 +7,17 @@ import { useSend } from "../current-chat/hooks/useSend";
 import {
   selectCurrentChat,
   CurrentChatActions,
-} from "../current-chat/reducers/main.chat.reducer";
+} from "../current-chat/reducers/current-chat.reducer";
 import MediaContainer from "./MediaContainer";
 import "./styles/MediaModal.css";
 
-interface IMediaModal {
-  socket: Socket;
-}
+interface IMediaModal {}
 
-const MediaModal: FC<IMediaModal> = ({ socket }) => {
+const MediaModal: FC<IMediaModal> = () => {
   const dispatch = useAppDispatch();
   const { media } = useSelector(selectCurrentChat);
-  const sendMessage = useSend(socket);
+
+  const sendMessage = useSend("");
 
   const handleSend = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -38,7 +37,9 @@ const MediaModal: FC<IMediaModal> = ({ socket }) => {
   //   dispatch(clearMedia());
   // };
 
-  if (!media.filename) return null;
+  if (!media.filename) {
+    return null;
+  }
 
   return (
     <div className="media_modal_container">

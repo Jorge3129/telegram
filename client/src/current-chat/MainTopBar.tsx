@@ -3,7 +3,7 @@ import { useAppDispatch } from "../redux/store";
 import {
   selectCurrentChat,
   CurrentChatActions,
-} from "./reducers/main.chat.reducer";
+} from "./reducers/current-chat.reducer";
 
 const MainTopBar = () => {
   const { currentChat } = useSelector(selectCurrentChat);

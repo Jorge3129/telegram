@@ -1,11 +1,11 @@
 import { FC } from "react";
-import MainInputForm from "./MainInputForm";
 import { Socket } from "socket.io-client";
 import MediaModal from "../media/MediaModal";
 import MainTopBar from "./MainTopBar";
 import { Chat } from "../chats/models/chat.model";
 import MessageListWrapper from "../messages/MessageListWrapper";
 import "./styles/CurrentChat.css";
+import ChatInput from "./inputs/ChatInput";
 
 interface Props {
   socket: Socket | null;
@@ -24,8 +24,8 @@ const CurrentChatComponent: FC<Props> = ({ socket, currentChat }) => {
     <div className="main_chat_container main_section">
       <MainTopBar />
       <MessageListWrapper socket={socket} currentChat={currentChat} />
-      <MainInputForm socket={socket} />
-      <MediaModal socket={socket} />
+      <ChatInput />
+      <MediaModal />
     </div>
   );
 };

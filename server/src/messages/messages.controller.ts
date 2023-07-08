@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Put, Delete, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Put,
+  Delete,
+  Param,
+  Patch,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { RequestUser } from 'src/users/decorators/user.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
@@ -7,13 +16,18 @@ import { Message } from './models/message.type';
 import { UserService } from 'src/users/user.service';
 import { MessageService } from './message.service';
 import { MessagesGateway } from 'src/socket/messages.gateway';
+import { MessageReadsService } from './services/message-reads.service';
+import { EditMessageDto } from './dto/edit-message.dto';
+import { MessagesRepository } from './message.repository';
 
 @Controller('messages')
 export class MessagesController {
   constructor(
     private messageService: MessageService,
+    private messageReadsService: MessageReadsService,
     private userService: UserService,
     private messagesGateway: MessagesGateway,
+    private messageRepo: MessagesRepository,
   ) {}
 
   @Post()
@@ -31,6 +45,35 @@ export class MessagesController {
     );
 
     return messageResponse;
+  }
+
+  @Patch(':id')
+  public async edit(
+    @Param('id') messageId: string,
+    @Body() dto: EditMessageDto,
+    @RequestUser() user: UserEntity,
+  ): Promise<void> {
+    const message = await this.messageRepo.findOneBy({ id: messageId });
+
+    if (!message) {
+      throw new NotFoundException('No message');
+    }
+
+    await this.messageRepo.updateMessageText(
+      message.content.id,
+      dto.textContent,
+    );
+
+    await this.messagesGateway.sendMessageToRecipients(
+      message.chatId,
+      user.id,
+      'message-edit',
+      {
+        messageId,
+        chatId: message.chatId,
+        text: dto.textContent,
+      },
+    );
   }
 
   @Delete(':id')
@@ -53,7 +96,7 @@ export class MessagesController {
     @Body() message: Message,
     @RequestUser() user: UserEntity,
   ) {
-    await this.messageService.updateSeenStatus(user.id, message);
+    await this.messageReadsService.updateSeen(user.id, message);
 
     const authorSocketId = await this.userService.getUserSocketId(
       message.authorId,

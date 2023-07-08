@@ -4,6 +4,7 @@ import { MessageReadEntity } from './entity/message-read.entity';
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TextMessageContentEntity } from './entity/message-content.entity';
 
 @Injectable()
 export class MessagesRepository {
@@ -13,6 +14,9 @@ export class MessagesRepository {
 
     @InjectRepository(MessageReadEntity)
     private messageReadRepo: Repository<MessageReadEntity>,
+
+    @InjectRepository(TextMessageContentEntity)
+    private messageContentRepo: Repository<TextMessageContentEntity>,
   ) {}
 
   public save(dto: Partial<MessageEntity>): Promise<MessageEntity> {
@@ -46,6 +50,15 @@ export class MessagesRepository {
     });
   }
 
+  public async updateMessageText(
+    messageContentId: string,
+    textContent: string,
+  ): Promise<void> {
+    await this.messageContentRepo.update(messageContentId, {
+      textContent,
+    });
+  }
+
   public getMessagesForChat(chatId: number): Promise<MessageEntity[]> {
     return this.messageRepo.find({
       where: {
@@ -74,68 +87,5 @@ export class MessagesRepository {
     });
 
     return message;
-  }
-
-  public async countUnreadMessages(
-    chatId: number,
-    userId: number,
-  ): Promise<number> {
-    const latestReadSubquery = this.messageReadRepo
-      .createQueryBuilder('read')
-      .innerJoin('read.message', 'message')
-      .where('read.userId = :userId', { userId })
-      .select('MAX(message.timestamp)', 'latestRead');
-
-    const count = await this.messageRepo
-      .createQueryBuilder('message')
-      .leftJoin(
-        'message.reads',
-        'read',
-        'read.messageId = message.id AND read.userId = :userId',
-        { userId },
-      )
-      .where('message.chatId = :chatId', { chatId })
-      .andWhere('message.timestamp > (' + latestReadSubquery.getQuery() + ')')
-      .andWhere('read.id IS NULL')
-      .setParameters(latestReadSubquery.getParameters())
-      .getCount();
-
-    return count;
-  }
-
-  public async updateSeen(
-    readByUserId: number,
-    message: {
-      chatId: number;
-      timestamp: string;
-    },
-  ): Promise<void> {
-    const qb = this.messageRepo
-      .createQueryBuilder('message')
-      .leftJoin(
-        'message.reads',
-        'readsByUser',
-        '"readsByUser"."messageId" = message.id AND "readsByUser"."userId" = :readByUserId',
-        { readByUserId },
-      )
-      .where('message.chatId = :chatId', { chatId: message.chatId })
-      .andWhere('message.timestamp <= :timestamp', {
-        timestamp: new Date(message.timestamp),
-      })
-      .andWhere('readsByUser.id IS NULL')
-      .select(`message.id AS "messageId"`);
-
-    const messagesToUpdate = await qb.getRawMany<{ messageId: string }>();
-
-    const values = messagesToUpdate.map(
-      ({ messageId }): Partial<MessageReadEntity> => ({
-        messageId,
-        userId: readByUserId,
-      }),
-    );
-
-    await this.messageReadRepo.save(values).catch((e) => {
-      console.log(e);
-    });
   }
 }

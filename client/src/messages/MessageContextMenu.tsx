@@ -6,6 +6,7 @@ import { useAppDispatch } from "../redux/store";
 import { MessageActions } from "./messages.reducer";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/user-reducer";
+import { CurrentChatActions } from "../current-chat/reducers/current-chat.reducer";
 
 interface ContextMenuProps {
   children: ReactElement;
@@ -41,6 +42,19 @@ const MessageContextMenu: FC<ContextMenuProps> = ({ children, message }) => {
     dispatch(MessageActions.deleteMessage(message.id));
   };
 
+  const handleEdit = async () => {
+    handleClose();
+
+    dispatch(
+      CurrentChatActions.setInput({
+        type: "edit",
+        message: message,
+      })
+    );
+  };
+
+  const isOwnMessage = user?.id === message.authorId;
+
   return (
     <>
       {cloneElement(children, {
@@ -55,9 +69,8 @@ const MessageContextMenu: FC<ContextMenuProps> = ({ children, message }) => {
         anchorReference="anchorPosition"
         anchorPosition={position}
       >
-        {user?.id === message.authorId && (
-          <MenuItem onClick={handleDelete}>Delete</MenuItem>
-        )}
+        {isOwnMessage && <MenuItem onClick={handleEdit}>Edit</MenuItem>}
+        {isOwnMessage && <MenuItem onClick={handleDelete}>Delete</MenuItem>}
         <MenuItem onClick={handleClose}>Close</MenuItem>
       </Menu>
     </>
