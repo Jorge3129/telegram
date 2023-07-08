@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { MediaEntity } from './entity/media.entity';
+import { CreateMessageDto } from '../dto/create-message.dto';
+import { MediaEntity } from '../entity/media.entity';
 import {
   MessageContentEntity,
   TextMessageContentEntity,
   MediaMessageContentEntity,
-} from './entity/message-content.entity';
-import { MessageEntity, PersonalMessageEntity } from './entity/message.entity';
+} from '../entity/message-content.entity';
+import { MessageEntity, PersonalMessageEntity } from '../entity/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from 'src/users/user.repository';
 import { Repository } from 'typeorm';
