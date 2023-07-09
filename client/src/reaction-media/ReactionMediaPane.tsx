@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import ReactionMediaHeader from "./ReactionMediaHeader";
 import EmojiList from "./emoji/EmojiList";
 import "./styles/ReactionMediaPane.css";
+import GifsPage from "./gifs/GifsPage";
 
 export type ReactionMediaPage = {
   title: string;
@@ -20,7 +21,7 @@ const ReactionMediaPane: FC = () => {
     },
     {
       title: "GIFs",
-      component: <div>GIFs</div>,
+      component: <GifsPage />,
     },
   ];
 

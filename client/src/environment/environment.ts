@@ -3,6 +3,7 @@ import { Environment } from "./environment.type";
 const environment: Environment = {
   apiUrl: "http://localhost:9000",
   wsUrl: "ws://localhost:8000",
+  giphyApiKey: "",
 };
 
 export default environment;
