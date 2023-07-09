@@ -8,7 +8,7 @@ import MainPlaceholder from "./MainPlaceholder";
 import { User } from "../users/models/user.model";
 import ChatsContainer from "../chats/components/ChatsContainer";
 import CurrentChatComponent from "../current-chat/CurrentChatComponent";
-import MediaSidebar from "../emotions/MediaSidebar";
+import ReactionMediaPane from "../reaction-media/ReactionMediaPane";
 
 interface MainProps {
   user: User;
@@ -29,7 +29,7 @@ const Main: FC<MainProps> = ({ user }) => {
       {currentChat ? (
         <div className="main_chat_media_container">
           <CurrentChatComponent socket={socket} currentChat={currentChat} />
-          <MediaSidebar />
+          <ReactionMediaPane />
         </div>
       ) : (
         <MainPlaceholder />

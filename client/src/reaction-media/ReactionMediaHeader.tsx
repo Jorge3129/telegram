@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { ReactionMediaPage } from "./MediaSidebar";
-import "./styles/MediaTopBar.css";
+import { ReactionMediaPage } from "./ReactionMediaPane";
+import "./styles/ReactionMediaHeader.css";
 
 interface Props {
   pages: ReactionMediaPage[];
@@ -8,7 +8,11 @@ interface Props {
   setCurrentPage: (value: ReactionMediaPage) => void;
 }
 
-const MediaTopBar: FC<Props> = ({ pages, currentPage, setCurrentPage }) => {
+const ReactionMediaHeader: FC<Props> = ({
+  pages,
+  currentPage,
+  setCurrentPage,
+}) => {
   const getPageClassname = (page: ReactionMediaPage) => {
     return (
       page.title.toLowerCase() +
@@ -17,24 +21,24 @@ const MediaTopBar: FC<Props> = ({ pages, currentPage, setCurrentPage }) => {
   };
 
   return (
-    <ul className="media_top_bar top_bar">
+    <div className="reaction-media-header top_bar">
       {pages.map((page) => (
-        <li
-          className={"media_top_bar_option " + getPageClassname(page)}
+        <div
+          className={"reaction-media-page-link " + getPageClassname(page)}
           key={page.title}
           onClick={() => setCurrentPage(page)}
         >
-          <div className={"media_top_bar_option_title"}>
+          <div className={"reaction-media-page-title"}>
             {page.title.toUpperCase()}
           </div>
-        </li>
+        </div>
       ))}
 
       <hr
         className={"selected_bottom_border " + currentPage.title.toLowerCase()}
       />
-    </ul>
+    </div>
   );
 };
 
-export default MediaTopBar;
+export default ReactionMediaHeader;

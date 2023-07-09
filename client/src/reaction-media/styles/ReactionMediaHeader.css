@@ -1,23 +1,23 @@
-.media_top_bar {
+.reaction-media-header {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   position: relative;
   flex: 1 0 auto;
 }
 
-.media_top_bar_option {
+.reaction-media-page-link {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.media_top_bar_option_title {
+.reaction-media-page-title {
   color: var(--gray);
   font-size: 0.9em;
   font-weight: 500;
 }
 
-.media_top_bar_option:hover {
+.reaction-media-page-link:hover {
   cursor: pointer;
 }
 
@@ -45,6 +45,6 @@
   margin-left: calc(200% / 3);
 }
 
-.media_selected_option .media_top_bar_option_title {
+.media_selected_option .reaction-media-page-title {
   color: var(--blue-darker);
 }

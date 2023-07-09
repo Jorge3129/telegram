@@ -101,7 +101,7 @@ body {
   font-weight: 600;
 }
 
-.media_sidebar {
+.reaction-media-pane {
   background-color: var(--blue-gray);
   width: calc(16em + 3vw);
   justify-self: flex-end;
@@ -127,7 +127,7 @@ body {
 }
 
 @media screen and (max-width: 1050px) {
-  .media_sidebar {
+  .reaction-media-pane {
     /* width: 0;
         transition: var(--transition); */
   }

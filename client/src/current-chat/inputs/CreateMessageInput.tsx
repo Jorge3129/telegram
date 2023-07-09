@@ -5,7 +5,7 @@ import { useSend } from "../hooks/useSend";
 import { CreateMessageInputState } from "../reducers/current-chat-state.type";
 import { useSelector } from "react-redux";
 import { selectCurrentChat } from "../reducers/current-chat.reducer";
-import { useEmojiInput } from "../../emotions/hooks/use-emoji-input";
+import { useEmojiInput } from "../../reaction-media/hooks/use-emoji-input";
 
 interface Props {
   inputState: CreateMessageInputState;

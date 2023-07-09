@@ -1,14 +1,14 @@
 import { FC, useState } from "react";
-import MediaTopBar from "./MediaTopBar";
+import ReactionMediaHeader from "./ReactionMediaHeader";
 import EmojiList from "./emoji/EmojiList";
-import "./styles/MediaSidebar.css";
+import "./styles/ReactionMediaPane.css";
 
 export type ReactionMediaPage = {
   title: string;
   component: JSX.Element;
 };
 
-const MediaSidebar: FC = () => {
+const ReactionMediaPane: FC = () => {
   const pages: ReactionMediaPage[] = [
     {
       title: "Emoji",
@@ -27,16 +27,18 @@ const MediaSidebar: FC = () => {
   const [currentPage, setCurrentPage] = useState<ReactionMediaPage>(pages[0]);
 
   return (
-    <div className="media_sidebar main_section">
-      <MediaTopBar
+    <div className="reaction-media-pane main_section">
+      <ReactionMediaHeader
         pages={pages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
 
-      <div className="media-page-container">{currentPage.component}</div>
+      <div className="reaction-media-page-container">
+        {currentPage.component}
+      </div>
     </div>
   );
 };
 
-export default MediaSidebar;
+export default ReactionMediaPane;

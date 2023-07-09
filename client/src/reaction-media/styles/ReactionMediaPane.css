@@ -1,9 +1,9 @@
-.media_sidebar {
+.reaction-media-pane {
   display: flex;
   flex-direction: column;
 }
 
-.media-page-container {
+.reaction-media-page-container {
   overflow-y: scroll;
   overflow-x: hidden;
   height: calc(100% - var(--chat_bar_height));
