@@ -1,6 +1,6 @@
 import EmojiCategoryComponent from "./EmojiBlock";
-import "./Emojis.css";
 import { emojiCategories } from "./emoji-categories.const";
+import "./Emojis.css";
 
 const EmojiList = () => {
   return (

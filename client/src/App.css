@@ -120,6 +120,12 @@ body {
   cursor: pointer;
 }
 
+.top_bar {
+  background-color: var(--white);
+  height: var(--chat_bar_height);
+  border-bottom: var(--border);
+}
+
 @media screen and (max-width: 1050px) {
   .media_sidebar {
     /* width: 0;

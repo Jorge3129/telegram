@@ -1,31 +1,37 @@
-import React, { useState } from "react";
-import "./styles/MediaSidebar.css";
+import { FC } from "react";
+import { ReactionMediaPage } from "./MediaSidebar";
+import "./styles/MediaTopBar.css";
 
-type MediaOption = "EMOJI" | "STICKERS" | "GIFS";
+interface Props {
+  pages: ReactionMediaPage[];
+  currentPage: ReactionMediaPage;
+  setCurrentPage: (value: ReactionMediaPage) => void;
+}
 
-const MediaTopBar = () => {
-  const options = ["EMOJI", "STICKERS", "GIFS"] as MediaOption[];
-
-  const [selectedOption, setSelectedOption] = useState<MediaOption>("EMOJI");
-
-  const getClassname = (op: MediaOption) =>
-    " " +
-    op.toLowerCase() +
-    (op === selectedOption ? " media_selected_option" : "");
+const MediaTopBar: FC<Props> = ({ pages, currentPage, setCurrentPage }) => {
+  const getPageClassname = (page: ReactionMediaPage) => {
+    return (
+      page.title.toLowerCase() +
+      (page.title === currentPage.title ? " media_selected_option" : "")
+    );
+  };
 
   return (
     <ul className="media_top_bar top_bar">
-      {options.map((op) => (
+      {pages.map((page) => (
         <li
-          className={"media_top_bar_option" + getClassname(op)}
-          key={op}
-          onClick={(e) => setSelectedOption(op)}
+          className={"media_top_bar_option " + getPageClassname(page)}
+          key={page.title}
+          onClick={() => setCurrentPage(page)}
         >
-          <div className={"media_top_bar_option_title"}>{op}</div>
+          <div className={"media_top_bar_option_title"}>
+            {page.title.toUpperCase()}
+          </div>
         </li>
       ))}
+
       <hr
-        className={"selected_bottom_border " + selectedOption.toLowerCase()}
+        className={"selected_bottom_border " + currentPage.title.toLowerCase()}
       />
     </ul>
   );
