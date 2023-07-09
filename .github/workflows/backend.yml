@@ -5,12 +5,13 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+    
+defaults:
+  run:
+    working-directory: ./server
 
 jobs:
   build:
-    defaults:
-          run:
-            working-directory: server
     runs-on: ubuntu-latest
 
     strategy:
