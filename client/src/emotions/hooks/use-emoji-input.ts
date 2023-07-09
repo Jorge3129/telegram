@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { emojisInput$ } from "./EmojiBlock";
+import { emojisInput$ } from "../emoji/EmojiBlock";
 
 export const useEmojiInput = (callback: (emoji: string) => void) => {
   useEffect(() => {

@@ -3,9 +3,9 @@ import FileInput from "../FileInput";
 import { useSend } from "../hooks/useSend";
 
 import { CreateMessageInputState } from "../reducers/current-chat-state.type";
-import { useEmojiInput } from "../../components/media-sidebar/use-emoji-input";
 import { useSelector } from "react-redux";
 import { selectCurrentChat } from "../reducers/current-chat.reducer";
+import { useEmojiInput } from "../../emotions/hooks/use-emoji-input";
 
 interface Props {
   inputState: CreateMessageInputState;

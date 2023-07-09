@@ -1,11 +1,10 @@
 import { FC, useEffect, useRef, MouseEvent, useState } from "react";
 import FileInput from "../FileInput";
-import { useSend } from "../hooks/useSend";
 import { EditMessageInputState } from "../reducers/current-chat-state.type";
-import { useEmojiInput } from "../../components/media-sidebar/use-emoji-input";
 import "./EditMessageInput.css";
 import EditMessageBar from "./EditMessageBar";
 import { useEditMessage } from "../hooks/use-edit-message";
+import { useEmojiInput } from "../../emotions/hooks/use-emoji-input";
 
 interface Props {
   inputState: EditMessageInputState;
