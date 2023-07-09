@@ -7,6 +7,7 @@ import MessageStatusWrapper from "../../ui/message/message-status/MessageStatusW
 import MessageContextMenu from "../MessageContextMenu";
 import { isOwnMessage } from "../../utils/is-own-message";
 import { Gif } from "@giphy/react-components";
+import "./GifMessageComponent.css";
 
 interface Props {
   message: GifMessage;
@@ -27,10 +28,10 @@ const GifMessageComponent: FC<Props> = ({ message, chatType, callback }) => {
 
   return (
     <MessageContextMenu message={message}>
-      <div className="message_item">
+      <div className="message_item gif_message_item">
         <div className="message_author">{showAuthor && message.authorName}</div>
         <div className="message_media">
-          <Gif gif={message.srcObject} width={300} hideAttribution noLink />
+          <Gif gif={message.srcObject} width={220} hideAttribution noLink />
         </div>
 
         <div className="message_text">{message.text}</div>

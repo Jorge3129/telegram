@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import ResizeObserver from "react-resize-observer";
 import { IGif } from "@giphy/js-types";
 import { useSendGif } from "./use-send-gif";
+import ChatsSearchBar from "../../chats/components/ChatsSearchBar";
 
 const GifsPage = () => {
   const sendGif = useSendGif();
@@ -15,6 +16,8 @@ const GifsPage = () => {
 
   const [width, setWidth] = useState(0);
 
+  const [showGrid, setShowGrid] = useState(true);
+
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,26 +26,48 @@ const GifsPage = () => {
     }
   }, []);
 
-  const fetchGifs = (offset: number) =>
-    giphyFetch.trending({ offset, limit: 10 });
+  const [searchItem, setSearchItem] = useState("");
+
+  useEffect(() => {
+    setShowGrid(false);
+    setTimeout(() => {
+      setShowGrid(true);
+    }, 40);
+  }, [searchItem]);
+
+  const fetchGifs = (offset: number) => {
+    if (searchItem) {
+      return giphyFetch.search(searchItem, { offset, limit: 10 });
+    }
+
+    return giphyFetch.trending({ offset, limit: 10 });
+  };
 
   return (
-    <div className="gifs-container" ref={ref}>
-      <Grid
-        onGifClick={onGifClick}
-        noLink
-        hideAttribution
-        fetchGifs={fetchGifs}
-        width={width}
-        columns={3}
-        gutter={6}
-      />
+    <div className="gifs-container">
+      <ChatsSearchBar searchItem={searchItem} setSearchItem={setSearchItem} />
 
-      <ResizeObserver
-        onResize={({ width }) => {
-          setWidth(width);
-        }}
-      />
+      <div className="gifs-grid" ref={ref}>
+        {showGrid ? (
+          <Grid
+            onGifClick={onGifClick}
+            noLink
+            hideAttribution
+            fetchGifs={fetchGifs}
+            width={width}
+            columns={3}
+            gutter={6}
+          />
+        ) : (
+          "Loading..."
+        )}
+
+        <ResizeObserver
+          onResize={({ width }) => {
+            setWidth(width);
+          }}
+        />
+      </div>
     </div>
   );
 };
