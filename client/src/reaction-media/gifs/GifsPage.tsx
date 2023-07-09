@@ -3,10 +3,14 @@ import { giphyFetch } from "./giphy-fetch";
 import "./GifsPage.css";
 import { useEffect, useRef, useState } from "react";
 import ResizeObserver from "react-resize-observer";
+import { IGif } from "@giphy/js-types";
+import { useSendGif } from "./use-send-gif";
 
 const GifsPage = () => {
-  const onGifClick = (...args: any[]) => {
-    console.log(args);
+  const sendGif = useSendGif();
+
+  const onGifClick = async (gif: IGif) => {
+    sendGif(gif);
   };
 
   const [width, setWidth] = useState(0);
