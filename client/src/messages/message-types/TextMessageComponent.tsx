@@ -1,15 +1,14 @@
 import { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { TextMessage } from "./models/message.model";
-import { selectUser } from "../redux/user-reducer";
-import MessageTimestamp from "../ui/message/MessageTimestamp";
-import MessageStatusWrapper from "../ui/message/message-status/MessageStatusWrapper";
-import { useLoadFile } from "../media/hooks/useLoadFile";
-import MediaContainer from "../media/MediaContainer";
-import MessageContextMenu from "./MessageContextMenu";
-import "./styles/MessageComponent.css";
-import { Media } from "./models/media.model";
-import { isOwnMessage } from "../utils/is-own-message";
+import { TextMessage } from "../models/message.model";
+import { selectUser } from "../../redux/user-reducer";
+import MessageTimestamp from "../../ui/message/MessageTimestamp";
+import MessageStatusWrapper from "../../ui/message/message-status/MessageStatusWrapper";
+import { useLoadFile } from "../../media/hooks/useLoadFile";
+import MediaContainer from "../../media/MediaContainer";
+import MessageContextMenu from "../MessageContextMenu";
+import { Media } from "../models/media.model";
+import { isOwnMessage } from "../../utils/is-own-message";
 
 interface Props {
   message: TextMessage;

@@ -1,17 +1,16 @@
 import { MessageActions } from "../../messages/messages.reducer";
 import { ChatActions } from "../../chats/chats.reducer";
-import {
-  selectCurrentChat,
-  CurrentChatActions,
-} from "../reducers/current-chat.reducer";
+
 import { useAppDispatch } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { Message } from "../../messages/models/message.model";
 import { messageApiService } from "../../messages/messages-api.service";
-import { CreateMessageDto } from "../../messages/models/create-message.dto";
 
-export const useSend = (inputText: string) => {
-  const { currentChatId, media } = useSelector(selectCurrentChat);
+import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
+import { IGif } from "@giphy/js-types";
+
+export const useSendGif = () => {
+  const { currentChatId } = useSelector(selectCurrentChat);
   const dispatch = useAppDispatch();
 
   const dispatchSendMessage = (message: Message) => {
@@ -20,23 +19,18 @@ export const useSend = (inputText: string) => {
     dispatch(ChatActions.setUnread({ unread: 0, chatId: message.chatId }));
   };
 
-  const handleSend = async () => {
+  const handleSend = async (gif: IGif) => {
     if (!currentChatId) {
       return;
     }
 
-    const message: CreateMessageDto = {
-      text: inputText,
-      timestamp: new Date().toISOString(),
+    const createdMessage = await messageApiService.createGif({
       chatId: currentChatId,
-      media,
-    };
+      timestamp: new Date().toISOString(),
+      srcObject: gif,
+    });
 
-    dispatch(CurrentChatActions.clearInput());
-
-    const response = await messageApiService.create(message);
-
-    dispatchSendMessage(response);
+    dispatchSendMessage(createdMessage);
   };
 
   return handleSend;

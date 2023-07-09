@@ -1,0 +1,9 @@
+.reaction-media-pane {
+  display: flex;
+  flex-direction: column;
+}
+
+.reaction-media-page-container {
+  height: calc(100% - var(--chat_bar_height));
+  background-color: var(--white);
+}

@@ -1,3 +1,4 @@
+import { IGif } from "@giphy/js-types";
 import { User } from "../../users/models/user.model";
 import { Media } from "./media.model";
 
@@ -23,7 +24,15 @@ export interface PollMessage extends BaseMessage {
   type: "poll-message";
 }
 
-export type Message = TextMessage | PollMessage;
+export interface GifMessage extends BaseMessage {
+  type: "gif-message";
+  srcObject: IGif;
+}
+
+export type Message = TextMessage | PollMessage | GifMessage;
 
 export const isTextMessage = (message: Message): message is TextMessage =>
-  message.type === "text-message";
+  (message as TextMessage).type === "text-message";
+
+export const isGifMessage = (message: Message): message is GifMessage =>
+  (message as GifMessage).type === "gif-message";

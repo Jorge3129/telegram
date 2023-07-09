@@ -1,19 +1,15 @@
 import { FC } from "react";
 import { Subject } from "rxjs";
+import { EmojiCategory } from "./emoji-category.type";
 
-export interface IEmojiBlock {
-  title: string;
-  data: string[];
-}
-
-interface IEmojiBlockProps {
-  emojiBlock: IEmojiBlock;
+interface Props {
+  emojiBlock: EmojiCategory;
 }
 
 export const emojisInput$ = new Subject<string>();
 
-const EmojiBlock: FC<IEmojiBlockProps> = ({ emojiBlock }) => {
-  const { title, data } = emojiBlock;
+const EmojiCategoryComponent: FC<Props> = ({ emojiBlock }) => {
+  const { name, emojis } = emojiBlock;
 
   const handleClick = (emoji: string) => {
     emojisInput$.next(emoji);
@@ -21,9 +17,9 @@ const EmojiBlock: FC<IEmojiBlockProps> = ({ emojiBlock }) => {
 
   return (
     <div className="emoji_block">
-      <div className="emoji_block_title">{title}</div>
+      <div className="emoji_block_title">{name}</div>
       <ul className="emoji_list">
-        {data.map((emoji) => (
+        {emojis.map((emoji) => (
           <li
             key={emoji}
             className="emoji_list_item"
@@ -37,4 +33,4 @@ const EmojiBlock: FC<IEmojiBlockProps> = ({ emojiBlock }) => {
   );
 };
 
-export default EmojiBlock;
+export default EmojiCategoryComponent;

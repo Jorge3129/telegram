@@ -1,7 +1,8 @@
 import { FC } from "react";
-import { Message, isTextMessage } from "./models/message.model";
+import { Message, isGifMessage, isTextMessage } from "./models/message.model";
 import "./styles/MessageComponent.css";
-import TextMessageComponent from "./TextMessageComponent";
+import TextMessageComponent from "./message-types/TextMessageComponent";
+import GifMessageComponent from "./message-types/GifMessageComponent";
 
 interface IPropsMessage {
   message: Message;
@@ -17,6 +18,16 @@ const MessageComponent: FC<IPropsMessage> = ({
   if (isTextMessage(message)) {
     return (
       <TextMessageComponent
+        message={message}
+        callback={callback}
+        chatType={chatType}
+      />
+    );
+  }
+
+  if (isGifMessage(message)) {
+    return (
+      <GifMessageComponent
         message={message}
         callback={callback}
         chatType={chatType}

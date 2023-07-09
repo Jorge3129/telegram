@@ -15,6 +15,7 @@ import { Message } from './models/message.type';
 import { MessageService } from './message.service';
 import { EditMessageDto } from './dto/edit-message.dto';
 import { EditMessageService } from './services/edit-message.service';
+import { CreateGifMessageDto } from './dto/create-gif-message.dto';
 
 @Controller('messages')
 export class MessagesController {
@@ -26,6 +27,14 @@ export class MessagesController {
   @Post()
   public async create(
     @Body() messageDto: CreateMessageDto,
+    @RequestUser() user: UserEntity,
+  ): Promise<Message> {
+    return this.messageService.create(messageDto, user);
+  }
+
+  @Post('gif')
+  public async createGif(
+    @Body() messageDto: CreateGifMessageDto,
     @RequestUser() user: UserEntity,
   ): Promise<Message> {
     return this.messageService.create(messageDto, user);

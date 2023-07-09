@@ -17,6 +17,7 @@ import { CreateMessageEvent } from './events/create-message.event';
 import { DeleteMessageEvent } from './events/delete-message.event';
 import { ReadMessageEvent } from './events/read-message.event';
 import { MessageMapperService } from './services/message-mapper.service';
+import { CreateGifMessageDto } from './dto/create-gif-message.dto';
 
 @Injectable()
 export class MessageService {
@@ -29,7 +30,10 @@ export class MessageService {
     private messageMapper: MessageMapperService,
   ) {}
 
-  public async create(message: CreateMessageDto, user: User): Promise<Message> {
+  public async create(
+    message: CreateMessageDto | CreateGifMessageDto,
+    user: User,
+  ): Promise<Message> {
     await this.membershipService.checkUserChatMembership(
       user.id,
       message.chatId,

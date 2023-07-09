@@ -19,7 +19,12 @@ export interface TextMessage extends BaseMessage {
   media: Media[];
 }
 
-export type Message = TextMessage;
+export interface GifMessage extends BaseMessage {
+  type: 'gif-message';
+  srcObject: object;
+}
+
+export type Message = TextMessage | GifMessage;
 
 export const isTextMessage = (message: Message): message is TextMessage =>
   message.type === 'text-message';
