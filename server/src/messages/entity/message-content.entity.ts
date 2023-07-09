@@ -13,6 +13,7 @@ import { MessageEntity } from './message.entity';
 export enum MessageContentType {
   TEXT_MESSAGE = 'text-message',
   MEDIA_MESSAGE = 'media-message',
+  GIF_MESSAGE = 'gif-message',
 }
 
 @Entity('message_contents')
@@ -49,6 +50,14 @@ export class MediaMessageContentEntity extends MessageContentEntity {
   media: MediaEntity[];
 }
 
+@ChildEntity('gif')
+export class GifContentEntity extends MessageContentEntity {
+  readonly type = MessageContentType.GIF_MESSAGE;
+
+  @Column({ type: 'jsonb' })
+  srcObject: object;
+}
+
 export const isTextContent = (
   value: MessageContentEntity,
 ): value is TextMessageContentEntity =>
@@ -58,3 +67,7 @@ export const isMediaContent = (
   value: MessageContentEntity,
 ): value is MediaMessageContentEntity =>
   value.type === MessageContentType.MEDIA_MESSAGE;
+
+export const isGifContent = (
+  value: MessageContentEntity,
+): value is GifContentEntity => value.type === MessageContentType.GIF_MESSAGE;

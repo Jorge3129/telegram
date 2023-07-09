@@ -5,12 +5,14 @@ import {
   MessageContentEntity,
   TextMessageContentEntity,
   MediaMessageContentEntity,
+  GifContentEntity,
 } from '../entity/message-content.entity';
 import { MessageEntity, PersonalMessageEntity } from '../entity/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from 'src/users/user.repository';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/user.type';
+import { CreateGifMessageDto } from '../dto/create-gif-message.dto';
 
 @Injectable()
 export class CreateMessageService {
@@ -25,7 +27,7 @@ export class CreateMessageService {
   ) {}
 
   public async saveFromDto(
-    dto: CreateMessageDto,
+    dto: CreateMessageDto | CreateGifMessageDto,
     user: User,
   ): Promise<MessageEntity> {
     const message = this.createMessage(dto, user);
@@ -41,7 +43,10 @@ export class CreateMessageService {
     return savedMessage;
   }
 
-  private createMessage(dto: CreateMessageDto, user: User): MessageEntity {
+  private createMessage(
+    dto: CreateMessageDto | CreateGifMessageDto,
+    user: User,
+  ): MessageEntity {
     const message = new PersonalMessageEntity();
     message.authorId = user.id;
     message.chatId = dto.chatId;
@@ -51,7 +56,15 @@ export class CreateMessageService {
     return message;
   }
 
-  private createMessageContent(dto: CreateMessageDto): MessageContentEntity {
+  private createMessageContent(
+    dto: CreateMessageDto | CreateGifMessageDto,
+  ): MessageContentEntity {
+    if (dto instanceof CreateGifMessageDto) {
+      const gifContent = new GifContentEntity();
+      gifContent.srcObject = dto.srcObject;
+      return gifContent;
+    }
+
     if (!dto.media?.filename) {
       const textContent = new TextMessageContentEntity();
       textContent.textContent = dto.text;
