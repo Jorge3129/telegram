@@ -71,3 +71,8 @@ export const isMediaContent = (
 export const isGifContent = (
   value: MessageContentEntity,
 ): value is GifContentEntity => value.type === MessageContentType.GIF_MESSAGE;
+
+export type UnionMessageContentEntity =
+  | TextMessageContentEntity
+  | MediaMessageContentEntity
+  | GifContentEntity;

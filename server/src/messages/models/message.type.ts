@@ -3,7 +3,6 @@ import { Media } from './media.type';
 
 export interface BaseMessage {
   id: string;
-  text: string;
   timestamp: string;
   authorName: string;
   authorId: number;
