@@ -34,7 +34,6 @@ import { MessageMapperModule } from './mappers/message-mapper.module';
     CreateMessageService,
     MessageReadsService,
     EditMessageService,
-    MessageMappingHelper,
     ...MessageMapperModule.providers,
   ],
   exports: [MessageService, MessagesRepository, MessageReadsService],
