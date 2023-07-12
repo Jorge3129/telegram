@@ -7,11 +7,11 @@ import {
 import { MessageEntity } from 'src/messages/entity/message.entity';
 import { Media } from 'src/messages/models/media.type';
 import { TextMessage } from 'src/messages/models/message.type';
-import { MessageMappingHelper } from '../message-mapping.helper';
+import { BaseMessageBuilder } from './base-message.builder';
 
 @Injectable()
 export class TextMessageBuilder {
-  constructor(private messageHelper: MessageMappingHelper) {}
+  constructor(private baseMessageBuilder: BaseMessageBuilder) {}
 
   public build(
     message: MessageEntity,
@@ -22,7 +22,7 @@ export class TextMessageBuilder {
       edited: message.edited,
       media: this.getMedia(content),
       text: this.getText(content),
-      ...this.messageHelper.getBaseMessage(message),
+      ...this.baseMessageBuilder.build(message),
     };
   }
 

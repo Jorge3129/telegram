@@ -9,7 +9,7 @@ import { TextMessageBuilder } from './builders/text-message-builder';
 import { GifMessageBuilder } from './builders/gif-message.builder';
 
 @Injectable()
-export class MessageModelMapper {
+export class MessageEntityToModelMapper {
   constructor(
     private textMessageBuilder: TextMessageBuilder,
     private gifMessageBuilder: GifMessageBuilder,

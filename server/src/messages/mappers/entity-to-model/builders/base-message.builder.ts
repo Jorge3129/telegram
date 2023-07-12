@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { MessageEntity } from 'src/messages/entity/message.entity';
 import { BaseMessage } from 'src/messages/models/message.type';
+import { MessageMappingHelper } from '../message-mapping.helper';
 
 @Injectable()
-export class MessageMappingHelper {
-  public getBaseMessage(message: MessageEntity): BaseMessage {
+export class BaseMessageBuilder {
+  constructor(private messageHelper: MessageMappingHelper) {}
+
+  public build(message: MessageEntity): BaseMessage {
     return {
       id: message.id,
       timestamp: message.timestamp,
@@ -12,11 +15,7 @@ export class MessageMappingHelper {
       authorId: message.authorId,
       authorName: message.author.username,
       chatId: message.chatId,
-      seen: this.isMessageSeen(message),
+      seen: this.messageHelper.isMessageSeen(message),
     };
-  }
-
-  public isMessageSeen(message: MessageEntity): boolean {
-    return !!message.reads?.find((read) => read.userId !== message.authorId);
   }
 }

@@ -2,17 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { GifContentEntity } from 'src/messages/entity/message-content.entity';
 import { MessageEntity } from 'src/messages/entity/message.entity';
 import { GifMessage } from 'src/messages/models/message.type';
-import { MessageMappingHelper } from '../message-mapping.helper';
+import { BaseMessageBuilder } from './base-message.builder';
 
 @Injectable()
 export class GifMessageBuilder {
-  constructor(private messageHelper: MessageMappingHelper) {}
+  constructor(private baseMessageBuilder: BaseMessageBuilder) {}
 
   public build(message: MessageEntity, content: GifContentEntity): GifMessage {
     return {
       type: 'gif-message',
       srcObject: content.srcObject,
-      ...this.messageHelper.getBaseMessage(message),
+      ...this.baseMessageBuilder.build(message),
     };
   }
 }

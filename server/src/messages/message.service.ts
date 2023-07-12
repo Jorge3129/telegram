@@ -16,8 +16,8 @@ import { AppMessageEvent } from './events';
 import { CreateMessageEvent } from './events/create-message.event';
 import { DeleteMessageEvent } from './events/delete-message.event';
 import { ReadMessageEvent } from './events/read-message.event';
-import { MessageModelMapper } from './services/mappers/message-model.mapper';
 import { CreateGifMessageDto } from './dto/create-gif-message.dto';
+import { MessageEntityToModelMapper } from './mappers/entity-to-model/message-entity-to-model.mapper';
 
 @Injectable()
 export class MessageService {
@@ -27,7 +27,7 @@ export class MessageService {
     private createMessageService: CreateMessageService,
     private membershipService: ChatMembershipService,
     private eventEmitter: AppEventEmitter<AppMessageEvent>,
-    private messageMapper: MessageModelMapper,
+    private messageMapper: MessageEntityToModelMapper,
   ) {}
 
   public async create(
