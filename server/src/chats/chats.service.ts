@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { ChatUserRepository } from '../chat-users/services/chat-user.repository';
-import { MessageService } from '../messages/message.service';
 import { User } from '../users/user.type';
 import { Chat, ChatForView } from './chat.type';
 import { ChatsRepository } from './chats.repository';
-import { MessageReadsService } from 'src/messages/services/message-reads.service';
+import { MessageQueryService } from 'src/messages/queries/message-query.service';
+import { MessageReadsQueryService } from 'src/messages/queries/message-reads-query.service';
 
 @Injectable()
 export class ChatsService {
   constructor(
     private readonly chatsRepo: ChatsRepository,
-    private readonly messageService: MessageService,
-    private readonly messageReadsService: MessageReadsService,
+    private readonly messageService: MessageQueryService,
+    private readonly messageReadsService: MessageReadsQueryService,
     private readonly chatUsersRepo: ChatUserRepository,
   ) {}
 

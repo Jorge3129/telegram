@@ -14,15 +14,11 @@ import { UserEntity } from 'src/users/entity/user.entity';
 import { Message } from './models/message.type';
 import { MessageService } from './message.service';
 import { EditMessageDto } from './dto/edit-message.dto';
-import { EditMessageService } from './services/edit-message.service';
 import { CreateGifMessageDto } from './dto/create-gif-message.dto';
 
 @Controller('messages')
 export class MessagesController {
-  constructor(
-    private messageService: MessageService,
-    private editMessageService: EditMessageService,
-  ) {}
+  constructor(private messageService: MessageService) {}
 
   @Post()
   public async create(
@@ -46,7 +42,7 @@ export class MessagesController {
     @Body() dto: EditMessageDto,
     @RequestUser() user: UserEntity,
   ): Promise<void> {
-    await this.editMessageService.editMessage(messageId, dto, user);
+    await this.messageService.editMessage(messageId, dto, user);
   }
 
   @Delete(':id')
