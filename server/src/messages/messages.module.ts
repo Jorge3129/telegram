@@ -14,7 +14,10 @@ import { CreateMessageService } from './services/create-message.service';
 import { MessagesController } from './messages.controller';
 import { MessageReadsService } from './services/message-reads.service';
 import { EditMessageService } from './services/edit-message.service';
-import { MessageMapperService } from './services/message-mapper.service';
+import { MessageModelMapper } from './services/mappers/message-model.mapper';
+import { MessageMappingHelper } from './services/mappers/message-mapping.helper';
+import { TextMessageBuilder } from './services/mappers/builders/text-message-builder';
+import { GifMessageBuilder } from './services/mappers/builders/gif-message.builder';
 
 @Module({
   imports: [
@@ -33,7 +36,10 @@ import { MessageMapperService } from './services/message-mapper.service';
     CreateMessageService,
     MessageReadsService,
     EditMessageService,
-    MessageMapperService,
+    MessageModelMapper,
+    TextMessageBuilder,
+    MessageMappingHelper,
+    GifMessageBuilder,
   ],
   exports: [MessageService, MessagesRepository, MessageReadsService],
   controllers: [MessagesController],
