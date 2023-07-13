@@ -3,8 +3,7 @@ import { ChatMembershipService } from 'src/chat-users/services/chat-membership.s
 import { AppEventEmitter } from 'src/shared/services/app-event-emitter.service';
 import { UserEntity } from 'src/users/entity/user.entity';
 import { User } from 'src/users/user.type';
-import { CreateGifMessageDto } from '../dto/create-gif-message.dto';
-import { CreateMessageDto } from '../dto/create-message.dto';
+import { CreateGifMessageDto } from '../dto/create-message/create-gif-message.dto';
 import { AppMessageEvent } from '../events';
 import { CreateMessageEvent } from '../events/create-message.event';
 import { ReadMessageEvent } from '../events/read-message.event';
@@ -17,6 +16,7 @@ import { DeleteMessageService } from './operations/delete-message-service';
 import { DeleteMessageEvent } from '../events/delete-message.event';
 import { EditMessageEvent } from '../events/edit-message.event';
 import { MessageReadsMutationService } from './message-reads-mutation.service';
+import { CreateMessageDto } from '../dto/create-message/create-message.dto';
 
 @Injectable()
 export class MessageMutationService {
@@ -30,10 +30,7 @@ export class MessageMutationService {
     private eventEmitter: AppEventEmitter<AppMessageEvent>,
   ) {}
 
-  public async create(
-    message: CreateMessageDto | CreateGifMessageDto,
-    user: User,
-  ): Promise<Message> {
+  public async create(message: CreateMessageDto, user: User): Promise<Message> {
     await this.membershipService.checkUserChatMembership(
       user.id,
       message.chatId,

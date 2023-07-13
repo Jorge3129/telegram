@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMessageDto } from 'src/messages/dto/create-message.dto';
+import { CreateTextMessageDto } from 'src/messages/dto/create-message/create-text-message.dto';
 import { MediaEntity } from 'src/messages/entity/media.entity';
 import { MediaMessageContentEntity } from 'src/messages/entity/message-content.entity';
 import { Media } from 'src/messages/models/media.type';
@@ -7,7 +7,7 @@ import { Media } from 'src/messages/models/media.type';
 @Injectable()
 export class MediaMessageContentBuilder {
   public build(
-    dto: CreateMessageDto,
+    dto: CreateTextMessageDto,
     dtoMedia: Media,
   ): MediaMessageContentEntity {
     const media = new MediaEntity();
