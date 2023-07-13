@@ -24,7 +24,8 @@ export const useSendGif = () => {
       return;
     }
 
-    const createdMessage = await messageApiService.createGif({
+    const createdMessage = await messageApiService.create({
+      type: "gif",
       chatId: currentChatId,
       timestamp: new Date().toISOString(),
       srcObject: gif,

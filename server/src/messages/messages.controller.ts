@@ -7,14 +7,15 @@ import {
   Param,
   Patch,
 } from '@nestjs/common';
-import { CreateMessageDto } from './dto/create-message.dto';
 import { RequestUser } from 'src/users/decorators/user.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
 
 import { Message } from './models/message.type';
 import { MessageService } from './message.service';
 import { EditMessageDto } from './dto/edit-message.dto';
-import { CreateGifMessageDto } from './dto/create-gif-message.dto';
+import { CreateGifMessageDto } from './dto/create-message/create-gif-message.dto';
+import { CreateMessageDto } from './dto/create-message/create-message.dto';
+import { CreateMessageValidationPipe } from './dto/create-message/create-message-validation.pipe';
 
 @Controller('messages')
 export class MessagesController {
@@ -22,15 +23,7 @@ export class MessagesController {
 
   @Post()
   public async create(
-    @Body() messageDto: CreateMessageDto,
-    @RequestUser() user: UserEntity,
-  ): Promise<Message> {
-    return this.messageService.create(messageDto, user);
-  }
-
-  @Post('gif')
-  public async createGif(
-    @Body() messageDto: CreateGifMessageDto,
+    @Body(CreateMessageValidationPipe) messageDto: CreateMessageDto,
     @RequestUser() user: UserEntity,
   ): Promise<Message> {
     return this.messageService.create(messageDto, user);

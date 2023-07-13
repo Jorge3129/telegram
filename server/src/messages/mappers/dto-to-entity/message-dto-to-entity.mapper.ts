@@ -4,12 +4,12 @@ import {
   PersonalMessageEntity,
 } from '../../entity/message.entity';
 import { MessageContentEntity } from '../../entity/message-content.entity';
-import { CreateGifMessageDto } from 'src/messages/dto/create-gif-message.dto';
-import { CreateMessageDto } from 'src/messages/dto/create-message.dto';
+import { CreateGifMessageDto } from 'src/messages/dto/create-message/create-gif-message.dto';
 import { User } from 'src/users/user.type';
 import { GifMessageContentBuilder } from './builders/gif-message-content.builder';
 import { TextMessageContentBuilder } from './builders/text-message-content.builder';
 import { MediaMessageContentBuilder } from './builders/media-message-content.builder';
+import { CreateMessageDto } from 'src/messages/dto/create-message/create-message.dto';
 
 @Injectable()
 export class MessageDtoToEntityMapper {
@@ -19,10 +19,7 @@ export class MessageDtoToEntityMapper {
     private mediaContentBuilder: MediaMessageContentBuilder,
   ) {}
 
-  public mapDtoToEntity(
-    dto: CreateMessageDto | CreateGifMessageDto,
-    user: User,
-  ): MessageEntity {
+  public mapDtoToEntity(dto: CreateMessageDto, user: User): MessageEntity {
     const message = new PersonalMessageEntity();
     message.authorId = user.id;
     message.chatId = dto.chatId;
@@ -32,9 +29,7 @@ export class MessageDtoToEntityMapper {
     return message;
   }
 
-  private createMessageContent(
-    dto: CreateMessageDto | CreateGifMessageDto,
-  ): MessageContentEntity {
+  private createMessageContent(dto: CreateMessageDto): MessageContentEntity {
     if (dto instanceof CreateGifMessageDto) {
       return this.gifContentBuilder.build(dto);
     }

@@ -1,21 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { Message } from './models/message.type';
 import { User } from '../users/user.type';
-import { CreateMessageDto } from './dto/create-message.dto';
 import { UserEntity } from 'src/users/entity/user.entity';
 
-import { CreateGifMessageDto } from './dto/create-gif-message.dto';
 import { MessageMutationService } from './mutations/message-mutation.service';
 import { EditMessageDto } from './dto/edit-message.dto';
+import { CreateMessageDto } from './dto/create-message/create-message.dto';
 
 @Injectable()
 export class MessageService {
   constructor(private messageMutationService: MessageMutationService) {}
 
-  public async create(
-    message: CreateMessageDto | CreateGifMessageDto,
-    user: User,
-  ): Promise<Message> {
+  public async create(message: CreateMessageDto, user: User): Promise<Message> {
     return this.messageMutationService.create(message, user);
   }
 
