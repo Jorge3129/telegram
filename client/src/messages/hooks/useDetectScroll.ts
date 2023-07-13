@@ -1,4 +1,4 @@
-import { MutableRefObject, UIEvent, useRef } from "react";
+import { MutableRefObject, useRef } from "react";
 import { selectChats, ChatActions } from "../../chats/chats.reducer";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../redux/store";
@@ -28,7 +28,7 @@ export const useDetectScroll = (
     const divs = Array.from(document.querySelectorAll(".message_list_item"));
 
     const visible = divs
-      .filter((el, i) => {
+      .filter((el) => {
         const seen = getVisibleElementHeight(el, scrollRef.current);
         return seen > 0 && seen === el.clientHeight;
       })
@@ -61,7 +61,7 @@ export const useDetectScroll = (
       return;
     }
 
-    messageApiService.updateMessageReads(message);
+    void messageApiService.updateMessageReads(message);
   };
 
   const onMessagesFirstRendered = () => {
@@ -78,7 +78,7 @@ export const useDetectScroll = (
     }
   };
 
-  const handleScroll = (e: UIEvent<HTMLUListElement>) => {
+  const handleScroll = () => {
     const unreadCount = chats.find((ch) => ch.id === currentChatId)?.unread;
 
     if (

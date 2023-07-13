@@ -1,6 +1,5 @@
 import { FC, MouseEvent } from "react";
 import { useSelector } from "react-redux";
-import { Socket } from "socket.io-client";
 import { useAppDispatch } from "../redux/store";
 import { uploadsApiService } from "../uploads/uploads-api.service";
 import { useSend } from "../current-chat/hooks/useSend";

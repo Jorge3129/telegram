@@ -20,7 +20,7 @@ const Main: FC<MainProps> = ({ user }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(chatThunk(user.id));
+    void dispatch(chatThunk(user.id));
   }, []);
 
   return (
