@@ -4,7 +4,9 @@ import { isHttpError } from "./http-error";
 export const useHandleHttpError = () => {
   const navigate = useNavigate();
 
-  const withHandleError = <F extends (...args: any[]) => any>(func: F) => {
+  const withHandleError = <F extends (...args: unknown[]) => unknown>(
+    func: F
+  ) => {
     return async (...args: Parameters<F>) => {
       try {
         await func(...args);

@@ -1,5 +1,4 @@
 import { FC, useEffect } from "react";
-import "./App.css";
 import "./components/reuse/styles/Avatar.css";
 import Main from "./components/Main";
 import {
@@ -14,6 +13,8 @@ import { useSelector } from "react-redux";
 import { selectUser, setUser, setUserLoading } from "./redux/user-reducer";
 import { useAppDispatch } from "./redux/store";
 import { authService } from "./auth/services/auth.service";
+
+import "./App.scss";
 
 const App: FC = () => {
   const { user, loading } = useSelector(selectUser);
@@ -44,9 +45,7 @@ const App: FC = () => {
           <Routes>
             <Route
               path="/"
-              element={
-                !!user ? <Main user={user} /> : <Navigate to={"/login"} />
-              }
+              element={user ? <Main user={user} /> : <Navigate to={"/login"} />}
             />
             <Route path="/login" element={<LoginPage />} />
           </Routes>

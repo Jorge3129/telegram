@@ -50,17 +50,17 @@ const ChatsContainer: FC<IChatsContainer> = () => {
   const chatList = loading ? (
     <LoadSpinner backgroundColor={"var(--white"} />
   ) : (
-    filteredChats.map((ch: Chat) => (
-      <li key={ch.id + ""} className="chat_list_item">
+    filteredChats.map((chat: Chat) => (
+      <li key={`${chat.id}`} className="chat_list_item">
         <button
           className={
             "chat_item_button " +
-            (currentChatId === ch.id ? " selected_chat" : "")
+            (currentChatId === chat.id ? " selected_chat" : "")
           }
-          id={ch.id + ""}
-          onClick={() => handleSelectChat(ch)}
+          id={`${chat.id}`}
+          onClick={() => handleSelectChat(chat)}
         >
-          <ChatItem chat={ch} />
+          <ChatItem chat={chat} />
         </button>
       </li>
     ))

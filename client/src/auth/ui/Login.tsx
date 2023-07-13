@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import "./Login.css";
 import { useNavigate } from "react-router";
 import { setUser } from "../../redux/user-reducer";
@@ -24,8 +24,7 @@ const LoginPage: FC<LoginProps> = () => {
     setState({ ...state, password: e.target.value });
   };
 
-  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     const userId = await authService.login(state);
 
     if (userId) {
@@ -45,6 +44,7 @@ const LoginPage: FC<LoginProps> = () => {
           Username
           <input type="text" value={state.username} onChange={handleUser} />
         </label>
+
         <label>
           Password
           <input
@@ -53,7 +53,15 @@ const LoginPage: FC<LoginProps> = () => {
             onChange={handlePassword}
           />
         </label>
-        <button type="submit" className="login_submit" onClick={handleSubmit}>
+
+        <button
+          type="submit"
+          className="login_submit"
+          onClick={(e) => {
+            e.preventDefault();
+            void handleSubmit();
+          }}
+        >
           Login
         </button>
       </form>

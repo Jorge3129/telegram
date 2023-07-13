@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import Avatar from "../components/reuse/Avatar";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/user-reducer";

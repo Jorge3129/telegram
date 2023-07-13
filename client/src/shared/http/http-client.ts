@@ -11,18 +11,21 @@ export class HttpClient {
     this.axios.interceptors.request.use(authRequestInterceptor);
   }
 
-  public get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
+  public get<T = unknown>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
     return wrap(this.axios.get(url, config));
   }
 
-  public delete<T = any, D = any>(
+  public delete<T = unknown, D = unknown>(
     url: string,
     config?: AxiosRequestConfig<D>
   ): Promise<T> {
     return wrap(this.axios.delete(url, config));
   }
 
-  public post<T = any, D = any>(
+  public post<T = unknown, D = unknown>(
     url: string,
     data?: D,
     config?: AxiosRequestConfig<D>
@@ -30,7 +33,7 @@ export class HttpClient {
     return wrap(this.axios.post(url, data, config));
   }
 
-  public put<T = any, D = any>(
+  public put<T = unknown, D = unknown>(
     url: string,
     data?: D,
     config?: AxiosRequestConfig<D>
@@ -38,7 +41,7 @@ export class HttpClient {
     return wrap(this.axios.put(url, data, config));
   }
 
-  public patch<T = any, D = any>(
+  public patch<T = unknown, D = unknown>(
     url: string,
     data?: D,
     config?: AxiosRequestConfig<D>

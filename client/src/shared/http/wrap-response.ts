@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { HttpError } from "./http-error";
 
-export const wrapResponse = <T = any>(
+export const wrapResponse = <T = unknown>(
   val: Promise<{ data: T }>
 ): Promise<T> => {
   return val

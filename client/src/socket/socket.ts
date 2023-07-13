@@ -83,9 +83,12 @@ export const useSocket = () => {
       return;
     }
 
-    socket.on("online-change", ({ online, chatId }) => {
-      dispatch(ChatActions.setOnline({ online, chatId }));
-    });
+    socket.on(
+      "online-change",
+      ({ online, chatId }: { online: boolean; chatId: number }) => {
+        dispatch(ChatActions.setOnline({ online, chatId }));
+      }
+    );
     socket.on("message-to-client", onMessage);
     socket.on("seen", onSeen);
     socket.on("message-deleted", onDeleted);

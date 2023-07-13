@@ -25,7 +25,7 @@ const EditMessageInput: FC<Props> = ({ inputState }) => {
 
   const handleSubmit = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    editMessage();
+    void editMessage();
   };
 
   return (

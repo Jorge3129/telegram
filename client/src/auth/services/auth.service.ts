@@ -45,8 +45,10 @@ export class AuthService {
     return this.http.post(`${environment.apiUrl}/auth/register`, data);
   }
 
-  public async logout(): Promise<void> {
+  public logout(): Promise<void> {
     this.tokenService.clearTokens();
+
+    return Promise.resolve();
   }
 
   public getUserIdFromToken(token: string) {

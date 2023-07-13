@@ -1,16 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectMessages } from "../messages.reducer";
-import { selectUser } from "../../redux/user-reducer";
-import { isOwnMessage } from "../../utils/is-own-message";
 
 export const useAutoScroll = (unread: number) => {
   const { messages, loading } = useSelector(selectMessages);
   const [messageLength, setMessageLength] = useState(messages?.length || 0);
 
   const scrollRef = useRef<HTMLUListElement>(null);
-
-  const { user } = useSelector(selectUser);
 
   useEffect(() => {
     if (messages.length === messageLength) {

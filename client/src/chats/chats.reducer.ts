@@ -110,7 +110,7 @@ export const ChatActions = chatSlice.actions;
 
 export const chatThunk = createAsyncThunk(
   "/chats/get",
-  async (userId: number, thunkApi) => {
+  async (_: number, thunkApi) => {
     try {
       thunkApi.dispatch(ChatActions.setLoading(true));
       const messages = await chatsApiService.getChats();
