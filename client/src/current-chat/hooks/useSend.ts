@@ -8,7 +8,7 @@ import { useAppDispatch } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { Message } from "../../messages/models/message.model";
 import { messageApiService } from "../../messages/messages-api.service";
-import { CreateMessageDto } from "../../messages/models/create-message.dto";
+import { CreateTextMessageDto } from "../../messages/models/create-message.dto";
 
 export const useSend = (inputText: string) => {
   const { currentChatId, media } = useSelector(selectCurrentChat);
@@ -25,11 +25,12 @@ export const useSend = (inputText: string) => {
       return;
     }
 
-    const message: CreateMessageDto = {
+    const message: CreateTextMessageDto = {
+      type: "text",
       text: inputText,
       timestamp: new Date().toISOString(),
       chatId: currentChatId,
-      media,
+      media: media.filename ? media : undefined,
     };
 
     dispatch(CurrentChatActions.clearInput());
