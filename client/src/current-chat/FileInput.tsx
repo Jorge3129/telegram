@@ -20,9 +20,13 @@ const FileInput: FC<IFileInput> = () => {
     dispatch(CurrentChatActions.setMedia(mediaObject));
   };
 
-  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (!e.target?.files) return;
+
+    if (!e.target?.files) {
+      return;
+    }
+
     saveToApi(e.target.files[0]);
     saveToRedux(e.target.files[0]);
   };

@@ -42,7 +42,7 @@ const MessageContextMenu: FC<ContextMenuProps> = ({ children, message }) => {
     dispatch(MessageActions.deleteMessage(message.id));
   };
 
-  const handleEdit = async () => {
+  const handleEdit = () => {
     handleClose();
 
     dispatch(

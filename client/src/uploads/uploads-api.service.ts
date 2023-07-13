@@ -7,7 +7,7 @@ export class UploadsApiService {
   constructor(private readonly http: HttpClient) {}
 
   public async getFile(filename: string): Promise<Blob> {
-    const response = await this.http.get(
+    const response = await this.http.get<Blob>(
       `${environment.apiUrl}/uploads/${filename}`,
       {
         responseType: "blob",

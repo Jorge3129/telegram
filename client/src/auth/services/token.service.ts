@@ -6,7 +6,7 @@ export class TokenService {
   }
 
   public getBearer(): string {
-    return `Bearer ${this.getAccessToken()}`;
+    return `Bearer ${this.getAccessToken() ?? ""}`;
   }
 
   public setAccessToken(value: string): void {

@@ -20,7 +20,7 @@ const MessageListWrapper: FC<MessageListWrapperProps> = ({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(messageThunk(currentChat.id));
+    void dispatch(messageThunk(currentChat.id));
   }, [currentChat.id]);
 
   return (

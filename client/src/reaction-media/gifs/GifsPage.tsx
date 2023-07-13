@@ -10,8 +10,8 @@ import ChatsSearchBar from "../../chats/components/ChatsSearchBar";
 const GifsPage = () => {
   const sendGif = useSendGif();
 
-  const onGifClick = async (gif: IGif) => {
-    sendGif(gif);
+  const onGifClick = (gif: IGif) => {
+    void sendGif(gif);
   };
 
   const [width, setWidth] = useState(0);

@@ -20,7 +20,7 @@ const MediaModal: FC<IMediaModal> = () => {
 
   const handleSend = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    sendMessage();
+    await sendMessage();
     dispatch(CurrentChatActions.clearMedia());
     await uploadsApiService.postFile();
   };

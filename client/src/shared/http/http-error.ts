@@ -1,6 +1,6 @@
 const httpErrorType = Symbol("httpError");
 
-export class HttpError<T = any> {
+export class HttpError<T = unknown> {
   public readonly type = httpErrorType;
 
   constructor(public readonly status: number, public readonly data: T) {}

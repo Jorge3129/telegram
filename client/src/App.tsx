@@ -45,9 +45,7 @@ const App: FC = () => {
           <Routes>
             <Route
               path="/"
-              element={
-                !!user ? <Main user={user} /> : <Navigate to={"/login"} />
-              }
+              element={user ? <Main user={user} /> : <Navigate to={"/login"} />}
             />
             <Route path="/login" element={<LoginPage />} />
           </Routes>
