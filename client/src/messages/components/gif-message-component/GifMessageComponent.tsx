@@ -1,13 +1,14 @@
 import { FC, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { GifMessage } from "../models/message.model";
-import { selectUser } from "../../redux/user-reducer";
-import MessageTimestamp from "../../ui/message/MessageTimestamp";
-import MessageStatusWrapper from "../../ui/message/message-status/MessageStatusWrapper";
-import MessageContextMenu from "../MessageContextMenu";
-import { isOwnMessage } from "../../utils/is-own-message";
+import "./GifMessageComponent.scss";
 import { Gif } from "@giphy/react-components";
-import "./GifMessageComponent.css";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../redux/user-reducer";
+import MessageTimestamp from "../../../ui/message/MessageTimestamp";
+import MessageStatusWrapper from "../../../ui/message/message-status/MessageStatusWrapper";
+import { isOwnMessage } from "../../../utils/is-own-message";
+import { GifMessage } from "../../models/message.model";
+import { classIf } from "../../../utils/class-if";
+import MessageContextMenu from "../message-context-menu/MessageContextMenu";
 
 interface Props {
   message: GifMessage;
@@ -24,11 +25,17 @@ const GifMessageComponent: FC<Props> = ({ message, chatType, callback }) => {
 
   const { user } = useSelector(selectUser);
 
-  const showAuthor = chatType === "group" && !isOwnMessage(message, user);
+  const isOwn = isOwnMessage(message, user);
+
+  const showAuthor = chatType === "group" && !isOwn;
 
   return (
     <MessageContextMenu message={message}>
-      <div className="message_item gif_message_item">
+      <div
+        className={
+          "message_item gif_message_item" + classIf(isOwn, "own_message")
+        }
+      >
         <div className="message_author">{showAuthor && message.authorName}</div>
         <div className="message_media">
           <Gif gif={message.srcObject} width={220} hideAttribution noLink />

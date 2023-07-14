@@ -3,9 +3,9 @@ import { Socket } from "socket.io-client";
 import MediaModal from "../media/MediaModal";
 import MainTopBar from "./MainTopBar";
 import { Chat } from "../chats/models/chat.model";
-import MessageListWrapper from "../messages/MessageListWrapper";
 import "./styles/CurrentChat.css";
 import ChatInput from "./inputs/ChatInput";
+import MessageListWrapper from "../messages/components/message-list-wrapper/MessageListWrapper";
 
 interface Props {
   socket: Socket | null;

@@ -13,7 +13,7 @@ import { messageApiService } from "../messages-api.service";
 
 export const useDetectScroll = (
   socket: Socket | null,
-  scrollRef: MutableRefObject<HTMLUListElement | null>,
+  scrollRef: MutableRefObject<HTMLDivElement | null>,
   messages: Message[]
 ) => {
   const { chats } = useSelector(selectChats);
@@ -25,7 +25,7 @@ export const useDetectScroll = (
   const { user } = useSelector(selectUser);
 
   const getVisibleMessageIds = (): string[] => {
-    const divs = Array.from(document.querySelectorAll(".message_list_item"));
+    const divs = Array.from(document.querySelectorAll(".message_container"));
 
     const visible = divs
       .filter((el) => {

@@ -1,0 +1,13 @@
+.message_list {
+  width: 100%;
+  min-height: min-content;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  bottom: 0;
+  border-bottom: var(--border);
+  border-color: var(--blue-gray);
+}

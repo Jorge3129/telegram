@@ -1,20 +1,20 @@
 import { FC } from "react";
-import { Message, isGifMessage, isTextMessage } from "./models/message.model";
-import "./styles/MessageComponent.css";
-import TextMessageComponent from "./message-types/TextMessageComponent";
-import GifMessageComponent from "./message-types/GifMessageComponent";
+import "./MessageComponent.scss";
+import {
+  Message,
+  isTextMessage,
+  isGifMessage,
+} from "../../models/message.model";
+import GifMessageComponent from "../gif-message-component/GifMessageComponent";
+import TextMessageComponent from "../text-message-component/TextMessageComponent";
 
-interface IPropsMessage {
+interface Props {
   message: Message;
   callback: null | (() => void);
   chatType: "personal" | "group";
 }
 
-const MessageComponent: FC<IPropsMessage> = ({
-  message,
-  chatType,
-  callback,
-}) => {
+const MessageComponent: FC<Props> = ({ message, chatType, callback }) => {
   if (isTextMessage(message)) {
     return (
       <TextMessageComponent

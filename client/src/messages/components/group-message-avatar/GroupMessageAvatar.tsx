@@ -1,20 +1,21 @@
 import { FC } from "react";
-import Avatar from "../components/reuse/Avatar";
+import "./GroupMessageAvatar.scss";
 import { useSelector } from "react-redux";
-import { selectUser } from "../redux/user-reducer";
-import { Chat } from "../chats/models/chat.model";
-import { Message } from "./models/message.model";
-import { isOwnMessage } from "../utils/is-own-message";
+import { Chat } from "../../../chats/models/chat.model";
+import { selectUser } from "../../../redux/user-reducer";
+import { isOwnMessage } from "../../../utils/is-own-message";
+import { Message } from "../../models/message.model";
+import Avatar from "../../../components/reuse/Avatar";
 
-interface IMessageAvatar {
+interface Props {
   data: {
     currentChat: Chat;
     message: Message;
-    nextMessage: Message;
+    nextMessage?: Message;
   };
 }
 
-const MessageAvatar: FC<IMessageAvatar> = ({ data }) => {
+const MessageAvatar: FC<Props> = ({ data }) => {
   const { currentChat, message, nextMessage } = data;
 
   const { user } = useSelector(selectUser);

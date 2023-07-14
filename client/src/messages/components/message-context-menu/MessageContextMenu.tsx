@@ -1,19 +1,20 @@
-import { FC, useState, MouseEvent, ReactElement, cloneElement } from "react";
+import { FC, ReactElement, cloneElement, useState, MouseEvent } from "react";
+import "./MessageContextMenu.scss";
 import { Menu, MenuItem } from "@mui/material";
-import { Message } from "./models/message.model";
-import { messageApiService } from "./messages-api.service";
-import { useAppDispatch } from "../redux/store";
-import { MessageActions } from "./messages.reducer";
 import { useSelector } from "react-redux";
-import { selectUser } from "../redux/user-reducer";
-import { CurrentChatActions } from "../current-chat/reducers/current-chat.reducer";
+import { CurrentChatActions } from "../../../current-chat/reducers/current-chat.reducer";
+import { useAppDispatch } from "../../../redux/store";
+import { selectUser } from "../../../redux/user-reducer";
+import { messageApiService } from "../../messages-api.service";
+import { MessageActions } from "../../messages.reducer";
+import { Message } from "../../models/message.model";
 
-interface ContextMenuProps {
+interface Props {
   children: ReactElement;
   message: Message;
 }
 
-const MessageContextMenu: FC<ContextMenuProps> = ({ children, message }) => {
+const MessageContextMenu: FC<Props> = ({ children, message }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [position, setPosition] = useState({ left: 0, top: 0 });
 

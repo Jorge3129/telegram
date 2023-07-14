@@ -128,8 +128,8 @@ body {
 
 @media screen and (max-width: 1050px) {
   .reaction-media-pane {
-    /* width: 0;
-        transition: var(--transition); */
+    width: 0;
+    transition: var(--transition);
   }
 
   .chats_container {

@@ -1,22 +1,18 @@
 import { FC, useEffect } from "react";
+import "./MessageListWrapper.scss";
 import { Socket } from "socket.io-client";
-import { useAppDispatch } from "../redux/store";
+import { Chat } from "../../../chats/models/chat.model";
+import DefaultWallPaper from "../../../components/reuse/DefaultWallPaper";
+import { useAppDispatch } from "../../../redux/store";
+import { messageThunk } from "../../messages.reducer";
+import MessageList from "../message-list/MessageList";
 
-import { messageThunk } from "./messages.reducer";
-import { Chat } from "../chats/models/chat.model";
-import MessageList from "./MessageList";
-import "./styles/Messages.css";
-import DefaultWallPaper from "../components/reuse/DefaultWallPaper";
-
-interface MessageListWrapperProps {
+interface Props {
   socket: Socket;
   currentChat: Chat;
 }
 
-const MessageListWrapper: FC<MessageListWrapperProps> = ({
-  socket,
-  currentChat,
-}) => {
+const MessageListWrapper: FC<Props> = ({ socket, currentChat }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
