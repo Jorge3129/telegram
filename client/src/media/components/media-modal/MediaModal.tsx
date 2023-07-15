@@ -1,18 +1,16 @@
 import { FC, MouseEvent } from "react";
+import "./MediaModal.scss";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../redux/store";
-import { uploadsApiService } from "../uploads/uploads-api.service";
-import { useSend } from "../current-chat/hooks/useSend";
+import { useSend } from "../../../current-chat/hooks/useSend";
 import {
   selectCurrentChat,
   CurrentChatActions,
-} from "../current-chat/reducers/current-chat.reducer";
-import MediaContainer from "./MediaContainer";
-import "./styles/MediaModal.css";
+} from "../../../current-chat/reducers/current-chat.reducer";
+import { useAppDispatch } from "../../../redux/store";
+import { uploadsApiService } from "../../../uploads/uploads-api.service";
+import MediaContainer from "../MediaContainer";
 
-interface IMediaModal {}
-
-const MediaModal: FC<IMediaModal> = () => {
+const MediaModal: FC = () => {
   const dispatch = useAppDispatch();
   const { media } = useSelector(selectCurrentChat);
 

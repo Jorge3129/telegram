@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Media } from "../messages/models/media.model";
+import { Media } from "../../messages/models/media.model";
 
 interface MediaContainerProps {
   media: Media;

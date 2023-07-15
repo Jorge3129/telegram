@@ -22,7 +22,7 @@ const FileInput: FC = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    if (!e.target?.files) {
+    if (!e.target?.files?.[0]) {
       return;
     }
 

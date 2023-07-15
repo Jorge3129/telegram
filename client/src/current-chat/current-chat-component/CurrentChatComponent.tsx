@@ -2,10 +2,10 @@ import { FC } from "react";
 import "./CurrentChatComponent.scss";
 import { Socket } from "socket.io-client";
 import { Chat } from "../../chats/models/chat.model";
-import MediaModal from "../../media/MediaModal";
 import MessageListWrapper from "../../messages/components/message-list-wrapper/MessageListWrapper";
 import CurrentChatTopBar from "../current-chat-top-bar/CurrentChatTopBar";
 import CurrentChatInput from "../inputs/current-chat-input/CurrentChatInput";
+import MediaModal from "../../media/components/media-modal/MediaModal";
 
 interface Props {
   socket: Socket | null;

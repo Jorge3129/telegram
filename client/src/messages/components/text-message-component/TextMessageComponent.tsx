@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import "./TextMessageComponent.scss";
 import { useSelector } from "react-redux";
-import MediaContainer from "../../../media/MediaContainer";
+import MediaContainer from "../../../media/components/MediaContainer";
 import { useLoadFile } from "../../../media/hooks/useLoadFile";
 import { selectUser } from "../../../redux/user-reducer";
 import MessageTimestamp from "../../../ui/message/MessageTimestamp";
