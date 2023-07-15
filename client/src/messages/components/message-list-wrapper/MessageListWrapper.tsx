@@ -1,6 +1,5 @@
 import { FC, useEffect } from "react";
 import "./MessageListWrapper.scss";
-import { Socket } from "socket.io-client";
 import { Chat } from "../../../chats/models/chat.model";
 import { useAppDispatch } from "../../../redux/store";
 import { messageThunk } from "../../messages.reducer";
@@ -8,11 +7,10 @@ import MessageList from "../message-list/MessageList";
 import DefaultWallPaper from "../../../shared/components/default-wallpaper/DefaultWallpaper";
 
 interface Props {
-  socket: Socket;
   currentChat: Chat;
 }
 
-const MessageListWrapper: FC<Props> = ({ socket, currentChat }) => {
+const MessageListWrapper: FC<Props> = ({ currentChat }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -22,7 +20,7 @@ const MessageListWrapper: FC<Props> = ({ socket, currentChat }) => {
   return (
     <div className="message_list_wrapper">
       <DefaultWallPaper />
-      <MessageList socket={socket} currentChat={currentChat} />
+      <MessageList currentChat={currentChat} />
     </div>
   );
 };
