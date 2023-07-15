@@ -10,6 +10,5 @@ export class CreateTextMessageDto extends BaseCreateMessageDto {
   text: string;
 
   @IsOptional()
-  @ValidateNested()
   media?: CreateMediaDto;
 }

@@ -1,20 +1,19 @@
 import { FC, useEffect } from "react";
-import "./components/reuse/styles/Avatar.css";
-import Main from "./components/Main";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import LoginPage from "./auth/ui/Login";
-import ErrorBoundary from "./components/reuse/ErrorBoundary";
+import ErrorBoundary from "./shared/errors/ErrorBoundary";
 import { useSelector } from "react-redux";
 import { selectUser, setUser, setUserLoading } from "./redux/user-reducer";
 import { useAppDispatch } from "./redux/store";
 import { authService } from "./auth/services/auth.service";
 
 import "./App.scss";
+import MainComponent from "./main/main-component/MainComponent";
+import LoginPage from "./auth/components/login-page/LoginPage";
 
 const App: FC = () => {
   const { user, loading } = useSelector(selectUser);
@@ -45,7 +44,13 @@ const App: FC = () => {
           <Routes>
             <Route
               path="/"
-              element={user ? <Main user={user} /> : <Navigate to={"/login"} />}
+              element={
+                user ? (
+                  <MainComponent user={user} />
+                ) : (
+                  <Navigate to={"/login"} />
+                )
+              }
             />
             <Route path="/login" element={<LoginPage />} />
           </Routes>

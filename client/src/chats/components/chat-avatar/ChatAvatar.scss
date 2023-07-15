@@ -1,0 +1,25 @@
+.chat_avatar_wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1em;
+
+  .chat_avatar {
+    height: var(--avatar-height);
+    width: var(--avatar-height);
+    background-color: var(--yellow);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    .chat_avatar_text {
+      color: var(--white);
+      font-weight: 600;
+      font-size: 1.2em;
+      overflow: hidden;
+    }
+  }
+}

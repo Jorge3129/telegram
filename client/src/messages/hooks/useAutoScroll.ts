@@ -6,7 +6,7 @@ export const useAutoScroll = (unread: number) => {
   const { messages, loading } = useSelector(selectMessages);
   const [messageLength, setMessageLength] = useState(messages?.length || 0);
 
-  const scrollRef = useRef<HTMLUListElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (messages.length === messageLength) {

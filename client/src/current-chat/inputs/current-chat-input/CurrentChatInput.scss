@@ -1,0 +1,29 @@
+.main_chat_input_container {
+  justify-self: flex-end;
+  width: 100%;
+  height: var(--chat_bar_height);
+  background-color: var(--white);
+  border: var(--border);
+  border-bottom: none;
+
+  .main_chat_input_form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    .main_chat_input {
+      height: 1.8em;
+      padding: 1em;
+      border: none;
+      font-size: 1em;
+      flex: 2 1 auto;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

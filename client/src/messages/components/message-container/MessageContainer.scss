@@ -1,0 +1,11 @@
+.message_container {
+  display: flex;
+
+  &.own_message_container {
+    justify-content: flex-end;
+  }
+
+  &:last-child {
+    margin-bottom: 2em;
+  }
+}

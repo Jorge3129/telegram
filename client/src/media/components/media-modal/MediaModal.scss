@@ -1,0 +1,49 @@
+.media_modal_container {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+
+  .media_modal {
+    background-color: var(--white);
+    width: 22em;
+    height: fit-content;
+    border-radius: 0.6em;
+    padding: 0.5em;
+
+    .media_modal_img {
+      max-width: 90%;
+    }
+
+    .media_modal_buttons {
+      display: flex;
+      flex-direction: row;
+
+      .media_modal_button_placeholder {
+        flex-grow: 5;
+      }
+
+      .media_modal_button {
+        font-size: 0.9em;
+        font-weight: 570;
+        color: var(--blue-darker);
+        outline: none;
+        background-color: inherit;
+        border: none;
+        border-radius: 0.2em;
+        padding: 0.3em 0.5em;
+
+        &:hover {
+          background-color: var(--blue-light);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

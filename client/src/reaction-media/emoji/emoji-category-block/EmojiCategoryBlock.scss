@@ -1,0 +1,25 @@
+.emoji_block {
+  .emoji_block_title {
+    color: var(--gray);
+    width: 100%;
+    text-align: left;
+    margin: 0 1em;
+  }
+
+  .emoji_list {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    margin: 0 0.5em;
+
+    .emoji_list_item {
+      padding: 0.5em;
+      font-size: 1.2em;
+      background-color: var(--white);
+    }
+
+    .emoji_list_item:hover {
+      cursor: pointer;
+      background-color: var(--gray-super-light);
+    }
+  }
+}
