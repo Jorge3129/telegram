@@ -1,6 +1,8 @@
-import DefaultWallPaper from "../shared/components/default-wallpaper/DefaultWallpaper";
+import { FC } from "react";
+import "./MainPlaceholder.scss";
+import DefaultWallPaper from "../../shared/components/default-wallpaper/DefaultWallpaper";
 
-const MainPlaceholder = () => {
+const MainPlaceholder: FC = () => {
   return (
     <div className="main_chat_placeholder main_section">
       <DefaultWallPaper />
