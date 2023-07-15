@@ -2,7 +2,6 @@ import { FC, useEffect } from "react";
 import "./MainComponent.scss";
 import { useSelector } from "react-redux";
 import { chatThunk } from "../../chats/chats.reducer";
-import ChatsContainer from "../../chats/components/ChatsContainer";
 import CurrentChatComponent from "../../current-chat/current-chat-component/CurrentChatComponent";
 import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
 import ReactionMediaPane from "../../reaction-media/reaction-media-pane/ReactionMediaPane";
@@ -10,6 +9,7 @@ import { useAppDispatch } from "../../redux/store";
 import { useSocket } from "../../socket/socket";
 import { User } from "../../users/models/user.model";
 import MainPlaceholder from "../main-placeholder/MainPlaceholder";
+import ChatsContainer from "../../chats/components/chats-container/ChatsContainer";
 
 interface Props {
   user: User;

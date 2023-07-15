@@ -1,0 +1,24 @@
+.chats_container {
+  background-color: var(--white);
+  width: calc(16em + 3vw);
+}
+
+@media screen and (max-width: 700px) {
+  .chats_container.main_chat_active {
+    width: 4.5em;
+    transition: var(--transition);
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .chats_container.main_section {
+    width: 100%;
+  }
+
+  .chats_container.main_chat_active {
+    background-color: var(--gray-super-light);
+    width: 0;
+    overflow: hidden;
+    transition: var(--transition);
+  }
+}

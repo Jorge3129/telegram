@@ -8,14 +8,12 @@ interface ChatState {
   chats: Chat[];
   loading: boolean;
   error: boolean;
-  width: string;
 }
 
 const initialState: ChatState = {
   chats: [],
   loading: false,
   error: false,
-  width: "",
 };
 
 const updateChat = (

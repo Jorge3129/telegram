@@ -1,22 +1,24 @@
 import { FC } from "react";
+import "./ChatItem.scss";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../redux/user-reducer";
-import { Chat } from "../../chats/models/chat.model";
-import MessageStatusWrapper from "../../ui/message/message-status/MessageStatusWrapper";
-import LastMessageTimestamp from "../../ui/chats/LastMessageTimestamp";
-import LastMessageAuthor from "../../ui/chats/LastMessageAuthor";
-import "./ChatItem.scss";
-import CustomAvatar from "../../shared/components/custom-avatar/CustomAvatar";
+import { selectUser } from "../../../redux/user-reducer";
+import LastMessageAuthor from "../../../ui/chats/LastMessageAuthor";
+import LastMessageTimestamp from "../../../ui/chats/LastMessageTimestamp";
+import MessageStatusWrapper from "../../../ui/message/message-status/MessageStatusWrapper";
+import { Chat } from "../../models/chat.model";
+import ChatAvatar from "../chat-avatar/ChatAvatar";
+import { classIf } from "../../../utils/class-if";
 
 dayjs.extend(isBetween);
 
-interface IChatItem {
+interface Props {
   chat: Chat;
+  selected: boolean;
 }
 
-const ChatItem: FC<IChatItem> = ({ chat }) => {
+const ChatItem: FC<Props> = ({ chat }) => {
   const { lastMessage, title, unread, muted, type } = chat;
 
   const { user } = useSelector(selectUser);
@@ -49,21 +51,23 @@ const ChatItem: FC<IChatItem> = ({ chat }) => {
               <LastMessageAuthor message={lastMessage} chatType={type} />
             )}
           </span>
+
           <span className="chat_last_message_text">{lastMessage?.text}</span>
         </div>
       </div>
+
       <div
         className="chat_unread_container info_container"
         style={unread ? {} : { display: "none" }}
       >
-        <div className={"chat_unread" + (muted ? " muted" : "")}>{unread}</div>
+        <div className={"chat_unread" + classIf(muted, "muted")}>{unread}</div>
       </div>
     </ul>
   );
 
   return (
     <ul className="chat_item">
-      <CustomAvatar chat={chat} title={title} prefix="chat" />
+      <ChatAvatar chat={chat} title={title} />
 
       <li className="chat_body">
         {upperSection}

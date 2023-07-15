@@ -3,9 +3,9 @@ import "./GifsPage.scss";
 import { useSendGif } from "../use-send-gif";
 import { IGif } from "@giphy/js-types";
 import { Grid } from "@giphy/react-components";
-import ChatsSearchBar from "../../../chats/components/ChatsSearchBar";
 import { giphyFetch } from "../giphy-fetch";
 import ResizeObserver from "react-resize-observer";
+import ChatsSearchBar from "../../../chats/components/chats-search-bar/ChatsSearchBar";
 
 interface Props {}
 

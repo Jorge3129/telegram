@@ -1,11 +1,12 @@
 import { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
+import "./ChatsSearchBar.scss";
 
-interface IChatSearchBar {
+interface Props {
   searchItem: string;
   setSearchItem: Dispatch<SetStateAction<string>>;
 }
 
-const ChatsSearchBar: FC<IChatSearchBar> = ({ searchItem, setSearchItem }) => {
+const ChatsSearchBar: FC<Props> = ({ searchItem, setSearchItem }) => {
   const changeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchItem(e.target.value);
   };
