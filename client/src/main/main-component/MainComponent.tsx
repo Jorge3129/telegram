@@ -6,10 +6,10 @@ import CurrentChatComponent from "../../current-chat/current-chat-component/Curr
 import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
 import ReactionMediaPane from "../../reaction-media/reaction-media-pane/ReactionMediaPane";
 import { useAppDispatch } from "../../redux/store";
-import { useSocket } from "../../socket/socket";
 import { User } from "../../users/models/user.model";
 import MainPlaceholder from "../main-placeholder/MainPlaceholder";
 import ChatsContainer from "../../chats/components/chats-container/ChatsContainer";
+import { SocketProvider } from "../../socket/SocketProvider";
 
 interface Props {
   user: User;
@@ -17,7 +17,6 @@ interface Props {
 
 const MainComponent: FC<Props> = ({ user }) => {
   const { currentChat } = useSelector(selectCurrentChat);
-  const [socket] = useSocket();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -25,17 +24,19 @@ const MainComponent: FC<Props> = ({ user }) => {
   }, []);
 
   return (
-    <div className="main">
-      <ChatsContainer />
-      {currentChat ? (
-        <div className="main_chat_media_container">
-          <CurrentChatComponent socket={socket} currentChat={currentChat} />
-          <ReactionMediaPane />
-        </div>
-      ) : (
-        <MainPlaceholder />
-      )}
-    </div>
+    <SocketProvider>
+      <div className="main">
+        <ChatsContainer />
+        {currentChat ? (
+          <div className="main_chat_media_container">
+            <CurrentChatComponent currentChat={currentChat} />
+            <ReactionMediaPane />
+          </div>
+        ) : (
+          <MainPlaceholder />
+        )}
+      </div>
+    </SocketProvider>
   );
 };
 
