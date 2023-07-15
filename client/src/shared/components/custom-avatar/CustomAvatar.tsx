@@ -1,15 +1,16 @@
-import { Chat } from "../../chats/models/chat.model";
 import { CSSProperties, FC } from "react";
-import { initials } from "../../shared/utils/format-initials";
+import "./CustomAvatar.scss";
+import { Chat } from "../../../chats/models/chat.model";
+import { initials } from "../../utils/format-initials";
 
-interface IAvatar {
+interface Props {
   chat?: Chat;
   hide?: boolean;
   title: string;
   prefix: string;
 }
 
-const Avatar: FC<IAvatar> = ({ chat, title, prefix, hide }) => {
+const CustomAvatar: FC<Props> = ({ chat, title, prefix, hide }) => {
   const style: CSSProperties = hide ? { visibility: "hidden" } : {};
 
   return (
@@ -31,4 +32,4 @@ const Avatar: FC<IAvatar> = ({ chat, title, prefix, hide }) => {
   );
 };
 
-export default Avatar;
+export default CustomAvatar;

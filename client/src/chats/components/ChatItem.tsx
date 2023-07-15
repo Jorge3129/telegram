@@ -7,8 +7,8 @@ import { Chat } from "../../chats/models/chat.model";
 import MessageStatusWrapper from "../../ui/message/message-status/MessageStatusWrapper";
 import LastMessageTimestamp from "../../ui/chats/LastMessageTimestamp";
 import LastMessageAuthor from "../../ui/chats/LastMessageAuthor";
-import Avatar from "../../components/reuse/Avatar";
-import "./ChatItem.css";
+import "./ChatItem.scss";
+import CustomAvatar from "../../shared/components/custom-avatar/CustomAvatar";
 
 dayjs.extend(isBetween);
 
@@ -63,7 +63,8 @@ const ChatItem: FC<IChatItem> = ({ chat }) => {
 
   return (
     <ul className="chat_item">
-      <Avatar chat={chat} title={title} prefix="chat" />
+      <CustomAvatar chat={chat} title={title} prefix="chat" />
+
       <li className="chat_body">
         {upperSection}
         {lowerSection}

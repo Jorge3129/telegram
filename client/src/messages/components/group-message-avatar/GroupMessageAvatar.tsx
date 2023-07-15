@@ -5,7 +5,7 @@ import { Chat } from "../../../chats/models/chat.model";
 import { selectUser } from "../../../redux/user-reducer";
 import { isOwnMessage } from "../../../utils/is-own-message";
 import { Message } from "../../models/message.model";
-import Avatar from "../../../components/reuse/Avatar";
+import CustomAvatar from "../../../shared/components/custom-avatar/CustomAvatar";
 
 interface Props {
   data: {
@@ -25,7 +25,7 @@ const MessageAvatar: FC<Props> = ({ data }) => {
   }
 
   return (
-    <Avatar
+    <CustomAvatar
       prefix="message"
       title={message.authorName}
       hide={nextMessage && nextMessage.authorId === message.authorId}

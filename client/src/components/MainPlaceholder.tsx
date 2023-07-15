@@ -1,4 +1,4 @@
-import DefaultWallPaper from "./reuse/DefaultWallPaper";
+import DefaultWallPaper from "../shared/components/default-wallpaper/DefaultWallpaper";
 
 const MainPlaceholder = () => {
   return (

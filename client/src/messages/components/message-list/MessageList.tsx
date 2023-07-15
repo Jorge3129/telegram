@@ -3,11 +3,11 @@ import "./MessageList.scss";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { Chat } from "../../../chats/models/chat.model";
-import LoadSpinner from "../../../components/reuse/LoadSpinner";
 import { useAutoScroll } from "../../hooks/useAutoScroll";
 import { useDetectScroll } from "../../hooks/useDetectScroll";
 import { selectMessages } from "../../messages.reducer";
 import MessageContainer from "../message-container/MessageContainer";
+import LoadingSpinner from "../../../shared/components/loading-spinner/LoadingSpinner";
 
 interface Props {
   socket: Socket;
@@ -26,7 +26,7 @@ const MessageList: FC<Props> = ({ socket, currentChat }) => {
   );
 
   if (loading) {
-    return <LoadSpinner backgroundColor="var(--light-blue-gray)" />;
+    return <LoadingSpinner backgroundColor="var(--light-blue-gray)" />;
   }
 
   return (

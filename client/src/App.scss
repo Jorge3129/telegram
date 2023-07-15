@@ -92,15 +92,6 @@ body {
   align-items: center;
 }
 
-.chat_wallpaper {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-
 .main_chat_placeholder_message {
   background-color: rgba(47, 47, 47, 0.26);
   color: var(--white);

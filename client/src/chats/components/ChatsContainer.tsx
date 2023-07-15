@@ -8,11 +8,11 @@ import { useAppDispatch } from "../../redux/store";
 
 import ChatsSearchBar from "./ChatsSearchBar";
 import { Chat } from "../../chats/models/chat.model";
-import LoadSpinner from "../../components/reuse/LoadSpinner";
 import {
   selectCurrentChat,
   CurrentChatActions,
 } from "../../current-chat/reducers/current-chat.reducer";
+import LoadingSpinner from "../../shared/components/loading-spinner/LoadingSpinner";
 
 interface IChatsContainer {}
 
@@ -48,7 +48,7 @@ const ChatsContainer: FC<IChatsContainer> = () => {
   }, [searchItem, sortedChats]);
 
   const chatList = loading ? (
-    <LoadSpinner backgroundColor={"var(--white"} />
+    <LoadingSpinner backgroundColor={"var(--white"} />
   ) : (
     filteredChats.map((chat: Chat) => (
       <li key={`${chat.id}`} className="chat_list_item">

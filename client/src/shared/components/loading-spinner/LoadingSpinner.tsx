@@ -1,13 +1,13 @@
 import { FC } from "react";
-import "./styles/Loader.css";
+import "./LoadingSpinner.scss";
 
-interface ILoadSpinner {
+interface Props {
   backgroundColor: string;
   startColor?: string;
   endColor?: string;
 }
 
-const LoadSpinner: FC<ILoadSpinner> = ({ startColor, endColor }) => {
+const LoadSpinner: FC<Props> = ({ startColor, endColor }) => {
   const outerStyle = {
     background: `conic-gradient(${startColor || "var(--white)"}, ${
       endColor || "var(--gray)"

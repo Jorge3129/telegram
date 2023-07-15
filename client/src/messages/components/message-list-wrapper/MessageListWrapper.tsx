@@ -2,10 +2,10 @@ import { FC, useEffect } from "react";
 import "./MessageListWrapper.scss";
 import { Socket } from "socket.io-client";
 import { Chat } from "../../../chats/models/chat.model";
-import DefaultWallPaper from "../../../components/reuse/DefaultWallPaper";
 import { useAppDispatch } from "../../../redux/store";
 import { messageThunk } from "../../messages.reducer";
 import MessageList from "../message-list/MessageList";
+import DefaultWallPaper from "../../../shared/components/default-wallpaper/DefaultWallpaper";
 
 interface Props {
   socket: Socket;
