@@ -7,7 +7,9 @@ import { Message } from 'src/messages/models/message.type';
 import { RequestUser } from 'src/users/decorators/user.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
 import { MessageQueryService } from 'src/messages/queries/message-query.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Chats')
 @Controller('chats')
 export class ChatsController {
   constructor(

@@ -13,10 +13,11 @@ import { UserEntity } from 'src/users/entity/user.entity';
 import { Message } from './models/message.type';
 import { MessageService } from './message.service';
 import { EditMessageDto } from './dto/edit-message.dto';
-import { CreateGifMessageDto } from './dto/create-message/create-gif-message.dto';
 import { CreateMessageDto } from './dto/create-message/create-message.dto';
 import { CreateMessageValidationPipe } from './dto/create-message/create-message-validation.pipe';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Messages')
 @Controller('messages')
 export class MessagesController {
   constructor(private messageService: MessageService) {}

@@ -17,7 +17,9 @@ import { UPLOAD_PATH } from './upload-path.const';
 import { Response } from 'express';
 import { StreamResponseStats } from './streaming/stream-response.type';
 import * as mime from 'mime-types';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Uploads')
 @Controller('uploads')
 export class UploadsController {
   constructor(private readonly streamingService: StreamingService) {}
