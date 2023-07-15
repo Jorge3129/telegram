@@ -1,12 +1,11 @@
 import { ChangeEvent, FC } from "react";
-import { CurrentChatActions } from "./reducers/current-chat.reducer";
+import "./FileInput.scss";
 import { useDispatch } from "react-redux";
-import { uploadsApiService } from "../uploads/uploads-api.service";
-import { convertFileToMedia } from "../utils/convert-file-to-media";
+import { uploadsApiService } from "../../../uploads/uploads-api.service";
+import { convertFileToMedia } from "../../../utils/convert-file-to-media";
+import { CurrentChatActions } from "../../reducers/current-chat.reducer";
 
-interface IFileInput {}
-
-const FileInput: FC<IFileInput> = () => {
+const FileInput: FC = () => {
   const dispatch = useDispatch();
 
   const saveToApi = (file: File) => {
@@ -32,7 +31,7 @@ const FileInput: FC<IFileInput> = () => {
   };
 
   return (
-    <label className="chat_file_input_label input_icon_container">
+    <label className="chat_file_input_label icon_container">
       <input
         type="file"
         style={{ display: "none" }}

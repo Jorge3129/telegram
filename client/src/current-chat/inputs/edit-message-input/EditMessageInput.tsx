@@ -1,10 +1,10 @@
-import { FC, useEffect, useRef, MouseEvent, useState } from "react";
-import FileInput from "../FileInput";
-import { EditMessageInputState } from "../reducers/current-chat-state.type";
-import "./EditMessageInput.css";
-import EditMessageBar from "./EditMessageBar";
-import { useEditMessage } from "../hooks/use-edit-message";
-import { useEmojiInput } from "../../reaction-media/emoji/use-emoji-input";
+import { FC, useEffect, useRef, useState, MouseEvent } from "react";
+import "./EditMessageInput.scss";
+import { useEmojiInput } from "../../../reaction-media/emoji/use-emoji-input";
+import { useEditMessage } from "../../hooks/use-edit-message";
+import { EditMessageInputState } from "../../reducers/current-chat-state.type";
+import EditMessageBar from "../edit-message-bar/EditMessageBar";
+import FileInput from "../file-input/FileInput";
 
 interface Props {
   inputState: EditMessageInputState;
@@ -30,7 +30,7 @@ const EditMessageInput: FC<Props> = ({ inputState }) => {
 
   return (
     <div className="main_chat_input_container">
-      <form className="main_chat_input_form">
+      <form className="main_chat_input_form edit_message_form">
         <EditMessageBar inputState={inputState} />
 
         <FileInput />
@@ -44,22 +44,22 @@ const EditMessageInput: FC<Props> = ({ inputState }) => {
           onChange={(e) => setText(e.target.value)}
         />
 
-        <div className="input_icon_container">
+        <div className="icon_container">
           <i className="fa-solid fa-face-smile main_chat_icon" />
         </div>
 
         {text ? (
-          <div className="input_icon_container">
+          <div className="icon_container">
             <button
               type="submit"
-              className="main_chat_send_button input_icon_container"
+              className="main_chat_send_button icon_container"
               onClick={handleSubmit}
             >
               <i className="fa-solid fa-check main_chat_send_icon" />
             </button>
           </div>
         ) : (
-          <div className="input_icon_container">
+          <div className="icon_container">
             <i className="fa-solid fa-microphone main_chat_icon" />
           </div>
         )}

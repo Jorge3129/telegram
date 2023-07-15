@@ -1,9 +1,8 @@
 import { FC } from "react";
-
-import { EditMessageInputState } from "../reducers/current-chat-state.type";
-import "./EditMessageBar.css";
-import { useAppDispatch } from "../../redux/store";
-import { CurrentChatActions } from "../reducers/current-chat.reducer";
+import "./EditMessageBar.scss";
+import { useAppDispatch } from "../../../redux/store";
+import { EditMessageInputState } from "../../reducers/current-chat-state.type";
+import { CurrentChatActions } from "../../reducers/current-chat.reducer";
 
 interface Props {
   inputState: EditMessageInputState;
@@ -18,7 +17,7 @@ const EditMessageBar: FC<Props> = ({ inputState }) => {
 
   return (
     <div className="edit-message-display">
-      <div className="input_icon_container">
+      <div className="icon_container">
         <i className="fa-solid fa-pen edit-message-icon"></i>
       </div>
 
@@ -27,7 +26,7 @@ const EditMessageBar: FC<Props> = ({ inputState }) => {
         <div className="edit-message-text">{inputState.message.text}</div>
       </div>
 
-      <div className="input_icon_container" onClick={handleCancelEdit}>
+      <div className="icon_container" onClick={handleCancelEdit}>
         <i className="fa-solid fa-xmark"></i>
       </div>
     </div>

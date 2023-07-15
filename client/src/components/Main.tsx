@@ -7,8 +7,8 @@ import { selectCurrentChat } from "../current-chat/reducers/current-chat.reducer
 import MainPlaceholder from "./MainPlaceholder";
 import { User } from "../users/models/user.model";
 import ChatsContainer from "../chats/components/ChatsContainer";
-import CurrentChatComponent from "../current-chat/CurrentChatComponent";
 import ReactionMediaPane from "../reaction-media/reaction-media-pane/ReactionMediaPane";
+import CurrentChatComponent from "../current-chat/current-chat-component/CurrentChatComponent";
 
 interface MainProps {
   user: User;

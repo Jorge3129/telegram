@@ -1,11 +1,11 @@
-import { FC, useEffect, useRef, MouseEvent, useState } from "react";
-import FileInput from "../FileInput";
-import { useSend } from "../hooks/useSend";
-
-import { CreateMessageInputState } from "../reducers/current-chat-state.type";
+import { FC, useEffect, useRef, useState, MouseEvent } from "react";
+import "./CreateMessageInput.scss";
 import { useSelector } from "react-redux";
-import { selectCurrentChat } from "../reducers/current-chat.reducer";
-import { useEmojiInput } from "../../reaction-media/emoji/use-emoji-input";
+import { useEmojiInput } from "../../../reaction-media/emoji/use-emoji-input";
+import { useSend } from "../../hooks/useSend";
+import { CreateMessageInputState } from "../../reducers/current-chat-state.type";
+import { selectCurrentChat } from "../../reducers/current-chat.reducer";
+import FileInput from "../file-input/FileInput";
 
 interface Props {
   inputState: CreateMessageInputState;
@@ -28,8 +28,8 @@ const CreateMessageInput: FC<Props> = () => {
 
   const handleSubmit = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    void sendMessage();
     setText("");
+    void sendMessage();
   };
 
   return (
@@ -46,22 +46,22 @@ const CreateMessageInput: FC<Props> = () => {
           onChange={(e) => setText(e.target.value)}
         />
 
-        <div className="input_icon_container">
+        <div className="icon_container">
           <i className="fa-solid fa-face-smile main_chat_icon" />
         </div>
 
         {text ? (
-          <div className="input_icon_container">
+          <div className="icon_container">
             <button
               type="submit"
-              className="main_chat_send_button input_icon_container"
+              className="main_chat_send_button icon_container"
               onClick={handleSubmit}
             >
               <i className="fa-solid fa-paper-plane main_chat_send_icon" />
             </button>
           </div>
         ) : (
-          <div className="input_icon_container">
+          <div className="icon_container">
             <i className="fa-solid fa-microphone main_chat_icon" />
           </div>
         )}
