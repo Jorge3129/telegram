@@ -5,7 +5,6 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import LoginPage from "./auth/ui/Login";
 import ErrorBoundary from "./shared/errors/ErrorBoundary";
 import { useSelector } from "react-redux";
 import { selectUser, setUser, setUserLoading } from "./redux/user-reducer";
@@ -14,6 +13,7 @@ import { authService } from "./auth/services/auth.service";
 
 import "./App.scss";
 import MainComponent from "./main/main-component/MainComponent";
+import LoginPage from "./auth/components/login-page/LoginPage";
 
 const App: FC = () => {
   const { user, loading } = useSelector(selectUser);

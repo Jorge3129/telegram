@@ -1,15 +1,13 @@
 import { ChangeEvent, FC, useState } from "react";
-import "./Login.css";
+import "./LoginPage.scss";
 import { useNavigate } from "react-router";
-import { setUser } from "../../redux/user-reducer";
-import { useAppDispatch } from "../../redux/store";
-import { usersApiService } from "../../users/users-api.service";
-import { authService } from "../services/auth.service";
-import { LoginDto } from "../dto/login-dto";
+import { useAppDispatch } from "../../../redux/store";
+import { setUser } from "../../../redux/user-reducer";
+import { usersApiService } from "../../../users/users-api.service";
+import { LoginDto } from "../../dto/login-dto";
+import { authService } from "../../services/auth.service";
 
-interface LoginProps {}
-
-const LoginPage: FC<LoginProps> = () => {
+const LoginPage: FC = () => {
   const navigate = useNavigate();
 
   const [state, setState] = useState<LoginDto>({ username: "", password: "" });
@@ -39,6 +37,7 @@ const LoginPage: FC<LoginProps> = () => {
   return (
     <div className="login_container">
       <h2>Login</h2>
+
       <form className="login_form">
         <label>
           Username
