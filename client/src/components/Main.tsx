@@ -8,7 +8,7 @@ import MainPlaceholder from "./MainPlaceholder";
 import { User } from "../users/models/user.model";
 import ChatsContainer from "../chats/components/ChatsContainer";
 import CurrentChatComponent from "../current-chat/CurrentChatComponent";
-import ReactionMediaPane from "../reaction-media/ReactionMediaPane";
+import ReactionMediaPane from "../reaction-media/reaction-media-pane/ReactionMediaPane";
 
 interface MainProps {
   user: User;

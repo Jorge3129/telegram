@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { ReactionMediaPage } from "./ReactionMediaPane";
-import "./styles/ReactionMediaHeader.css";
+import "./ReactionMediaHeader.scss";
+import { ReactionMediaPage } from "../reaction-media-page.type";
 
 interface Props {
   pages: ReactionMediaPage[];
@@ -28,9 +28,7 @@ const ReactionMediaHeader: FC<Props> = ({
           key={page.title}
           onClick={() => setCurrentPage(page)}
         >
-          <div className={"reaction-media-page-title"}>
-            {page.title.toUpperCase()}
-          </div>
+          <div className={"reaction-media-page-title"}>{page.title}</div>
         </div>
       ))}
 

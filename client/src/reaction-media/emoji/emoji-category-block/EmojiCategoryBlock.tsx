@@ -1,14 +1,14 @@
 import { FC } from "react";
-import { Subject } from "rxjs";
-import { EmojiCategory } from "./emoji-category.type";
+import "./EmojiCategoryBlock.scss";
+
+import { EmojiCategory } from "../emoji-category.type";
+import { emojisInput$ } from "../emoji-input.subject";
 
 interface Props {
   emojiBlock: EmojiCategory;
 }
 
-export const emojisInput$ = new Subject<string>();
-
-const EmojiCategoryComponent: FC<Props> = ({ emojiBlock }) => {
+const EmojiCategoryBlock: FC<Props> = ({ emojiBlock }) => {
   const { name, emojis } = emojiBlock;
 
   const handleClick = (emoji: string) => {
@@ -33,4 +33,4 @@ const EmojiCategoryComponent: FC<Props> = ({ emojiBlock }) => {
   );
 };
 
-export default EmojiCategoryComponent;
+export default EmojiCategoryBlock;

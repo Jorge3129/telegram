@@ -1,19 +1,15 @@
 import { FC, useState } from "react";
-import ReactionMediaHeader from "./ReactionMediaHeader";
-import EmojiList from "./emoji/EmojiList";
-import "./styles/ReactionMediaPane.css";
-import GifsPage from "./gifs/GifsPage";
-
-export type ReactionMediaPage = {
-  title: string;
-  component: JSX.Element;
-};
+import "./ReactionMediaPane.scss";
+import GifsPage from "../gifs/gifs-page/GifsPage";
+import EmojiPage from "../emoji/emoji-list/EmojiList";
+import ReactionMediaHeader from "../reaction-media-header/ReactionMediaHeader";
+import { ReactionMediaPage } from "../reaction-media-page.type";
 
 const ReactionMediaPane: FC = () => {
   const pages: ReactionMediaPage[] = [
     {
       title: "Emoji",
-      component: <EmojiList />,
+      component: <EmojiPage />,
     },
     {
       title: "Stickers",

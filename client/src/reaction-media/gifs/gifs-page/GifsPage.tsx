@@ -1,13 +1,15 @@
-import { Grid } from "@giphy/react-components";
-import { giphyFetch } from "./giphy-fetch";
-import "./GifsPage.css";
-import { useEffect, useRef, useState } from "react";
-import ResizeObserver from "react-resize-observer";
+import { FC, useEffect, useRef, useState } from "react";
+import "./GifsPage.scss";
+import { useSendGif } from "../use-send-gif";
 import { IGif } from "@giphy/js-types";
-import { useSendGif } from "./use-send-gif";
-import ChatsSearchBar from "../../chats/components/ChatsSearchBar";
+import { Grid } from "@giphy/react-components";
+import ChatsSearchBar from "../../../chats/components/ChatsSearchBar";
+import { giphyFetch } from "../giphy-fetch";
+import ResizeObserver from "react-resize-observer";
 
-const GifsPage = () => {
+interface Props {}
+
+const GifsPage: FC<Props> = () => {
   const sendGif = useSendGif();
 
   const onGifClick = (gif: IGif) => {
