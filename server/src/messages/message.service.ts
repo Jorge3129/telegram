@@ -19,8 +19,8 @@ export class MessageService {
     await this.messageMutationService.delete(messageId, user);
   }
 
-  public async readMessage(message: Message, user: UserEntity): Promise<void> {
-    await this.messageMutationService.readMessage(message, user);
+  public async readMessage(messageId: string, user: UserEntity): Promise<void> {
+    await this.messageMutationService.readMessage(messageId, user);
   }
 
   public async editMessage(

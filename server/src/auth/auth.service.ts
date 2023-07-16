@@ -38,8 +38,14 @@ export class AuthService {
   }
 
   public async login(loginData: UserPass): Promise<SignedTokens> {
-    const user = await this.userRepo.findOneByOrFail({
-      username: loginData.username,
+    const user = await this.userRepo.findOneOrFail({
+      where: {
+        username: loginData.username,
+      },
+      select: {
+        id: true,
+        password: true,
+      },
     });
 
     await this.checkPassword(loginData.password, user);

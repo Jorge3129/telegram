@@ -7,7 +7,9 @@ import { Message } from 'src/messages/models/message.type';
 import { RequestUser } from 'src/users/decorators/user.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
 import { MessageQueryService } from 'src/messages/queries/message-query.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Chats')
 @Controller('chats')
 export class ChatsController {
   constructor(
@@ -16,11 +18,13 @@ export class ChatsController {
   ) {}
 
   @Get('/')
+  @ApiBearerAuth()
   public getChats(@Req() req: Request): Promise<ChatForView[]> {
     return this.chatsService.getUserChats(<User>req.user);
   }
 
   @Get('/:chatId/messages')
+  @ApiBearerAuth()
   public getMessages(
     @Param('chatId', ParseIntPipe) chatId: number,
     @RequestUser() user: UserEntity,

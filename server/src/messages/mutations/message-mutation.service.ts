@@ -3,7 +3,6 @@ import { ChatMembershipService } from 'src/chat-users/services/chat-membership.s
 import { AppEventEmitter } from 'src/shared/services/app-event-emitter.service';
 import { UserEntity } from 'src/users/entity/user.entity';
 import { User } from 'src/users/user.type';
-import { CreateGifMessageDto } from '../dto/create-message/create-gif-message.dto';
 import { AppMessageEvent } from '../events';
 import { CreateMessageEvent } from '../events/create-message.event';
 import { ReadMessageEvent } from '../events/read-message.event';
@@ -17,6 +16,8 @@ import { DeleteMessageEvent } from '../events/delete-message.event';
 import { EditMessageEvent } from '../events/edit-message.event';
 import { MessageReadsMutationService } from './message-reads-mutation.service';
 import { CreateMessageDto } from '../dto/create-message/create-message.dto';
+import { EntityManager } from 'typeorm';
+import { MessageEntity } from '../entity/message.entity';
 
 @Injectable()
 export class MessageMutationService {
@@ -27,6 +28,7 @@ export class MessageMutationService {
     private membershipService: ChatMembershipService,
     private messageReadsService: MessageReadsMutationService,
     private messageMapper: MessageEntityToModelMapper,
+    private entityManager: EntityManager,
     private eventEmitter: AppEventEmitter<AppMessageEvent>,
   ) {}
 
@@ -82,7 +84,13 @@ export class MessageMutationService {
     this.eventEmitter.emit(new DeleteMessageEvent({ message, user }));
   }
 
-  public async readMessage(message: Message, user: UserEntity): Promise<void> {
+  public async readMessage(messageId: string, user: UserEntity): Promise<void> {
+    const message = await this.entityManager
+      .findOneByOrFail(MessageEntity, {
+        id: messageId,
+      })
+      .then((entity) => this.messageMapper.mapEntityToModel(entity));
+
     await this.messageReadsService.updateSeen(user.id, message);
 
     this.eventEmitter.emit(new ReadMessageEvent({ message, user }));

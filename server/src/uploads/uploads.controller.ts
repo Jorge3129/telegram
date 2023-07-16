@@ -17,13 +17,21 @@ import { UPLOAD_PATH } from './upload-path.const';
 import { Response } from 'express';
 import { StreamResponseStats } from './streaming/stream-response.type';
 import * as mime from 'mime-types';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { uploadFileSchema } from './dto/upload-file.schema';
 
+@ApiTags('Uploads')
 @Controller('uploads')
 export class UploadsController {
   constructor(private readonly streamingService: StreamingService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: uploadFileSchema,
+  })
+  @ApiBearerAuth()
   public uploadFile(@UploadedFile() file: Express.Multer.File) {
     return {
       originalName: file.originalname,
@@ -31,6 +39,7 @@ export class UploadsController {
   }
 
   @Get(':filename')
+  @ApiBearerAuth()
   public async getFile(
     @Param('filename') fileName: string,
     @Headers('range') rawRange: string | undefined,

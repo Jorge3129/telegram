@@ -1,27 +1,15 @@
-import { UserRepository } from './user.repository';
-import {
-  Controller,
-  Get,
-  NotFoundException,
-  Param,
-  ParseIntPipe,
-} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { User } from './user.type';
+import { RequestUser } from './decorators/user.decorator';
+import { UserEntity } from './entity/user.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
-  constructor(private readonly userRepository: UserRepository) {}
-
-  @Get('/:userId')
-  public async getUser(
-    @Param('userId', ParseIntPipe) userId: number,
-  ): Promise<User> {
-    const user = await this.userRepository.findOneBy({ id: userId });
-
-    if (!user) {
-      throw new NotFoundException('No user');
-    }
-
+  @Get('/current')
+  @ApiBearerAuth()
+  public async getUser(@RequestUser() user: UserEntity): Promise<User> {
     return { ...user, password: '' };
   }
 }

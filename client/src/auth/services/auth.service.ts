@@ -35,8 +35,7 @@ export class AuthService {
       return null;
     }
 
-    const userId = this.getUserIdFromToken(token);
-    const user = await usersApiService.getUser(userId);
+    const user = await usersApiService.getCurrentUser();
 
     return user;
   }
