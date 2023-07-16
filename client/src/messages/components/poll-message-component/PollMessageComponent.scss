@@ -1,0 +1,50 @@
+.poll_message_item {
+  min-width: 3em;
+  max-width: 70%;
+  margin: 0.2em 1em;
+  padding: 0.7em;
+  background-color: var(--white);
+  border-radius: 0.5em;
+  min-height: 1.5em;
+
+  .message_author {
+    text-align: left;
+    color: var(--blue);
+    font-weight: 600;
+    font-size: 0.9em;
+  }
+
+  .message_text {
+    overflow-wrap: break-word;
+    text-align: left;
+    float: left;
+    font-size: 0.9em;
+  }
+
+  .message_img {
+    max-width: 15em;
+  }
+
+  .message_info {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    float: right;
+    color: var(--blue-gray);
+    font-size: 0.8em;
+    font-weight: 500;
+    margin: 0.5em 0 0 0.5em;
+  }
+
+  .clearfix {
+    clear: both;
+  }
+
+  &.own_message {
+    background-color: var(--green-light);
+
+    .message_info {
+      color: var(--green-deep);
+    }
+  }
+}
