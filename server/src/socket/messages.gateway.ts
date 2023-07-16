@@ -11,6 +11,7 @@ import { CatchError } from './decorators/catch-error.decorator';
 import { SocketAuthGuard, SocketWithUser } from './guards/socket-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { SocketAuthService } from './services/socket-auth.service';
+import { OnlineStatusSocketEvents } from './dtos/online-status-events';
 
 @WebSocketGateway(8000, { cors: true })
 export class MessagesGateway
@@ -60,7 +61,7 @@ export class MessagesGateway
     const socketIds = await this.chatUserRepo.findAllUserContactSockets(userId);
 
     socketIds.forEach(({ socketId, chatId }) => {
-      this.emitEventTo(socketId, 'online-change', {
+      this.emitEventTo(socketId, OnlineStatusSocketEvents.CHANGE, {
         online: online,
         chatId: chatId,
       });

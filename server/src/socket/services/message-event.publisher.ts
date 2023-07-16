@@ -1,75 +1,64 @@
 import { Injectable } from '@nestjs/common';
 import { MessagesGateway } from '../messages.gateway';
-import { OnEvent } from '@nestjs/event-emitter';
-import { MessageEventType } from 'src/messages/events/message-event-type';
-import { CreateMessageEventPayload } from 'src/messages/events/create-message.event';
-import { EditMessageEventPayload } from 'src/messages/events/edit-message.event';
-import { DeleteMessageEventPayload } from 'src/messages/events/delete-message.event';
-import { ReadMessageEventPayload } from 'src/messages/events/read-message.event';
-import { UserService } from 'src/users/user.service';
+import {
+  DeleteMessageSocketPayload,
+  EditMessageSocketPayload,
+  MessageSocketEvents,
+  NewMessageSocketPayload,
+  SeenMessageSocketPayload,
+} from '../dtos/message-socket-events';
 
 @Injectable()
 export class MessageEventPublisher {
-  constructor(
-    private messagesGateway: MessagesGateway,
-    private userService: UserService,
-  ) {}
+  constructor(private messagesGateway: MessagesGateway) {}
 
-  @OnEvent(MessageEventType.CREATE)
-  public async handleCreate(payload: CreateMessageEventPayload) {
-    const { messageResponse, user } = payload;
-
+  public async publishNewMessage(
+    payload: NewMessageSocketPayload,
+    chatId: number,
+    userId: number,
+  ) {
     await this.messagesGateway.sendMessageToRecipients(
-      messageResponse.chatId,
-      user.id,
-      'message-to-client',
-      messageResponse,
+      chatId,
+      userId,
+      MessageSocketEvents.NEW,
+      payload,
     );
   }
 
-  @OnEvent(MessageEventType.EDIT)
-  public async handleEdit(payload: EditMessageEventPayload) {
-    const { message, user, editedText } = payload;
-
+  public async publishEdit(
+    payload: EditMessageSocketPayload,
+    chatId: number,
+    userId: number,
+  ) {
     await this.messagesGateway.sendMessageToRecipients(
-      message.chatId,
-      user.id,
-      'message-edit',
-      {
-        messageId: message.id,
-        chatId: message.chatId,
-        text: editedText,
-      },
+      chatId,
+      userId,
+      MessageSocketEvents.EDIT,
+      payload,
     );
   }
 
-  @OnEvent(MessageEventType.DELETE)
-  public async handleDelete(payload: DeleteMessageEventPayload) {
-    const { message, user } = payload;
-
+  public async publishDelete(
+    payload: DeleteMessageSocketPayload,
+    chatId: number,
+    userId: number,
+  ) {
     await this.messagesGateway.sendMessageToRecipients(
-      message.chatId,
-      user.id,
-      'message-deleted',
-      message.id,
+      chatId,
+      userId,
+      MessageSocketEvents.DELETE,
+      payload,
     );
   }
 
-  @OnEvent(MessageEventType.READ)
-  public async handleRead(payload: ReadMessageEventPayload) {
-    const { message, user } = payload;
-
-    const authorSocketId = await this.userService.getUserSocketId(
-      message.authorId,
+  public async publishMessageRead(
+    payload: SeenMessageSocketPayload,
+    authorSocketId: string,
+  ) {
+    this.messagesGateway.emitEventTo(
+      authorSocketId,
+      MessageSocketEvents.READ,
+      payload,
     );
-
-    if (!authorSocketId) {
-      return;
-    }
-
-    this.messagesGateway.emitEventTo(authorSocketId, 'seen', {
-      message,
-      userId: user.id,
-    });
   }
 }
