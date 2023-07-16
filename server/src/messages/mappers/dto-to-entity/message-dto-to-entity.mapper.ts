@@ -5,7 +5,7 @@ import {
   MessageEntity,
   PersonalMessageEntity,
 } from '../../entity/message.entity';
-import { MessageContentEntity } from '../../entity/message-content.entity';
+import { MessageContentEntity } from '../../entity/message-content/message-content.entity';
 import { CreateGifMessageDto } from 'src/messages/dto/create-message/create-gif-message.dto';
 import { GifMessageContentBuilder } from './builders/gif-message-content.builder';
 import { TextMessageContentBuilder } from './builders/text-message-content.builder';

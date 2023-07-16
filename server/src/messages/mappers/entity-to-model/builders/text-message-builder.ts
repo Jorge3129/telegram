@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import {
   MediaMessageContentEntity,
   TextMessageContentEntity,
-  isMediaContent,
-} from 'src/messages/entity/message-content.entity';
+} from 'src/messages/entity/message-content/message-content.entity';
 import { MessageEntity } from 'src/messages/entity/message.entity';
 import { Media } from 'src/messages/models/media.type';
 import { TextMessage } from 'src/messages/models/message.type';
 import { BaseMessageBuilder } from './base-message.builder';
+import { isMediaContent } from '../../../entity/message-content/message-content.type-guards';
 
 @Injectable()
 export class TextMessageBuilder {

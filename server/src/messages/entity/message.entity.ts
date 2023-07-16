@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../../users/entity/user.entity';
 import { ChatEntity } from '../../chats/entity/chat.entity';
-import { MessageContentEntity } from './message-content.entity';
+import { MessageContentEntity } from './message-content/message-content.entity';
 import { MessageReadEntity } from './message-read.entity';
 
 export enum MessageType {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTextMessageDto } from 'src/messages/dto/create-message/create-text-message.dto';
 import { MediaEntity } from 'src/messages/entity/media.entity';
-import { MediaMessageContentEntity } from 'src/messages/entity/message-content.entity';
+import { MediaMessageContentEntity } from 'src/messages/entity/message-content/message-content.entity';
 import { Media } from 'src/messages/models/media.type';
 
 @Injectable()
