@@ -9,6 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { pollAnswerOptionsExample } from './poll-answer-options.example';
 
 export class CreatePollDto {
   @IsString()
@@ -32,6 +33,9 @@ export class CreatePollDto {
   @ValidateNested({ each: true })
   @ArrayMinSize(2)
   @ArrayMaxSize(10)
-  @ApiProperty({ type: [CreatePollAnswerOptionDto] })
+  @ApiProperty({
+    type: [CreatePollAnswerOptionDto],
+    example: pollAnswerOptionsExample,
+  })
   answerOptions: CreatePollAnswerOptionDto[];
 }
