@@ -21,7 +21,7 @@ export class MessageApiService {
   }
 
   public async updateMessageReads(message: Message): Promise<void> {
-    await this.http.put(`${environment.apiUrl}/messages`, message);
+    await this.http.post(`${environment.apiUrl}/messages/${message.id}/reads`);
   }
 }
 
