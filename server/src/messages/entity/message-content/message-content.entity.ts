@@ -2,19 +2,16 @@ import {
   ChildEntity,
   Column,
   Entity,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   TableInheritance,
 } from 'typeorm';
-import { MediaEntity } from './media.entity';
-import { MessageEntity } from './message.entity';
-
-export enum MessageContentType {
-  TEXT_MESSAGE = 'text-message',
-  MEDIA_MESSAGE = 'media-message',
-  GIF_MESSAGE = 'gif-message',
-}
+import { MediaEntity } from '../media.entity';
+import { MessageEntity } from '../message.entity';
+import { MessageContentType } from './message-content-type';
+import { PollEntity } from '../../../polls/entity/poll.entity';
 
 @Entity('message_contents')
 @TableInheritance({ column: { name: 'type', type: 'varchar' } })
@@ -58,21 +55,22 @@ export class GifContentEntity extends MessageContentEntity {
   srcObject: object;
 }
 
-export const isTextContent = (
-  value: MessageContentEntity,
-): value is TextMessageContentEntity =>
-  value.type === MessageContentType.TEXT_MESSAGE;
+@ChildEntity('poll')
+export class PollContentEntity extends MessageContentEntity {
+  readonly type = MessageContentType.POLL_MESSAGE;
 
-export const isMediaContent = (
-  value: MessageContentEntity,
-): value is MediaMessageContentEntity =>
-  value.type === MessageContentType.MEDIA_MESSAGE;
+  @Column()
+  pollId: string;
 
-export const isGifContent = (
-  value: MessageContentEntity,
-): value is GifContentEntity => value.type === MessageContentType.GIF_MESSAGE;
+  @ManyToOne(() => PollEntity, {
+    eager: true,
+    cascade: true,
+  })
+  poll: PollEntity;
+}
 
 export type UnionMessageContentEntity =
   | TextMessageContentEntity
   | MediaMessageContentEntity
-  | GifContentEntity;
+  | GifContentEntity
+  | PollContentEntity;

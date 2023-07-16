@@ -13,6 +13,7 @@ import { SocketModule } from './socket/socket.module';
 import { UploadsModule } from './uploads/uploads.module';
 import { SharedModule } from './shared/shared.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { PollsModule } from './polls/polls.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     SocketModule,
     UploadsModule,
     SharedModule,
+    PollsModule,
   ],
   providers: [
     {

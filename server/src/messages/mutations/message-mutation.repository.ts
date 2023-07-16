@@ -4,7 +4,7 @@ import { MessageReadEntity } from '../entity/message-read.entity';
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TextMessageContentEntity } from '../entity/message-content.entity';
+import { TextMessageContentEntity } from '../entity/message-content/message-content.entity';
 
 @Injectable()
 export class MessageMutationRepository {

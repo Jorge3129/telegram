@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { MessageEntity } from '../../entity/message.entity';
 import { Message } from '../../models/message.type';
-import {
-  UnionMessageContentEntity,
-  isGifContent,
-} from '../../entity/message-content.entity';
+import { UnionMessageContentEntity } from '../../entity/message-content/message-content.entity';
 import { TextMessageBuilder } from './builders/text-message-builder';
 import { GifMessageBuilder } from './builders/gif-message.builder';
+import {
+  isGifContent,
+  isPollContent,
+} from '../../entity/message-content/message-content.type-guards';
 
 @Injectable()
 export class MessageEntityToModelMapper {
@@ -20,6 +21,10 @@ export class MessageEntityToModelMapper {
 
     if (isGifContent(content)) {
       return this.gifMessageBuilder.build(entity, content);
+    }
+
+    if (isPollContent(content)) {
+      throw new Error('poll');
     }
 
     return this.textMessageBuilder.build(entity, content);
