@@ -8,12 +8,14 @@ import {
   isGifContent,
   isPollContent,
 } from '../../entity/message-content/message-content.type-guards';
+import { PollMessageBuilder } from './builders/poll-message.builder';
 
 @Injectable()
 export class MessageEntityToModelMapper {
   constructor(
     private textMessageBuilder: TextMessageBuilder,
     private gifMessageBuilder: GifMessageBuilder,
+    private pollMessageBuilder: PollMessageBuilder,
   ) {}
 
   public mapEntityToModel(entity: MessageEntity): Message {
@@ -24,7 +26,7 @@ export class MessageEntityToModelMapper {
     }
 
     if (isPollContent(content)) {
-      throw new Error('poll');
+      return this.pollMessageBuilder.build(entity, content);
     }
 
     return this.textMessageBuilder.build(entity, content);

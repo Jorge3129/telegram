@@ -1,5 +1,6 @@
 import { User } from 'src/users/user.type';
 import { Media } from './media.type';
+import { Poll } from 'src/polls/models/poll.model';
 
 export interface BaseMessage {
   id: string;
@@ -23,7 +24,12 @@ export interface GifMessage extends BaseMessage {
   srcObject: object;
 }
 
-export type Message = TextMessage | GifMessage;
+export interface PollMessage extends BaseMessage {
+  type: 'poll-message';
+  poll: Poll;
+}
+
+export type Message = TextMessage | GifMessage | PollMessage;
 
 export const isTextMessage = (message: Message): message is TextMessage =>
   message.type === 'text-message';
