@@ -15,7 +15,10 @@ import { MessageService } from './message.service';
 import { EditMessageDto } from './dto/edit-message.dto';
 import { CreateMessageDto } from './dto/create-message/create-message.dto';
 import { CreateMessageValidationPipe } from './dto/create-message/create-message-validation.pipe';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiExtraModels, ApiTags, refs } from '@nestjs/swagger';
+import { CreateTextMessageDto } from './dto/create-message/create-text-message.dto';
+import { CreateGifMessageDto } from './dto/create-message/create-gif-message.dto';
+import { createMessageDtoExamples } from './dto/create-message/create-message.dto.examples';
 
 @ApiTags('Messages')
 @Controller('messages')
@@ -23,6 +26,13 @@ export class MessagesController {
   constructor(private messageService: MessageService) {}
 
   @Post()
+  @ApiExtraModels(CreateTextMessageDto, CreateGifMessageDto)
+  @ApiBody({
+    schema: {
+      oneOf: refs(CreateTextMessageDto, CreateGifMessageDto),
+    },
+    examples: createMessageDtoExamples,
+  })
   public async create(
     @Body(CreateMessageValidationPipe) messageDto: CreateMessageDto,
     @RequestUser() user: UserEntity,
