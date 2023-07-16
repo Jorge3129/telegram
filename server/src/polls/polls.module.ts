@@ -5,6 +5,7 @@ import { PollVotesController } from './poll-votes.controller';
 import { VotesQueryService } from './votes/votes-query.service';
 import { PollsQueryService } from './poll-services/polls-query.service';
 import { CreateVoteRequirement } from './votes/requirements/create-vote-requirement';
+import { PollDtoToEntityMapper } from './poll-services/poll-dto-to-entity.mapper';
 
 @Module({
   controllers: [PollsController, PollVotesController],
@@ -13,6 +14,8 @@ import { CreateVoteRequirement } from './votes/requirements/create-vote-requirem
     VotesQueryService,
     PollsQueryService,
     CreateVoteRequirement,
+    PollDtoToEntityMapper,
   ],
+  exports: [PollDtoToEntityMapper],
 })
 export class PollsModule {}

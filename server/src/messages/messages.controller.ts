@@ -12,11 +12,12 @@ import {
   ApiBody,
   ApiExtraModels,
   ApiTags,
-  refs,
 } from '@nestjs/swagger';
 import { CreateTextMessageDto } from './dto/create-message/create-text-message.dto';
 import { CreateGifMessageDto } from './dto/create-message/create-gif-message.dto';
 import { createMessageDtoExamples } from './dto/create-message/create-message.dto.examples';
+import { createMessageSchema } from './dto/create-message/create-message-schema';
+import { CreatePollMessageDto } from './dto/create-message/create-poll-message.dto';
 
 @ApiTags('Messages')
 @Controller('messages')
@@ -24,11 +25,13 @@ export class MessagesController {
   constructor(private messageService: MessageService) {}
 
   @Post()
-  @ApiExtraModels(CreateTextMessageDto, CreateGifMessageDto)
+  @ApiExtraModels(
+    CreateTextMessageDto,
+    CreateGifMessageDto,
+    CreatePollMessageDto,
+  )
   @ApiBody({
-    schema: {
-      oneOf: refs(CreateTextMessageDto, CreateGifMessageDto),
-    },
+    schema: createMessageSchema,
     examples: createMessageDtoExamples,
   })
   @ApiBearerAuth()

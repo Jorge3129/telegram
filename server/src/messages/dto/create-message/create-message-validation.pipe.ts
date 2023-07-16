@@ -3,6 +3,7 @@ import { CreateMessageDto } from './create-message.dto';
 import { plainToInstance } from 'class-transformer';
 import { CreateTextMessageDto } from './create-text-message.dto';
 import { CreateGifMessageDto } from './create-gif-message.dto';
+import { CreatePollMessageDto } from './create-poll-message.dto';
 
 export class CreateMessageValidationPipe extends BaseUnionValidationPipe<CreateMessageDto> {
   protected async createInstance(
@@ -10,6 +11,10 @@ export class CreateMessageValidationPipe extends BaseUnionValidationPipe<CreateM
   ): Promise<CreateMessageDto> {
     if (payload.type === 'gif') {
       return plainToInstance(CreateGifMessageDto, payload);
+    }
+
+    if (payload.type === 'poll') {
+      return plainToInstance(CreatePollMessageDto, payload);
     }
 
     return plainToInstance(CreateTextMessageDto, payload);

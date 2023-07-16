@@ -13,6 +13,8 @@ import { MediaMessageContentBuilder } from './builders/media-message-content.bui
 import { CreateMessageDto } from 'src/messages/dto/create-message/create-message.dto';
 import { ChatEntity, ChatType } from 'src/chats/entity/chat.entity';
 import { User } from 'src/users/user.type';
+import { CreatePollMessageDto } from 'src/messages/dto/create-message/create-poll-message.dto';
+import { PollMessageContentBuilder } from './builders/poll-message-content.builder';
 
 @Injectable()
 export class MessageDtoToEntityMapper {
@@ -20,6 +22,7 @@ export class MessageDtoToEntityMapper {
     private gifContentBuilder: GifMessageContentBuilder,
     private textContentBuilder: TextMessageContentBuilder,
     private mediaContentBuilder: MediaMessageContentBuilder,
+    private pollContentBuilder: PollMessageContentBuilder,
   ) {}
 
   public mapDtoToEntity(
@@ -52,6 +55,10 @@ export class MessageDtoToEntityMapper {
   private createMessageContent(dto: CreateMessageDto): MessageContentEntity {
     if (dto instanceof CreateGifMessageDto) {
       return this.gifContentBuilder.build(dto);
+    }
+
+    if (dto instanceof CreatePollMessageDto) {
+      return this.pollContentBuilder.build(dto);
     }
 
     if (!dto.media?.filename) {
