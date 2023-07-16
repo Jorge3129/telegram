@@ -26,7 +26,7 @@ const LoginPage: FC = () => {
     const userId = await authService.login(state);
 
     if (userId) {
-      const user = await usersApiService.getUser(userId);
+      const user = await usersApiService.getCurrentUser();
 
       dispatch(setUser(user));
     }

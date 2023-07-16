@@ -8,6 +8,10 @@ export class UsersApiService {
   public async getUser(userId: number): Promise<User> {
     return await this.http.get<User>(`${environment.apiUrl}/users/${userId}`);
   }
+
+  public async getCurrentUser(): Promise<User> {
+    return await this.http.get<User>(`${environment.apiUrl}/users/current`);
+  }
 }
 
 export const usersApiService = new UsersApiService(httpClient);
