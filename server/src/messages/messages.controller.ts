@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Put,
-  Delete,
-  Param,
-  Patch,
-} from '@nestjs/common';
+import { Controller, Post, Body, Delete, Param, Patch } from '@nestjs/common';
 import { RequestUser } from 'src/users/decorators/user.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
 
@@ -66,12 +58,12 @@ export class MessagesController {
     await this.messageService.delete(messageId, user);
   }
 
-  @Put()
+  @Post(':messageId/reads')
   @ApiBearerAuth()
   public async updateMessageReads(
-    @Body() message: Message,
+    @Param('messageId') messageId: string,
     @RequestUser() user: UserEntity,
   ) {
-    await this.messageService.readMessage(message, user);
+    await this.messageService.readMessage(messageId, user);
   }
 }
