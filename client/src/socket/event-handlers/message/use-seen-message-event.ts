@@ -2,18 +2,21 @@ import { useCallback } from "react";
 import { Socket } from "socket.io-client";
 import { ChatActions } from "../../../chats/chats.reducer";
 import { MessageActions } from "../../../messages/messages.reducer";
-import { Message } from "../../../messages/models/message.model";
 import { useAppDispatch } from "../../../redux/store";
 import { useSocketEvent } from "../../use-socket-event";
 import { useSelector } from "react-redux";
 import { selectCurrentChat } from "../../../current-chat/reducers/current-chat.reducer";
+import {
+  MessageSocketEvents,
+  SeenMessageSocketPayload,
+} from "../../dtos/message-socket-events";
 
 export const useSeenMessageEvent = (socket: Socket | null) => {
   const dispatch = useAppDispatch();
   const { currentChatId } = useSelector(selectCurrentChat);
 
   const onSeen = useCallback(
-    ({ message, userId }: { message: Message; userId: number }) => {
+    ({ message, userId }: SeenMessageSocketPayload) => {
       if (currentChatId === message.chatId) {
         dispatch(MessageActions.setSeenMessage({ message, userId }));
       }
@@ -22,5 +25,5 @@ export const useSeenMessageEvent = (socket: Socket | null) => {
     [currentChatId, dispatch]
   );
 
-  useSocketEvent(socket, "seen", onSeen);
+  useSocketEvent(socket, MessageSocketEvents.READ, onSeen);
 };

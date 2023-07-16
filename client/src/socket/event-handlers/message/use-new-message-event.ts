@@ -4,16 +4,19 @@ import { Socket } from "socket.io-client";
 import { ChatActions } from "../../../chats/chats.reducer";
 import { selectCurrentChat } from "../../../current-chat/reducers/current-chat.reducer";
 import { MessageActions } from "../../../messages/messages.reducer";
-import { Message } from "../../../messages/models/message.model";
 import { useAppDispatch } from "../../../redux/store";
 import { useSocketEvent } from "../../use-socket-event";
+import {
+  MessageSocketEvents,
+  NewMessageSocketPayload,
+} from "../../dtos/message-socket-events";
 
 export const useNewMessageEvent = (socket: Socket | null) => {
   const dispatch = useAppDispatch();
   const { currentChatId } = useSelector(selectCurrentChat);
 
   const onMessage = useCallback(
-    (message: Message) => {
+    ({ message }: NewMessageSocketPayload) => {
       if (currentChatId === message.chatId) {
         dispatch(MessageActions.addMessage(message));
       }
@@ -24,5 +27,5 @@ export const useNewMessageEvent = (socket: Socket | null) => {
     [currentChatId, dispatch]
   );
 
-  useSocketEvent(socket, "message-to-client", onMessage);
+  useSocketEvent(socket, MessageSocketEvents.NEW, onMessage);
 };
