@@ -15,7 +15,13 @@ import { MessageService } from './message.service';
 import { EditMessageDto } from './dto/edit-message.dto';
 import { CreateMessageDto } from './dto/create-message/create-message.dto';
 import { CreateMessageValidationPipe } from './dto/create-message/create-message-validation.pipe';
-import { ApiBody, ApiExtraModels, ApiTags, refs } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiExtraModels,
+  ApiTags,
+  refs,
+} from '@nestjs/swagger';
 import { CreateTextMessageDto } from './dto/create-message/create-text-message.dto';
 import { CreateGifMessageDto } from './dto/create-message/create-gif-message.dto';
 import { createMessageDtoExamples } from './dto/create-message/create-message.dto.examples';
@@ -33,6 +39,7 @@ export class MessagesController {
     },
     examples: createMessageDtoExamples,
   })
+  @ApiBearerAuth()
   public async create(
     @Body(CreateMessageValidationPipe) messageDto: CreateMessageDto,
     @RequestUser() user: UserEntity,
@@ -41,6 +48,7 @@ export class MessagesController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
   public async edit(
     @Param('id') messageId: string,
     @Body() dto: EditMessageDto,
@@ -50,6 +58,7 @@ export class MessagesController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   public async delete(
     @Param('id') messageId: string,
     @RequestUser() user: UserEntity,
@@ -58,6 +67,7 @@ export class MessagesController {
   }
 
   @Put()
+  @ApiBearerAuth()
   public async updateMessageReads(
     @Body() message: Message,
     @RequestUser() user: UserEntity,
