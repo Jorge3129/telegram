@@ -8,6 +8,8 @@ import { MediaMessageContentBuilder } from './dto-to-entity/builders/media-messa
 import { GifMessageContentBuilder } from './dto-to-entity/builders/gif-message-content.builder';
 import { MessageDtoToEntityMapper } from './dto-to-entity/message-dto-to-entity.mapper';
 import { MessageMappingHelper } from './entity-to-model/message-mapping.helper';
+import { PollMessageBuilder } from './entity-to-model/builders/poll-message.builder';
+import { PollMessageContentBuilder } from './dto-to-entity/builders/poll-message-content.builder';
 
 export class MessageMapperModule {
   public static get providers(): Provider[] {
@@ -19,6 +21,7 @@ export class MessageMapperModule {
       BaseMessageBuilder,
       GifMessageBuilder,
       TextMessageBuilder,
+      PollMessageBuilder,
       MessageEntityToModelMapper,
       MessageMappingHelper,
     ];
@@ -29,6 +32,7 @@ export class MessageMapperModule {
       TextMessageContentBuilder,
       MediaMessageContentBuilder,
       GifMessageContentBuilder,
+      PollMessageContentBuilder,
       MessageDtoToEntityMapper,
     ];
   }

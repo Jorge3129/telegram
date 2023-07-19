@@ -45,7 +45,10 @@ export class MessageMutationService {
 
     await this.messageReadsService.updateSeen(user.id, message);
 
-    const messageResponse = this.messageMapper.mapEntityToModel(savedMessage);
+    const messageResponse = await this.messageMapper.mapEntityToModel(
+      savedMessage,
+      user,
+    );
 
     this.eventEmitter.emit(
       new CreateMessageEvent({
@@ -89,7 +92,7 @@ export class MessageMutationService {
       .findOneByOrFail(MessageEntity, {
         id: messageId,
       })
-      .then((entity) => this.messageMapper.mapEntityToModel(entity));
+      .then((entity) => this.messageMapper.mapEntityToModel(entity, user));
 
     await this.messageReadsService.updateSeen(user.id, message);
 

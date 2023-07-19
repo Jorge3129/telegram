@@ -9,12 +9,14 @@ import { MessageMapperModule } from './mappers/message-mapper.module';
 
 import { MessageQueriesModule } from './queries/message-queries.module';
 import { MessageMutationsModule } from './mutations/message-mutations.module';
+import { PollsModule } from 'src/polls/polls.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([MessageEntity]),
     ChatUsersModule,
     UserModule,
+    PollsModule,
   ],
   providers: [
     MessageService,

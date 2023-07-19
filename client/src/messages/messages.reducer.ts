@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../redux/rootReducer";
 import { chatsApiService } from "../chats/chats-api.service";
-import { isTextMessage, Message } from "./models/message.model";
+import { isPollMessage, isTextMessage, Message } from "./models/message.model";
+import { PollVotePercentage } from "../polls/models/poll-vote-percentage";
 
 interface MessageState {
   messages: Message[];
@@ -62,6 +63,52 @@ const messageSlice = createSlice({
         )
         .forEach((msg) => {
           msg.seen = true;
+        });
+    },
+
+    addPollVote: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{ messageId: string; selectedOptionIds: string[] }>
+    ) => {
+      state.messages
+        .filter((message) => message.id === payload.messageId)
+        .forEach((message) => {
+          if (isPollMessage(message)) {
+            message.poll.userSelectedOptionIds = payload.selectedOptionIds;
+          }
+        });
+    },
+
+    retractPollVote: (
+      state,
+      { payload }: PayloadAction<{ messageId: string }>
+    ) => {
+      state.messages
+        .filter((message) => message.id === payload.messageId)
+        .forEach((message) => {
+          if (isPollMessage(message)) {
+            message.poll.userSelectedOptionIds = [];
+          }
+        });
+    },
+
+    setPollVotePercentages: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        messageId: string;
+        votePercentages: PollVotePercentage[] | undefined;
+      }>
+    ) => {
+      state.messages
+        .filter((message) => message.id === payload.messageId)
+        .forEach((message) => {
+          if (isPollMessage(message)) {
+            message.poll.votesPercentages = payload.votePercentages;
+          }
         });
     },
   },

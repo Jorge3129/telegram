@@ -1,6 +1,7 @@
 import { IGif } from "@giphy/js-types";
 import { User } from "../../users/models/user.model";
 import { Media } from "./media.model";
+import { Poll } from "../../polls/models/poll.model";
 
 export interface BaseMessage {
   id: string;
@@ -22,6 +23,7 @@ export interface TextMessage extends BaseMessage {
 
 export interface PollMessage extends BaseMessage {
   type: "poll-message";
+  poll: Poll;
 }
 
 export interface GifMessage extends BaseMessage {
@@ -36,3 +38,6 @@ export const isTextMessage = (message: Message): message is TextMessage =>
 
 export const isGifMessage = (message: Message): message is GifMessage =>
   (message as GifMessage).type === "gif-message";
+
+export const isPollMessage = (message: Message): message is PollMessage =>
+  (message as PollMessage).type === "poll-message";

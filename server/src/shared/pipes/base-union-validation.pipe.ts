@@ -16,7 +16,9 @@ export abstract class BaseUnionValidationPipe<
     });
 
     if (errors.length) {
-      const errorMessage = errors.map((error) => error.constraints).join(',');
+      const errorMessage = errors
+        .map((error) => Object.values(error.constraints ?? {}))
+        .join(', ');
 
       throw new UnprocessableEntityException(
         `Validation failed: ${errorMessage}`,

@@ -8,15 +8,21 @@ import {
   isGifContent,
   isPollContent,
 } from '../../entity/message-content/message-content.type-guards';
+import { PollMessageBuilder } from './builders/poll-message.builder';
+import { User } from 'src/users/user.type';
 
 @Injectable()
 export class MessageEntityToModelMapper {
   constructor(
     private textMessageBuilder: TextMessageBuilder,
     private gifMessageBuilder: GifMessageBuilder,
+    private pollMessageBuilder: PollMessageBuilder,
   ) {}
 
-  public mapEntityToModel(entity: MessageEntity): Message {
+  public async mapEntityToModel(
+    entity: MessageEntity,
+    currentUser: User,
+  ): Promise<Message> {
     const content = entity.content as UnionMessageContentEntity;
 
     if (isGifContent(content)) {
@@ -24,9 +30,18 @@ export class MessageEntityToModelMapper {
     }
 
     if (isPollContent(content)) {
-      throw new Error('poll');
+      return this.pollMessageBuilder.build(entity, content, currentUser);
     }
 
     return this.textMessageBuilder.build(entity, content);
+  }
+
+  public mapEntitiesToModel(
+    entities: MessageEntity[],
+    currentUser: User,
+  ): Promise<Message[]> {
+    return Promise.all(
+      entities.map((entity) => this.mapEntityToModel(entity, currentUser)),
+    );
   }
 }

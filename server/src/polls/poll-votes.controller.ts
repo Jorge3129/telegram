@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { VotesMutationService } from './votes/votes-mutation.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateVotesDto } from './dto/create-votes/create-votes.dto';
@@ -48,5 +57,15 @@ export class PollVotesController {
     // TODO check user has access to poll
 
     return this.votesQueryService.countVotePercentages(pollId);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':pollId/votes')
+  @ApiBearerAuth()
+  public retractVotes(
+    @Param('pollId') pollId: string,
+    @RequestUser() user: UserEntity,
+  ) {
+    return this.votesMutationService.retractVotes(pollId, user);
   }
 }

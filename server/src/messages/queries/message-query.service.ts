@@ -4,6 +4,7 @@ import { UserEntity } from 'src/users/entity/user.entity';
 import { MessageEntityToModelMapper } from '../mappers/entity-to-model/message-entity-to-model.mapper';
 import { Message } from '../models/message.type';
 import { MessageQueryRepository } from './message-query.repository';
+import { User } from 'src/users/user.type';
 
 @Injectable()
 export class MessageQueryService {
@@ -13,14 +14,17 @@ export class MessageQueryService {
     private messageMapper: MessageEntityToModelMapper,
   ) {}
 
-  public async getLatestChatMessage(chatId: number): Promise<Message | null> {
+  public async getLatestChatMessage(
+    chatId: number,
+    currentUser: User,
+  ): Promise<Message | null> {
     const message = await this.messageRepo.getLatestMessage(chatId);
 
     if (!message) {
       return null;
     }
 
-    return this.messageMapper.mapEntityToModel(message);
+    return this.messageMapper.mapEntityToModel(message, currentUser);
   }
 
   public async getMessagesForChat(
@@ -31,8 +35,6 @@ export class MessageQueryService {
 
     const messages = await this.messageRepo.getMessagesForChat(chatId);
 
-    return messages.map((message) =>
-      this.messageMapper.mapEntityToModel(message),
-    );
+    return this.messageMapper.mapEntitiesToModel(messages, user);
   }
 }
