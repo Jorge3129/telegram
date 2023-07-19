@@ -24,21 +24,26 @@ export class ChatsService {
       }),
     );
 
-    return Promise.all(rawChats.map((ch) => this.mapChatToClient(ch, user.id)));
+    return Promise.all(rawChats.map((ch) => this.mapChatToClient(ch, user)));
   }
 
   private async mapChatToClient(
     chat: Chat,
-    userId: number,
+    currentUser: User,
   ): Promise<ChatForView> {
-    const user = chat.members.filter((u) => u.userId === userId)[0];
+    const userId = currentUser.id;
+
+    const currentChatUser = chat.members.filter((u) => u.userId === userId)[0];
 
     const unreadCount = await this.messageReadsService.countUnreadMessages(
       chat.id,
       userId,
     );
 
-    const lastMessage = await this.messageService.getLatestChatMessage(chat.id);
+    const lastMessage = await this.messageService.getLatestChatMessage(
+      chat.id,
+      currentUser,
+    );
 
     const otherMember = await this.chatUsersRepo.getOtherChatMember(
       chat.id,
@@ -50,7 +55,7 @@ export class ChatsService {
       title: chat.title || otherMember.user.username,
       lastMessage: lastMessage ?? undefined,
       unread: unreadCount,
-      muted: !!user?.muted,
+      muted: !!currentChatUser?.muted,
       type: chat.type,
       online: !!otherMember.user.socketId,
     };

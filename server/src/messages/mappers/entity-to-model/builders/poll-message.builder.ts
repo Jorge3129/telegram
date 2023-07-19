@@ -6,23 +6,33 @@ import { BaseMessageBuilder } from './base-message.builder';
 import { PollEntity } from 'src/polls/entity/poll.entity';
 import { Poll, PollAnswerOption } from 'src/polls/models/poll.model';
 import { PollAnswerOptionEntity } from 'src/polls/entity/poll-answer-option.entity';
+import { EntityManager } from 'typeorm';
+import { PollVoteEntity } from 'src/polls/entity/poll-vote.entity';
+import { User } from 'src/users/user.type';
 
 @Injectable()
 export class PollMessageBuilder {
-  constructor(private baseMessageBuilder: BaseMessageBuilder) {}
+  constructor(
+    private baseMessageBuilder: BaseMessageBuilder,
+    private entityManager: EntityManager,
+  ) {}
 
-  public build(
+  public async build(
     message: MessageEntity,
     content: PollContentEntity,
-  ): PollMessage {
+    currentUser: User,
+  ): Promise<PollMessage> {
     return {
       type: 'poll-message',
-      poll: this.buildPoll(content.poll),
+      poll: await this.buildPoll(content.poll, currentUser),
       ...this.baseMessageBuilder.build(message),
     };
   }
 
-  private buildPoll(pollEntity: PollEntity): Poll {
+  private async buildPoll(
+    pollEntity: PollEntity,
+    currentUser: User,
+  ): Promise<Poll> {
     return {
       id: pollEntity.id,
       question: pollEntity.question,
@@ -32,7 +42,27 @@ export class PollMessageBuilder {
       answerOptions: pollEntity.answerOptions.map((option) =>
         this.buildAnsweOption(option),
       ),
+      userSelectedOptionIds: await this.getUserVotes(
+        pollEntity.id,
+        currentUser.id,
+      ),
     };
+  }
+
+  private async getUserVotes(
+    pollId: string,
+    userId: number,
+  ): Promise<string[]> {
+    return this.entityManager
+      .find(PollVoteEntity, {
+        where: {
+          answerOption: {
+            pollId: pollId,
+          },
+          userId: userId,
+        },
+      })
+      .then((votes) => votes.map((vote) => vote.answerOptionId));
   }
 
   private buildAnsweOption(
