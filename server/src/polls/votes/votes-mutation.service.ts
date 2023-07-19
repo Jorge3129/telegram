@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from 'src/users/entity/user.entity';
-import { EntityManager, In } from 'typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
 import { PollAnswerOptionEntity } from '../entity/poll-answer-option.entity';
 import { PollVoteEntity } from '../entity/poll-vote.entity';
 import { PollsQueryService } from '../poll-services/polls-query.service';
 import { CreateVoteRequirement } from './requirements/create-vote-requirement';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class VotesMutationService {
@@ -12,6 +13,8 @@ export class VotesMutationService {
     private entityManager: EntityManager,
     private pollsQueryService: PollsQueryService,
     private createVoteRequirement: CreateVoteRequirement,
+    @InjectRepository(PollVoteEntity)
+    private pollVotesRepo: Repository<PollVoteEntity>,
   ) {}
 
   public async vote(
@@ -45,6 +48,21 @@ export class VotesMutationService {
       }),
     );
 
-    return this.entityManager.save(PollVoteEntity, votes);
+    return this.pollVotesRepo.save(votes);
+  }
+
+  public async retractVotes(pollId: string, user: UserEntity): Promise<void> {
+    await this.entityManager.transaction(async (tx) => {
+      const votes = await tx.find(PollVoteEntity, {
+        where: {
+          answerOption: {
+            pollId: pollId,
+          },
+          userId: user.id,
+        },
+      });
+
+      await tx.remove(votes);
+    });
   }
 }
