@@ -29,7 +29,11 @@ const PollComponent: FC<Props> = ({ poll, isOwnMessage, message }) => {
       <div className="poll_question">{poll.question}</div>
       <div className="poll_type">{getPollType(poll)}</div>
 
-      <SinglePollComponent poll={poll} message={message} />
+      <SinglePollComponent
+        poll={poll}
+        message={message}
+        isOwnPoll={isOwnMessage}
+      />
     </div>
   );
 };

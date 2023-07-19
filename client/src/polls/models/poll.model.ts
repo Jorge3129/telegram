@@ -1,3 +1,5 @@
+import { PollVotePercentage } from "./poll-vote-percentage";
+
 export interface PollAnswerOption {
   id: string;
   text: string;
@@ -12,4 +14,5 @@ export interface Poll {
   isQuiz: boolean;
   answerOptions: PollAnswerOption[];
   userSelectedOptionIds: string[];
+  votesPercentages?: PollVotePercentage[];
 }

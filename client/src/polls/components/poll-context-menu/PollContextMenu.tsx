@@ -51,6 +51,13 @@ const PollContextMenu: FC<Props> = ({ children, message, poll }) => {
     await pollsApiService.retractVote(poll.id);
 
     dispatch(MessageActions.retractPollVote({ messageId: message.id }));
+
+    dispatch(
+      MessageActions.setPollVotePercentages({
+        messageId: message.id,
+        votePercentages: undefined,
+      })
+    );
   };
 
   const isOwnMessage = user?.id === message.authorId;

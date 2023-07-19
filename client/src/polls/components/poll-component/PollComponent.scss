@@ -24,14 +24,44 @@
 
     .poll_answer_option {
       display: flex;
-      gap: 0.7em;
 
-      .poll_answer_option_checkbox {
-        cursor: pointer;
+      .poll_answer_option_checkbox_container {
+        width: 2.5em;
+
+        .poll_answer_option_checkbox {
+          cursor: pointer;
+        }
+
+        .poll_answer_option_checkbox_percentage {
+          font-weight: 500;
+          font-size: 0.9em;
+        }
       }
 
-      .poll_answer_option_text {
-        font-weight: 500;
+      .poll_answer_option_text_container {
+        flex: 1;
+        position: relative;
+
+        .poll_answer_option_text {
+          font-weight: 500;
+        }
+
+        .poll_answer_percentage_bar {
+          position: absolute;
+          height: 3px;
+          width: calc(100% - 10px);
+
+          .poll_answer_percentage_bar_value {
+            width: 0%;
+            height: 100%;
+            background-color: var(--blue);
+            transition: all 0.3s ease;
+
+            &.own_poll {
+              background-color: var(--green-deep);
+            }
+          }
+        }
       }
     }
   }
