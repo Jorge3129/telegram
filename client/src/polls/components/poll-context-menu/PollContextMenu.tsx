@@ -1,20 +1,22 @@
 import { FC, ReactElement, cloneElement, useState, MouseEvent } from "react";
-import "./MessageContextMenu.scss";
+import "./PollContextMenu.scss";
+import { Poll } from "../../models/poll.model";
 import { Menu, MenuItem } from "@mui/material";
 import { useSelector } from "react-redux";
-import { CurrentChatActions } from "../../../current-chat/reducers/current-chat.reducer";
 import { useAppDispatch } from "../../../redux/store";
 import { selectUser } from "../../../redux/user-reducer";
-import { messageApiService } from "../../messages-api.service";
-import { MessageActions } from "../../messages.reducer";
-import { Message } from "../../models/message.model";
+import { PollMessage } from "../../../messages/models/message.model";
+import { messageApiService } from "../../../messages/messages-api.service";
+import { MessageActions } from "../../../messages/messages.reducer";
+import { pollsApiService } from "../polls-api.service";
 
 interface Props {
   children: ReactElement;
-  message: Message;
+  message: PollMessage;
+  poll: Poll;
 }
 
-const MessageContextMenu: FC<Props> = ({ children, message }) => {
+const PollContextMenu: FC<Props> = ({ children, message, poll }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [position, setPosition] = useState({ left: 0, top: 0 });
 
@@ -43,18 +45,17 @@ const MessageContextMenu: FC<Props> = ({ children, message }) => {
     dispatch(MessageActions.deleteMessage(message.id));
   };
 
-  const handleEdit = () => {
+  const handleRetractVote = async () => {
     handleClose();
 
-    dispatch(
-      CurrentChatActions.setInput({
-        type: "edit",
-        message: message,
-      })
-    );
+    await pollsApiService.retractVote(poll.id);
+
+    dispatch(MessageActions.retractPollVote({ messageId: message.id }));
   };
 
   const isOwnMessage = user?.id === message.authorId;
+
+  const userHasVoted = !!poll.userSelectedOptionIds.length;
 
   return (
     <>
@@ -70,11 +71,13 @@ const MessageContextMenu: FC<Props> = ({ children, message }) => {
         anchorReference="anchorPosition"
         anchorPosition={position}
       >
-        {isOwnMessage && <MenuItem onClick={handleEdit}>Edit</MenuItem>}
+        {userHasVoted && (
+          <MenuItem onClick={handleRetractVote}>Retract vote</MenuItem>
+        )}
         {isOwnMessage && <MenuItem onClick={handleDelete}>Delete</MenuItem>}
       </Menu>
     </>
   );
 };
 
-export default MessageContextMenu;
+export default PollContextMenu;

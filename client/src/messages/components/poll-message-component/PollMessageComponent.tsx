@@ -7,7 +7,8 @@ import MessageTimestamp from "../../../ui/message/MessageTimestamp";
 import MessageStatusWrapper from "../../../ui/message/message-status/MessageStatusWrapper";
 import { classIf } from "../../../utils/class-if";
 import { isOwnMessage } from "../../../utils/is-own-message";
-import MessageContextMenu from "../message-context-menu/MessageContextMenu";
+import PollComponent from "../../../polls/components/poll-component/PollComponent";
+import PollContextMenu from "../../../polls/components/poll-context-menu/PollContextMenu";
 
 interface Props {
   message: PollMessage;
@@ -29,24 +30,24 @@ const PollMessageComponent: FC<Props> = ({ message, chatType, callback }) => {
   const showAuthor = chatType === "group" && !isOwn;
 
   return (
-    <MessageContextMenu message={message}>
-      <div
-        className={
-          "message_item poll_message_item" + classIf(isOwn, "own_message")
-        }
-      >
+    <PollContextMenu poll={message.poll} message={message}>
+      <div className={"poll_message_item" + classIf(isOwn, "own_message")}>
         <div className="message_author">{showAuthor && message.authorName}</div>
 
-        <div className="message_text">{message.poll.question}</div>
+        <div className="message_text">
+          <PollComponent
+            poll={message.poll}
+            isOwnMessage={isOwn}
+            message={message}
+          />
+        </div>
 
         <div className="message_info">
           <MessageTimestamp timestamp={message.timestamp} />
           <MessageStatusWrapper message={message} currentUser={user} />
         </div>
-
-        <div className="clearfix"></div>
       </div>
-    </MessageContextMenu>
+    </PollContextMenu>
   );
 };
 

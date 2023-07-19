@@ -11,4 +11,5 @@ export interface Poll {
   isMultipleChoice: boolean;
   isQuiz: boolean;
   answerOptions: PollAnswerOption[];
+  userSelectedOptionIds: string[];
 }
