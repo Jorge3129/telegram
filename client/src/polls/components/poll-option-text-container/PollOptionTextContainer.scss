@@ -1,0 +1,25 @@
+.poll_answer_option_text_container {
+  flex: 1;
+  position: relative;
+
+  .poll_answer_option_text {
+    font-weight: 500;
+  }
+
+  .poll_answer_percentage_bar {
+    position: absolute;
+    height: 3px;
+    width: calc(100% - 10px);
+
+    .poll_answer_percentage_bar_value {
+      width: 0%;
+      height: 100%;
+      background-color: var(--blue);
+      transition: all 0.3s ease;
+
+      &.own_poll {
+        background-color: var(--green-deep);
+      }
+    }
+  }
+}
