@@ -3,7 +3,7 @@ import { PollEntity } from './entity/poll.entity';
 import { EntityManager } from 'typeorm';
 import { CreatePollDto } from './dto/create-poll/create-poll.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { PollDtoToEntityMapper } from './poll-services/poll-dto-to-entity.mapper';
+import { PollDtoToEntityMapper } from './mappers/dto-to-entity/poll-dto-to-entity.mapper';
 
 @ApiTags('Polls')
 @Controller('polls')
