@@ -9,11 +9,12 @@ import { classIf } from "../../../utils/class-if";
 import { isOwnMessage } from "../../../utils/is-own-message";
 import PollComponent from "../../../polls/components/poll-component/PollComponent";
 import PollContextMenu from "../../../polls/components/poll-context-menu/PollContextMenu";
+import { ChatType } from "../../../chats/models/chat.model";
 
 interface Props {
   message: PollMessage;
   callback: null | (() => void);
-  chatType: "personal" | "group";
+  chatType: ChatType;
 }
 
 const PollMessageComponent: FC<Props> = ({ message, chatType, callback }) => {

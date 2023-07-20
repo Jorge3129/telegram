@@ -9,11 +9,12 @@ import { isOwnMessage } from "../../../utils/is-own-message";
 import { GifMessage } from "../../models/message.model";
 import { classIf } from "../../../utils/class-if";
 import GifMessageContextMenu from "./gif-message-context-menu/GifMessageContextMenu";
+import { ChatType } from "../../../chats/models/chat.model";
 
 interface Props {
   message: GifMessage;
   callback: null | (() => void);
-  chatType: "personal" | "group";
+  chatType: ChatType;
 }
 
 const GifMessageComponent: FC<Props> = ({ message, chatType, callback }) => {

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import "./ChatAvatar.scss";
-import { Chat } from "../../models/chat.model";
+import { Chat, ChatType } from "../../models/chat.model";
 import { initials } from "../../../shared/utils/format-initials";
 import { classIf } from "../../../utils/class-if";
 
@@ -15,7 +15,7 @@ const ChatAvatar: FC<Props> = ({ chat, title }) => {
       <div
         className={
           "chat_avatar avatar" +
-          classIf(!!chat?.online && chat.type === "personal", "online")
+          classIf(!!chat?.online && chat.type === ChatType.PERSONAL, "online")
         }
       >
         <div className={"chat_avatar_text avatar_text"}>{initials(title)}</div>

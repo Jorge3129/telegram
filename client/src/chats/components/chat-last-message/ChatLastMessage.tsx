@@ -6,10 +6,11 @@ import {
   isPollMessage,
 } from "../../../messages/models/message.model";
 import LastMessageAuthor from "../../../ui/chats/LastMessageAuthor";
+import { ChatType } from "../../models/chat.model";
 
 interface Props {
   lastMessage: Message;
-  chatType: "personal" | "group"; // TODO refactor chat type enum
+  chatType: ChatType;
 }
 
 const getLastMessageText = (message: Message): string => {
