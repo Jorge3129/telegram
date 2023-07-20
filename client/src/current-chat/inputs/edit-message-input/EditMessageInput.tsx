@@ -11,7 +11,7 @@ interface Props {
 }
 
 const EditMessageInput: FC<Props> = ({ inputState }) => {
-  const [text, setText] = useState(inputState.message.text);
+  const [text, setText] = useState<string>(inputState.message.text);
 
   const inputRef = useRef<HTMLInputElement>(null);
 

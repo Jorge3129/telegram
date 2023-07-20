@@ -8,7 +8,7 @@ import MessageStatusWrapper from "../../../ui/message/message-status/MessageStat
 import { isOwnMessage } from "../../../utils/is-own-message";
 import { GifMessage } from "../../models/message.model";
 import { classIf } from "../../../utils/class-if";
-import MessageContextMenu from "../message-context-menu/MessageContextMenu";
+import GifMessageContextMenu from "./gif-message-context-menu/GifMessageContextMenu";
 
 interface Props {
   message: GifMessage;
@@ -30,7 +30,7 @@ const GifMessageComponent: FC<Props> = ({ message, chatType, callback }) => {
   const showAuthor = chatType === "group" && !isOwn;
 
   return (
-    <MessageContextMenu message={message}>
+    <GifMessageContextMenu message={message}>
       <div
         className={
           "message_item gif_message_item" + classIf(isOwn, "own_message")
@@ -41,8 +41,6 @@ const GifMessageComponent: FC<Props> = ({ message, chatType, callback }) => {
           <Gif gif={message.srcObject} width={220} hideAttribution noLink />
         </div>
 
-        <div className="message_text">{message.text}</div>
-
         <div className="message_info">
           <MessageTimestamp timestamp={message.timestamp} />
           <MessageStatusWrapper message={message} currentUser={user} />
@@ -50,7 +48,7 @@ const GifMessageComponent: FC<Props> = ({ message, chatType, callback }) => {
 
         <div className="clearfix"></div>
       </div>
-    </MessageContextMenu>
+    </GifMessageContextMenu>
   );
 };
 

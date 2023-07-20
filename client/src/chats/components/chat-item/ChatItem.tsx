@@ -4,12 +4,12 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/user-reducer";
-import LastMessageAuthor from "../../../ui/chats/LastMessageAuthor";
 import LastMessageTimestamp from "../../../ui/chats/LastMessageTimestamp";
 import MessageStatusWrapper from "../../../ui/message/message-status/MessageStatusWrapper";
 import { Chat } from "../../models/chat.model";
 import ChatAvatar from "../chat-avatar/ChatAvatar";
 import { classIf } from "../../../utils/class-if";
+import ChatLastMessage from "../chat-last-message/ChatLastMessage";
 
 dayjs.extend(isBetween);
 
@@ -24,12 +24,12 @@ const ChatItem: FC<Props> = ({ chat }) => {
   const { user } = useSelector(selectUser);
 
   const upperSection = (
-    <ul className="chat_body_upper">
-      <li className="chat_title_container hide_overflow">
+    <div className="chat_body_upper">
+      <div className="chat_title_container hide_overflow">
         <div className="chat_title text_ellipsis">{title}</div>
-      </li>
+      </div>
 
-      <li className="chat_timestamp_container grey_text info_container">
+      <div className="chat_timestamp_container grey_text info_container">
         <div className="chat_timestamp">
           <span style={{ paddingRight: "0.3em" }}>
             <MessageStatusWrapper message={lastMessage} currentUser={user} />
@@ -38,22 +38,16 @@ const ChatItem: FC<Props> = ({ chat }) => {
             <LastMessageTimestamp timestamp={lastMessage.timestamp} />
           )}
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
   );
 
   const lowerSection = (
-    <ul className="chat_body_lower">
+    <div className="chat_body_lower">
       <div className="chat_last_message_container grey_text hide_overflow">
-        <div className="chat_last_message text_ellipsis">
-          <span className="chat_last_message_author">
-            {!!lastMessage && (
-              <LastMessageAuthor message={lastMessage} chatType={type} />
-            )}
-          </span>
-
-          <span className="chat_last_message_text">{lastMessage?.text}</span>
-        </div>
+        {!!lastMessage && (
+          <ChatLastMessage lastMessage={lastMessage} chatType={type} />
+        )}
       </div>
 
       <div
@@ -62,18 +56,18 @@ const ChatItem: FC<Props> = ({ chat }) => {
       >
         <div className={"chat_unread" + classIf(muted, "muted")}>{unread}</div>
       </div>
-    </ul>
+    </div>
   );
 
   return (
-    <ul className="chat_item">
+    <div className="chat_item">
       <ChatAvatar chat={chat} title={title} />
 
-      <li className="chat_body">
+      <div className="chat_body">
         {upperSection}
         {lowerSection}
-      </li>
-    </ul>
+      </div>
+    </div>
   );
 };
 
