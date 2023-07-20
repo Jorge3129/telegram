@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { PollAnswerOptionEntity } from '../entity/poll-answer-option.entity';
 import { PollVoteEntity } from '../entity/poll-vote.entity';
+import { PollVotesPercentage } from '../models/poll-votes-percentage.model';
 
 export type CountVotesResult = {
   answerOptionId: string;
@@ -11,7 +12,7 @@ export type CountVotesResult = {
 
 export type CountVotePercentagesResult = {
   answerOptionId: string;
-  votesPercentage: number;
+  votesPercentage: string;
   text: string;
 };
 
@@ -38,7 +39,7 @@ export class VotesQueryService {
 
   public async countVotePercentages(
     pollId: string,
-  ): Promise<CountVotePercentagesResult[]> {
+  ): Promise<PollVotesPercentage[]> {
     const result = await this.entityManager.transaction(async (tx) => {
       const totalVotes = await tx
         .createQueryBuilder()
@@ -47,7 +48,9 @@ export class VotesQueryService {
         .where('answers."pollId" = :pollId', { pollId })
         .getCount();
 
-      console.log({ totalVotes });
+      if (!totalVotes) {
+        return [];
+      }
 
       const qb = tx
         .createQueryBuilder()
@@ -66,9 +69,9 @@ export class VotesQueryService {
     });
 
     return result.map(
-      (answer): CountVotePercentagesResult => ({
+      (answer): PollVotesPercentage => ({
         ...answer,
-        votesPercentage: Math.round(parseFloat(`${answer.votesPercentage}`)),
+        votesPercentage: Math.round(parseFloat(answer.votesPercentage)),
       }),
     );
   }

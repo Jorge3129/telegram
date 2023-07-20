@@ -11,11 +11,12 @@ import { Media } from "../../models/media.model";
 import { TextMessage } from "../../models/message.model";
 import { classIf } from "../../../utils/class-if";
 import MessageContextMenu from "../message-context-menu/MessageContextMenu";
+import { ChatType } from "../../../chats/models/chat.model";
 
 interface Props {
   message: TextMessage;
   callback: null | (() => void);
-  chatType: "personal" | "group";
+  chatType: ChatType;
 }
 
 const TextMessageComponent: FC<Props> = ({ message, chatType, callback }) => {

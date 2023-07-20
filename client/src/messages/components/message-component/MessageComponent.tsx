@@ -9,11 +9,12 @@ import {
 import GifMessageComponent from "../gif-message-component/GifMessageComponent";
 import TextMessageComponent from "../text-message-component/TextMessageComponent";
 import PollMessageComponent from "../poll-message-component/PollMessageComponent";
+import { ChatType } from "../../../chats/models/chat.model";
 
 interface Props {
   message: Message;
   callback: null | (() => void);
-  chatType: "personal" | "group";
+  chatType: ChatType;
 }
 
 const MessageComponent: FC<Props> = ({ message, chatType, callback }) => {

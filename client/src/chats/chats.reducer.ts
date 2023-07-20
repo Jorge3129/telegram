@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../redux/rootReducer";
 import { chatsApiService } from "./chats-api.service";
 import { Chat } from "./models/chat.model";
-import { Message } from "../messages/models/message.model";
+import { isTextMessage, Message } from "../messages/models/message.model";
 
 interface ChatState {
   chats: Chat[];
@@ -56,7 +56,10 @@ const chatSlice = createSlice({
       }: PayloadAction<{ messageId: string; text: string; chatId: number }>
     ) => {
       updateChat(state, payload.chatId, (chat) => {
-        if (chat.lastMessage?.id === payload.messageId) {
+        if (
+          chat.lastMessage?.id === payload.messageId &&
+          isTextMessage(chat.lastMessage)
+        ) {
           chat.lastMessage.text = payload.text;
         }
       });

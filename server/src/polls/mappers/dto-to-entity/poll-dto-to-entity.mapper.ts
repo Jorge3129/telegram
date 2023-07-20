@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PollEntity } from '../entity/poll.entity';
-import { CreatePollDto } from '../dto/create-poll/create-poll.dto';
+import { PollEntity } from '../../entity/poll.entity';
+import { CreatePollDto } from '../../dto/create-poll/create-poll.dto';
 import { EntityManager } from 'typeorm';
-import { PollAnswerOptionEntity } from '../entity/poll-answer-option.entity';
+import { PollAnswerOptionEntity } from '../../entity/poll-answer-option.entity';
 
 @Injectable()
 export class PollDtoToEntityMapper {

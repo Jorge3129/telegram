@@ -5,7 +5,6 @@ import { Poll } from "../../polls/models/poll.model";
 
 export interface BaseMessage {
   id: string;
-  text: string;
   timestamp: string;
   authorName: string;
   authorId: number;

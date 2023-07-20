@@ -1,20 +1,19 @@
 import { FC, ReactElement, cloneElement, useState, MouseEvent } from "react";
-import "./MessageContextMenu.scss";
+import "./GifMessageContextMenu.scss";
 import { Menu, MenuItem } from "@mui/material";
 import { useSelector } from "react-redux";
-import { CurrentChatActions } from "../../../current-chat/reducers/current-chat.reducer";
-import { useAppDispatch } from "../../../redux/store";
-import { selectUser } from "../../../redux/user-reducer";
-import { messageApiService } from "../../messages-api.service";
-import { MessageActions } from "../../messages.reducer";
-import { TextMessage } from "../../models/message.model";
+import { useAppDispatch } from "../../../../redux/store";
+import { selectUser } from "../../../../redux/user-reducer";
+import { messageApiService } from "../../../messages-api.service";
+import { MessageActions } from "../../../messages.reducer";
+import { GifMessage } from "../../../models/message.model";
 
 interface Props {
   children: ReactElement;
-  message: TextMessage;
+  message: GifMessage;
 }
 
-const MessageContextMenu: FC<Props> = ({ children, message }) => {
+const GifMessageContextMenu: FC<Props> = ({ children, message }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [position, setPosition] = useState({ left: 0, top: 0 });
 
@@ -43,17 +42,6 @@ const MessageContextMenu: FC<Props> = ({ children, message }) => {
     dispatch(MessageActions.deleteMessage(message.id));
   };
 
-  const handleEdit = () => {
-    handleClose();
-
-    dispatch(
-      CurrentChatActions.setInput({
-        type: "edit",
-        message: message,
-      })
-    );
-  };
-
   const isOwnMessage = user?.id === message.authorId;
 
   return (
@@ -70,11 +58,10 @@ const MessageContextMenu: FC<Props> = ({ children, message }) => {
         anchorReference="anchorPosition"
         anchorPosition={position}
       >
-        {isOwnMessage && <MenuItem onClick={handleEdit}>Edit</MenuItem>}
         {isOwnMessage && <MenuItem onClick={handleDelete}>Delete</MenuItem>}
       </Menu>
     </>
   );
 };
 
-export default MessageContextMenu;
+export default GifMessageContextMenu;

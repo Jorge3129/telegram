@@ -4,17 +4,15 @@ import { MessageEntity } from 'src/messages/entity/message.entity';
 import { PollMessage } from 'src/messages/models/message.type';
 import { BaseMessageBuilder } from './base-message.builder';
 import { PollEntity } from 'src/polls/entity/poll.entity';
-import { Poll, PollAnswerOption } from 'src/polls/models/poll.model';
-import { PollAnswerOptionEntity } from 'src/polls/entity/poll-answer-option.entity';
-import { EntityManager } from 'typeorm';
-import { PollVoteEntity } from 'src/polls/entity/poll-vote.entity';
+import { Poll } from 'src/polls/models/poll.model';
 import { User } from 'src/users/user.type';
+import { PollEntityToModelMapper } from 'src/polls/mappers/entity-to-model/poll.entity-to-model.mapper';
 
 @Injectable()
 export class PollMessageBuilder {
   constructor(
     private baseMessageBuilder: BaseMessageBuilder,
-    private entityManager: EntityManager,
+    private pollMapper: PollEntityToModelMapper,
   ) {}
 
   public async build(
@@ -33,45 +31,6 @@ export class PollMessageBuilder {
     pollEntity: PollEntity,
     currentUser: User,
   ): Promise<Poll> {
-    return {
-      id: pollEntity.id,
-      question: pollEntity.question,
-      isAnonymous: pollEntity.isAnonymous,
-      isMultipleChoice: pollEntity.isMultipleChoice,
-      isQuiz: pollEntity.isQuiz,
-      answerOptions: pollEntity.answerOptions.map((option) =>
-        this.buildAnsweOption(option),
-      ),
-      userSelectedOptionIds: await this.getUserVotes(
-        pollEntity.id,
-        currentUser.id,
-      ),
-    };
-  }
-
-  private async getUserVotes(
-    pollId: string,
-    userId: number,
-  ): Promise<string[]> {
-    return this.entityManager
-      .find(PollVoteEntity, {
-        where: {
-          answerOption: {
-            pollId: pollId,
-          },
-          userId: userId,
-        },
-      })
-      .then((votes) => votes.map((vote) => vote.answerOptionId));
-  }
-
-  private buildAnsweOption(
-    answerEntity: PollAnswerOptionEntity,
-  ): PollAnswerOption {
-    return {
-      id: answerEntity.id,
-      optionIndex: answerEntity.optionIndex,
-      text: answerEntity.text,
-    };
+    return this.pollMapper.mapEntityToModel(pollEntity, currentUser);
   }
 }

@@ -1,6 +1,6 @@
 import { Chat } from "../../chats/models/chat.model";
 import { Media } from "../../messages/models/media.model";
-import { Message } from "../../messages/models/message.model";
+import { TextMessage } from "../../messages/models/message.model";
 
 export type CreateMessageInputState = {
   type: "create";
@@ -8,7 +8,7 @@ export type CreateMessageInputState = {
 
 export type EditMessageInputState = {
   type: "edit";
-  message: Message;
+  message: TextMessage;
 };
 
 export type ChatInputState = CreateMessageInputState | EditMessageInputState;

@@ -6,6 +6,7 @@ import { ChatsRepository } from './chats.repository';
 import { ChatsService } from './chats.service';
 import { MessagesModule } from 'src/messages/messages.module';
 import { ChatUsersModule } from 'src/chat-users/chat-users.module';
+import { ChatMappersModule } from './mappers/chat-mappers.module';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { ChatUsersModule } from 'src/chat-users/chat-users.module';
     ChatUsersModule,
   ],
   controllers: [ChatsController],
-  providers: [ChatsRepository, ChatsService],
+  providers: [...ChatMappersModule.providers, ChatsRepository, ChatsService],
 })
 export class ChatsModule {}
