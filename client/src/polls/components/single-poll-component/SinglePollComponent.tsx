@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../../redux/store";
 import { MessageActions } from "../../../messages/messages.reducer";
 import { PollMessage } from "../../../messages/models/message.model";
 import _ from "lodash";
-import PollOptionTextContainer from "../poll-option-text-container/PollOptionTextContainer";
+import PollOptionPercentageBar from "../poll-option-percentage-bar/PollOptionPercentageBar";
 
 interface Props {
   poll: Poll;
@@ -74,11 +74,15 @@ const SinglePollComponent: FC<Props> = ({ poll, message, isOwnPoll }) => {
             )}
           </div>
 
-          <PollOptionTextContainer
-            option={option}
-            isOwnPoll={isOwnPoll}
-            votesPercentage={getVotesPercentage(option.id)}
-          />
+          <div className="poll_answer_option_text_container">
+            <div className="poll_answer_option_text">{option.text}</div>
+
+            <PollOptionPercentageBar
+              userHasVoted={userHasVoted}
+              isOwnPoll={isOwnPoll}
+              votesPercentage={getVotesPercentage(option.id)}
+            />
+          </div>
         </div>
       ))}
     </div>
