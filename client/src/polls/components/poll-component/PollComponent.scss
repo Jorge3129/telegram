@@ -37,6 +37,14 @@
           font-size: 0.9em;
         }
       }
+
+      .poll_answer_option_text_container {
+        flex: 1;
+
+        .poll_answer_option_text {
+          font-weight: 500;
+        }
+      }
     }
   }
 }
