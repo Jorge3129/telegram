@@ -7,6 +7,7 @@ import { useHandleVote } from "../../hooks/use-handle-vote";
 import PollOptionCheckbox from "../poll-option-checkbox/PollOptionCheckbox";
 import PollOptionPercentageBar from "../poll-option-percentage-bar/PollOptionPercentageBar";
 import PollButton from "../poll-button/PollButton";
+import ViewResultsButton from "../view-results-button/ViewResultsButton";
 
 interface Props {
   poll: Poll;
@@ -88,7 +89,11 @@ const MultipleChoicePoll: FC<Props> = ({ poll, message, isOwnPoll }) => {
             Vote
           </PollButton>
         ) : (
-          <PollButton isOwnPoll={isOwnPoll}>View results</PollButton>
+          <ViewResultsButton
+            message={message}
+            isOwnPoll={isOwnPoll}
+            poll={poll}
+          />
         )}
       </div>
     </div>

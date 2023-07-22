@@ -1,3 +1,4 @@
+import { PollAnswerOptionWithUsers } from "./poll-answer-option-with-user";
 import { PollVotePercentage } from "./poll-vote-percentage";
 
 export interface PollAnswerOption {
@@ -15,4 +16,5 @@ export interface Poll {
   answerOptions: PollAnswerOption[];
   userSelectedOptionIds: string[];
   votesPercentages?: PollVotePercentage[];
+  answerOptionsWithUsers?: PollAnswerOptionWithUsers[];
 }

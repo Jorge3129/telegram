@@ -3,3 +3,8 @@ export interface User {
   username: string;
   password: string;
 }
+
+export interface BasicUser {
+  id: number;
+  username: string;
+}
