@@ -8,12 +8,14 @@ import { CreateVoteRequirement } from './votes/requirements/create-vote-requirem
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PollVoteEntity } from './entity/poll-vote.entity';
 import { PollMappersModule } from './mappers/poll-mappers.module';
+import { VoteQueriesModule } from './votes/queries/vote-queries.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PollVoteEntity])],
   controllers: [PollsController, PollVotesController],
   providers: [
     ...PollMappersModule.providers,
+    ...VoteQueriesModule.providers,
     VotesMutationService,
     VotesQueryService,
     PollsQueryService,
