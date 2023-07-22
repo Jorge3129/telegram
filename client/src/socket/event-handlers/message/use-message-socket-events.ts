@@ -4,7 +4,7 @@ import { useEditMessageEvent } from "./use-edit-message-event";
 import { useNewMessageEvent } from "./use-new-message-event";
 import { useSeenMessageEvent } from "./use-seen-message-event";
 
-export const useAllMessageEvents = (socket: Socket | null) => {
+export const useMessageSocketEvents = (socket: Socket | null) => {
   useNewMessageEvent(socket);
   useEditMessageEvent(socket);
   useDeleteMessageEvent(socket);

@@ -5,7 +5,7 @@ import { tokenService } from "../auth/services/token.service";
 import environment from "../environment/environment";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/user-reducer";
-import { useAllAppEvents } from "./event-handlers/use-all-app-events";
+import { useAppSocketEvents } from "./event-handlers/use-app-socket-events";
 
 export const SocketProvider: FC<PropsWithChildren> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -29,7 +29,7 @@ export const SocketProvider: FC<PropsWithChildren> = ({ children }) => {
     };
   }, [user]);
 
-  useAllAppEvents(socket);
+  useAppSocketEvents(socket);
 
   return (
     <SocketContext.Provider value={{ socket }}>
