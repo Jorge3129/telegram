@@ -28,7 +28,7 @@ const PollResultsDialog: FC<Props> = ({ open, onClose, message, poll }) => {
         <div className="poll_results_dialog_question">{poll.question}</div>
       </div>
 
-      <PollResultsDialogBody pollMessageId={message.id} poll={poll} />
+      <PollResultsDialogBody message={message} poll={poll} />
     </Dialog>
   );
 };
