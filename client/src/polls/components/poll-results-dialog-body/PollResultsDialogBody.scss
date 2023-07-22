@@ -1,0 +1,36 @@
+.poll_results_list {
+  display: flex;
+  flex-direction: column;
+
+  .poll_result_option {
+    display: flex;
+    flex-direction: column;
+
+    .poll_result_option_header {
+      background-color: var(--gray_light);
+      padding: 0.8em 1.1em;
+      font-size: 0.9em;
+      color: var(--gray_darker);
+
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .poll_result_option_votes {
+      display: flex;
+      flex-direction: column;
+
+      .poll_result_option_vote {
+        display: flex;
+        align-items: center;
+        gap: 0.8em;
+
+        padding: 0.8em 1.1em;
+
+        .username {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}

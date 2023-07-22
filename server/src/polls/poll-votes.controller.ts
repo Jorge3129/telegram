@@ -15,6 +15,7 @@ import { RequestUser } from 'src/users/decorators/user.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
 import { VotesQueryService } from './votes/votes-query.service';
 import { PollVotesPercentage } from './models/poll-votes-percentage.model';
+import { PollAnswerOptionWithUsers } from './votes/queries/get-poll-vote-users.query';
 
 @ApiTags('Polls')
 @Controller('polls')
@@ -58,6 +59,17 @@ export class PollVotesController {
     // TODO check user has access to poll
 
     return this.votesQueryService.countVotePercentages(pollId);
+  }
+
+  @Get(':pollId/votes/results')
+  @ApiBearerAuth()
+  public getPollVoteResults(
+    @Param('pollId') pollId: string,
+    // @RequestUser() user: UserEntity,
+  ): Promise<PollAnswerOptionWithUsers[]> {
+    // TODO check user has access to poll
+
+    return this.votesQueryService.getPollVotedUsers(pollId);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)

@@ -1,0 +1,20 @@
+.poll_results_dialog_header {
+  width: 25rem;
+  padding: 0.8em 1.1em;
+
+  .poll_results_dialog_title {
+    .title {
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .poll_results_dialog_question {
+    font-weight: 600;
+    font-size: 1em;
+  }
+}

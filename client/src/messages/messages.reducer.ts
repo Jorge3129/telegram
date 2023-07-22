@@ -3,6 +3,7 @@ import { RootState } from "../redux/rootReducer";
 import { chatsApiService } from "../chats/chats-api.service";
 import { isPollMessage, isTextMessage, Message } from "./models/message.model";
 import { PollVotePercentage } from "../polls/models/poll-vote-percentage";
+import { PollAnswerOptionWithUsers } from "../polls/models/poll-answer-option-with-user";
 
 interface MessageState {
   messages: Message[];
@@ -108,6 +109,24 @@ const messageSlice = createSlice({
         .forEach((message) => {
           if (isPollMessage(message)) {
             message.poll.votesPercentages = payload.votePercentages;
+          }
+        });
+    },
+
+    setPollVoteResults: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        messageId: string;
+        results: PollAnswerOptionWithUsers[] | undefined;
+      }>
+    ) => {
+      state.messages
+        .filter((message) => message.id === payload.messageId)
+        .forEach((message) => {
+          if (isPollMessage(message)) {
+            message.poll.answerOptionsWithUsers = payload.results;
           }
         });
     },
