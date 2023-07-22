@@ -29,7 +29,6 @@ export const useSend = (inputText: string) => {
     const message: CreateTextMessageDto = {
       type: "text",
       text: inputText,
-      timestamp: new Date().toISOString(),
       chatId: currentChatId,
       media: media.filename
         ? <Media>{

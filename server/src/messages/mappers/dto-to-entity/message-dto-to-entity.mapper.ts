@@ -35,7 +35,7 @@ export class MessageDtoToEntityMapper {
     message.authorId = user.id;
     message.chatId = dto.chatId;
     message.content = this.createMessageContent(dto);
-    message.timestamp = dto.timestamp;
+    message.timestamp = new Date().toISOString();
 
     return message;
   }
