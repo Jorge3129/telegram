@@ -41,12 +41,15 @@ export class VotesQueryService {
     pollId: string,
   ): Promise<PollVotesPercentage[]> {
     const result = await this.entityManager.transaction(async (tx) => {
-      const totalVotes = await tx
+      const totalVotesResult = await tx
         .createQueryBuilder()
         .from(PollVoteEntity, 'votes')
         .innerJoin('votes.answerOption', 'answers')
         .where('answers."pollId" = :pollId', { pollId })
-        .getCount();
+        .select('COUNT(DISTINCT votes."userId")::INT', 'count')
+        .getRawOne<{ count: number }>();
+
+      const totalVotes = totalVotesResult?.count ?? 0;
 
       if (!totalVotes) {
         return [];

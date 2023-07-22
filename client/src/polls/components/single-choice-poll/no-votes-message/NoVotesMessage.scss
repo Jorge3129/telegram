@@ -1,0 +1,7 @@
+.no_votes_message {
+  color: var(--blue-gray);
+
+  &.own_poll {
+    color: var(--green-deep);
+  }
+}

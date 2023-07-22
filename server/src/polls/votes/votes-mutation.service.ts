@@ -6,6 +6,9 @@ import { PollVoteEntity } from '../entity/poll-vote.entity';
 import { PollsQueryService } from '../poll-services/polls-query.service';
 import { CreateVoteRequirement } from './requirements/create-vote-requirement';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AppEventEmitter } from 'src/shared/services/app-event-emitter.service';
+import { NewVoteEvent } from '../events/votes/new-vote.event';
+import { RetractVoteEvent } from '../events/votes/retract-vote.event';
 
 @Injectable()
 export class VotesMutationService {
@@ -15,6 +18,7 @@ export class VotesMutationService {
     private createVoteRequirement: CreateVoteRequirement,
     @InjectRepository(PollVoteEntity)
     private pollVotesRepo: Repository<PollVoteEntity>,
+    private eventEmitter: AppEventEmitter,
   ) {}
 
   public async vote(
@@ -48,7 +52,17 @@ export class VotesMutationService {
       }),
     );
 
-    return this.pollVotesRepo.save(votes);
+    const savedVotes = await this.pollVotesRepo.save(votes);
+
+    this.eventEmitter.emit(
+      new NewVoteEvent({
+        poll,
+        selectedAnswerOptionIds: answerOptionIds,
+        user,
+      }),
+    );
+
+    return savedVotes;
   }
 
   public async retractVotes(pollId: string, user: UserEntity): Promise<void> {
@@ -64,5 +78,12 @@ export class VotesMutationService {
 
       await tx.remove(votes);
     });
+
+    this.eventEmitter.emit(
+      new RetractVoteEvent({
+        pollId,
+        user,
+      }),
+    );
   }
 }

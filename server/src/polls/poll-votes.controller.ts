@@ -14,6 +14,7 @@ import { CreateVotesDto } from './dto/create-votes/create-votes.dto';
 import { RequestUser } from 'src/users/decorators/user.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
 import { VotesQueryService } from './votes/votes-query.service';
+import { PollVotesPercentage } from './models/poll-votes-percentage.model';
 
 @ApiTags('Polls')
 @Controller('polls')
@@ -53,7 +54,7 @@ export class PollVotesController {
   public getVotePercentage(
     @Param('pollId') pollId: string,
     // @RequestUser() user: UserEntity,
-  ) {
+  ): Promise<PollVotesPercentage[]> {
     // TODO check user has access to poll
 
     return this.votesQueryService.countVotePercentages(pollId);

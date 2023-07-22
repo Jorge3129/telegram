@@ -43,7 +43,7 @@ export class MessageMutationService {
       user,
     );
 
-    await this.messageReadsService.updateSeen(user.id, message);
+    await this.messageReadsService.updateSeen(user.id, savedMessage);
 
     const messageResponse = await this.messageMapper.mapEntityToModel(
       savedMessage,

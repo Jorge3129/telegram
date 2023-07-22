@@ -6,20 +6,20 @@ import { EditMessageEventPayload } from 'src/messages/events/edit-message.event'
 import { MessageEventType } from 'src/messages/events/message-event-type';
 import { ReadMessageEventPayload } from 'src/messages/events/read-message.event';
 import { UserService } from 'src/users/user.service';
-import { MessageEventPublisher } from './message-event.publisher';
+import { MessageNotificationPublisher } from './message-notification.publisher';
 
 @Injectable()
-export class MessageAppEventHandler {
+export class SocketMessageAppEventHandler {
   constructor(
     private userService: UserService,
-    private messageEventPublisher: MessageEventPublisher,
+    private messagePublisher: MessageNotificationPublisher,
   ) {}
 
   @OnEvent(MessageEventType.CREATE)
   public async handleCreate(payload: CreateMessageEventPayload) {
     const { messageResponse, user } = payload;
 
-    await this.messageEventPublisher.publishNewMessage(
+    await this.messagePublisher.publishNewMessage(
       { message: messageResponse },
       messageResponse.chatId,
       user.id,
@@ -30,7 +30,7 @@ export class MessageAppEventHandler {
   public async handleEdit(payload: EditMessageEventPayload) {
     const { message, user, editedText } = payload;
 
-    await this.messageEventPublisher.publishEdit(
+    await this.messagePublisher.publishEdit(
       {
         messageId: message.id,
         chatId: message.chatId,
@@ -45,7 +45,7 @@ export class MessageAppEventHandler {
   public async handleDelete(payload: DeleteMessageEventPayload) {
     const { message, user } = payload;
 
-    await this.messageEventPublisher.publishDelete(
+    await this.messagePublisher.publishDelete(
       { messageId: message.id },
       message.chatId,
       user.id,
@@ -64,7 +64,7 @@ export class MessageAppEventHandler {
       return;
     }
 
-    this.messageEventPublisher.publishMessageRead(
+    this.messagePublisher.publishMessageRead(
       {
         message,
         userId: user.id,

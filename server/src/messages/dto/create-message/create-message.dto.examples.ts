@@ -9,7 +9,6 @@ export const createMessageDtoExamples: Record<string, { value: any }> = {
       type: 'text',
       chatId: 1,
       text: 'hello',
-      timestamp: new Date('2023-07-16').toISOString(),
     },
   },
   [CreateGifMessageDto.name]: {
@@ -17,14 +16,12 @@ export const createMessageDtoExamples: Record<string, { value: any }> = {
       type: 'gif',
       chatId: 1,
       srcObject: {},
-      timestamp: new Date('2023-07-16').toISOString(),
     },
   },
   [CreatePollMessageDto.name]: {
     value: <CreatePollMessageDto>{
       type: 'poll',
       chatId: 1,
-      timestamp: new Date('2023-07-16').toISOString(),
       poll: {
         isAnonymous: false,
         isMultipleChoice: false,

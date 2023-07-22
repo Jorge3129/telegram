@@ -19,6 +19,10 @@ import { PollMappersModule } from './mappers/poll-mappers.module';
     PollsQueryService,
     CreateVoteRequirement,
   ],
-  exports: [...PollMappersModule.providers],
+  exports: [
+    ...PollMappersModule.providers,
+    PollsQueryService,
+    VotesQueryService,
+  ],
 })
 export class PollsModule {}

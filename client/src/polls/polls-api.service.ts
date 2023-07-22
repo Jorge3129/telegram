@@ -1,6 +1,6 @@
-import environment from "../../environment/environment";
-import { HttpClient, httpClient } from "../../shared/http/http-client";
-import { PollVotePercentage } from "../models/poll-vote-percentage";
+import environment from "../environment/environment";
+import { HttpClient, httpClient } from "../shared/http/http-client";
+import { PollVotePercentage } from "./models/poll-vote-percentage";
 import { CreateVotesDto } from "./dto/create-votes.dto";
 
 export class PollsApiService {

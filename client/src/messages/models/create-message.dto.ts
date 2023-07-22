@@ -2,7 +2,6 @@ import { Media } from "./media.model";
 import { IGif } from "@giphy/js-types";
 
 export interface BaseCreateMessageDto {
-  timestamp: string;
   chatId: number;
 }
 
