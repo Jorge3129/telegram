@@ -17,34 +17,46 @@
     }
   }
 
-  .poll_answer_options_list {
+  .poll_body {
     display: flex;
     flex-direction: column;
     gap: 1em;
 
-    .poll_answer_option {
+    .poll_answer_options_list {
       display: flex;
+      flex-direction: column;
+      gap: 1em;
 
-      .poll_answer_option_checkbox_container {
-        width: 2.5em;
+      .poll_answer_option {
+        display: flex;
 
-        .poll_answer_option_checkbox {
-          cursor: pointer;
+        .poll_answer_option_checkbox_container {
+          width: 2.5em;
+
+          .poll_answer_option_checkbox {
+            cursor: pointer;
+          }
+
+          .poll_answer_option_checkbox_percentage {
+            font-weight: 500;
+            font-size: 0.9em;
+          }
         }
 
-        .poll_answer_option_checkbox_percentage {
-          font-weight: 500;
-          font-size: 0.9em;
+        .poll_answer_option_text_container {
+          flex: 1;
+
+          .poll_answer_option_text {
+            font-weight: 500;
+          }
         }
       }
+    }
 
-      .poll_answer_option_text_container {
-        flex: 1;
-
-        .poll_answer_option_text {
-          font-weight: 500;
-        }
-      }
+    .poll_button_container {
+      display: flex;
+      justify-content: center;
+      height: 2em;
     }
   }
 }

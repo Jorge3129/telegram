@@ -6,7 +6,7 @@ import { useGetVotePercentage } from "../../hooks/use-get-vote-percentages";
 import { useHandleVote } from "../../hooks/use-handle-vote";
 import PollOptionCheckbox from "../poll-option-checkbox/PollOptionCheckbox";
 import PollOptionPercentageBar from "../poll-option-percentage-bar/PollOptionPercentageBar";
-import { Button } from "@mui/material";
+import PollButton from "../poll-button/PollButton";
 
 interface Props {
   poll: Poll;
@@ -43,49 +43,52 @@ const MultipleChoicePoll: FC<Props> = ({ poll, message, isOwnPoll }) => {
   }, [userHasVoted]);
 
   return (
-    <div className="poll_answer_options_list">
-      {poll.answerOptions.map((option) => (
-        <div className="poll_answer_option" key={option.id}>
-          <div className="poll_answer_option_checkbox_container">
-            {!userHasVoted ? (
-              <PollOptionCheckbox
+    <div className="poll_body">
+      <div className="poll_answer_options_list">
+        {poll.answerOptions.map((option) => (
+          <div className="poll_answer_option" key={option.id}>
+            <div className="poll_answer_option_checkbox_container">
+              {!userHasVoted ? (
+                <PollOptionCheckbox
+                  userHasVoted={userHasVoted}
+                  checked={selectedOptions.includes(option.id)}
+                  onChange={(e) => {
+                    handleOptionSelect(option.id, e.target.checked);
+                  }}
+                />
+              ) : (
+                <div className="poll_answer_option_checkbox_percentage">
+                  {getVotesPercentage(option.id)}%
+                </div>
+              )}
+            </div>
+
+            <div className="poll_answer_option_text_container">
+              <div className="poll_answer_option_text">{option.text}</div>
+
+              <PollOptionPercentageBar
                 userHasVoted={userHasVoted}
-                checked={selectedOptions.includes(option.id)}
-                onChange={(e) => {
-                  handleOptionSelect(option.id, e.target.checked);
-                }}
+                isOwnPoll={isOwnPoll}
+                votesPercentage={getVotesPercentage(option.id)}
               />
-            ) : (
-              <div className="poll_answer_option_checkbox_percentage">
-                {getVotesPercentage(option.id)}%
-              </div>
-            )}
+            </div>
           </div>
+        ))}
+      </div>
 
-          <div className="poll_answer_option_text_container">
-            <div className="poll_answer_option_text">{option.text}</div>
-
-            <PollOptionPercentageBar
-              userHasVoted={userHasVoted}
-              isOwnPoll={isOwnPoll}
-              votesPercentage={getVotesPercentage(option.id)}
-            />
-          </div>
-        </div>
-      ))}
-
-      <div className="poll_button">
+      <div className="poll_button_container">
         {!userHasVoted ? (
-          <Button
+          <PollButton
+            isOwnPoll={isOwnPoll}
             disabled={!selectedOptions.length}
             onClick={() => {
               void handleVote(selectedOptions);
             }}
           >
             Vote
-          </Button>
+          </PollButton>
         ) : (
-          <Button>View results</Button>
+          <PollButton isOwnPoll={isOwnPoll}>View results</PollButton>
         )}
       </div>
     </div>
