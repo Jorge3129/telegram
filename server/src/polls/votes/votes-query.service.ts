@@ -3,6 +3,10 @@ import { EntityManager } from 'typeorm';
 import { PollVotesPercentage } from '../models/poll-votes-percentage.model';
 import { CountVotePercentagesQuery } from './queries/count-vote-percentages.query';
 import { CountVotesByOptionQuery } from './queries/count-votes-by-option-query';
+import {
+  GetPollVoteUsersQuery,
+  PollAnswerOptionWithUsers,
+} from './queries/get-poll-vote-users.query';
 
 export type CountVotesResult = {
   answerOptionId: string;
@@ -16,6 +20,7 @@ export class VotesQueryService {
     private em: EntityManager,
     private countVotePercentageQuery: CountVotePercentagesQuery,
     private countVotesByOptionQuery: CountVotesByOptionQuery,
+    private getPollVoteUsersQuery: GetPollVoteUsersQuery,
   ) {}
 
   public async countVotes(pollId: string): Promise<CountVotesResult[]> {
@@ -26,5 +31,11 @@ export class VotesQueryService {
     pollId: string,
   ): Promise<PollVotesPercentage[]> {
     return this.countVotePercentageQuery.execute(this.em, pollId);
+  }
+
+  public async getPollVotedUsers(
+    pollId: string,
+  ): Promise<PollAnswerOptionWithUsers[]> {
+    return this.getPollVoteUsersQuery.execute(this.em, pollId);
   }
 }

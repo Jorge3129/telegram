@@ -21,7 +21,10 @@ export class CountVotePercentagesQuery {
     pollId: string,
   ): Promise<PollVotesPercentage[]> {
     const result = await manager.transaction(async (txManager) => {
-      const totalVotes = this.countDistinctUserVotesForPoll(txManager, pollId);
+      const totalVotes = await this.countDistinctUserVotesForPoll(
+        txManager,
+        pollId,
+      );
 
       if (!totalVotes) {
         return [];

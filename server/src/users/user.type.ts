@@ -6,4 +6,9 @@ export interface User {
   socketId?: string;
 }
 
+export interface BasicUser {
+  id: number;
+  username: string;
+}
+
 export type UserKey = keyof User;
