@@ -14,9 +14,7 @@ import { SocketAuthService } from './services/socket-auth.service';
 import { OnlineStatusSocketEvents } from './dtos/online-status-events';
 
 @WebSocketGateway(8000, { cors: true })
-export class MessagesGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
-{
+export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   public readonly server: Server;
 

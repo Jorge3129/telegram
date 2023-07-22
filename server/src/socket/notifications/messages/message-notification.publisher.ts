@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { MessagesGateway } from '../messages.gateway';
 import {
-  DeleteMessageSocketPayload,
-  EditMessageSocketPayload,
-  MessageSocketEvents,
   NewMessageSocketPayload,
+  MessageSocketEvents,
+  EditMessageSocketPayload,
+  DeleteMessageSocketPayload,
   SeenMessageSocketPayload,
-} from '../dtos/message-socket-events';
+} from 'src/socket/dtos/message-socket-events';
+import { SocketGateway } from 'src/socket/socket.gateway';
 
 @Injectable()
-export class MessageEventPublisher {
-  constructor(private messagesGateway: MessagesGateway) {}
+export class MessageNotificationPublisher {
+  constructor(private socketGateway: SocketGateway) {}
 
   public async publishNewMessage(
     payload: NewMessageSocketPayload,
     chatId: number,
     userId: number,
   ) {
-    await this.messagesGateway.sendMessageToRecipients(
+    await this.socketGateway.sendMessageToRecipients(
       chatId,
       userId,
       MessageSocketEvents.NEW,
@@ -30,7 +30,7 @@ export class MessageEventPublisher {
     chatId: number,
     userId: number,
   ) {
-    await this.messagesGateway.sendMessageToRecipients(
+    await this.socketGateway.sendMessageToRecipients(
       chatId,
       userId,
       MessageSocketEvents.EDIT,
@@ -43,7 +43,7 @@ export class MessageEventPublisher {
     chatId: number,
     userId: number,
   ) {
-    await this.messagesGateway.sendMessageToRecipients(
+    await this.socketGateway.sendMessageToRecipients(
       chatId,
       userId,
       MessageSocketEvents.DELETE,
@@ -55,7 +55,7 @@ export class MessageEventPublisher {
     payload: SeenMessageSocketPayload,
     authorSocketId: string,
   ) {
-    this.messagesGateway.emitEventTo(
+    this.socketGateway.emitEventTo(
       authorSocketId,
       MessageSocketEvents.READ,
       payload,
