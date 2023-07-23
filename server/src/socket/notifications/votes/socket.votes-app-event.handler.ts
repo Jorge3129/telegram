@@ -23,6 +23,7 @@ export class SocketVotesAppEventHandler {
 
     const votePercentages = await this.votesQueryService.countVotePercentages(
       payload.poll.id,
+      payload.user,
     );
 
     await Promise.all(
@@ -51,6 +52,7 @@ export class SocketVotesAppEventHandler {
 
     const votePercentages = await this.votesQueryService.countVotePercentages(
       payload.pollId,
+      payload.user,
     );
 
     await Promise.all(
