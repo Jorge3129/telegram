@@ -50,11 +50,6 @@ export class SocketVotesAppEventHandler {
       payload.pollId,
     );
 
-    const votePercentages = await this.votesQueryService.countVotePercentages(
-      payload.pollId,
-      payload.user,
-    );
-
     await Promise.all(
       messages.map((message) =>
         this.votesPublisher.publishRetractVote(
@@ -63,7 +58,7 @@ export class SocketVotesAppEventHandler {
             pollId: payload.pollId,
             user: payload.user,
             chatId: message.chatId,
-            votePercentages,
+            votePercentages: [],
           },
           message.chatId,
           payload.user.id,
