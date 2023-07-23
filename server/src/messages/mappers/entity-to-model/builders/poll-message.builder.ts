@@ -1,35 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { PollContentEntity } from 'src/messages/entity/message-content/message-content.entity';
-import { MessageEntity } from 'src/messages/entity/message.entity';
-import { PollMessage } from 'src/messages/models/message.type';
-import { BaseMessageBuilder } from './base-message.builder';
+import { BaseMessage, PollMessage } from 'src/messages/models/message.type';
 import { PollEntity } from 'src/polls/entity/poll.entity';
 import { Poll } from 'src/polls/models/poll.model';
-import { User } from 'src/users/user.type';
 import { PollEntityToModelMapper } from 'src/polls/mappers/entity-to-model/poll.entity-to-model.mapper';
+import { UserEntity } from 'src/users/entity/user.entity';
 
 @Injectable()
 export class PollMessageBuilder {
-  constructor(
-    private baseMessageBuilder: BaseMessageBuilder,
-    private pollMapper: PollEntityToModelMapper,
-  ) {}
+  constructor(private pollMapper: PollEntityToModelMapper) {}
 
   public async build(
-    message: MessageEntity,
+    baseMessage: BaseMessage,
     content: PollContentEntity,
-    currentUser: User,
+    currentUser: UserEntity,
   ): Promise<PollMessage> {
     return {
       type: 'poll-message',
       poll: await this.buildPoll(content.poll, currentUser),
-      ...this.baseMessageBuilder.build(message),
+      ...baseMessage,
     };
   }
 
   private async buildPoll(
     pollEntity: PollEntity,
-    currentUser: User,
+    currentUser: UserEntity,
   ): Promise<Poll> {
     return this.pollMapper.mapEntityToModel(pollEntity, currentUser);
   }

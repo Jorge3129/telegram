@@ -1,7 +1,5 @@
-import { Request } from 'express';
 import { ChatsService } from './chats.service';
-import { User } from '../users/user.type';
-import { Controller, Get, Param, ParseIntPipe, Req } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { Message } from 'src/messages/models/message.type';
 import { RequestUser } from 'src/users/decorators/user.decorator';
 import { UserEntity } from 'src/users/entity/user.entity';
@@ -19,8 +17,8 @@ export class ChatsController {
 
   @Get('/')
   @ApiBearerAuth()
-  public getChats(@Req() req: Request): Promise<ChatForView[]> {
-    return this.chatsService.getUserChats(<User>req.user);
+  public getChats(@RequestUser() user: UserEntity): Promise<ChatForView[]> {
+    return this.chatsService.getUserChats(user);
   }
 
   @Get('/:chatId/messages')

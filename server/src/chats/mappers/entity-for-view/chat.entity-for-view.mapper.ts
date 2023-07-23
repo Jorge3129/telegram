@@ -9,7 +9,7 @@ import {
 import { ChatForView } from 'src/chats/view/chat-for-view';
 import { MessageQueryService } from 'src/messages/queries/message-query.service';
 import { MessageReadsQueryService } from 'src/messages/queries/message-reads-query.service';
-import { User } from 'src/users/user.type';
+import { UserEntity } from 'src/users/entity/user.entity';
 
 @Injectable()
 export class ChatEntityForViewMapper {
@@ -21,7 +21,7 @@ export class ChatEntityForViewMapper {
 
   public async mapEntityForView(
     chat: ChatEntity,
-    currentUser: User,
+    currentUser: UserEntity,
   ): Promise<ChatForView> {
     const userId = currentUser.id;
 
@@ -55,7 +55,7 @@ export class ChatEntityForViewMapper {
 
   public mapEntitiesForView(
     entities: ChatEntity[],
-    currentUser: User,
+    currentUser: UserEntity,
   ): Promise<ChatForView[]> {
     return Promise.all(
       entities.map((entity) => this.mapEntityForView(entity, currentUser)),
