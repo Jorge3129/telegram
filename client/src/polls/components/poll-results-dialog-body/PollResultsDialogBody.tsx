@@ -5,18 +5,13 @@ import { Avatar } from "@mui/material";
 import { initials } from "../../../shared/utils/format-initials";
 import { useGetVotePercentage } from "../../hooks/use-get-vote-percentages";
 import { formatWithQuantity } from "../../../shared/utils/pluralize";
-import { PollMessage } from "../../../messages/models/message.model";
-import { useFetchPollResults } from "../../hooks/use-fetch-poll-results";
 import { useGetVotes } from "../../hooks/use-get-votes";
 
 interface Props {
   poll: Poll;
-  message: PollMessage;
 }
 
-const PollResultsDialogBody: FC<Props> = ({ poll, message }) => {
-  useFetchPollResults(poll, message);
-
+const PollResultsDialogBody: FC<Props> = ({ poll }) => {
   const getPercentage = useGetVotePercentage(poll);
   const getVotes = useGetVotes(poll);
 
