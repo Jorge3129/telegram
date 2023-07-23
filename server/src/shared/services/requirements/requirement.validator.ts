@@ -9,13 +9,13 @@ import {
 export class RequirementValidator {
   public async validate(
     requirements: RequirementConfig[],
-    defaultError: (message: string) => Error,
+    defaultError: (message?: string) => Error,
   ): Promise<void> {
-    for (const { check, err } of requirements) {
+    for (const { check, err, errMessage } of requirements) {
       const success = await this.getCheckResult(check);
 
       if (!success) {
-        throw this.getError(this.getErrorValue(err), defaultError);
+        throw this.getError(err, errMessage, defaultError);
       }
     }
   }
@@ -28,20 +28,17 @@ export class RequirementValidator {
     return check;
   }
 
-  private getErrorValue(error: RequirementError): Error | string {
-    if (typeof error === 'function') {
-      return error();
+  private getError(
+    err: RequirementError | undefined,
+    errMessage: string | undefined,
+    defaultError: (message?: string) => Error,
+  ): Error {
+    if (!err) {
+      return defaultError(errMessage);
     }
 
-    return error;
-  }
-
-  private getError(
-    err: Error | string,
-    defaultError: (message: string) => Error,
-  ): Error {
-    if (typeof err === 'string') {
-      return defaultError(err);
+    if (typeof err === 'function') {
+      return err(errMessage);
     }
 
     return err;

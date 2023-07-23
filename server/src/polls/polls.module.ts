@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PollVoteEntity } from './entity/poll-vote.entity';
 import { PollMappersModule } from './mappers/poll-mappers.module';
 import { VoteQueriesModule } from './votes/queries/vote-queries.module';
+import { ChatWithPollMembershipRequirement } from './requirements/chat-with-poll-membership.requirement';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PollVoteEntity])],
@@ -20,6 +21,7 @@ import { VoteQueriesModule } from './votes/queries/vote-queries.module';
     VotesQueryService,
     PollsQueryService,
     CreateVoteRequirement,
+    ChatWithPollMembershipRequirement,
   ],
   exports: [
     ...PollMappersModule.providers,

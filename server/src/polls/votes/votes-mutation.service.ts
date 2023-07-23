@@ -43,6 +43,7 @@ export class VotesMutationService {
       answerOptionIds,
       answerOptions,
       poll,
+      user,
     );
 
     const votes = answerOptions.map((answerOption) =>

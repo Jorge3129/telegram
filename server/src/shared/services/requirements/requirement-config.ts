@@ -4,9 +4,10 @@ export type RequirementCheck =
   | MaybePromise<boolean>
   | (() => MaybePromise<boolean>);
 
-export type RequirementError = string | Error | (() => Error | string);
+export type RequirementError = Error | ((message?: string) => Error);
 
 export interface RequirementConfig {
   check: RequirementCheck;
-  err: RequirementError;
+  err?: RequirementError;
+  errMessage?: string;
 }
