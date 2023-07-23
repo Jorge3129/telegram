@@ -3,6 +3,7 @@ import { CountTotalDistinctUserVotesQuery } from './count-total-distinct-user-vo
 import { CountVotePercentagesQuery } from './count-vote-percentages.query';
 import { CountVotesByOptionQuery } from './count-votes-by-option-query';
 import { GetPollVoteUsersQuery } from './get-poll-vote-users.query';
+import { UserHasVotedInPollQuery } from './user-has-voted-in-poll.query';
 
 export class VoteQueriesModule {
   public static get providers(): Provider[] {
@@ -11,6 +12,7 @@ export class VoteQueriesModule {
       CountVotePercentagesQuery,
       CountVotesByOptionQuery,
       GetPollVoteUsersQuery,
+      UserHasVotedInPollQuery,
     ];
   }
 }

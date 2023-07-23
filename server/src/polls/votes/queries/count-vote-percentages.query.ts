@@ -32,16 +32,16 @@ export class CountVotePercentagesQuery {
 
       const qb = txManager
         .createQueryBuilder()
-        .from(PollAnswerOptionEntity, 'answers')
-        .leftJoin('answers.votes', 'votes')
-        .where('answers."pollId" = :pollId', { pollId })
+        .from(PollAnswerOptionEntity, 'answer')
+        .leftJoin('answer.votes', 'vote')
+        .where('answer.pollId = :pollId', { pollId })
         .select([
-          'answers."id" AS "answerOptionId"',
-          'answers.text AS "text"',
-          `(COUNT(votes."userId")::DECIMAL / ${totalVotes} * 100) AS "votesPercentage"`,
+          'answer.id AS "answerOptionId"',
+          'answer.text AS "text"',
+          `(COUNT(vote.userId)::DECIMAL / ${totalVotes} * 100) AS "votesPercentage"`,
         ])
-        .groupBy('answers."id", answers.text')
-        .orderBy('answers."optionIndex"', 'ASC');
+        .groupBy('answer.id, answer.text')
+        .orderBy('answer.optionIndex', 'ASC');
 
       return qb.getRawMany<CountVotePercentagesResult>();
     });

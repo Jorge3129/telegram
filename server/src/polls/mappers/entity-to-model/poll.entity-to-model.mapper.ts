@@ -7,6 +7,7 @@ import { User } from 'src/users/user.type';
 import { EntityManager } from 'typeorm';
 import { PollAnswerEntityToModelMapper } from './poll-answer.entity-to-model.mapper';
 import { PollVotesPercentage } from 'src/polls/models/poll-votes-percentage.model';
+import { UserEntity } from 'src/users/entity/user.entity';
 
 @Injectable()
 export class PollEntityToModelMapper {
@@ -38,6 +39,7 @@ export class PollEntityToModelMapper {
       votesPercentages: await this.getVotesPercentages(
         pollEntity.id,
         userSelectedOptionIds,
+        currentUser,
       ),
     };
   }
@@ -45,12 +47,16 @@ export class PollEntityToModelMapper {
   private async getVotesPercentages(
     pollId: string,
     userSelectedOptionIds: string[],
+    user: User,
   ): Promise<PollVotesPercentage[]> {
     if (!userSelectedOptionIds.length) {
       return [];
     }
 
-    return this.votesQueryService.countVotePercentages(pollId);
+    return this.votesQueryService.countVotePercentages(
+      pollId,
+      user as UserEntity,
+    );
   }
 
   // TODO separate into service

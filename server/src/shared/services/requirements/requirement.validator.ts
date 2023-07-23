@@ -1,47 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import {
-  RequirementCheck,
   RequirementConfig,
   RequirementError,
+  isNegativeRequirement,
 } from './requirement-config';
 
 @Injectable()
 export class RequirementValidator {
   public async validate(
     requirements: RequirementConfig[],
-    defaultError: (message: string) => Error,
+    defaultError: (message?: string) => Error,
   ): Promise<void> {
-    for (const { check, err } of requirements) {
-      const success = await this.getCheckResult(check);
+    for (const requirement of requirements) {
+      const success = await this.getCheckResult(requirement);
 
       if (!success) {
-        throw this.getError(this.getErrorValue(err), defaultError);
+        const { err, errMessage } = requirement;
+
+        throw this.getError(err, errMessage, defaultError);
       }
     }
   }
 
-  private async getCheckResult(check: RequirementCheck): Promise<boolean> {
-    if (typeof check === 'function') {
-      return await check();
+  private async getCheckResult(req: RequirementConfig): Promise<boolean> {
+    if (isNegativeRequirement(req)) {
+      const result = await req.checkNot;
+
+      return !result;
     }
 
-    return check;
-  }
-
-  private getErrorValue(error: RequirementError): Error | string {
-    if (typeof error === 'function') {
-      return error();
-    }
-
-    return error;
+    return await req.check;
   }
 
   private getError(
-    err: Error | string,
-    defaultError: (message: string) => Error,
+    err: RequirementError | undefined,
+    errMessage: string | undefined,
+    defaultError: (message?: string) => Error,
   ): Error {
-    if (typeof err === 'string') {
-      return defaultError(err);
+    if (!err) {
+      return defaultError(errMessage);
+    }
+
+    if (typeof err === 'function') {
+      return err(errMessage);
     }
 
     return err;

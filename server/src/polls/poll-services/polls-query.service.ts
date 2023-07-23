@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntityManager, FindOneOptions } from 'typeorm';
 import { PollEntity } from '../entity/poll.entity';
 import { MessageEntity } from 'src/messages/entity/message.entity';
-import { MessageContentType } from 'src/messages/entity/message-content/message-content-type';
 import { ChatEntity } from 'src/chats/entity/chat.entity';
 
 @Injectable()
@@ -21,6 +20,14 @@ export class PollsQueryService {
     return poll;
   }
 
+  public async findOneByIdOrFail(pollId: string): Promise<PollEntity> {
+    return this.findOneOrFail({
+      where: {
+        id: pollId,
+      },
+    });
+  }
+
   public async findMessagesWithPoll(pollId: string): Promise<MessageEntity[]> {
     const qb = this.entityManager
       .createQueryBuilder()
@@ -35,20 +42,21 @@ export class PollsQueryService {
     return qb.getMany();
   }
 
-  public async findChatsWithPoll(pollId: string): Promise<ChatEntity[]> {
+  public async isUserMemberOfChatsWithPoll(
+    userId: number,
+    pollId: string,
+  ): Promise<boolean> {
     const qb = this.entityManager
       .createQueryBuilder()
       .from(ChatEntity, 'chat')
-      .innerJoin('chat.messages', 'message')
+      .innerJoin('chat.members', 'member')
+      .innerJoin('messages', 'message', 'message.chatId = chat.id')
       .innerJoin('message.content', 'content')
-      .where('content.type = :pollType', {
-        pollType: MessageContentType.POLL_MESSAGE,
-      })
-      .andWhere('content.pollId = :pollId', {
+      .where('content.pollId = :pollId', {
         pollId,
       })
-      .distinct();
+      .andWhere('member.userId = :userId', { userId });
 
-    return qb.getMany();
+    return qb.getCount().then((count) => count !== 0);
   }
 }

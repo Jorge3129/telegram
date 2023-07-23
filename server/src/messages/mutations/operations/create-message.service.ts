@@ -6,7 +6,6 @@ import { User } from 'src/users/user.type';
 import { MessageDtoToEntityMapper } from '../../mappers/dto-to-entity/message-dto-to-entity.mapper';
 import { CreateMessageDto } from '../../dto/create-message/create-message.dto';
 import { ChatEntity } from 'src/chats/entity/chat.entity';
-import { UserEntity } from 'src/users/entity/user.entity';
 
 @Injectable()
 export class CreateMessageService {

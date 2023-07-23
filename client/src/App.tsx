@@ -14,6 +14,7 @@ import { authService } from "./auth/services/auth.service";
 import "./App.scss";
 import MainComponent from "./main/main-component/MainComponent";
 import LoginPage from "./auth/components/login-page/LoginPage";
+import GlobalModal from "./shared/components/global-modal/GlobalModal";
 
 const App: FC = () => {
   const { user, loading } = useSelector(selectUser);
@@ -40,21 +41,23 @@ const App: FC = () => {
   return (
     <div className="App">
       <ErrorBoundary>
-        <Router>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                user ? (
-                  <MainComponent user={user} />
-                ) : (
-                  <Navigate to={"/login"} />
-                )
-              }
-            />
-            <Route path="/login" element={<LoginPage />} />
-          </Routes>
-        </Router>
+        <GlobalModal>
+          <Router>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  user ? (
+                    <MainComponent user={user} />
+                  ) : (
+                    <Navigate to={"/login"} />
+                  )
+                }
+              />
+              <Route path="/login" element={<LoginPage />} />
+            </Routes>
+          </Router>
+        </GlobalModal>
       </ErrorBoundary>
     </div>
   );

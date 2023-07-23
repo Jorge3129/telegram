@@ -1,5 +1,5 @@
 import { PipeTransform, UnprocessableEntityException } from '@nestjs/common';
-import { validate } from 'class-validator';
+import { ValidationError, validate } from 'class-validator';
 
 export abstract class BaseUnionValidationPipe<
   TInput extends object,
@@ -16,8 +16,10 @@ export abstract class BaseUnionValidationPipe<
     });
 
     if (errors.length) {
+      console.log(errors.map((er) => er.children));
+
       const errorMessage = errors
-        .map((error) => Object.values(error.constraints ?? {}))
+        .map((error) => this.formatError(error))
         .join(', ');
 
       throw new UnprocessableEntityException(
@@ -26,6 +28,16 @@ export abstract class BaseUnionValidationPipe<
     }
 
     return instance;
+  }
+
+  private formatError(error: ValidationError): string[] {
+    const ownConstraints = Object.values(error.constraints ?? {});
+
+    const childConstraints = (error.children ?? []).map((child) =>
+      this.formatError(child),
+    );
+
+    return [ownConstraints, ...childConstraints].flat();
   }
 
   protected abstract createInstance(payload: TInput): Promise<TResult>;

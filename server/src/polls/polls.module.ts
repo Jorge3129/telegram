@@ -4,11 +4,12 @@ import { VotesMutationService } from './votes/votes-mutation.service';
 import { PollVotesController } from './poll-votes.controller';
 import { VotesQueryService } from './votes/votes-query.service';
 import { PollsQueryService } from './poll-services/polls-query.service';
-import { CreateVoteRequirement } from './votes/requirements/create-vote-requirement';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PollVoteEntity } from './entity/poll-vote.entity';
 import { PollMappersModule } from './mappers/poll-mappers.module';
 import { VoteQueriesModule } from './votes/queries/vote-queries.module';
+import { PollRequirementsModule } from './requirements/poll-requirements.module';
+import { VotesOperationsModule } from './votes/operations/votes-operations.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PollVoteEntity])],
@@ -16,10 +17,11 @@ import { VoteQueriesModule } from './votes/queries/vote-queries.module';
   providers: [
     ...PollMappersModule.providers,
     ...VoteQueriesModule.providers,
+    ...PollRequirementsModule.providers,
+    ...VotesOperationsModule.providers,
     VotesMutationService,
     VotesQueryService,
     PollsQueryService,
-    CreateVoteRequirement,
   ],
   exports: [
     ...PollMappersModule.providers,

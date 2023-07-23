@@ -23,6 +23,7 @@ export class SocketVotesAppEventHandler {
 
     const votePercentages = await this.votesQueryService.countVotePercentages(
       payload.poll.id,
+      payload.user,
     );
 
     await Promise.all(
@@ -44,14 +45,16 @@ export class SocketVotesAppEventHandler {
   }
 
   @OnEvent(VoteEventType.RETRACT)
+  // TODO ensure original user does not get this event
   public async handleRetractVote(payload: RetractVoteEventPayload) {
     const messages = await this.pollsService.findMessagesWithPoll(
       payload.pollId,
     );
 
-    const votePercentages = await this.votesQueryService.countVotePercentages(
-      payload.pollId,
-    );
+    const votePercentages =
+      await this.votesQueryService.countVotePercentagesForOtherUsers(
+        payload.pollId,
+      );
 
     await Promise.all(
       messages.map((message) =>

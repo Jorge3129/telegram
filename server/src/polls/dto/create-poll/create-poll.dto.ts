@@ -6,6 +6,7 @@ import {
   IsBoolean,
   IsNotEmpty,
   IsString,
+  Length,
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
@@ -15,6 +16,7 @@ export class CreatePollDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'How are you?' })
+  @Length(1, 255)
   question: string;
 
   @IsBoolean()

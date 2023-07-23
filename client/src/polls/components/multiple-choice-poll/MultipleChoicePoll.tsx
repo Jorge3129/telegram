@@ -8,6 +8,7 @@ import PollOptionCheckbox from "../poll-option-checkbox/PollOptionCheckbox";
 import PollOptionPercentageBar from "../poll-option-percentage-bar/PollOptionPercentageBar";
 import PollButton from "../poll-button/PollButton";
 import ViewResultsButton from "../view-results-button/ViewResultsButton";
+import PollOptionPercentage from "../poll-option-percentage/PollOptionPercentage";
 
 interface Props {
   poll: Poll;
@@ -58,9 +59,12 @@ const MultipleChoicePoll: FC<Props> = ({ poll, message, isOwnPoll }) => {
                   }}
                 />
               ) : (
-                <div className="poll_answer_option_checkbox_percentage">
-                  {getVotesPercentage(option.id)}%
-                </div>
+                <PollOptionPercentage
+                  isOwnPoll={isOwnPoll}
+                  poll={poll}
+                  option={option}
+                  percentage={getVotesPercentage(option.id)}
+                />
               )}
             </div>
 

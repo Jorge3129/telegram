@@ -39,37 +39,22 @@ export class PollVotesController {
     );
   }
 
-  @Get(':pollId/votes/count')
-  @ApiBearerAuth()
-  public getVoteCount(
-    @Param('pollId') pollId: string,
-    // @RequestUser() user: UserEntity,
-  ) {
-    // TODO check user has access to poll
-
-    return this.votesQueryService.countVotes(pollId);
-  }
-
   @Get(':pollId/votes/percentage')
   @ApiBearerAuth()
   public getVotePercentage(
     @Param('pollId') pollId: string,
-    // @RequestUser() user: UserEntity,
+    @RequestUser() user: UserEntity,
   ): Promise<PollVotesPercentage[]> {
-    // TODO check user has access to poll
-
-    return this.votesQueryService.countVotePercentages(pollId);
+    return this.votesQueryService.countVotePercentages(pollId, user);
   }
 
   @Get(':pollId/votes/results')
   @ApiBearerAuth()
   public getPollVoteResults(
     @Param('pollId') pollId: string,
-    // @RequestUser() user: UserEntity,
+    @RequestUser() user: UserEntity,
   ): Promise<PollAnswerOptionWithUsers[]> {
-    // TODO check user has access to poll
-
-    return this.votesQueryService.getPollVotedUsers(pollId);
+    return this.votesQueryService.getPollVotedUsers(pollId, user);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
