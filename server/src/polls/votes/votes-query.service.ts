@@ -33,6 +33,12 @@ export class VotesQueryService {
     return this.countVotePercentageQuery.execute(this.em, pollId);
   }
 
+  public async countVotePercentagesForOtherUsers(
+    pollId: string,
+  ): Promise<PollVotesPercentage[]> {
+    return this.countVotePercentageQuery.execute(this.em, pollId);
+  }
+
   public async getPollVotedUsers(
     pollId: string,
     currentUser: UserEntity,
