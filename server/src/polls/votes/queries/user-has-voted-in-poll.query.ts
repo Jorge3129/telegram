@@ -3,16 +3,21 @@ import { PollVoteEntity } from 'src/polls/entity/poll-vote.entity';
 import { EntityManager } from 'typeorm';
 
 @Injectable()
-export class CountTotalDistinctUserVotesQuery {
-  public async execute(manager: EntityManager, pollId: string) {
-    const totalVotesResult = await manager
+export class UserHasVotedInPollQuery {
+  public async execute(
+    manager: EntityManager,
+    userId: number,
+    pollId: string,
+  ): Promise<boolean> {
+    const qb = manager
       .createQueryBuilder()
       .from(PollVoteEntity, 'vote')
       .innerJoin('vote.answerOption', 'answer')
       .where('answer.pollId = :pollId', { pollId })
-      .select('COUNT(DISTINCT vote.userId)::INT', 'count')
-      .getRawOne<{ count: number }>();
+      .andWhere('vote.userId = :userId', { userId });
 
-    return totalVotesResult?.count ?? 0;
+    const userVotesCount = await qb.getCount();
+
+    return userVotesCount !== 0;
   }
 }

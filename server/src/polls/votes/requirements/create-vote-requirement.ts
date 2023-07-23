@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
@@ -10,12 +11,14 @@ import { PollEntity } from '../../entity/poll.entity';
 import * as _ from 'lodash';
 import { UserEntity } from 'src/users/entity/user.entity';
 import { ChatWithPollMembershipRequirement } from 'src/polls/requirements/chat-with-poll-membership.requirement';
+import { UserHasVotedInPollRequirement } from './user-has-voted-in-poll.requirement';
 
 @Injectable()
 export class CreateVoteRequirement {
   constructor(
     private validator: RequirementValidator,
     private chatWithPollMembership: ChatWithPollMembershipRequirement,
+    private userHasVotedRequirement: UserHasVotedInPollRequirement,
   ) {}
 
   public validate(
@@ -26,6 +29,7 @@ export class CreateVoteRequirement {
   ) {
     const requirements: RequirementConfig[] = [
       ...this.getAccessRequirements(poll, currentUser),
+      ...this.getIntegrityRequirements(currentUser.id, poll.id),
       ...this.getValueRequirements(answerOptionIds, answerOptions, poll),
     ];
 
@@ -49,6 +53,23 @@ export class CreateVoteRequirement {
     return requirements.map((config) => ({
       ...config,
       err: (message) => new ForbiddenException(message),
+    }));
+  }
+
+  private getIntegrityRequirements(
+    userId: number,
+    pollId: string,
+  ): RequirementConfig[] {
+    const requirements: RequirementConfig[] = [
+      {
+        checkNot: this.userHasVotedRequirement.validate(userId, pollId),
+        errMessage: 'User has already voted in this poll',
+      },
+    ];
+
+    return requirements.map((config) => ({
+      ...config,
+      err: (message) => new ConflictException(message),
     }));
   }
 

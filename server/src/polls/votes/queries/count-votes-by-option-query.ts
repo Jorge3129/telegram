@@ -8,16 +8,16 @@ export class CountVotesByOptionQuery {
   public async execute(manager: EntityManager, pollId: string) {
     const qb = manager
       .createQueryBuilder()
-      .from(PollAnswerOptionEntity, 'answers')
-      .leftJoin('answers.votes', 'votes')
-      .where('answers."pollId" = :pollId', { pollId })
+      .from(PollAnswerOptionEntity, 'answer')
+      .leftJoin('answer.votes', 'vote')
+      .where('answer."pollId" = :pollId', { pollId })
       .select([
-        'answers."id" AS "answerOptionId"',
-        'answers.text AS "text"',
-        'COUNT(votes."userId")::INT AS "votesCount"',
+        'answer.id AS "answerOptionId"',
+        'answer.text AS "text"',
+        'COUNT(vote.userId)::INT AS "votesCount"',
       ])
-      .groupBy('answers."id", answers.text')
-      .orderBy('answers."optionIndex"', 'ASC');
+      .groupBy('answer.id, answer.text')
+      .orderBy('answer.optionIndex', 'ASC');
 
     return qb.getRawMany<CountVotesResult>();
   }
