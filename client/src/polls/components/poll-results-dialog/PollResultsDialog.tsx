@@ -14,7 +14,7 @@ export interface PollResultsDialogProps {
 
 const PollResultsDialog: FC<PollResultsDialogProps> = ({ onClose, poll }) => {
   return (
-    <>
+    <div className="poll_results_dialog">
       <div className="poll_results_dialog_header">
         <div className="poll_results_dialog_title">
           <div className="title">Poll results</div>
@@ -28,7 +28,7 @@ const PollResultsDialog: FC<PollResultsDialogProps> = ({ onClose, poll }) => {
       </div>
 
       <PollResultsDialogBody poll={poll} />
-    </>
+    </div>
   );
 };
 

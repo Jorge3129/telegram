@@ -30,8 +30,10 @@
       .poll_answer_option {
         display: flex;
 
+        --checkbox-width: 2.5em;
+
         .poll_answer_option_checkbox_container {
-          width: 2.5em;
+          width: var(--checkbox-width);
 
           .poll_answer_option_checkbox {
             cursor: pointer;
@@ -44,7 +46,8 @@
         }
 
         .poll_answer_option_text_container {
-          flex: 1;
+          width: calc(100% - var(--checkbox-width));
+          overflow-wrap: break-word;
 
           .poll_answer_option_text {
             font-weight: 500;

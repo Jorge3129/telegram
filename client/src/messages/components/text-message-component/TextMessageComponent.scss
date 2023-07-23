@@ -1,6 +1,6 @@
 .message_item {
   min-width: 3em;
-  max-width: 70%;
+  max-width: 24em;
   margin: 0.2em 1em;
   padding: 0.7em;
   background-color: var(--white);
@@ -15,6 +15,7 @@
   }
 
   .message_text {
+    max-width: 100%;
     overflow-wrap: break-word;
     text-align: left;
     float: left;

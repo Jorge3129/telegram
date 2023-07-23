@@ -14,6 +14,21 @@
 
       display: flex;
       justify-content: space-between;
+
+      overflow-wrap: break-word;
+
+      --vote_count_width: 4em;
+      --vote_count_gap: 1em;
+
+      .answer_text {
+        width: calc(100% - var(--vote_count_width) - var(--vote_count_gap));
+      }
+
+      .votes_count {
+        display: flex;
+        justify-content: end;
+        width: var(--vote_count_width);
+      }
     }
 
     .poll_result_option_votes {

@@ -33,7 +33,7 @@ const PollResultsDialogBody: FC<Props> = ({ poll }) => {
                 {option.text} - {getPercentage(option.id)}%
               </div>
               <div className="votes_count">
-                {formatWithQuantity(votesCount, "vote")}
+                <span>{formatWithQuantity(votesCount, "vote")}</span>
               </div>
             </div>
 
