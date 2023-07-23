@@ -1,0 +1,27 @@
+.poll_answer_option_percentage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: end;
+  height: 100%;
+  position: relative;
+
+  .poll_answer_option_percentage_value {
+    font-weight: 500;
+  }
+
+  .poll_answer_option_percentage_check {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: var(--blue);
+    transform: scale(0.9);
+    margin: 0;
+  }
+
+  &.own_poll {
+    .poll_answer_option_percentage_check {
+      color: var(--green_darker);
+    }
+  }
+}

@@ -28,25 +28,24 @@
       gap: 1em;
 
       .poll_answer_option {
-        display: flex;
+        $poll_answer_checkbox_width: 2.5em;
+        $poll_answer_checkbox_gap: 0.3em;
 
-        --checkbox-width: 2.5em;
+        display: flex;
+        gap: $poll_answer_checkbox_gap;
 
         .poll_answer_option_checkbox_container {
-          width: var(--checkbox-width);
+          width: $poll_answer_checkbox_width;
 
           .poll_answer_option_checkbox {
             cursor: pointer;
           }
-
-          .poll_answer_option_checkbox_percentage {
-            font-weight: 500;
-            font-size: 0.9em;
-          }
         }
 
         .poll_answer_option_text_container {
-          width: calc(100% - var(--checkbox-width));
+          width: calc(
+            100% - $poll_answer_checkbox_width - $poll_answer_checkbox_gap
+          );
           overflow-wrap: break-word;
 
           .poll_answer_option_text {

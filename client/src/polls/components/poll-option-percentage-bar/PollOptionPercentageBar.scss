@@ -1,8 +1,10 @@
 .poll_answer_percentage_bar {
-  height: 3px;
+  height: 0.3em;
   width: calc(100% - 10px);
+  margin: 0.3em 0;
 
   .poll_answer_percentage_bar_value {
+    border-radius: 2px;
     width: 0%;
     height: 100%;
     background-color: var(--blue);
