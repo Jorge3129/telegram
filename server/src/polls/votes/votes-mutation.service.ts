@@ -1,25 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from 'src/users/entity/user.entity';
-import { EntityManager, In, Repository } from 'typeorm';
-import { PollAnswerOptionEntity } from '../entity/poll-answer-option.entity';
 import { PollVoteEntity } from '../entity/poll-vote.entity';
 import { PollsQueryService } from '../poll-services/polls-query.service';
-import { CreateVoteRequirement } from './requirements/create-vote-requirement';
-import { InjectRepository } from '@nestjs/typeorm';
 import { AppEventEmitter } from 'src/shared/services/app-event-emitter.service';
 import { NewVoteEvent } from '../events/votes/new-vote.event';
 import { RetractVoteEvent } from '../events/votes/retract-vote.event';
-import { RetractVoteRequirement } from './requirements/retract-vote-requirement';
+import { CreateVoteService } from './operations/create-vote.service';
+import { RetractVoteService } from './operations/retract-vote.service';
 
 @Injectable()
 export class VotesMutationService {
   constructor(
-    private entityManager: EntityManager,
     private pollsQueryService: PollsQueryService,
-    private createVoteRequirement: CreateVoteRequirement,
-    private retractVoteRequirement: RetractVoteRequirement,
-    @InjectRepository(PollVoteEntity)
-    private pollVotesRepo: Repository<PollVoteEntity>,
+    private createVoteService: CreateVoteService,
+    private retractVoteService: RetractVoteService,
     private eventEmitter: AppEventEmitter,
   ) {}
 
@@ -28,34 +22,13 @@ export class VotesMutationService {
     answerOptionIds: string[],
     user: UserEntity,
   ): Promise<PollVoteEntity[]> {
-    const poll = await this.pollsQueryService.findOneOrFail({
-      where: {
-        id: pollId,
-      },
-    });
+    const poll = await this.pollsQueryService.findOneByIdOrFail(pollId);
 
-    const answerOptions = await this.entityManager.findBy(
-      PollAnswerOptionEntity,
-      {
-        id: In(answerOptionIds),
-      },
-    );
-
-    await this.createVoteRequirement.validate(
-      answerOptionIds,
-      answerOptions,
+    const savedVotes = await this.createVoteService.createVote(
       poll,
+      answerOptionIds,
       user,
     );
-
-    const votes = answerOptions.map((answerOption) =>
-      this.entityManager.create(PollVoteEntity, {
-        answerOption,
-        user,
-      }),
-    );
-
-    const savedVotes = await this.pollVotesRepo.save(votes);
 
     this.eventEmitter.emit(
       new NewVoteEvent({
@@ -69,26 +42,9 @@ export class VotesMutationService {
   }
 
   public async retractVotes(pollId: string, user: UserEntity): Promise<void> {
-    const poll = await this.pollsQueryService.findOneOrFail({
-      where: {
-        id: pollId,
-      },
-    });
+    const poll = await this.pollsQueryService.findOneByIdOrFail(pollId);
 
-    await this.retractVoteRequirement.validate(poll, user);
-
-    await this.entityManager.transaction(async (tx) => {
-      const votes = await tx.find(PollVoteEntity, {
-        where: {
-          answerOption: {
-            pollId: pollId,
-          },
-          userId: user.id,
-        },
-      });
-
-      await tx.remove(votes);
-    });
+    await this.retractVoteService.retractVotes(poll, user);
 
     this.eventEmitter.emit(
       new RetractVoteEvent({

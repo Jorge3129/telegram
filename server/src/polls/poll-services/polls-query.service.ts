@@ -20,6 +20,14 @@ export class PollsQueryService {
     return poll;
   }
 
+  public async findOneByIdOrFail(pollId: string): Promise<PollEntity> {
+    return this.findOneOrFail({
+      where: {
+        id: pollId,
+      },
+    });
+  }
+
   public async findMessagesWithPoll(pollId: string): Promise<MessageEntity[]> {
     const qb = this.entityManager
       .createQueryBuilder()

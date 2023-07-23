@@ -9,6 +9,7 @@ import { PollVoteEntity } from './entity/poll-vote.entity';
 import { PollMappersModule } from './mappers/poll-mappers.module';
 import { VoteQueriesModule } from './votes/queries/vote-queries.module';
 import { PollRequirementsModule } from './requirements/poll-requirements.module';
+import { VotesOperationsModule } from './votes/operations/votes-operations.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PollVoteEntity])],
@@ -17,6 +18,7 @@ import { PollRequirementsModule } from './requirements/poll-requirements.module'
     ...PollMappersModule.providers,
     ...VoteQueriesModule.providers,
     ...PollRequirementsModule.providers,
+    ...VotesOperationsModule.providers,
     VotesMutationService,
     VotesQueryService,
     PollsQueryService,

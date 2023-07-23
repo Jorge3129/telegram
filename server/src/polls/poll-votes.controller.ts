@@ -39,17 +39,6 @@ export class PollVotesController {
     );
   }
 
-  @Get(':pollId/votes/count')
-  @ApiBearerAuth()
-  public getVoteCount(
-    @Param('pollId') pollId: string,
-    // @RequestUser() user: UserEntity,
-  ) {
-    // TODO check user has access to poll
-
-    return this.votesQueryService.countVotes(pollId);
-  }
-
   @Get(':pollId/votes/percentage')
   @ApiBearerAuth()
   public getVotePercentage(
