@@ -11,7 +11,6 @@ import MessageComponent from "../message-component/MessageComponent";
 
 interface Props {
   message: Message;
-  isLast: boolean;
   nextMessage: Message | undefined;
   currentChat: Chat;
 }

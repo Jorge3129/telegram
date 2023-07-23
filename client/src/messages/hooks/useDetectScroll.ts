@@ -1,27 +1,19 @@
 import { MutableRefObject, useRef } from "react";
-import { selectChats, ChatActions } from "../../chats/chats.reducer";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../redux/store";
-import { Socket } from "socket.io-client";
-import { selectUser } from "../../redux/user-reducer";
 import { Message } from "../models/message.model";
 import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
 import { getVisibleElementHeight } from "../utils/get-visible-element-height";
-import { isMessageSeen } from "../../utils/is-message-seen";
-import { messageApiService } from "../messages-api.service";
+import { useEmitMessageRead } from "./use-emit-message-read";
 
 export const useDetectScroll = (
-  socket: Socket | null,
   scrollRef: MutableRefObject<HTMLDivElement | null>,
   messages: Message[]
 ) => {
-  const { chats } = useSelector(selectChats);
-  const { currentChatId, currentChat } = useSelector(selectCurrentChat);
-  const dispatch = useAppDispatch();
+  const { currentChat } = useSelector(selectCurrentChat);
   const readRef = useRef<string[]>([]);
   const topRef = useRef<number>(scrollRef.current?.scrollTop || 0);
 
-  const { user } = useSelector(selectUser);
+  const emitReadEvent = useEmitMessageRead(messages);
 
   const getVisibleMessageIds = (): string[] => {
     const divs = Array.from(document.querySelectorAll(".message_container"));
@@ -39,32 +31,8 @@ export const useDetectScroll = (
   const getLastVisibleMessage = (): string | undefined =>
     [...getVisibleMessageIds()].pop();
 
-  const emitReadEvent = (message: Message): void => {
-    if (
-      !currentChat ||
-      isMessageSeen(message.timestamp, currentChat.unread, messages)
-    ) {
-      return;
-    }
-
-    const index = messages.indexOf(message);
-
-    dispatch(
-      ChatActions.setUnread({
-        unread: messages.slice(index + 1).length,
-        chatId: currentChatId || -1,
-      })
-    );
-
-    if (!socket || !user) {
-      return;
-    }
-
-    void messageApiService.updateMessageReads(message);
-  };
-
   const handleScroll = () => {
-    const unreadCount = chats.find((ch) => ch.id === currentChatId)?.unread;
+    const unreadCount = currentChat?.unread;
 
     if (
       !unreadCount ||
