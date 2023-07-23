@@ -78,7 +78,7 @@ const PollContextMenu: FC<Props> = ({ children, message, poll }) => {
         anchorReference="anchorPosition"
         anchorPosition={position}
       >
-        {userHasVoted && (
+        {userHasVoted && !poll.isQuiz && (
           <MenuItem onClick={handleRetractVote}>Retract vote</MenuItem>
         )}
         {isOwnMessage && <MenuItem onClick={handleDelete}>Delete</MenuItem>}
