@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import "./TextMessageComponent.scss";
 import { useSelector } from "react-redux";
 import MediaContainer from "../../../media/components/MediaContainer";
@@ -15,17 +15,10 @@ import { ChatType } from "../../../chats/models/chat.model";
 
 interface Props {
   message: TextMessage;
-  callback: null | (() => void);
   chatType: ChatType;
 }
 
-const TextMessageComponent: FC<Props> = ({ message, chatType, callback }) => {
-  useEffect(() => {
-    if (callback && !message.seen) {
-      callback();
-    }
-  }, []);
-
+const TextMessageComponent: FC<Props> = ({ message, chatType }) => {
   const [file, setFile] = useState<Media | null>(null);
 
   const { user } = useSelector(selectUser);

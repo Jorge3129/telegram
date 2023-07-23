@@ -20,11 +20,7 @@ const MessageList: FC<Props> = ({ currentChat }) => {
 
   const { socket } = useSocketContext();
 
-  const { onMessagesFirstRendered, handleScroll } = useDetectScroll(
-    socket,
-    scrollRef,
-    messages
-  );
+  const { handleScroll } = useDetectScroll(socket, scrollRef, messages);
 
   if (loading) {
     return <LoadingSpinner backgroundColor="var(--light-blue-gray)" />;
@@ -39,7 +35,6 @@ const MessageList: FC<Props> = ({ currentChat }) => {
           message={message}
           nextMessage={messages.at(i + 1)}
           currentChat={currentChat}
-          onMessagesFirstRendered={onMessagesFirstRendered}
         />
       ))}
     </div>

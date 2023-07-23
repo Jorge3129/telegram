@@ -14,16 +14,9 @@ interface Props {
   isLast: boolean;
   nextMessage: Message | undefined;
   currentChat: Chat;
-  onMessagesFirstRendered: () => void;
 }
 
-const MessageContainer: FC<Props> = ({
-  message,
-  nextMessage,
-  currentChat,
-  isLast,
-  onMessagesFirstRendered,
-}) => {
+const MessageContainer: FC<Props> = ({ message, nextMessage, currentChat }) => {
   const { user } = useSelector(selectUser);
   const isSelf = isOwnMessage(message, user);
 
@@ -40,11 +33,7 @@ const MessageContainer: FC<Props> = ({
         }}
       />
 
-      <MessageComponent
-        message={message}
-        callback={isLast ? onMessagesFirstRendered : null}
-        chatType={currentChat.type}
-      />
+      <MessageComponent message={message} chatType={currentChat.type} />
     </div>
   );
 };

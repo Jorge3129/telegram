@@ -13,39 +13,20 @@ import { ChatType } from "../../../chats/models/chat.model";
 
 interface Props {
   message: Message;
-  callback: null | (() => void);
   chatType: ChatType;
 }
 
-const MessageComponent: FC<Props> = ({ message, chatType, callback }) => {
+const MessageComponent: FC<Props> = ({ message, chatType }) => {
   if (isTextMessage(message)) {
-    return (
-      <TextMessageComponent
-        message={message}
-        callback={callback}
-        chatType={chatType}
-      />
-    );
+    return <TextMessageComponent message={message} chatType={chatType} />;
   }
 
   if (isGifMessage(message)) {
-    return (
-      <GifMessageComponent
-        message={message}
-        callback={callback}
-        chatType={chatType}
-      />
-    );
+    return <GifMessageComponent message={message} chatType={chatType} />;
   }
 
   if (isPollMessage(message)) {
-    return (
-      <PollMessageComponent
-        message={message}
-        callback={callback}
-        chatType={chatType}
-      />
-    );
+    return <PollMessageComponent message={message} chatType={chatType} />;
   }
 
   return <div>This message type is not supported yet</div>;

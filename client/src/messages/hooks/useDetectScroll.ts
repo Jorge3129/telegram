@@ -7,7 +7,6 @@ import { selectUser } from "../../redux/user-reducer";
 import { Message } from "../models/message.model";
 import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
 import { getVisibleElementHeight } from "../utils/get-visible-element-height";
-import { findMessageById } from "../../utils/find-message-by-id";
 import { isMessageSeen } from "../../utils/is-message-seen";
 import { messageApiService } from "../messages-api.service";
 
@@ -64,20 +63,6 @@ export const useDetectScroll = (
     void messageApiService.updateMessageReads(message);
   };
 
-  const onMessagesFirstRendered = () => {
-    const last = getLastVisibleMessage();
-
-    if (!currentChat || !last) {
-      return;
-    }
-
-    const message = findMessageById(last, currentChat.id, messages);
-
-    if (message) {
-      emitReadEvent(message);
-    }
-  };
-
   const handleScroll = () => {
     const unreadCount = chats.find((ch) => ch.id === currentChatId)?.unread;
 
@@ -105,5 +90,5 @@ export const useDetectScroll = (
     }
   };
 
-  return { onMessagesFirstRendered, handleScroll };
+  return { handleScroll };
 };
