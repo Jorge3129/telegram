@@ -17,6 +17,11 @@ export class BaseMessageBuilder {
       authorName: message.author.username,
       chatId: message.chatId,
       seen: this.messageHelper.isMessageSeen(message),
+      isCurrentUserAuthor: message.authorId === currentUser.id,
+      isReadByCurrentUser: this.messageHelper.isMessageReadByUser(
+        message,
+        currentUser.id,
+      ),
     };
   }
 }
