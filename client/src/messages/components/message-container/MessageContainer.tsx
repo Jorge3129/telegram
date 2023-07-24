@@ -1,5 +1,5 @@
-import { FC, useCallback, useRef } from "react";
-import { Message } from "../../models/message.model";
+import { FC, useCallback, useMemo, useRef } from "react";
+import { Message, PollMessage, TextMessage } from "../../models/message.model";
 import { isOwnMessage } from "../../../utils/is-own-message";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/user-reducer";
@@ -8,17 +8,18 @@ import { classIf } from "../../../utils/class-if";
 import "./MessageContainer.scss";
 import MessageAvatar from "../group-message-avatar/GroupMessageAvatar";
 import MessageComponent from "../message-component/MessageComponent";
-import { Observable } from "rxjs";
+import { Observable, filter, tap } from "rxjs";
 import { MessageScrollEvent } from "../message-list/MessageList";
-import { useSubscribeObservable } from "../../hooks/use-observable";
-import { getVisibleElementHeight } from "../../utils/get-visible-element-height";
+import { useSubscribeObservable } from "../../../shared/hooks/use-subscribe-observable";
 import { useEmitMessageRead } from "../../hooks/use-emit-message-read";
+import { isMessageVisible } from "../../utils/is-message-visible";
+import { getVisibleElementHeight } from "../../utils/get-visible-element-height";
 
 interface Props {
   message: Message;
   nextMessage: Message | undefined;
   currentChat: Chat;
-  scroll$: Observable<MessageScrollEvent | null>;
+  scroll$: Observable<MessageScrollEvent>;
 }
 
 const MessageContainer: FC<Props> = ({
@@ -34,30 +35,27 @@ const MessageContainer: FC<Props> = ({
 
   const emitReadEvent = useEmitMessageRead();
 
-  const handleScroll = useCallback(
-    (e: MessageScrollEvent | null) => {
-      if (!ref.current || !e?.target || message.isReadByCurrentUser) {
-        return;
-      }
+  const scrollForUnread$ = useMemo(() => {
+    return scroll$.pipe(
+      filter(() => !message.isReadByCurrentUser),
+      filter(
+        (e) => !!ref.current && isMessageVisible(ref.current, e.container)
+      ),
+      tap((e) => {
+        console.log(
+          getVisibleElementHeight(ref.current!, e.container),
+          (message as TextMessage).text ||
+            (message as PollMessage).poll?.question
+        );
+      })
+    );
+  }, [scroll$, message]);
 
-      const totalHeight = ref.current.clientHeight;
+  const handleScroll = useCallback(() => {
+    emitReadEvent(message);
+  }, [message, emitReadEvent]);
 
-      const visibleHeight = getVisibleElementHeight(
-        ref.current,
-        e.target as HTMLElement
-      );
-
-      if (visibleHeight < 0.8 * totalHeight) {
-        return;
-      }
-
-      console.log(visibleHeight);
-      emitReadEvent(message);
-    },
-    [message, emitReadEvent]
-  );
-
-  useSubscribeObservable(scroll$, handleScroll);
+  useSubscribeObservable(scrollForUnread$, handleScroll);
 
   return (
     <div

@@ -1,5 +1,5 @@
 export const getVisibleElementHeight = (
-  element: Element,
+  element: HTMLElement,
   container: HTMLElement | null
 ): number => {
   if (!container) {

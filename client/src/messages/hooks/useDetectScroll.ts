@@ -20,7 +20,10 @@ export const useDetectScroll = (
 
     const visible = divs
       .filter((el) => {
-        const seen = getVisibleElementHeight(el, scrollRef.current);
+        const seen = getVisibleElementHeight(
+          el as HTMLElement,
+          scrollRef.current
+        );
         return seen > 0 && seen === el.clientHeight;
       })
       .map((el) => el.id.replace(/message-/, ""));
