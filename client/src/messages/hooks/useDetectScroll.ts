@@ -15,15 +15,12 @@ export const useDetectScroll = (
 
   const emitReadEvent = useEmitMessageRead();
 
-  const getVisibleMessageIds = (): string[] => {
+  const getVisibleMessageIds = (container: HTMLElement): string[] => {
     const divs = Array.from(document.querySelectorAll(".message_container"));
 
     const visible = divs
       .filter((el) => {
-        const seen = getVisibleElementHeight(
-          el as HTMLElement,
-          scrollRef.current
-        );
+        const seen = getVisibleElementHeight(el as HTMLElement, container);
         return seen > 0 && seen === el.clientHeight;
       })
       .map((el) => el.id.replace(/message-/, ""));
@@ -31,8 +28,8 @@ export const useDetectScroll = (
     return visible;
   };
 
-  const getLastVisibleMessage = (): string | undefined =>
-    [...getVisibleMessageIds()].pop();
+  const getLastVisibleMessage = (container: HTMLElement): string | undefined =>
+    [...getVisibleMessageIds(container)].pop();
 
   const handleScroll = () => {
     const unreadCount = currentChat?.unread;
@@ -48,7 +45,7 @@ export const useDetectScroll = (
 
     topRef.current = scrollRef.current?.scrollTop || 0;
 
-    const lastMessageId = getLastVisibleMessage();
+    const lastMessageId = getLastVisibleMessage(scrollRef.current);
 
     if (lastMessageId && lastMessageId !== [...readRef.current].pop()) {
       readRef.current.push(lastMessageId);

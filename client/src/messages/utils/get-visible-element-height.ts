@@ -1,27 +1,18 @@
 export const getVisibleElementHeight = (
   element: HTMLElement,
-  container: HTMLElement | null
+  container: HTMLElement
 ): number => {
-  if (!container) {
-    return -1;
-  }
-
-  const scrollTop = container.scrollTop;
-  const scrollBottom = scrollTop + container.clientHeight;
+  const containerTop = container.scrollTop;
+  const containerBottom = containerTop + container.clientHeight;
 
   const containerRect = container.getBoundingClientRect();
   const elementRect = element.getBoundingClientRect();
 
-  const rect = {
-    top: elementRect.top - containerRect.top,
-  };
+  const elementRelativeTop = elementRect.top - containerRect.top + containerTop;
+  const elementRelativeBottom = elementRelativeTop + elementRect.height;
 
-  const elementTop = rect.top + scrollTop;
-  const elementBottom = elementTop + element.clientHeight;
+  const visibleTop = Math.max(elementRelativeTop, containerTop);
+  const visibleBottom = Math.min(elementRelativeBottom, containerBottom);
 
-  const visibleTop = elementTop < scrollTop ? scrollTop : elementTop;
-  const visibleBottom =
-    elementBottom > scrollBottom ? scrollBottom : elementBottom;
-
-  return visibleBottom - visibleTop;
+  return Math.max(0, visibleBottom - visibleTop);
 };
