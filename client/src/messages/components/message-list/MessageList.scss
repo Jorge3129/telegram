@@ -1,13 +1,21 @@
-.message_list {
+.message_list_scroll_wrapper {
+  position: relative;
   width: 100%;
-  min-height: min-content;
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: absolute;
-  bottom: 0;
-  border-bottom: var(--border);
-  border-color: var(--blue-gray);
+  height: 100%;
+
+  .message_list {
+    position: absolute;
+    bottom: 0;
+
+    width: 100%;
+    min-height: min-content; // when there is no scroll, messages should stick to bottom
+    max-height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-bottom: var(--border);
+    border-color: var(--blue-gray);
+  }
 }

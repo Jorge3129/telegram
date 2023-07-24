@@ -1,6 +1,8 @@
+import { MeasurableElement } from "./measurable-element";
+
 export const getVisibleElementHeight = (
   element: HTMLElement,
-  container: HTMLElement
+  container: MeasurableElement
 ): number => {
   const containerTop = container.scrollTop;
   const containerBottom = containerTop + container.clientHeight;
