@@ -5,30 +5,44 @@ import { useAppDispatch } from "../../redux/store";
 import { isMessageSeen } from "../../utils/is-message-seen";
 import { messageApiService } from "../messages-api.service";
 import { Message } from "../models/message.model";
+import { MessageActions, selectMessages } from "../messages.reducer";
+import { useCallback } from "react";
 
-export const useEmitMessageRead = (messages: Message[]) => {
-  const { currentChatId, currentChat } = useSelector(selectCurrentChat);
+export const useEmitMessageRead = () => {
+  const { currentChat } = useSelector(selectCurrentChat);
+  const { messages } = useSelector(selectMessages);
   const dispatch = useAppDispatch();
 
-  const emitReadEvent = (message: Message): void => {
-    if (
-      !currentChat ||
-      isMessageSeen(message.timestamp, currentChat.unread, messages)
-    ) {
-      return;
-    }
+  const emitReadEvent = useCallback(
+    (message: Message): void => {
+      if (
+        !currentChat ||
+        message.isReadByCurrentUser ||
+        isMessageSeen(message.timestamp, currentChat.unread, messages)
+      ) {
+        return;
+      }
 
-    const index = messages.indexOf(message);
+      dispatch(
+        MessageActions.updateReadsByCurrentUser({
+          message,
+        })
+      );
 
-    dispatch(
-      ChatActions.setUnread({
-        unread: messages.slice(index + 1).length,
-        chatId: currentChatId || -1,
-      })
-    );
+      const index = messages.findIndex((m) => m.id === message.id);
 
-    void messageApiService.updateMessageReads(message);
-  };
+      // todo dispatch message update isReadByCurrentUSer
+      dispatch(
+        ChatActions.setUnread({
+          unread: messages.slice(index + 1).length,
+          chatId: currentChat.id,
+        })
+      );
+
+      void messageApiService.updateMessageReads(message);
+    },
+    [currentChat, dispatch, messages]
+  );
 
   return emitReadEvent;
 };

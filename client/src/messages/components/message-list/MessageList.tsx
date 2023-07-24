@@ -12,13 +12,14 @@ interface Props {
   currentChat: Chat;
 }
 
+export type MessageScrollEvent = UIEvent<HTMLDivElement>;
+
 const MessageList: FC<Props> = ({ currentChat }) => {
   const { messages, loading } = useSelector(selectMessages);
 
   const scrollRef = useAutoScroll(currentChat?.unread || 0);
 
-  const { scroll$, emitScrollEvent } =
-    useScrollSubject<UIEvent<HTMLDivElement>>();
+  const { scroll$, emitScrollEvent } = useScrollSubject<MessageScrollEvent>(0);
 
   if (loading) {
     return <LoadingSpinner backgroundColor="var(--light-blue-gray)" />;
@@ -32,6 +33,7 @@ const MessageList: FC<Props> = ({ currentChat }) => {
           message={message}
           nextMessage={messages.at(i + 1)}
           currentChat={currentChat}
+          scroll$={scroll$}
         />
       ))}
     </div>

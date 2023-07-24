@@ -13,7 +13,7 @@ export const useDetectScroll = (
   const readRef = useRef<string[]>([]);
   const topRef = useRef<number>(scrollRef.current?.scrollTop || 0);
 
-  const emitReadEvent = useEmitMessageRead(messages);
+  const emitReadEvent = useEmitMessageRead();
 
   const getVisibleMessageIds = (): string[] => {
     const divs = Array.from(document.querySelectorAll(".message_container"));
