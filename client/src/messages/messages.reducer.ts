@@ -67,6 +67,20 @@ const messageSlice = createSlice({
         });
     },
 
+    updateReadsByCurrentUser: (
+      state,
+      { payload }: PayloadAction<{ message: Message }>
+    ) => {
+      state.messages
+        .filter(
+          (message) =>
+            new Date(message.timestamp) <= new Date(payload.message.timestamp)
+        )
+        .forEach((msg) => {
+          msg.isReadByCurrentUser = true;
+        });
+    },
+
     addPollVote: (
       state,
       {

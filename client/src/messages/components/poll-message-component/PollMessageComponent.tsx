@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import "./PollMessageComponent.scss";
 import { PollMessage } from "../../models/message.model";
 import { useSelector } from "react-redux";
@@ -13,17 +13,10 @@ import { ChatType } from "../../../chats/models/chat.model";
 
 interface Props {
   message: PollMessage;
-  callback: null | (() => void);
   chatType: ChatType;
 }
 
-const PollMessageComponent: FC<Props> = ({ message, chatType, callback }) => {
-  useEffect(() => {
-    if (callback && !message.seen) {
-      callback();
-    }
-  }, []);
-
+const PollMessageComponent: FC<Props> = ({ message, chatType }) => {
   const { user } = useSelector(selectUser);
 
   const isOwn = isOwnMessage(message, user);

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ChatUserRepository } from '../chat-users/services/chat-user.repository';
-import { User } from '../users/user.type';
 import { ChatsRepository } from './chats.repository';
 import { ChatForView } from './view/chat-for-view';
 import { ChatEntityForViewMapper } from './mappers/entity-for-view/chat.entity-for-view.mapper';
+import { UserEntity } from 'src/users/entity/user.entity';
 
 @Injectable()
 export class ChatsService {
@@ -13,7 +13,7 @@ export class ChatsService {
     private chatMapper: ChatEntityForViewMapper,
   ) {}
 
-  public async getUserChats(user: User): Promise<ChatForView[]> {
+  public async getUserChats(user: UserEntity): Promise<ChatForView[]> {
     const rawChats = await this.chatsRepo.findByUserId(user.id);
 
     // TODO refactor

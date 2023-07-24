@@ -4,7 +4,6 @@ import { UserEntity } from 'src/users/entity/user.entity';
 import { MessageEntityToModelMapper } from '../mappers/entity-to-model/message-entity-to-model.mapper';
 import { Message } from '../models/message.type';
 import { MessageQueryRepository } from './message-query.repository';
-import { User } from 'src/users/user.type';
 
 @Injectable()
 export class MessageQueryService {
@@ -16,7 +15,7 @@ export class MessageQueryService {
 
   public async getLatestChatMessage(
     chatId: number,
-    currentUser: User,
+    currentUser: UserEntity,
   ): Promise<Message | null> {
     const message = await this.messageRepo.getLatestMessage(chatId);
 

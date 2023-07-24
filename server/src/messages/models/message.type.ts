@@ -10,6 +10,8 @@ export interface BaseMessage {
   author: User;
   chatId: number;
   seen: boolean;
+  isReadByCurrentUser: boolean;
+  isCurrentUserAuthor: boolean;
 }
 
 export interface TextMessage extends BaseMessage {

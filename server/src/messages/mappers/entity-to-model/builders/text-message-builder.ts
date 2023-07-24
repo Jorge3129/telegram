@@ -5,7 +5,7 @@ import {
 } from 'src/messages/entity/message-content/message-content.entity';
 import { MessageEntity } from 'src/messages/entity/message.entity';
 import { Media } from 'src/messages/models/media.type';
-import { TextMessage } from 'src/messages/models/message.type';
+import { BaseMessage, TextMessage } from 'src/messages/models/message.type';
 import { BaseMessageBuilder } from './base-message.builder';
 import { isMediaContent } from '../../../entity/message-content/message-content.type-guards';
 
@@ -14,6 +14,7 @@ export class TextMessageBuilder {
   constructor(private baseMessageBuilder: BaseMessageBuilder) {}
 
   public build(
+    baseMessage: BaseMessage,
     message: MessageEntity,
     content: TextMessageContentEntity | MediaMessageContentEntity,
   ): TextMessage {
@@ -22,7 +23,7 @@ export class TextMessageBuilder {
       edited: message.edited,
       media: this.getMedia(content),
       text: this.getText(content),
-      ...this.baseMessageBuilder.build(message),
+      ...baseMessage,
     };
   }
 

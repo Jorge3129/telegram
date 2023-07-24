@@ -32,7 +32,10 @@ export class MessageMutationService {
     private eventEmitter: AppEventEmitter<AppMessageEvent>,
   ) {}
 
-  public async create(message: CreateMessageDto, user: User): Promise<Message> {
+  public async create(
+    message: CreateMessageDto,
+    user: UserEntity,
+  ): Promise<Message> {
     await this.membershipService.checkUserChatMembership(
       user.id,
       message.chatId,

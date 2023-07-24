@@ -7,12 +7,13 @@ import { MessageEntity } from '../entity/message.entity';
 export class MessageReadsQueryService {
   constructor(private em: EntityManager) {}
 
+  // TODO refactor to 'count all messages since the latest sent by user'
   public async countUnreadMessages(
     chatId: number,
     userId: number,
   ): Promise<number> {
     const count = await this.em.transaction(async (tx) => {
-      const latestReadSubquery = tx
+      const latestReadSubQuery = tx
         .createQueryBuilder()
         .from(MessageReadEntity, 'read')
         .innerJoin('read.message', 'message')
@@ -29,9 +30,11 @@ export class MessageReadsQueryService {
           { userId },
         )
         .where('message.chatId = :chatId', { chatId })
-        .andWhere('message.timestamp > (' + latestReadSubquery.getQuery() + ')')
+        .andWhere(
+          `message.timestamp > COALESCE((${latestReadSubQuery.getQuery()}), '1970-01-01')`,
+        )
         .andWhere('read.id IS NULL')
-        .setParameters(latestReadSubquery.getParameters())
+        .setParameters(latestReadSubQuery.getParameters())
         .getCount();
     });
 

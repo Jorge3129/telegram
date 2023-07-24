@@ -11,11 +11,14 @@ import { CreateMessageDto } from './dto/create-message/create-message.dto';
 export class MessageService {
   constructor(private messageMutationService: MessageMutationService) {}
 
-  public async create(message: CreateMessageDto, user: User): Promise<Message> {
+  public async create(
+    message: CreateMessageDto,
+    user: UserEntity,
+  ): Promise<Message> {
     return this.messageMutationService.create(message, user);
   }
 
-  public async delete(messageId: string, user: User): Promise<void> {
+  public async delete(messageId: string, user: UserEntity): Promise<void> {
     await this.messageMutationService.delete(messageId, user);
   }
 
