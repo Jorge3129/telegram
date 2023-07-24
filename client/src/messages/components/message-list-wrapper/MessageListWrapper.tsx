@@ -15,7 +15,7 @@ const MessageListWrapper: FC<Props> = ({ currentChat }) => {
 
   useEffect(() => {
     void dispatch(messageThunk(currentChat.id));
-  }, [currentChat.id]);
+  }, [currentChat.id, dispatch]);
 
   return (
     <div className="message_list_wrapper">

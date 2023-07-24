@@ -4,6 +4,7 @@ import { Message } from "../models/message.model";
 import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
 import { getVisibleElementHeight } from "../utils/get-visible-element-height";
 import { useEmitMessageRead } from "./use-emit-message-read";
+import { MeasurableElement } from "../utils/measurable-element";
 
 export const useDetectScroll = (
   scrollRef: MutableRefObject<HTMLDivElement | null>,
@@ -20,7 +21,10 @@ export const useDetectScroll = (
 
     const visible = divs
       .filter((el) => {
-        const seen = getVisibleElementHeight(el as HTMLElement, container);
+        const seen = getVisibleElementHeight(
+          el as HTMLElement,
+          MeasurableElement.fromHtml(container)
+        );
         return seen > 0 && seen === el.clientHeight;
       })
       .map((el) => el.id.replace(/message-/, ""));

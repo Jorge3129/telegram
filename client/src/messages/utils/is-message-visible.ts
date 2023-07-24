@@ -1,8 +1,9 @@
 import { getVisibleElementHeight } from "./get-visible-element-height";
+import { MeasurableElement } from "./measurable-element";
 
 export const isMessageVisible = (
   messageElement: HTMLElement,
-  container: HTMLElement
+  container: MeasurableElement
 ): boolean => {
   const totalHeight = messageElement.clientHeight;
 
