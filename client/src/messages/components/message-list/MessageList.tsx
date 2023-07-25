@@ -10,7 +10,6 @@ import { tap, filter } from "rxjs";
 import { isNotNullable } from "../../../shared/utils/is-not-null";
 import { MeasurableElement } from "../../utils/measurable-element";
 import { useEmitFirstMessagesView } from "../../hooks/use-emit-first-messages-view";
-import { useScrollToFirstUnreadMessage } from "../../hooks/use-scroll-to-first-unread-message";
 
 interface Props {
   currentChat: Chat;
@@ -35,7 +34,6 @@ const MessageList: FC<Props> = ({ currentChat }) => {
   }, [scroll$]);
 
   useEmitFirstMessagesView(wrapperRef, emitScrollEvent);
-  useScrollToFirstUnreadMessage();
 
   if (loading) {
     return <LoadingSpinner backgroundColor="var(--light-blue-gray)" />;

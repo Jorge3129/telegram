@@ -13,6 +13,7 @@ import { MessageScrollEvent } from "../message-list/MessageList";
 import { useSubscribeObservable } from "../../../shared/hooks/use-subscribe-observable";
 import { useEmitMessageRead } from "../../hooks/use-emit-message-read";
 import { isMessageVisible } from "../../utils/is-message-visible";
+import { useScrollToFirstUnreadMessage } from "../../hooks/use-scroll-to-first-unread-message";
 
 interface Props {
   message: Message;
@@ -31,6 +32,8 @@ const MessageContainer: FC<Props> = ({
   const isSelf = isOwnMessage(message, user);
 
   const messageRef = useRef<HTMLDivElement>(null);
+
+  useScrollToFirstUnreadMessage(currentChat, message, messageRef);
 
   const emitReadEvent = useEmitMessageRead();
 

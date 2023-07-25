@@ -1,43 +1,46 @@
-import { useCallback } from "react";
+import { RefObject, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
 import { useSubscribeObservable } from "../../shared/hooks/use-subscribe-observable";
 import { messagesFetched$ } from "../state/fetch-messages-thunk";
 import { Message } from "../models/message.model";
 import { selectMessages } from "../state/messages.reducer";
+import { Chat } from "../../chats/models/chat.model";
 
-// TODO refactor this logic
-export const useScrollToFirstUnreadMessage = () => {
+const getLatestReadMessage = (
+  messages: Message[],
+  unreadCount: number
+): Message | undefined => {
+  const lastMessageIndex = messages.length - unreadCount - 1;
+
+  return messages[lastMessageIndex];
+};
+
+export const useScrollToFirstUnreadMessage = <TElement extends HTMLElement>(
+  currentChat: Chat,
+  message: Message,
+  messageRef: RefObject<TElement>
+) => {
   const { loading: messagesLoading } = useSelector(selectMessages);
-  const { currentChat } = useSelector(selectCurrentChat);
 
   const handleFirstMessageFetch = useCallback(
     (messages: Message[]) => {
+      const messageElement = messageRef.current;
+
       if (
-        !currentChat ||
+        !messageElement ||
         messagesLoading ||
         messages.length < currentChat.unread
       ) {
         return;
       }
 
-      const lastMessageIndex = messages.length - currentChat.unread;
+      const lastMessage = getLatestReadMessage(messages, currentChat.unread);
 
-      const lastMessage = messages[lastMessageIndex];
-
-      const lastMessageId = lastMessage?.id;
-
-      const lastMessageElement = document.getElementById(
-        `message-${lastMessageId || ""}`
-      );
-
-      if (!lastMessageElement) {
-        return;
+      if (message.id === lastMessage?.id) {
+        messageElement.scrollIntoView();
       }
-
-      lastMessageElement.scrollIntoView();
     },
-    [currentChat, messagesLoading]
+    [currentChat, messagesLoading, message.id, messageRef]
   );
 
   useSubscribeObservable(messagesFetched$, handleFirstMessageFetch);
