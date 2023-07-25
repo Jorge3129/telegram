@@ -3,6 +3,7 @@ import { RootState } from "../../redux/rootReducer";
 import { isPollMessage, isTextMessage, Message } from "../models/message.model";
 import { PollVotePercentage } from "../../polls/models/poll-vote-percentage";
 import { PollAnswerOptionWithUsers } from "../../polls/models/poll-answer-option-with-user";
+import { isMessageSentBefore } from "../utils/is-message-sent-before";
 
 interface MessageState {
   messages: Message[];
@@ -57,10 +58,8 @@ const messageSlice = createSlice({
       { payload }: PayloadAction<{ message: Message; userId: number }>
     ) => {
       state.messages
-        .filter(
-          (message) =>
-            new Date(message.timestamp) <= new Date(payload.message.timestamp)
-        )
+        .filter((message) => !message.isCurrentUserAuthor)
+        .filter((message) => isMessageSentBefore(message, payload.message))
         .forEach((msg) => {
           msg.seen = true;
         });
@@ -71,10 +70,7 @@ const messageSlice = createSlice({
       { payload }: PayloadAction<{ message: Message }>
     ) => {
       state.messages
-        .filter(
-          (message) =>
-            new Date(message.timestamp) <= new Date(payload.message.timestamp)
-        )
+        .filter((message) => isMessageSentBefore(message, payload.message))
         .forEach((msg) => {
           msg.isReadByCurrentUser = true;
         });

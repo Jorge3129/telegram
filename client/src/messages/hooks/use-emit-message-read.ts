@@ -18,6 +18,7 @@ export const useEmitMessageRead = () => {
       if (
         !currentChat ||
         message.isReadByCurrentUser ||
+        message.isCurrentUserAuthor ||
         isMessageSeen(message.timestamp, currentChat.unread, messages)
       ) {
         return;

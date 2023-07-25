@@ -1,34 +1,44 @@
-import { useEffect } from "react";
+import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
+import { useSubscribeObservable } from "../../shared/hooks/use-subscribe-observable";
+import { messagesFetched$ } from "../state/fetch-messages-thunk";
+import { Message } from "../models/message.model";
 import { selectMessages } from "../state/messages.reducer";
 
 // TODO refactor this logic
 export const useScrollToFirstUnreadMessage = () => {
-  const { messages, loading } = useSelector(selectMessages);
+  const { loading: messagesLoading } = useSelector(selectMessages);
   const { currentChat } = useSelector(selectCurrentChat);
 
-  useEffect(() => {
-    messages;
-    loading;
-    currentChat;
-  }, []);
+  const handleFirstMessageFetch = useCallback(
+    (messages: Message[]) => {
+      if (
+        !currentChat ||
+        messagesLoading ||
+        messages.length < currentChat.unread
+      ) {
+        return;
+      }
 
-  useEffect(() => {
-    if (!currentChat || loading || messages.length < currentChat.unread) {
-      return;
-    }
+      const lastMessageIndex = messages.length - currentChat.unread;
 
-    const lastMessageIndex = messages.length - currentChat.unread - 1;
+      const lastMessage = messages[lastMessageIndex];
 
-    const messageId = messages[lastMessageIndex]?.id;
+      const lastMessageId = lastMessage?.id;
 
-    const lastMessage = document.getElementById(`message-${messageId || ""}`);
+      const lastMessageElement = document.getElementById(
+        `message-${lastMessageId || ""}`
+      );
 
-    if (!lastMessage) {
-      return;
-    }
+      if (!lastMessageElement) {
+        return;
+      }
 
-    lastMessage.scrollIntoView();
-  }, [loading]);
+      lastMessageElement.scrollIntoView();
+    },
+    [currentChat, messagesLoading]
+  );
+
+  useSubscribeObservable(messagesFetched$, handleFirstMessageFetch);
 };
