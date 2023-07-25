@@ -10,6 +10,7 @@ import { tap, filter } from "rxjs";
 import { isNotNullable } from "../../../shared/utils/is-not-null";
 import { MeasurableElement } from "../../utils/measurable-element";
 import { useEmitFirstMessagesView } from "../../hooks/use-emit-first-messages-view";
+import { useMessageReadsQueue } from "../../hooks/use-message-reads-queue";
 
 interface Props {
   currentChat: Chat;
@@ -35,6 +36,8 @@ const MessageList: FC<Props> = ({ currentChat }) => {
 
   useEmitFirstMessagesView(wrapperRef, emitScrollEvent);
 
+  const { emitMessageRead } = useMessageReadsQueue();
+
   if (loading) {
     return <LoadingSpinner backgroundColor="var(--light-blue-gray)" />;
   }
@@ -57,6 +60,7 @@ const MessageList: FC<Props> = ({ currentChat }) => {
             nextMessage={messages.at(i + 1)}
             currentChat={currentChat}
             scroll$={mappedScroll$}
+            emitMessageRead={emitMessageRead}
           />
         ))}
       </div>
