@@ -1,4 +1,4 @@
-import { MessageActions } from "../../messages/messages.reducer";
+import { MessageActions } from "../../messages/state/messages.reducer";
 import { ChatActions } from "../../chats/chats.reducer";
 
 import { useAppDispatch } from "../../redux/store";

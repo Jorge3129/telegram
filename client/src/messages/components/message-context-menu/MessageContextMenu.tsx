@@ -6,7 +6,7 @@ import { CurrentChatActions } from "../../../current-chat/reducers/current-chat.
 import { useAppDispatch } from "../../../redux/store";
 import { selectUser } from "../../../redux/user-reducer";
 import { messageApiService } from "../../messages-api.service";
-import { MessageActions } from "../../messages.reducer";
+import { MessageActions } from "../../state/messages.reducer";
 import { TextMessage } from "../../models/message.model";
 
 interface Props {

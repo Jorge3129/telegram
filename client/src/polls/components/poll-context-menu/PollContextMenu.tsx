@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../../redux/store";
 import { selectUser } from "../../../redux/user-reducer";
 import { PollMessage } from "../../../messages/models/message.model";
 import { messageApiService } from "../../../messages/messages-api.service";
-import { MessageActions } from "../../../messages/messages.reducer";
+import { MessageActions } from "../../../messages/state/messages.reducer";
 import { pollsApiService } from "../../polls-api.service";
 
 interface Props {

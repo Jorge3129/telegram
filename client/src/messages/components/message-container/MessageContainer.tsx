@@ -8,11 +8,12 @@ import { classIf } from "../../../utils/class-if";
 import "./MessageContainer.scss";
 import MessageAvatar from "../group-message-avatar/GroupMessageAvatar";
 import MessageComponent from "../message-component/MessageComponent";
-import { Observable, filter } from "rxjs";
+import { Observable, filter, tap } from "rxjs";
 import { MessageScrollEvent } from "../message-list/MessageList";
 import { useSubscribeObservable } from "../../../shared/hooks/use-subscribe-observable";
 import { useEmitMessageRead } from "../../hooks/use-emit-message-read";
 import { isMessageVisible } from "../../utils/is-message-visible";
+import { useScrollToFirstUnreadMessage } from "../../hooks/use-scroll-to-first-unread-message";
 
 interface Props {
   message: Message;
@@ -30,14 +31,21 @@ const MessageContainer: FC<Props> = ({
   const { user } = useSelector(selectUser);
   const isSelf = isOwnMessage(message, user);
 
-  const ref = useRef<HTMLDivElement>(null);
+  const messageRef = useRef<HTMLDivElement>(null);
+
+  useScrollToFirstUnreadMessage(currentChat, message, messageRef);
 
   const emitReadEvent = useEmitMessageRead();
 
   const scrollForUnread$ = useMemo(() => {
     return scroll$.pipe(
       filter(() => !message.isReadByCurrentUser),
-      filter((e) => !!ref.current && isMessageVisible(ref.current, e.container))
+      filter(
+        (e) =>
+          !!messageRef.current &&
+          isMessageVisible(messageRef.current, e.container)
+      ),
+      tap()
     );
   }, [scroll$, message]);
 
@@ -49,7 +57,7 @@ const MessageContainer: FC<Props> = ({
 
   return (
     <div
-      ref={ref}
+      ref={messageRef}
       className={"message_container" + classIf(isSelf, "own_message_container")}
       id={"message-" + message.id}
     >

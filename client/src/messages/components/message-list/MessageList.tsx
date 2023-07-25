@@ -2,7 +2,7 @@ import { FC, UIEvent, useMemo, useRef } from "react";
 import "./MessageList.scss";
 import { useSelector } from "react-redux";
 import { Chat } from "../../../chats/models/chat.model";
-import { selectMessages } from "../../messages.reducer";
+import { selectMessages } from "../../state/messages.reducer";
 import MessageContainer from "../message-container/MessageContainer";
 import LoadingSpinner from "../../../shared/components/loading-spinner/LoadingSpinner";
 import { useScrollSubject } from "../../hooks/use-scroll-subject";
@@ -10,7 +10,6 @@ import { tap, filter } from "rxjs";
 import { isNotNullable } from "../../../shared/utils/is-not-null";
 import { MeasurableElement } from "../../utils/measurable-element";
 import { useEmitFirstMessagesView } from "../../hooks/use-emit-first-messages-view";
-import { useScrollToFirstUnreadMessage } from "../../hooks/use-scroll-to-first-unread-message";
 
 interface Props {
   currentChat: Chat;
@@ -35,7 +34,6 @@ const MessageList: FC<Props> = ({ currentChat }) => {
   }, [scroll$]);
 
   useEmitFirstMessagesView(wrapperRef, emitScrollEvent);
-  useScrollToFirstUnreadMessage();
 
   if (loading) {
     return <LoadingSpinner backgroundColor="var(--light-blue-gray)" />;
