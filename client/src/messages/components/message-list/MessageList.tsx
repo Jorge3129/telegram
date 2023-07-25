@@ -6,7 +6,7 @@ import { selectMessages } from "../../state/messages.reducer";
 import MessageContainer from "../message-container/MessageContainer";
 import LoadingSpinner from "../../../shared/components/loading-spinner/LoadingSpinner";
 import { useScrollSubject } from "../../hooks/use-scroll-subject";
-import { tap, filter } from "rxjs";
+import { tap, filter, throttleTime } from "rxjs";
 import { isNotNullable } from "../../../shared/utils/is-not-null";
 import { MeasurableElement } from "../../utils/measurable-element";
 import { useEmitFirstMessagesView } from "../../hooks/use-emit-first-messages-view";
@@ -28,10 +28,14 @@ const MessageList: FC<Props> = ({ currentChat }) => {
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const { scroll$, emitScrollEvent } = useScrollSubject<MessageScrollEvent>(0);
+  const { scroll$, emitScrollEvent } = useScrollSubject<MessageScrollEvent>();
 
   const mappedScroll$ = useMemo(() => {
-    return scroll$.pipe(tap(), filter(isNotNullable));
+    return scroll$.pipe(
+      tap(),
+      throttleTime(100, undefined, { trailing: true }),
+      filter(isNotNullable)
+    );
   }, [scroll$]);
 
   useEmitFirstMessagesView(wrapperRef, emitScrollEvent);

@@ -56,7 +56,7 @@ const MessageContainer: FC<Props> = ({
   const handleScroll = useCallback(() => {
     emitMessageRead(message);
     emitLocalReadEvent(message);
-  }, [message, emitLocalReadEvent]);
+  }, [message, emitLocalReadEvent, emitMessageRead]);
 
   useSubscribeObservable(scrollForUnread$, handleScroll);
 

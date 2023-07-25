@@ -31,7 +31,6 @@ export class MessageReadsQueue {
     );
 
     this.sub = result$.subscribe((message) => {
-      console.log(message);
       void messageApiService.updateMessageReads(message.id);
     });
   }

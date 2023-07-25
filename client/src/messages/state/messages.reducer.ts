@@ -58,7 +58,7 @@ const messageSlice = createSlice({
       { payload }: PayloadAction<{ message: Message; userId: number }>
     ) => {
       state.messages
-        .filter((message) => !message.isCurrentUserAuthor)
+        .filter((message) => message.isCurrentUserAuthor)
         .filter((message) => isMessageSentBefore(message, payload.message))
         .forEach((msg) => {
           msg.seen = true;
