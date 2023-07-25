@@ -1,7 +1,7 @@
 import { RefObject, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useSubscribeObservable } from "../../shared/hooks/use-subscribe-observable";
-import { messagesFetched$ } from "../state/fetch-messages-thunk";
+import { messagesFetched$ } from "../state/get-messages-thunk";
 import { Message } from "../models/message.model";
 import { selectMessages } from "../state/messages.reducer";
 import { Chat } from "../../chats/models/chat.model";

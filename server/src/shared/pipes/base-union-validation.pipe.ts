@@ -16,8 +16,6 @@ export abstract class BaseUnionValidationPipe<
     });
 
     if (errors.length) {
-      console.log(errors.map((er) => er.children));
-
       const errorMessage = errors
         .map((error) => this.formatError(error))
         .join(', ');

@@ -6,7 +6,7 @@ import { Message } from "../models/message.model";
 
 export const messagesFetched$ = new BehaviorSubject<Message[]>([]);
 
-export const fetchMessagesThunk = createAsyncThunk(
+export const getMessagesThunk = createAsyncThunk(
   "/messages/get",
   async (id: number, thunkApi) => {
     try {

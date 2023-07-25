@@ -11,15 +11,16 @@ import MessageComponent from "../message-component/MessageComponent";
 import { Observable, filter, tap } from "rxjs";
 import { MessageScrollEvent } from "../message-list/MessageList";
 import { useSubscribeObservable } from "../../../shared/hooks/use-subscribe-observable";
-import { useEmitMessageRead } from "../../hooks/use-emit-message-read";
 import { isMessageVisible } from "../../utils/is-message-visible";
 import { useScrollToFirstUnreadMessage } from "../../hooks/use-scroll-to-first-unread-message";
+import { useEmitLocalMessageRead } from "../../hooks/use-emit-local-message-read";
 
 interface Props {
   message: Message;
   nextMessage: Message | undefined;
   currentChat: Chat;
   scroll$: Observable<MessageScrollEvent>;
+  emitMessageRead: (message: Message) => void;
 }
 
 const MessageContainer: FC<Props> = ({
@@ -27,6 +28,7 @@ const MessageContainer: FC<Props> = ({
   nextMessage,
   currentChat,
   scroll$,
+  emitMessageRead,
 }) => {
   const { user } = useSelector(selectUser);
   const isSelf = isOwnMessage(message, user);
@@ -35,23 +37,26 @@ const MessageContainer: FC<Props> = ({
 
   useScrollToFirstUnreadMessage(currentChat, message, messageRef);
 
-  const emitReadEvent = useEmitMessageRead();
+  const emitLocalReadEvent = useEmitLocalMessageRead();
 
   const scrollForUnread$ = useMemo(() => {
     return scroll$.pipe(
-      filter(() => !message.isReadByCurrentUser),
       filter(
-        (e) =>
+        () => !message.isReadByCurrentUser && !message.isCurrentUserAuthor
+      ),
+      filter(
+        (event) =>
           !!messageRef.current &&
-          isMessageVisible(messageRef.current, e.container)
+          isMessageVisible(messageRef.current, event.container)
       ),
       tap()
     );
   }, [scroll$, message]);
 
   const handleScroll = useCallback(() => {
-    emitReadEvent(message);
-  }, [message, emitReadEvent]);
+    emitMessageRead(message);
+    emitLocalReadEvent(message);
+  }, [message, emitLocalReadEvent]);
 
   useSubscribeObservable(scrollForUnread$, handleScroll);
 

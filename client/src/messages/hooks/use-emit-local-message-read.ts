@@ -3,12 +3,11 @@ import { ChatActions } from "../../chats/chats.reducer";
 import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
 import { useAppDispatch } from "../../redux/store";
 import { isMessageSeen } from "../../utils/is-message-seen";
-import { messageApiService } from "../messages-api.service";
 import { Message } from "../models/message.model";
 import { MessageActions, selectMessages } from "../state/messages.reducer";
 import { useCallback } from "react";
 
-export const useEmitMessageRead = () => {
+export const useEmitLocalMessageRead = () => {
   const { currentChat } = useSelector(selectCurrentChat);
   const { messages } = useSelector(selectMessages);
   const dispatch = useAppDispatch();
@@ -38,8 +37,6 @@ export const useEmitMessageRead = () => {
           chatId: currentChat.id,
         })
       );
-
-      void messageApiService.updateMessageReads(message.id);
     },
     [currentChat, dispatch, messages]
   );

@@ -20,8 +20,8 @@ export class MessageApiService {
     });
   }
 
-  public async updateMessageReads(message: Message): Promise<void> {
-    await this.http.post(`${environment.apiUrl}/messages/${message.id}/reads`);
+  public async updateMessageReads(messageId: string): Promise<void> {
+    await this.http.post(`${environment.apiUrl}/messages/${messageId}/reads`);
   }
 }
 
