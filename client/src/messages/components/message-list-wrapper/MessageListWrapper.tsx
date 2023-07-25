@@ -4,7 +4,7 @@ import { Chat } from "../../../chats/models/chat.model";
 import { useAppDispatch } from "../../../redux/store";
 import MessageList from "../message-list/MessageList";
 import DefaultWallPaper from "../../../shared/components/default-wallpaper/DefaultWallpaper";
-import { fetchMessagesThunk } from "../../state/fetch-messages-thunk";
+import { getMessagesThunk } from "../../state/get-messages-thunk";
 
 interface Props {
   currentChat: Chat;
@@ -14,7 +14,7 @@ const MessageListWrapper: FC<Props> = ({ currentChat }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    void dispatch(fetchMessagesThunk(currentChat.id));
+    void dispatch(getMessagesThunk(currentChat.id));
   }, [currentChat.id, dispatch]);
 
   return (
