@@ -1,18 +1,14 @@
 import { useCallback, useMemo } from "react";
-import { BehaviorSubject, debounceTime } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
-export const useScrollSubject = <Event>(debounceMs = 0) => {
+export const useScrollSubject = <Event>() => {
   const scrollSubject$ = useMemo(() => {
     return new BehaviorSubject<Event | null>(null);
   }, []);
 
   const scroll$ = useMemo(() => {
-    if (!debounceMs) {
-      return scrollSubject$;
-    }
-
-    return scrollSubject$.pipe(debounceTime(debounceMs));
-  }, [scrollSubject$, debounceMs]);
+    return scrollSubject$.pipe();
+  }, [scrollSubject$]);
 
   const emitScrollEvent = useCallback(
     (event: Event) => scrollSubject$.next(event),
