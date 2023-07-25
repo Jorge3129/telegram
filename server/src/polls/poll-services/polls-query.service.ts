@@ -38,7 +38,6 @@ export class PollsQueryService {
       })
       .select(['message.id', 'message.chatId']);
 
-    // console.log(qb.getQueryAndParameters());
     return qb.getMany();
   }
 

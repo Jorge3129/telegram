@@ -54,8 +54,6 @@ export class MessageReadsQueryService {
       userId,
     );
 
-    console.log({ chatId, latestRead, latestSent });
-
     if (!latestRead && latestSent) {
       return latestSent;
     }

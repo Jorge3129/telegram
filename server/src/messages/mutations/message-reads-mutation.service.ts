@@ -33,6 +33,8 @@ export class MessageReadsMutationService {
 
       const messagesToUpdate = await qb.getRawMany<{ messageId: string }>();
 
+      console.log(messagesToUpdate.map((m) => m.messageId));
+
       const values = messagesToUpdate.map(
         ({ messageId }): Partial<MessageReadEntity> => ({
           messageId,
@@ -41,7 +43,7 @@ export class MessageReadsMutationService {
       );
 
       await tx.save(MessageReadEntity, values).catch((e) => {
-        console.log(e);
+        console.log(e.message);
       });
     });
   }
