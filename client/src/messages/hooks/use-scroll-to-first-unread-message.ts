@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { selectMessages } from "../messages.reducer";
 import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
+import { selectMessages } from "../state/messages.reducer";
 
 // TODO refactor this logic
 export const useScrollToFirstUnreadMessage = () => {

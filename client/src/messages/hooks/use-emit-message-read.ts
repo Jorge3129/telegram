@@ -5,7 +5,7 @@ import { useAppDispatch } from "../../redux/store";
 import { isMessageSeen } from "../../utils/is-message-seen";
 import { messageApiService } from "../messages-api.service";
 import { Message } from "../models/message.model";
-import { MessageActions, selectMessages } from "../messages.reducer";
+import { MessageActions, selectMessages } from "../state/messages.reducer";
 import { useCallback } from "react";
 
 export const useEmitMessageRead = () => {

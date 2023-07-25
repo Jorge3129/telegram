@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../../redux/store";
 import { selectUser } from "../../../../redux/user-reducer";
 import { messageApiService } from "../../../messages-api.service";
-import { MessageActions } from "../../../messages.reducer";
+import { MessageActions } from "../../../state/messages.reducer";
 import { GifMessage } from "../../../models/message.model";
 
 interface Props {

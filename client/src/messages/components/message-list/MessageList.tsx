@@ -2,7 +2,7 @@ import { FC, UIEvent, useMemo, useRef } from "react";
 import "./MessageList.scss";
 import { useSelector } from "react-redux";
 import { Chat } from "../../../chats/models/chat.model";
-import { selectMessages } from "../../messages.reducer";
+import { selectMessages } from "../../state/messages.reducer";
 import MessageContainer from "../message-container/MessageContainer";
 import LoadingSpinner from "../../../shared/components/loading-spinner/LoadingSpinner";
 import { useScrollSubject } from "../../hooks/use-scroll-subject";
