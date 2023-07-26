@@ -5,8 +5,8 @@ import {
   EditMessageSocketPayload,
   DeleteMessageSocketPayload,
   SeenMessageSocketPayload,
-} from 'src/socket/dtos/message-socket-events';
-import { SocketGateway } from 'src/socket/socket.gateway';
+} from '../../dtos/message-socket-events';
+import { SocketGateway } from '../../socket.gateway';
 
 @Injectable()
 export class MessageNotificationPublisher {

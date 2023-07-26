@@ -1,8 +1,8 @@
-import { PollAnswerOptionEntity } from 'src/polls/entity/poll-answer-option.entity';
-import { PollVotesPercentage } from 'src/polls/models/poll-votes-percentage.model';
 import { EntityManager } from 'typeorm';
 import { CountTotalDistinctUserVotesQuery } from './count-total-distinct-user-votes.query';
 import { Injectable } from '@nestjs/common';
+import { PollAnswerOptionEntity } from '../../entity/poll-answer-option.entity';
+import { PollVotesPercentage } from '../../models/poll-votes-percentage.model';
 
 type CountVotePercentagesResult = {
   answerOptionId: string;

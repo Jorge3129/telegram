@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { BasicUser } from 'src/users/user.type';
 import { EntityManager } from 'typeorm';
 import * as _ from 'lodash';
-import { PollVoteEntity } from 'src/polls/entity/poll-vote.entity';
+import { BasicUser } from '../../../users/user.type';
+import { PollVoteEntity } from '../../entity/poll-vote.entity';
 
 type PollUserVote = BasicUser & { optionId: string };
 

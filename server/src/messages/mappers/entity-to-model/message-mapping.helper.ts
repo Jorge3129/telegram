@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MessageEntity } from 'src/messages/entity/message.entity';
+import { MessageEntity } from '../../entity/message.entity';
 
 @Injectable()
 export class MessageMappingHelper {

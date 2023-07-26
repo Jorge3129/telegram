@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { VotesNotificationPublisher } from './votes-notification.publisher';
-import { NewVoteEventPayload } from 'src/polls/events/votes/new-vote.event';
-import { RetractVoteEventPayload } from 'src/polls/events/votes/retract-vote.event';
-import { VoteEventType } from 'src/polls/events/votes/vote-event-type';
-import { PollsQueryService } from 'src/polls/poll-services/polls-query.service';
-import { VotesQueryService } from 'src/polls/votes/votes-query.service';
+import { NewVoteEventPayload } from '../../../polls/events/votes/new-vote.event';
+import { RetractVoteEventPayload } from '../../../polls/events/votes/retract-vote.event';
+import { VoteEventType } from '../../../polls/events/votes/vote-event-type';
+import { PollsQueryService } from '../../../polls/poll-services/polls-query.service';
+import { VotesQueryService } from '../../../polls/votes/votes-query.service';
 
 @Injectable()
 export class SocketVotesAppEventHandler {

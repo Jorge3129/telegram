@@ -1,5 +1,5 @@
-import { PollVotesPercentage } from 'src/polls/models/poll-votes-percentage.model';
-import { User } from 'src/users/user.type';
+import { PollVotesPercentage } from '../../polls/models/poll-votes-percentage.model';
+import { User } from '../../users/user.type';
 
 export enum VotesSocketEvents {
   NEW = 'vote.new',

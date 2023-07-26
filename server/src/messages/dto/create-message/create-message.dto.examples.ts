@@ -1,4 +1,4 @@
-import { pollAnswerOptionsExample } from 'src/polls/dto/create-poll/poll-answer-options.example';
+import { pollAnswerOptionsExample } from '../../../polls/dto/create-poll/poll-answer-options.example';
 import { CreateGifMessageDto } from './create-gif-message.dto';
 import { CreatePollMessageDto } from './create-poll-message.dto';
 import { CreateTextMessageDto } from './create-text-message.dto';

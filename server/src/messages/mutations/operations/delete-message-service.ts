@@ -4,9 +4,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { MessageMutationRepository } from '../message-mutation.repository';
-import { User } from 'src/users/user.type';
 import { MessageQueryRepository } from '../../queries/message-query.repository';
-import { MessageEntity } from 'src/messages/entity/message.entity';
+import { MessageEntity } from '../../entity/message.entity';
+import { User } from '../../../users/user.type';
 
 @Injectable()
 export class DeleteMessageService {

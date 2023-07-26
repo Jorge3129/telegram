@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MessageEntity } from './entity/message.entity';
 import { MessageService } from './message.service';
-import { ChatUsersModule } from 'src/chat-users/chat-users.module';
-import { UserModule } from 'src/users/user.module';
 import { MessagesController } from './messages.controller';
 import { MessageMapperModule } from './mappers/message-mapper.module';
 
 import { MessageQueriesModule } from './queries/message-queries.module';
 import { MessageMutationsModule } from './mutations/message-mutations.module';
-import { PollsModule } from 'src/polls/polls.module';
+import { ChatUsersModule } from '../chat-users/chat-users.module';
+import { PollsModule } from '../polls/polls.module';
+import { UserModule } from '../users/user.module';
 
 @Module({
   imports: [

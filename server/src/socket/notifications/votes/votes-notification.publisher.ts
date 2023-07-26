@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import {
   NewVoteSocketPayload,
-  RetractVoteSocketPayload,
   VotesSocketEvents,
-} from 'src/socket/dtos/votes-socket-events';
-import { SocketGateway } from 'src/socket/socket.gateway';
+  RetractVoteSocketPayload,
+} from '../../dtos/votes-socket-events';
+import { SocketGateway } from '../../socket.gateway';
 
 @Injectable()
 export class VotesNotificationPublisher {

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { PollVoteEntity } from 'src/polls/entity/poll-vote.entity';
-import { PollEntity } from 'src/polls/entity/poll.entity';
-import { Poll } from 'src/polls/models/poll.model';
-import { VotesQueryService } from 'src/polls/votes/votes-query.service';
-import { User } from 'src/users/user.type';
 import { EntityManager } from 'typeorm';
 import { PollAnswerEntityToModelMapper } from './poll-answer.entity-to-model.mapper';
-import { PollVotesPercentage } from 'src/polls/models/poll-votes-percentage.model';
-import { UserEntity } from 'src/users/entity/user.entity';
+import { UserEntity } from '../../../users/entity/user.entity';
+import { User } from '../../../users/user.type';
+import { PollVoteEntity } from '../../entity/poll-vote.entity';
+import { PollEntity } from '../../entity/poll.entity';
+import { PollVotesPercentage } from '../../models/poll-votes-percentage.model';
+import { Poll } from '../../models/poll.model';
+import { VotesQueryService } from '../../votes/votes-query.service';
 
 @Injectable()
 export class PollEntityToModelMapper {

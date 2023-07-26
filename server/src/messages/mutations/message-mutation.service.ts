@@ -1,8 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ChatMembershipService } from 'src/chat-users/services/chat-membership.service';
-import { AppEventEmitter } from 'src/shared/services/app-event-emitter.service';
-import { UserEntity } from 'src/users/entity/user.entity';
-import { User } from 'src/users/user.type';
 import { AppMessageEvent } from '../events';
 import { CreateMessageEvent } from '../events/create-message.event';
 import { ReadMessageEvent } from '../events/read-message.event';
@@ -18,6 +14,10 @@ import { MessageReadsMutationService } from './message-reads-mutation.service';
 import { CreateMessageDto } from '../dto/create-message/create-message.dto';
 import { EntityManager } from 'typeorm';
 import { MessageEntity } from '../entity/message.entity';
+import { ChatMembershipService } from '../../chat-users/services/chat-membership.service';
+import { AppEventEmitter } from '../../shared/services/app-event-emitter.service';
+import { UserEntity } from '../../users/entity/user.entity';
+import { User } from '../../users/user.type';
 
 @Injectable()
 export class MessageMutationService {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PollAnswerOptionEntity } from 'src/polls/entity/poll-answer-option.entity';
 import { EntityManager } from 'typeorm';
+import { PollAnswerOptionEntity } from '../../entity/poll-answer-option.entity';
 
 export type CountVotesResult = {
   answerOptionId: string;

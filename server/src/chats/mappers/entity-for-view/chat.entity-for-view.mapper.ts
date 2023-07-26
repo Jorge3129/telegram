@@ -1,15 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { ChatUserEntity } from 'src/chat-users/entity/chat-user.entity';
-import { ChatUserRepository } from 'src/chat-users/services/chat-user.repository';
-import { ChatEntity } from 'src/chats/entity/chat.entity';
-import {
-  isGroupChat,
-  isChannel,
-} from 'src/chats/entity/chat.entity.type-guards';
-import { ChatForView } from 'src/chats/view/chat-for-view';
-import { MessageQueryService } from 'src/messages/queries/message-query.service';
-import { MessageReadsQueryService } from 'src/messages/queries/message-reads-query.service';
-import { UserEntity } from 'src/users/entity/user.entity';
+import { ChatUserEntity } from '../../../chat-users/entity/chat-user.entity';
+import { ChatUserRepository } from '../../../chat-users/services/chat-user.repository';
+import { MessageQueryService } from '../../../messages/queries/message-query.service';
+import { MessageReadsQueryService } from '../../../messages/queries/message-reads-query.service';
+import { UserEntity } from '../../../users/entity/user.entity';
+import { ChatEntity } from '../../entity/chat.entity';
+import { isGroupChat, isChannel } from '../../entity/chat.entity.type-guards';
+import { ChatForView } from '../../view/chat-for-view';
 
 @Injectable()
 export class ChatEntityForViewMapper {

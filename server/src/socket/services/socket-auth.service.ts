@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Socket } from 'socket.io';
-import { AuthTokenService } from 'src/auth/auth-token.service';
-import { UserEntity } from 'src/users/entity/user.entity';
+import { AuthTokenService } from '../../auth/auth-token.service';
+import { UserEntity } from '../../users/entity/user.entity';
 
 @Injectable()
 export class SocketAuthService {

@@ -6,9 +6,9 @@ import {
 import { RequirementValidator } from '../../../shared/services/requirements/requirement.validator';
 import { RequirementConfig } from '../../../shared/services/requirements/requirement-config';
 import { PollEntity } from '../../entity/poll.entity';
-import { UserEntity } from 'src/users/entity/user.entity';
-import { ChatWithPollMembershipRequirement } from 'src/polls/requirements/chat-with-poll-membership.requirement';
 import { UserHasVotedInPollRequirement } from './user-has-voted-in-poll.requirement';
+import { UserEntity } from '../../../users/entity/user.entity';
+import { ChatWithPollMembershipRequirement } from '../../requirements/chat-with-poll-membership.requirement';
 
 @Injectable()
 export class GetVoteResultsRequirement {

@@ -3,7 +3,7 @@ import { ChatUserRepository } from '../chat-users/services/chat-user.repository'
 import { ChatsRepository } from './chats.repository';
 import { ChatForView } from './view/chat-for-view';
 import { ChatEntityForViewMapper } from './mappers/entity-for-view/chat.entity-for-view.mapper';
-import { UserEntity } from 'src/users/entity/user.entity';
+import { UserEntity } from '../users/entity/user.entity';
 
 @Injectable()
 export class ChatsService {

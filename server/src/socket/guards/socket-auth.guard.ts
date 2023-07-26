@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Socket } from 'socket.io';
-import { UserEntity } from 'src/users/entity/user.entity';
 import { SocketAuthService } from '../services/socket-auth.service';
+import { UserEntity } from '../../users/entity/user.entity';
 
 export interface SocketWithUser extends Socket {
   user: UserEntity;
