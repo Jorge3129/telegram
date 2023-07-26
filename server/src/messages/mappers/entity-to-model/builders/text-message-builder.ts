@@ -10,8 +10,6 @@ import { BaseMessage, TextMessage } from '../../../models/message.type';
 
 @Injectable()
 export class TextMessageBuilder {
-  constructor() {}
-
   public build(
     baseMessage: BaseMessage,
     message: MessageEntity,
