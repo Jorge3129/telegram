@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PollVoteEntity } from 'src/polls/entity/poll-vote.entity';
 import { EntityManager } from 'typeorm';
+import { PollVoteEntity } from '../../entity/poll-vote.entity';
 
 @Injectable()
 export class UserHasVotedInPollQuery {

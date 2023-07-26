@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { SECRET_KEY } from 'src/config/constants';
-import { UserRepository } from 'src/users/user.repository';
+import { SECRET_KEY } from '../config/constants';
+import { UserRepository } from '../users/user.repository';
 
 @Injectable()
 export class AuthTokenService {

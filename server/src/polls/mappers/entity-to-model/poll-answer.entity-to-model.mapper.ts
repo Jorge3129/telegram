@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PollAnswerOptionEntity } from 'src/polls/entity/poll-answer-option.entity';
-import { PollAnswerOption } from 'src/polls/models/poll.model';
+import { PollAnswerOptionEntity } from '../../entity/poll-answer-option.entity';
+import { PollAnswerOption } from '../../models/poll.model';
 
 @Injectable()
 export class PollAnswerEntityToModelMapper {

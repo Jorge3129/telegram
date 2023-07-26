@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { UserEntity } from 'src/users/entity/user.entity';
 import { PollVoteEntity } from '../entity/poll-vote.entity';
 import { PollsQueryService } from '../poll-services/polls-query.service';
-import { AppEventEmitter } from 'src/shared/services/app-event-emitter.service';
 import { NewVoteEvent } from '../events/votes/new-vote.event';
 import { RetractVoteEvent } from '../events/votes/retract-vote.event';
 import { CreateVoteService } from './operations/create-vote.service';
 import { RetractVoteService } from './operations/retract-vote.service';
+import { AppEventEmitter } from '../../shared/services/app-event-emitter.service';
+import { UserEntity } from '../../users/entity/user.entity';
 
 @Injectable()
 export class VotesMutationService {

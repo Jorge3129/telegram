@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntityManager, FindOneOptions } from 'typeorm';
 import { PollEntity } from '../entity/poll.entity';
-import { MessageEntity } from 'src/messages/entity/message.entity';
-import { ChatEntity } from 'src/chats/entity/chat.entity';
+import { ChatEntity } from '../../chats/entity/chat.entity';
+import { MessageEntity } from '../../messages/entity/message.entity';
 
 @Injectable()
 export class PollsQueryService {

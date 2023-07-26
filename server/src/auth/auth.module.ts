@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UserEntity } from 'src/users/entity/user.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { ACCESS_TOKEN_EXPIRATION_TIME, SECRET_KEY } from 'src/config/constants';
-import { UserModule } from 'src/users/user.module';
 import { AuthTokenService } from './auth-token.service';
+import { SECRET_KEY, ACCESS_TOKEN_EXPIRATION_TIME } from '../config/constants';
+import { UserEntity } from '../users/entity/user.entity';
+import { UserModule } from '../users/user.module';
 
 @Module({
   imports: [

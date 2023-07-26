@@ -1,6 +1,6 @@
-import { User } from 'src/users/user.type';
+import { Poll } from '../../polls/models/poll.model';
+import { User } from '../../users/user.type';
 import { Media } from './media.type';
-import { Poll } from 'src/polls/models/poll.model';
 
 export interface BaseMessage {
   id: string;

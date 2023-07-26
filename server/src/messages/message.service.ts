@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Message } from './models/message.type';
 import { User } from '../users/user.type';
-import { UserEntity } from 'src/users/entity/user.entity';
 
 import { MessageMutationService } from './mutations/message-mutation.service';
 import { EditMessageDto } from './dto/edit-message.dto';
 import { CreateMessageDto } from './dto/create-message/create-message.dto';
+import { UserEntity } from '../users/entity/user.entity';
 
 @Injectable()
 export class MessageService {

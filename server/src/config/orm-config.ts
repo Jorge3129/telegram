@@ -2,7 +2,9 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 import { DataSourceOptions } from 'typeorm';
 
-dotenv.config();
+dotenv.config({
+  path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}.env`),
+});
 
 const migrationsPath = path.join(__dirname, '../migrations/*{.ts,.js}');
 const entitiesPath = path.join(__dirname, '../**/*.entity{.ts,.js}');

@@ -1,6 +1,4 @@
 import { Controller, Post, Body, Delete, Param, Patch } from '@nestjs/common';
-import { RequestUser } from 'src/users/decorators/user.decorator';
-import { UserEntity } from 'src/users/entity/user.entity';
 
 import { Message } from './models/message.type';
 import { MessageService } from './message.service';
@@ -18,6 +16,8 @@ import { CreateGifMessageDto } from './dto/create-message/create-gif-message.dto
 import { createMessageDtoExamples } from './dto/create-message/create-message.dto.examples';
 import { createMessageSchema } from './dto/create-message/create-message-schema';
 import { CreatePollMessageDto } from './dto/create-message/create-poll-message.dto';
+import { RequestUser } from '../users/decorators/user.decorator';
+import { UserEntity } from '../users/entity/user.entity';
 
 @ApiTags('Messages')
 @Controller('messages')

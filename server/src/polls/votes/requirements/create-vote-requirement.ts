@@ -9,9 +9,9 @@ import { RequirementValidator } from '../../../shared/services/requirements/requ
 import { RequirementConfig } from '../../../shared/services/requirements/requirement-config';
 import { PollEntity } from '../../entity/poll.entity';
 import * as _ from 'lodash';
-import { UserEntity } from 'src/users/entity/user.entity';
-import { ChatWithPollMembershipRequirement } from 'src/polls/requirements/chat-with-poll-membership.requirement';
 import { UserHasVotedInPollRequirement } from './user-has-voted-in-poll.requirement';
+import { ChatWithPollMembershipRequirement } from '../../requirements/chat-with-poll-membership.requirement';
+import { UserEntity } from '../../../users/entity/user.entity';
 
 @Injectable()
 export class CreateVoteRequirement {

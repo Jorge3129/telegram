@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PollAnswerOptionEntity } from 'src/polls/entity/poll-answer-option.entity';
-import { PollVoteEntity } from 'src/polls/entity/poll-vote.entity';
-import { UserEntity } from 'src/users/entity/user.entity';
+
 import { EntityManager, Repository, In } from 'typeorm';
 import { CreateVoteRequirement } from '../requirements/create-vote-requirement';
-import { PollEntity } from 'src/polls/entity/poll.entity';
+import { UserEntity } from '../../../users/entity/user.entity';
+import { PollAnswerOptionEntity } from '../../entity/poll-answer-option.entity';
+import { PollVoteEntity } from '../../entity/poll-vote.entity';
+import { PollEntity } from '../../entity/poll.entity';
 
 @Injectable()
 export class CreateVoteService {

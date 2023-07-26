@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { CreateMessageEventPayload } from 'src/messages/events/create-message.event';
-import { DeleteMessageEventPayload } from 'src/messages/events/delete-message.event';
-import { EditMessageEventPayload } from 'src/messages/events/edit-message.event';
-import { MessageEventType } from 'src/messages/events/message-event-type';
-import { ReadMessageEventPayload } from 'src/messages/events/read-message.event';
-import { UserService } from 'src/users/user.service';
 import { MessageNotificationPublisher } from './message-notification.publisher';
+import { CreateMessageEventPayload } from '../../../messages/events/create-message.event';
+import { DeleteMessageEventPayload } from '../../../messages/events/delete-message.event';
+import { EditMessageEventPayload } from '../../../messages/events/edit-message.event';
+import { MessageEventType } from '../../../messages/events/message-event-type';
+import { ReadMessageEventPayload } from '../../../messages/events/read-message.event';
+import { UserService } from '../../../users/user.service';
 
 @Injectable()
 export class SocketMessageAppEventHandler {

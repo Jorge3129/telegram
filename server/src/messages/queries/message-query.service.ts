@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ChatMembershipService } from 'src/chat-users/services/chat-membership.service';
-import { UserEntity } from 'src/users/entity/user.entity';
 import { MessageEntityToModelMapper } from '../mappers/entity-to-model/message-entity-to-model.mapper';
 import { Message } from '../models/message.type';
 import { MessageQueryRepository } from './message-query.repository';
+import { ChatMembershipService } from '../../chat-users/services/chat-membership.service';
+import { UserEntity } from '../../users/entity/user.entity';
 
 @Injectable()
 export class MessageQueryService {

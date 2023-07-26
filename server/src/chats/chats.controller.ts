@@ -1,11 +1,11 @@
 import { ChatsService } from './chats.service';
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
-import { Message } from 'src/messages/models/message.type';
-import { RequestUser } from 'src/users/decorators/user.decorator';
-import { UserEntity } from 'src/users/entity/user.entity';
-import { MessageQueryService } from 'src/messages/queries/message-query.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ChatForView } from './view/chat-for-view';
+import { Message } from '../messages/models/message.type';
+import { MessageQueryService } from '../messages/queries/message-query.service';
+import { RequestUser } from '../users/decorators/user.decorator';
+import { UserEntity } from '../users/entity/user.entity';
 
 @ApiTags('Chats')
 @Controller('chats')

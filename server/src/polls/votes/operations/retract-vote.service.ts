@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { PollVoteEntity } from 'src/polls/entity/poll-vote.entity';
-import { UserEntity } from 'src/users/entity/user.entity';
 import { EntityManager } from 'typeorm';
-import { PollEntity } from 'src/polls/entity/poll.entity';
+
 import { RetractVoteRequirement } from '../requirements/retract-vote-requirement';
+import { UserEntity } from '../../../users/entity/user.entity';
+import { PollVoteEntity } from '../../entity/poll-vote.entity';
+import { PollEntity } from '../../entity/poll.entity';
 
 @Injectable()
 export class RetractVoteService {

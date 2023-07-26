@@ -9,8 +9,8 @@ import {
   isPollContent,
 } from '../../entity/message-content/message-content.type-guards';
 import { PollMessageBuilder } from './builders/poll-message.builder';
-import { UserEntity } from 'src/users/entity/user.entity';
 import { BaseMessageBuilder } from './builders/base-message.builder';
+import { UserEntity } from '../../../users/entity/user.entity';
 
 @Injectable()
 export class MessageEntityToModelMapper {

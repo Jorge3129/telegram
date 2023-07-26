@@ -7,9 +7,9 @@ import {
   PollAnswerOptionWithUsers,
 } from './queries/get-poll-vote-users.query';
 import { GetVoteResultsRequirement } from './requirements/get-vote-results.requirement';
-import { UserEntity } from 'src/users/entity/user.entity';
 import { PollsQueryService } from '../poll-services/polls-query.service';
 import { GetVotePercentagesRequirement } from './requirements/get-vote-percentages.requirement';
+import { UserEntity } from '../../users/entity/user.entity';
 
 @Injectable()
 export class VotesQueryService {

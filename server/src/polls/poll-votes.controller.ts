@@ -11,11 +11,11 @@ import {
 import { VotesMutationService } from './votes/votes-mutation.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateVotesDto } from './dto/create-votes/create-votes.dto';
-import { RequestUser } from 'src/users/decorators/user.decorator';
-import { UserEntity } from 'src/users/entity/user.entity';
 import { VotesQueryService } from './votes/votes-query.service';
 import { PollVotesPercentage } from './models/poll-votes-percentage.model';
 import { PollAnswerOptionWithUsers } from './votes/queries/get-poll-vote-users.query';
+import { RequestUser } from '../users/decorators/user.decorator';
+import { UserEntity } from '../users/entity/user.entity';
 
 @ApiTags('Polls')
 @Controller('polls')

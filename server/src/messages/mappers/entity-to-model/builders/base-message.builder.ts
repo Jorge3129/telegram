@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { MessageEntity } from 'src/messages/entity/message.entity';
-import { BaseMessage } from 'src/messages/models/message.type';
 import { MessageMappingHelper } from '../message-mapping.helper';
-import { UserEntity } from 'src/users/entity/user.entity';
+import { MessageEntity } from '../../../entity/message.entity';
+import { UserEntity } from '../../../../users/entity/user.entity';
+import { BaseMessage } from '../../../models/message.type';
 
 @Injectable()
 export class BaseMessageBuilder {

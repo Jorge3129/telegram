@@ -1,6 +1,6 @@
-import { AppEvent } from 'src/shared/services/app-event-emitter.service';
+import { AppEvent } from '../../../shared/services/app-event-emitter.service';
+import { UserEntity } from '../../../users/entity/user.entity';
 import { VoteEventType } from './vote-event-type';
-import { UserEntity } from 'src/users/entity/user.entity';
 
 export type RetractVoteEventPayload = {
   pollId: string;

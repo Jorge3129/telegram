@@ -1,7 +1,7 @@
-import { AppEvent } from 'src/shared/services/app-event-emitter.service';
+import { AppEvent } from '../../../shared/services/app-event-emitter.service';
+import { UserEntity } from '../../../users/entity/user.entity';
+import { PollEntity } from '../../entity/poll.entity';
 import { VoteEventType } from './vote-event-type';
-import { PollEntity } from 'src/polls/entity/poll.entity';
-import { UserEntity } from 'src/users/entity/user.entity';
 
 export type NewVoteEventPayload = {
   poll: PollEntity;

@@ -1,4 +1,4 @@
-import { Message } from 'src/messages/models/message.type';
+import { Message } from '../../messages/models/message.type';
 
 export enum MessageSocketEvents {
   NEW = 'message.new',

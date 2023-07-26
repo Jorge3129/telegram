@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGifMessageDto } from 'src/messages/dto/create-message/create-gif-message.dto';
-import { GifContentEntity } from 'src/messages/entity/message-content/message-content.entity';
+import { CreateGifMessageDto } from '../../../dto/create-message/create-gif-message.dto';
+import { GifContentEntity } from '../../../entity/message-content/message-content.entity';
 
 @Injectable()
 export class GifMessageContentBuilder {

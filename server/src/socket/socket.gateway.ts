@@ -4,14 +4,14 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { ChatUserRepository } from 'src/chat-users/services/chat-user.repository';
-import { UserService } from 'src/users/user.service';
 import { Server, Socket } from 'socket.io';
 import { CatchError } from './decorators/catch-error.decorator';
 import { SocketAuthGuard, SocketWithUser } from './guards/socket-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { SocketAuthService } from './services/socket-auth.service';
 import { OnlineStatusSocketEvents } from './dtos/online-status-events';
+import { ChatUserRepository } from '../chat-users/services/chat-user.repository';
+import { UserService } from '../users/user.service';
 
 @WebSocketGateway(8000, { cors: true })
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
