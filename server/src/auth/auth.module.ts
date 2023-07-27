@@ -7,6 +7,7 @@ import { AuthTokenService } from './auth-token.service';
 import { SECRET_KEY, ACCESS_TOKEN_EXPIRATION_TIME } from '../config/constants';
 import { UserEntity } from '../users/entity/user.entity';
 import { UserModule } from '../users/user.module';
+import { AuthGuard } from './auth.guard';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { UserModule } from '../users/user.module';
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthTokenService],
-  exports: [AuthTokenService],
+  providers: [AuthService, AuthTokenService, AuthGuard],
+  exports: [AuthTokenService, AuthGuard],
 })
 export class AuthModule {}

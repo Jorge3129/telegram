@@ -46,7 +46,7 @@ export class ChatEntityForViewMapper {
       unread: unreadCount,
       muted: !!currentChatUser?.muted,
       type: chat.type,
-      online: !!otherMember.user.socketId,
+      online: !!otherMember?.user?.socketId,
     };
   }
 
@@ -59,11 +59,14 @@ export class ChatEntityForViewMapper {
     );
   }
 
-  private getChatTitle(chat: ChatEntity, otherMember: ChatUserEntity): string {
+  private getChatTitle(
+    chat: ChatEntity,
+    otherMember: ChatUserEntity | null,
+  ): string {
     if (isGroupChat(chat) || isChannel(chat)) {
       return chat.title;
     }
 
-    return otherMember.user.username;
+    return otherMember?.user?.username ?? '';
   }
 }
