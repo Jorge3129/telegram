@@ -39,13 +39,13 @@ export class ChatUserRepository {
   public async getOtherChatMember(
     chatId: number,
     currentUserId: number,
-  ): Promise<ChatUserEntity> {
+  ): Promise<ChatUserEntity | null> {
     const otherMember = await this.chatUserRepo
       .createQueryBuilder('chat_user')
       .leftJoinAndSelect('chat_user.user', 'u')
       .where('chat_user."chatId" = :chatId', { chatId })
       .andWhere('chat_user."userId" != :currentUserId', { currentUserId })
-      .getOneOrFail();
+      .getOne();
 
     return otherMember;
   }
