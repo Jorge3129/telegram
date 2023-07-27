@@ -38,7 +38,7 @@ import { PollsModule } from './polls/polls.module';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
+      useExisting: AuthGuard,
     },
   ],
 })
