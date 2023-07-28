@@ -13,7 +13,9 @@ import { OnlineStatusSocketEvents } from './dtos/online-status-events';
 import { ChatUserRepository } from '../chat-users/services/chat-user.repository';
 import { UserService } from '../users/user.service';
 
-@WebSocketGateway(8000, { cors: true })
+const wsPort = Number(process.env.WS_PORT);
+
+@WebSocketGateway(wsPort, { cors: true })
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   public readonly server: Server;
