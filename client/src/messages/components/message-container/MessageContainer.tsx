@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useRef } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef } from "react";
 import { Message } from "../../models/message.model";
 import { isOwnMessage } from "../../../utils/is-own-message";
 import { useSelector } from "react-redux";
@@ -20,6 +20,7 @@ interface Props {
   nextMessage: Message | undefined;
   currentChat: Chat;
   scroll$: Observable<MessageScrollEvent>;
+  observer: IntersectionObserver | null;
   emitMessageRead: (message: Message) => void;
 }
 
@@ -28,12 +29,25 @@ const MessageContainer: FC<Props> = ({
   nextMessage,
   currentChat,
   scroll$,
+  observer,
   emitMessageRead,
 }) => {
   const { user } = useSelector(selectUser);
   const isSelf = isOwnMessage(message, user);
 
   const messageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const messageElement = messageRef.current;
+
+    if (!observer || !messageElement) {
+      return;
+    }
+
+    observer.observe(messageRef.current);
+
+    return () => observer.unobserve(messageElement);
+  }, [observer]);
 
   useScrollToFirstUnreadMessage(currentChat, message, messageRef);
 
@@ -64,7 +78,7 @@ const MessageContainer: FC<Props> = ({
     <div
       ref={messageRef}
       className={"message_container" + classIf(isSelf, "own_message_container")}
-      id={"message-" + message.id}
+      data-message-id={message.id}
     >
       <MessageAvatar
         data={{

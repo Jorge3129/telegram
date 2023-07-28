@@ -1,35 +1,14 @@
 import { FC } from "react";
 import "./ChatLastMessage.scss";
-import {
-  Message,
-  isGifMessage,
-  isPollMessage,
-} from "../../../messages/models/message.model";
+import { Message } from "../../../messages/models/message.model";
 import LastMessageAuthor from "../../../ui/chats/LastMessageAuthor";
 import { ChatType } from "../../models/chat.model";
+import { getMessageText } from "../../../messages/utils/get-message-text";
 
 interface Props {
   lastMessage: Message;
   chatType: ChatType;
 }
-
-const getLastMessageText = (message: Message): string => {
-  if (isPollMessage(message)) {
-    return `*Poll* ${message.poll.question}`;
-  }
-
-  if (isGifMessage(message)) {
-    return `*Gif*`;
-  }
-
-  const bits = [message.text];
-
-  if (message.media.length) {
-    bits.unshift(`*Media*`);
-  }
-
-  return bits.join(" ");
-};
 
 const ChatLastMessage: FC<Props> = ({ lastMessage, chatType }) => {
   return (
@@ -39,7 +18,7 @@ const ChatLastMessage: FC<Props> = ({ lastMessage, chatType }) => {
       </span>
 
       <span className="chat_last_message_text">
-        {getLastMessageText(lastMessage)}
+        {getMessageText(lastMessage)}
       </span>
     </div>
   );
