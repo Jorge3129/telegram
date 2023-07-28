@@ -1,3 +1,4 @@
+import ormConfig from './config/orm-config';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './users/user.module';
@@ -6,7 +7,6 @@ import { MessagesModule } from './messages/messages.module';
 import { ChatUsersModule } from './chat-users/chat-users.module';
 import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
-import ormConfig from './config/orm-config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { SocketModule } from './socket/socket.module';

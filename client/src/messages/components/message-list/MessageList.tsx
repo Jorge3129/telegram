@@ -1,4 +1,4 @@
-import { FC, UIEvent, useMemo, useRef } from "react";
+import { FC, UIEvent, useEffect, useMemo, useRef, useState } from "react";
 import "./MessageList.scss";
 import { useSelector } from "react-redux";
 import { Chat } from "../../../chats/models/chat.model";
@@ -11,6 +11,8 @@ import { isNotNullable } from "../../../shared/utils/is-not-null";
 import { MeasurableElement } from "../../utils/measurable-element";
 import { useEmitFirstMessagesView } from "../../hooks/use-emit-first-messages-view";
 import { useMessageReadsQueue } from "../../hooks/use-message-reads-queue";
+import _ from "lodash";
+import { getMessageText } from "../../utils/get-message-text";
 
 interface Props {
   currentChat: Chat;
@@ -25,8 +27,47 @@ export type MessageScrollEvent = {
 
 const MessageList: FC<Props> = ({ currentChat }) => {
   const { messages, loading } = useSelector(selectMessages);
-
+  const [observer, setObserver] = useState<IntersectionObserver | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const containerRef = listRef.current;
+
+    if (!containerRef || loading) {
+      return;
+    }
+
+    const messagesMap = _.keyBy(messages, "id");
+
+    const newObserver = new IntersectionObserver(
+      (entries) => {
+        const readMessages = entries
+          .filter((entry) => entry.isIntersecting)
+          .map((entry) => {
+            const messageId = entry.target.getAttribute("data-message-id");
+
+            if (!messageId) {
+              return null;
+            }
+
+            return messagesMap[messageId];
+          })
+          .filter(isNotNullable)
+          .map((m) => getMessageText(m));
+
+        console.log(readMessages);
+      },
+      {
+        root: containerRef,
+        threshold: [0.8],
+      }
+    );
+
+    setObserver(newObserver);
+
+    return () => newObserver.disconnect();
+  }, [wrapperRef, loading, messages]);
 
   const { scroll$, emitScrollEvent } = useScrollSubject<MessageScrollEvent>();
 
@@ -50,6 +91,7 @@ const MessageList: FC<Props> = ({ currentChat }) => {
     <div ref={wrapperRef} className="message_list_scroll_wrapper">
       <div
         className={"message_list"}
+        ref={listRef}
         onScroll={(e) =>
           emitScrollEvent({
             event: e,
@@ -64,6 +106,7 @@ const MessageList: FC<Props> = ({ currentChat }) => {
             nextMessage={messages.at(i + 1)}
             currentChat={currentChat}
             scroll$={mappedScroll$}
+            observer={observer}
             emitMessageRead={emitMessageRead}
           />
         ))}
