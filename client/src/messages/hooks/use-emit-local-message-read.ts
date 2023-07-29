@@ -23,22 +23,27 @@ export const useEmitLocalMessageRead = () => {
         return;
       }
 
+      // TODO optimize this
       dispatch(
         MessageActions.updateReadsByCurrentUser({
           message,
         })
       );
 
-      const index = messages.findIndex((m) => m.id === message.id);
+      const latestReadMessageIndex = messages.findIndex(
+        (m) => m.id === message.id
+      );
+
+      const unreadMessagesCount = messages.length - latestReadMessageIndex - 1;
 
       dispatch(
         ChatActions.setUnread({
-          unread: messages.slice(index + 1).length,
+          unread: unreadMessagesCount,
           chatId: currentChat.id,
         })
       );
     },
-    [currentChat, dispatch, messages]
+    [currentChat, dispatch, messages.length]
   );
 
   return emitReadEvent;
