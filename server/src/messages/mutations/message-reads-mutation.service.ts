@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { MessageReadEntity } from '../entity/message-read.entity';
 import { MessageEntity } from '../entity/message.entity';
+import { AppLoggerService } from '../../logging/app-logger.service';
 
 @Injectable()
 export class MessageReadsMutationService {
-  constructor(private em: EntityManager) {}
+  constructor(private em: EntityManager, private logger: AppLoggerService) {
+    this.logger.setContext(MessageReadsMutationService.name);
+  }
 
   public async updateSeen(
     readByUserId: number,
@@ -33,7 +36,7 @@ export class MessageReadsMutationService {
 
       const messagesToUpdate = await qb.getRawMany<{ messageId: string }>();
 
-      console.log(messagesToUpdate.map((m) => m.messageId));
+      this.logger.debug(messagesToUpdate.map((m) => m.messageId));
 
       const values = messagesToUpdate.map(
         ({ messageId }): Partial<MessageReadEntity> => ({
@@ -43,7 +46,7 @@ export class MessageReadsMutationService {
       );
 
       await tx.save(MessageReadEntity, values).catch((e) => {
-        console.log(e.message);
+        this.logger.error(e.message);
       });
     });
   }

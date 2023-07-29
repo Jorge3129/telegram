@@ -14,6 +14,7 @@ import { UploadsModule } from './uploads/uploads.module';
 import { SharedModule } from './shared/shared.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PollsModule } from './polls/polls.module';
+import { LoggingModule } from './logging/logging.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { PollsModule } from './polls/polls.module';
     UploadsModule,
     SharedModule,
     PollsModule,
+    LoggingModule,
   ],
   providers: [
     {

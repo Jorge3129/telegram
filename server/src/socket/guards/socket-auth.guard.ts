@@ -2,6 +2,7 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Socket } from 'socket.io';
 import { SocketAuthService } from '../services/socket-auth.service';
 import { UserEntity } from '../../users/entity/user.entity';
+import { AppLoggerService } from '../../logging/app-logger.service';
 
 export interface SocketWithUser extends Socket {
   user: UserEntity;
@@ -9,7 +10,12 @@ export interface SocketWithUser extends Socket {
 
 @Injectable()
 export class SocketAuthGuard implements CanActivate {
-  constructor(private socketAuthService: SocketAuthService) {}
+  constructor(
+    private socketAuthService: SocketAuthService,
+    private logger: AppLoggerService,
+  ) {
+    this.logger.setContext(SocketAuthGuard.name);
+  }
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const client = context.switchToWs().getClient<SocketWithUser>();
@@ -21,7 +27,7 @@ export class SocketAuthGuard implements CanActivate {
 
       return true;
     } catch (e) {
-      console.log(e);
+      this.logger.error(e);
 
       return false;
     }
