@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { Message } from "../../models/message.model";
 import { isOwnMessage } from "../../../utils/is-own-message";
 import { useSelector } from "react-redux";
@@ -8,29 +8,20 @@ import { classIf } from "../../../utils/class-if";
 import "./MessageContainer.scss";
 import MessageAvatar from "../group-message-avatar/GroupMessageAvatar";
 import MessageComponent from "../message-component/MessageComponent";
-import { Observable, filter, tap } from "rxjs";
-import { MessageScrollEvent } from "../message-list/MessageList";
-import { useSubscribeObservable } from "../../../shared/hooks/use-subscribe-observable";
-import { isMessageVisible } from "../../utils/is-message-visible";
 import { useScrollToFirstUnreadMessage } from "../../hooks/use-scroll-to-first-unread-message";
-import { useEmitLocalMessageRead } from "../../hooks/use-emit-local-message-read";
 
 interface Props {
   message: Message;
   nextMessage: Message | undefined;
   currentChat: Chat;
-  scroll$: Observable<MessageScrollEvent>;
   observer: IntersectionObserver | null;
-  emitMessageRead: (message: Message) => void;
 }
 
 const MessageContainer: FC<Props> = ({
   message,
   nextMessage,
   currentChat,
-  scroll$,
   observer,
-  emitMessageRead,
 }) => {
   const { user } = useSelector(selectUser);
   const isSelf = isOwnMessage(message, user);
@@ -44,35 +35,16 @@ const MessageContainer: FC<Props> = ({
       return;
     }
 
+    if (message.isReadByCurrentUser || message.isCurrentUserAuthor) {
+      return;
+    }
+
     observer.observe(messageRef.current);
 
     return () => observer.unobserve(messageElement);
-  }, [observer]);
+  }, [observer, message.isReadByCurrentUser, message.isCurrentUserAuthor]);
 
   useScrollToFirstUnreadMessage(currentChat, message, messageRef);
-
-  const emitLocalReadEvent = useEmitLocalMessageRead();
-
-  const scrollForUnread$ = useMemo(() => {
-    return scroll$.pipe(
-      filter(
-        () => !message.isReadByCurrentUser && !message.isCurrentUserAuthor
-      ),
-      filter(
-        (event) =>
-          !!messageRef.current &&
-          isMessageVisible(messageRef.current, event.container)
-      ),
-      tap()
-    );
-  }, [scroll$, message]);
-
-  const handleScroll = useCallback(() => {
-    emitMessageRead(message);
-    emitLocalReadEvent(message);
-  }, [message, emitLocalReadEvent, emitMessageRead]);
-
-  useSubscribeObservable(scrollForUnread$, handleScroll);
 
   return (
     <div

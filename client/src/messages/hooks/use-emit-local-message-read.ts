@@ -38,7 +38,7 @@ export const useEmitLocalMessageRead = () => {
         })
       );
     },
-    [currentChat, dispatch, messages]
+    [currentChat, dispatch, messages.length]
   );
 
   return emitReadEvent;
