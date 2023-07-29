@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from "react";
+import { FC, useRef } from "react";
 import { Message } from "../../models/message.model";
 import { isOwnMessage } from "../../../utils/is-own-message";
 import { useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import "./MessageContainer.scss";
 import MessageAvatar from "../group-message-avatar/GroupMessageAvatar";
 import MessageComponent from "../message-component/MessageComponent";
 import { useScrollToFirstUnreadMessage } from "../../hooks/use-scroll-to-first-unread-message";
+import { useObserveMessageVisibility } from "../../hooks/use-observe-message-visibility";
 
 interface Props {
   message: Message;
@@ -28,22 +29,7 @@ const MessageContainer: FC<Props> = ({
 
   const messageRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const messageElement = messageRef.current;
-
-    if (!observer || !messageElement) {
-      return;
-    }
-
-    if (message.isReadByCurrentUser || message.isCurrentUserAuthor) {
-      return;
-    }
-
-    observer.observe(messageRef.current);
-
-    return () => observer.unobserve(messageElement);
-  }, [observer, message.isReadByCurrentUser, message.isCurrentUserAuthor]);
-
+  useObserveMessageVisibility(observer, message, messageRef);
   useScrollToFirstUnreadMessage(currentChat, message, messageRef);
 
   return (
