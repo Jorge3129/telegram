@@ -6,16 +6,16 @@ import {
 import { ChatForView } from '../../../../src/chats/view/chat-for-view';
 import { UserEntity } from '../../../../src/users/entity/user.entity';
 import { AppTestingModule } from '../../app-testing-module/app-testing-module';
-import * as superTestRequest from 'supertest';
 import { TestRequest, toTestRequest } from '../../test-request/test-request';
+import { BaseTestClient } from '../base-test-client';
 
-export class ChatsTestClient {
-  constructor(private readonly testingModule: AppTestingModule) {}
+export class ChatsTestClient extends BaseTestClient {
+  constructor(protected readonly testingModule: AppTestingModule) {
+    super();
+  }
 
   public getUserChats(): TestRequest<ChatForView[]> {
-    const req = superTestRequest(this.testingModule.app.getHttpServer()).get(
-      '/chats',
-    );
+    const req = this.request().get('/chats');
 
     return toTestRequest(req);
   }

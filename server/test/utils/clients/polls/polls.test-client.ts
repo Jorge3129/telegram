@@ -1,24 +1,16 @@
 import { AppTestingModule } from '../../app-testing-module/app-testing-module';
-import * as superTestRequest from 'supertest';
 import { CreatePollMessageDto } from '../../../../src/messages/dto/create-message/create-poll-message.dto';
 import { TestRequest, toTestRequest } from '../../test-request/test-request';
 import { CreatePollDto } from '../../../../src/polls/dto/create-poll/create-poll.dto';
 import { PollMessage } from '../../../../src/messages/models/message.type';
 import { CreateVotesDto } from '../../../../src/polls/dto/create-votes/create-votes.dto';
 import { PollVoteEntity } from '../../../../src/polls/entity/poll-vote.entity';
+import { BaseTestClient } from '../base-test-client';
 
-export class PollsTestClient {
-  constructor(private readonly testingModule: AppTestingModule) {}
-
-  private get httpServer() {
-    return this.testingModule.app.getHttpServer();
+export class PollsTestClient extends BaseTestClient {
+  constructor(protected readonly testingModule: AppTestingModule) {
+    super();
   }
-
-  // public async getUserChats(): Promise<ChatForView[]> {
-  //   const { body: fetchedChats } = await request(this.httpServer).get('/chats');
-
-  //   return fetchedChats;
-  // }
 
   public vote(
     pollId: string,
@@ -28,9 +20,7 @@ export class PollsTestClient {
       chosenAnswerOptions: selectedOptionIds,
     };
 
-    const res = superTestRequest(this.httpServer)
-      .post(`/polls/${pollId}/votes`)
-      .send(body);
+    const res = this.request().post(`/polls/${pollId}/votes`).send(body);
 
     return toTestRequest(res);
   }
@@ -45,9 +35,7 @@ export class PollsTestClient {
       poll: pollDto,
     };
 
-    const res = superTestRequest(this.httpServer)
-      .post('/messages')
-      .send(pollMessageDto);
+    const res = this.request().post('/messages').send(pollMessageDto);
 
     return toTestRequest(res);
   }
