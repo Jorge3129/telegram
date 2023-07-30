@@ -32,7 +32,7 @@ describe('ChatsController', () => {
 
     await chatsClient.seedGroupChat('Bloto', currentUser);
 
-    const fetchedChats = await chatsClient.getUserChats();
+    const fetchedChats = await chatsClient.getUserChats().expect(200).getBody();
 
     expect(fetchedChats).toMatchObject([
       <ChatForView>{

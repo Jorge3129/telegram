@@ -4,6 +4,7 @@ import { AppModule } from '../../../src/app.module';
 import { AppTestingModule } from './app-testing-module';
 import { MockAuthGuard } from '../mocks/mock-auth.guard';
 import { AuthGuard } from '../../../src/auth/auth.guard';
+import { AppEventEmitter } from '../../../src/shared/services/app-event-emitter.service';
 
 export class AppTestingModuleFactory {
   public async create(): Promise<AppTestingModule> {
@@ -14,6 +15,10 @@ export class AppTestingModuleFactory {
     const module = await moduleBuilder
       .overrideProvider(AuthGuard)
       .useClass(MockAuthGuard)
+      .overrideProvider(AppEventEmitter)
+      .useValue({
+        emit: jest.fn(),
+      })
       .compile();
 
     const app = module.createNestApplication();
