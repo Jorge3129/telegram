@@ -6,18 +6,18 @@ import {
 import { ChatForView } from '../../../../src/chats/view/chat-for-view';
 import { UserEntity } from '../../../../src/users/entity/user.entity';
 import { AppTestingModule } from '../../app-testing-module/app-testing-module';
-import * as request from 'supertest';
-import { TypedResponse } from '../../models/typed-response';
+import * as superTestRequest from 'supertest';
+import { TestRequest, toTestRequest } from '../../test-request/test-request';
 
 export class ChatsTestClient {
   constructor(private readonly testingModule: AppTestingModule) {}
 
-  public async getUserChats(): Promise<TypedResponse<ChatForView[]>> {
-    const res = await request(this.testingModule.app.getHttpServer()).get(
+  public getUserChats(): TestRequest<ChatForView[]> {
+    const req = superTestRequest(this.testingModule.app.getHttpServer()).get(
       '/chats',
     );
 
-    return res;
+    return toTestRequest(req);
   }
 
   public async seedGroupChat(
