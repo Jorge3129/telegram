@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsString, Length } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class CreatePollAnswerOptionDto {
   @IsString()
@@ -8,7 +14,8 @@ export class CreatePollAnswerOptionDto {
   @Length(1, 100)
   text: string;
 
+  @IsOptional()
   @IsBoolean()
   @ApiProperty({ example: false })
-  isCorrectOption: boolean;
+  isCorrectOption?: boolean;
 }
