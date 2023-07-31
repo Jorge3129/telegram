@@ -6,6 +6,7 @@ import { PollMessage } from '../../../../src/messages/models/message.type';
 import { CreateVotesDto } from '../../../../src/polls/dto/create-votes/create-votes.dto';
 import { PollVoteEntity } from '../../../../src/polls/entity/poll-vote.entity';
 import { BaseTestClient } from '../base-test-client';
+import { MakePartial } from '../../types/make-partial.type';
 
 export class PollsTestClient extends BaseTestClient {
   constructor(protected readonly testingModule: AppTestingModule) {
@@ -27,12 +28,26 @@ export class PollsTestClient extends BaseTestClient {
 
   public createPollMessage(
     chatId: number,
-    pollDto: CreatePollDto,
+    pollDto: MakePartial<
+      CreatePollDto,
+      'isAnonymous' | 'isMultipleChoice' | 'isQuiz'
+    >,
   ): TestRequest<PollMessage> {
+    const {
+      isAnonymous = false,
+      isMultipleChoice = false,
+      isQuiz = false,
+    } = pollDto;
+
     const pollMessageDto: CreatePollMessageDto = {
       type: 'poll',
       chatId,
-      poll: pollDto,
+      poll: {
+        ...pollDto,
+        isAnonymous,
+        isMultipleChoice,
+        isQuiz,
+      },
     };
 
     const res = this.request().post('/messages').send(pollMessageDto);

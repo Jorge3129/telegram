@@ -22,7 +22,7 @@ export class ChatsTestClient extends BaseTestClient {
 
   public async seedGroupChat(
     title: string,
-    user: UserEntity,
+    users: UserEntity[],
   ): Promise<GroupChatEntity> {
     const em = this.testingModule.getEntityManager();
 
@@ -34,11 +34,13 @@ export class ChatsTestClient extends BaseTestClient {
     );
 
     await em.save(
-      em.create(ChatUserEntity, {
-        chat: groupChat,
-        user: user,
-        muted: false,
-      }),
+      users.map((user) =>
+        em.create(ChatUserEntity, {
+          chat: groupChat,
+          user: user,
+          muted: false,
+        }),
+      ),
     );
 
     return groupChat;
