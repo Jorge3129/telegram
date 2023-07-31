@@ -6,58 +6,45 @@ import { ChatsTestClient } from '../../utils/clients/chats/chats.test-client';
 import { PollsTestClient } from '../../utils/clients/polls/polls.test-client';
 import { mockAuthService } from '../../utils/mocks/mock-auth.service';
 import { PollVoteEntity } from '../../../src/polls/entity/poll-vote.entity';
+import { UserTestClient } from '../../utils/clients/user/user.test-client';
+import { runWithOtherUser } from '../../utils/helpers/run-with-other-user';
 
 describe('PollVotesController - create votes', () => {
   let testingModule: AppTestingModule;
   let chatsClient: ChatsTestClient;
   let pollsClient: PollsTestClient;
+  let userClient: UserTestClient;
+  let currentUser: UserEntity;
 
   beforeAll(async () => {
     testingModule = await testingModuleFactory.create();
     chatsClient = new ChatsTestClient(testingModule);
     pollsClient = new PollsTestClient(testingModule);
+    userClient = new UserTestClient(testingModule);
   });
 
   afterAll(async () => {
     await testingModule.close();
   });
 
-  it('should vote in a poll', async () => {
-    const em = testingModule.getEntityManager();
-
-    const currentUser = await em.save(
-      em.create(UserEntity, {
-        username: 'foo',
-        password: 'bar',
-      }),
-    );
+  beforeEach(async () => {
+    currentUser = await userClient.seedUser('foo');
 
     await mockAuthService.login(currentUser.id);
+  });
 
-    const groupChat = await chatsClient.seedGroupChat('Bloto', currentUser);
+  it('should successfully vote in a poll', async () => {
+    const groupChat = await chatsClient.seedGroupChat('Bloto', [currentUser]);
 
     const pollMessage = await pollsClient
       .createPollMessage(groupChat.id, {
         question: 'Are you happy?',
-        isAnonymous: true,
-        isMultipleChoice: false,
-        isQuiz: false,
-        answerOptions: [
-          { text: 'Absolutely', isCorrectOption: false },
-          { text: 'No way :(', isCorrectOption: false },
-        ],
+        answerOptions: [{ text: 'Absolutely' }, { text: 'No way :(' }],
       })
-      .expect(HttpStatus.CREATED)
       .getBody();
 
     const createdPoll = pollMessage.poll;
     const answerOptions = createdPoll.answerOptions;
-
-    expect(createdPoll.answerOptions).toMatchObject([
-      { text: 'Absolutely' },
-      { text: 'No way :(' },
-    ]);
-
     const selectedAnswerOption = answerOptions[0];
 
     const createdVotes = await pollsClient
@@ -71,5 +58,36 @@ describe('PollVotesController - create votes', () => {
         answerOptionId: selectedAnswerOption.id,
       },
     ]);
+  });
+
+  it('should not be able to vote in a poll without being in the chat', async () => {
+    const pollAuthorUser = await userClient.seedUser('poll-author');
+
+    const groupChat = await chatsClient.seedGroupChat('Bloto', [
+      pollAuthorUser,
+    ]);
+
+    const createdPoll = await runWithOtherUser(pollAuthorUser.id, async () => {
+      const pollMessage = await pollsClient
+        .createPollMessage(groupChat.id, {
+          question: 'Are you happy?',
+          answerOptions: [{ text: 'Absolutely' }, { text: 'No way :(' }],
+        })
+        .getBody();
+
+      return pollMessage.poll;
+    });
+
+    const answerOptions = createdPoll.answerOptions;
+    const selectedAnswerOption = answerOptions[0];
+
+    const createdVotes = await pollsClient
+      .vote(createdPoll.id, [selectedAnswerOption.id])
+      .expect(HttpStatus.FORBIDDEN)
+      .getBody();
+
+    expect(createdVotes).toMatchObject({
+      message: 'User is not member of any chat with this poll',
+    });
   });
 });
