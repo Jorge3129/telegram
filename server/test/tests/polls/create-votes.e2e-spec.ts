@@ -8,6 +8,7 @@ import { mockAuthService } from '../../utils/mocks/mock-auth.service';
 import { PollVoteEntity } from '../../../src/polls/entity/poll-vote.entity';
 import { UserTestClient } from '../../utils/clients/user/user.test-client';
 import { runWithOtherUser } from '../../utils/helpers/run-with-other-user';
+import { pickPollOptionIds } from '../../utils/clients/polls/pick-poll-options';
 
 describe('PollVotesController - create votes', () => {
   let testingModule: AppTestingModule;
@@ -33,7 +34,61 @@ describe('PollVotesController - create votes', () => {
     await mockAuthService.login(currentUser.id);
   });
 
-  it('should successfully vote in a poll', async () => {
+  it('should successfully vote in a poll with multiple choice', async () => {
+    const groupChat = await chatsClient.seedGroupChat('Bloto', [currentUser]);
+
+    const pollMessage = await pollsClient
+      .createPollMessage(groupChat.id, {
+        question: 'Are you happy?',
+        isMultipleChoice: true,
+        answerOptions: [{ text: 'Absolutely' }, { text: 'No way :(' }],
+      })
+      .getBody();
+
+    const createdPoll = pollMessage.poll;
+    const selectedAnswerOptionIds = pickPollOptionIds(createdPoll, [0, 1]);
+
+    const createdVotes = await pollsClient
+      .vote(createdPoll.id, selectedAnswerOptionIds)
+      .expect(HttpStatus.CREATED)
+      .getBody();
+
+    expect(createdVotes).toMatchObject(
+      selectedAnswerOptionIds.map(
+        (optionId) =>
+          <PollVoteEntity>{
+            userId: currentUser.id,
+            answerOptionId: optionId,
+          },
+      ),
+    );
+  });
+
+  it('should fail to choose multiple options in a poll with single choice', async () => {
+    const groupChat = await chatsClient.seedGroupChat('Bloto', [currentUser]);
+
+    const pollMessage = await pollsClient
+      .createPollMessage(groupChat.id, {
+        question: 'Are you happy?',
+        isMultipleChoice: false,
+        answerOptions: [{ text: 'Absolutely' }, { text: 'No way :(' }],
+      })
+      .getBody();
+
+    const createdPoll = pollMessage.poll;
+    const selectedAnswerOptionIds = pickPollOptionIds(createdPoll, [0, 1]);
+
+    const errorBody = await pollsClient
+      .vote(createdPoll.id, selectedAnswerOptionIds)
+      .expect(HttpStatus.BAD_REQUEST)
+      .getBody();
+
+    expect(errorBody).toMatchObject({
+      message: 'Cannot choose multiple options',
+    });
+  });
+
+  it('should fail to vote in a poll twice', async () => {
     const groupChat = await chatsClient.seedGroupChat('Bloto', [currentUser]);
 
     const pollMessage = await pollsClient
@@ -44,23 +99,23 @@ describe('PollVotesController - create votes', () => {
       .getBody();
 
     const createdPoll = pollMessage.poll;
-    const answerOptions = createdPoll.answerOptions;
-    const selectedAnswerOption = answerOptions[0];
+    const selectedAnswerOption = createdPoll.answerOptions[0];
 
-    const createdVotes = await pollsClient
+    await pollsClient
       .vote(createdPoll.id, [selectedAnswerOption.id])
-      .expect(HttpStatus.CREATED)
+      .expect(HttpStatus.CREATED);
+
+    const errorBody = await pollsClient
+      .vote(createdPoll.id, [selectedAnswerOption.id])
+      .expect(HttpStatus.CONFLICT)
       .getBody();
 
-    expect(createdVotes).toMatchObject([
-      <PollVoteEntity>{
-        userId: currentUser.id,
-        answerOptionId: selectedAnswerOption.id,
-      },
-    ]);
+    expect(errorBody).toMatchObject({
+      message: 'User has already voted in this poll',
+    });
   });
 
-  it('should not be able to vote in a poll without being in the chat', async () => {
+  it('should fail to vote in a poll without being in the chat', async () => {
     const pollAuthorUser = await userClient.seedUser('poll-author');
 
     const groupChat = await chatsClient.seedGroupChat('Bloto', [
@@ -78,15 +133,14 @@ describe('PollVotesController - create votes', () => {
       return pollMessage.poll;
     });
 
-    const answerOptions = createdPoll.answerOptions;
-    const selectedAnswerOption = answerOptions[0];
+    const selectedAnswerOption = createdPoll.answerOptions[0];
 
-    const createdVotes = await pollsClient
+    const errorBody = await pollsClient
       .vote(createdPoll.id, [selectedAnswerOption.id])
       .expect(HttpStatus.FORBIDDEN)
       .getBody();
 
-    expect(createdVotes).toMatchObject({
+    expect(errorBody).toMatchObject({
       message: 'User is not member of any chat with this poll',
     });
   });
