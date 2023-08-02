@@ -7,6 +7,7 @@ import { CreateVotesDto } from '../../../../src/polls/dto/create-votes/create-vo
 import { PollVoteEntity } from '../../../../src/polls/entity/poll-vote.entity';
 import { BaseTestClient } from '../base-test-client';
 import { MakePartial } from '../../types/make-partial.type';
+import { PollAnswerOptionWithUsers } from '../../../../src/polls/votes/queries/get-poll-vote-users.query';
 
 export class PollsTestClient extends BaseTestClient {
   constructor(protected readonly testingModule: AppTestingModule) {
@@ -22,6 +23,14 @@ export class PollsTestClient extends BaseTestClient {
     };
 
     const res = this.request().post(`/polls/${pollId}/votes`).send(body);
+
+    return toTestRequest(res);
+  }
+
+  public getVoteResults(
+    pollId: string,
+  ): TestRequest<PollAnswerOptionWithUsers[]> {
+    const res = this.request().get(`/polls/${pollId}/votes/results`);
 
     return toTestRequest(res);
   }
