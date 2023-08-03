@@ -1,10 +1,11 @@
-import { FC, ReactElement, cloneElement, useState, MouseEvent } from "react";
+import { FC, ReactElement, cloneElement } from "react";
 import "./PollContextMenu.scss";
 import { Poll } from "../../models/poll.model";
 import { Menu, MenuItem } from "@mui/material";
 import { PollMessage } from "../../../messages/models/message.model";
 import { useDeleteMessage } from "../../../messages/hooks/message-actions/use-delete-message";
 import { useRetractVote } from "../../hooks/poll-actions/use-retract-vote";
+import { useContextMenu } from "../../../shared/hooks/use-context-menu";
 
 interface Props {
   children: ReactElement;
@@ -13,28 +14,13 @@ interface Props {
 }
 
 const PollContextMenu: FC<Props> = ({ children, message, poll }) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [position, setPosition] = useState({ left: 0, top: 0 });
-
-  const handleRightClick = (event: MouseEvent<HTMLElement>) => {
-    event.preventDefault();
-    setPosition({
-      top: event.clientY - 2,
-      left: event.clientX - 4,
-    });
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const withClose = (callback: () => void | Promise<void>) => {
-    return () => {
-      handleClose();
-      void callback();
-    };
-  };
+  const {
+    isMenuOpen,
+    anchorPosition,
+    handleOpenMenu,
+    handleCloseMenu,
+    withCloseMenu,
+  } = useContextMenu();
 
   const handleDelete = useDeleteMessage(message);
   const handleRetractVote = useRetractVote(poll, message);
@@ -46,24 +32,23 @@ const PollContextMenu: FC<Props> = ({ children, message, poll }) => {
   return (
     <>
       {cloneElement(children, {
-        onContextMenu: handleRightClick,
+        onContextMenu: handleOpenMenu,
         style: { cursor: "context-menu", userSelect: "none" },
       })}
 
       <Menu
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
+        open={isMenuOpen}
+        onClose={handleCloseMenu}
         anchorReference="anchorPosition"
-        anchorPosition={position}
+        anchorPosition={anchorPosition}
       >
         {userHasVoted && !poll.isQuiz && (
-          <MenuItem onClick={withClose(handleRetractVote)}>
+          <MenuItem onClick={withCloseMenu(handleRetractVote)}>
             Retract vote
           </MenuItem>
         )}
         {isOwnMessage && (
-          <MenuItem onClick={withClose(handleDelete)}>Delete</MenuItem>
+          <MenuItem onClick={withCloseMenu(handleDelete)}>Delete</MenuItem>
         )}
       </Menu>
     </>
