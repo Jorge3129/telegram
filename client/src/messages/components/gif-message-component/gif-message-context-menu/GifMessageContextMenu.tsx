@@ -2,7 +2,7 @@ import { FC, ReactElement, cloneElement } from "react";
 import "./GifMessageContextMenu.scss";
 import { Menu, MenuItem } from "@mui/material";
 import { GifMessage } from "../../../models/message.model";
-import { useDeleteMessage } from "../../../hooks/message-actions/use-delete-message";
+import { useOpenDeleteMessageModal } from "../../../hooks/message-actions/use-open-delete-message-modal";
 import { useContextMenu } from "../../../../shared/hooks/use-context-menu";
 
 interface Props {
@@ -19,7 +19,7 @@ const GifMessageContextMenu: FC<Props> = ({ children, message }) => {
     withCloseMenu,
   } = useContextMenu();
 
-  const handleDelete = useDeleteMessage(message);
+  const handleDelete = useOpenDeleteMessageModal(message);
 
   const isOwnMessage = message.isCurrentUserAuthor;
 

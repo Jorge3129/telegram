@@ -3,7 +3,7 @@ import "./PollContextMenu.scss";
 import { Poll } from "../../models/poll.model";
 import { Menu, MenuItem } from "@mui/material";
 import { PollMessage } from "../../../messages/models/message.model";
-import { useDeleteMessage } from "../../../messages/hooks/message-actions/use-delete-message";
+import { useOpenDeleteMessageModal } from "../../../messages/hooks/message-actions/use-open-delete-message-modal";
 import { useRetractVote } from "../../hooks/poll-actions/use-retract-vote";
 import { useContextMenu } from "../../../shared/hooks/use-context-menu";
 
@@ -22,7 +22,7 @@ const PollContextMenu: FC<Props> = ({ children, message, poll }) => {
     withCloseMenu,
   } = useContextMenu();
 
-  const handleDelete = useDeleteMessage(message);
+  const handleDelete = useOpenDeleteMessageModal(message);
   const handleRetractVote = useRetractVote(poll, message);
 
   const isOwnMessage = message.isCurrentUserAuthor;

@@ -3,7 +3,7 @@ import "./MessageContextMenu.scss";
 import { Menu, MenuItem } from "@mui/material";
 import { TextMessage } from "../../models/message.model";
 import { useEditMessage } from "../../hooks/message-actions/use-edit-message";
-import { useDeleteMessage } from "../../hooks/message-actions/use-delete-message";
+import { useOpenDeleteMessageModal } from "../../hooks/message-actions/use-open-delete-message-modal";
 import { useContextMenu } from "../../../shared/hooks/use-context-menu";
 
 interface Props {
@@ -20,7 +20,7 @@ const MessageContextMenu: FC<Props> = ({ children, message }) => {
     withCloseMenu,
   } = useContextMenu();
 
-  const handleDelete = useDeleteMessage(message);
+  const handleDelete = useOpenDeleteMessageModal(message);
   const handleEdit = useEditMessage(message);
 
   const isOwnMessage = message.isCurrentUserAuthor;
