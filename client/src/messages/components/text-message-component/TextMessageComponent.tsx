@@ -10,7 +10,7 @@ import { isOwnMessage } from "../../../utils/is-own-message";
 import { Media } from "../../models/media.model";
 import { TextMessage } from "../../models/message.model";
 import { classIf } from "../../../utils/class-if";
-import MessageContextMenu from "../message-context-menu/MessageContextMenu";
+import TextMessageContextMenu from "./text-message-context-menu/TextMessageContextMenu";
 import { ChatType } from "../../../chats/models/chat.model";
 
 interface Props {
@@ -30,7 +30,7 @@ const TextMessageComponent: FC<Props> = ({ message, chatType }) => {
   const showAuthor = chatType === "group" && !isOwn;
 
   return (
-    <MessageContextMenu message={message}>
+    <TextMessageContextMenu message={message}>
       <div className={"message_item" + classIf(isOwn, "own_message")}>
         <div className="message_author">{showAuthor && message.authorName}</div>
         {file && (
@@ -49,7 +49,7 @@ const TextMessageComponent: FC<Props> = ({ message, chatType }) => {
 
         <div className="clearfix"></div>
       </div>
-    </MessageContextMenu>
+    </TextMessageContextMenu>
   );
 };
 

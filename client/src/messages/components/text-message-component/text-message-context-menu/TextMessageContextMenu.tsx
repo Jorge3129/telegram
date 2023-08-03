@@ -1,17 +1,17 @@
 import { FC, ReactElement, cloneElement } from "react";
 import "./MessageContextMenu.scss";
 import { Menu, MenuItem } from "@mui/material";
-import { TextMessage } from "../../models/message.model";
-import { useEditMessage } from "../../hooks/message-actions/use-edit-message";
-import { useOpenDeleteMessageModal } from "../../hooks/message-actions/use-open-delete-message-modal";
-import { useContextMenu } from "../../../shared/hooks/use-context-menu";
+import { TextMessage } from "../../../models/message.model";
+import { useEditMessage } from "../../../hooks/message-actions/use-edit-message";
+import { useOpenDeleteMessageModal } from "../../../hooks/message-actions/use-open-delete-message-modal";
+import { useContextMenu } from "../../../../shared/hooks/use-context-menu";
 
 interface Props {
   children: ReactElement;
   message: TextMessage;
 }
 
-const MessageContextMenu: FC<Props> = ({ children, message }) => {
+const TextMessageContextMenu: FC<Props> = ({ children, message }) => {
   const {
     isMenuOpen,
     anchorPosition,
@@ -49,4 +49,4 @@ const MessageContextMenu: FC<Props> = ({ children, message }) => {
   );
 };
 
-export default MessageContextMenu;
+export default TextMessageContextMenu;
