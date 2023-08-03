@@ -24,11 +24,13 @@ const TextMessageContextMenu: FC<Props> = ({ renderChildren, message }) => {
       text: "Edit",
       enabled: isOwnMessage,
       handler: handleEdit,
+      icon: <i className="fa-solid fa-pen"></i>,
     },
     {
       text: "Delete",
       enabled: isOwnMessage,
       handler: handleDelete,
+      icon: <i className="fa-solid fa-trash"></i>,
     },
   ];
 

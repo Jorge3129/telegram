@@ -22,6 +22,7 @@ const GifMessageContextMenu: FC<Props> = ({ renderChildren, message }) => {
       text: "Delete",
       enabled: isOwnMessage,
       handler: handleDelete,
+      icon: <i className="fa-solid fa-trash"></i>,
     },
   ];
 

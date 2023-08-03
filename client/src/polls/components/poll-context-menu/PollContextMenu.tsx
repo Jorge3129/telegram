@@ -28,11 +28,13 @@ const PollContextMenu: FC<Props> = ({ renderChildren, message, poll }) => {
       text: "Retract vote",
       enabled: userHasVoted && !poll.isQuiz,
       handler: handleRetractVote,
+      icon: <i className="fa-solid fa-arrow-rotate-left"></i>,
     },
     {
       text: "Delete",
       enabled: isOwnMessage,
       handler: handleDelete,
+      icon: <i className="fa-solid fa-trash"></i>,
     },
   ];
 

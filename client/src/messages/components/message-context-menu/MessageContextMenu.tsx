@@ -44,15 +44,20 @@ const MessageContextMenu: FC<MessageMenuProps> = ({
         onClose={handleCloseMenu}
         anchorReference="anchorPosition"
         anchorPosition={anchorPosition}
+        className="message_menu"
       >
         {menuOptions.map(
           (option) =>
             option.enabled && (
               <MenuItem
                 key={option.text}
+                className="message_menu_item"
                 onClick={withCloseMenu(option.handler)}
               >
-                {option.text}
+                <div className="message_menu_item_content">
+                  <div className="message_menu_item_icon">{option.icon}</div>
+                  <div className="message_menu_item_text">{option.text}</div>
+                </div>
               </MenuItem>
             )
         )}
