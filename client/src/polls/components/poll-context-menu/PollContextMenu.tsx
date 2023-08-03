@@ -1,14 +1,11 @@
-import { FC, ReactElement, cloneElement, useState, MouseEvent } from "react";
+import { FC, ReactElement, cloneElement } from "react";
 import "./PollContextMenu.scss";
 import { Poll } from "../../models/poll.model";
 import { Menu, MenuItem } from "@mui/material";
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../../redux/store";
-import { selectUser } from "../../../redux/user-reducer";
 import { PollMessage } from "../../../messages/models/message.model";
-import { messageApiService } from "../../../messages/messages-api.service";
-import { MessageActions } from "../../../messages/state/messages.reducer";
-import { pollsApiService } from "../../polls-api.service";
+import { useOpenDeleteMessageModal } from "../../../messages/hooks/message-actions/use-open-delete-message-modal";
+import { useRetractVote } from "../../hooks/poll-actions/use-retract-vote";
+import { useContextMenu } from "../../../shared/hooks/use-context-menu";
 
 interface Props {
   children: ReactElement;
@@ -17,71 +14,42 @@ interface Props {
 }
 
 const PollContextMenu: FC<Props> = ({ children, message, poll }) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [position, setPosition] = useState({ left: 0, top: 0 });
+  const {
+    isMenuOpen,
+    anchorPosition,
+    handleOpenMenu,
+    handleCloseMenu,
+    withCloseMenu,
+  } = useContextMenu();
 
-  const { user } = useSelector(selectUser);
+  const handleDelete = useOpenDeleteMessageModal(message);
+  const handleRetractVote = useRetractVote(poll, message);
 
-  const dispatch = useAppDispatch();
-
-  const handleRightClick = (event: MouseEvent<HTMLElement>) => {
-    event.preventDefault();
-    setPosition({
-      top: event.clientY - 2,
-      left: event.clientX - 4,
-    });
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleDelete = async () => {
-    handleClose();
-
-    await messageApiService.delete(message.id);
-
-    dispatch(MessageActions.deleteMessage(message.id));
-  };
-
-  const handleRetractVote = async () => {
-    handleClose();
-
-    await pollsApiService.retractVote(poll.id);
-
-    dispatch(MessageActions.retractPollVote({ messageId: message.id }));
-
-    dispatch(
-      MessageActions.setPollVotePercentages({
-        messageId: message.id,
-        votePercentages: undefined,
-      })
-    );
-  };
-
-  const isOwnMessage = user?.id === message.authorId;
+  const isOwnMessage = message.isCurrentUserAuthor;
 
   const userHasVoted = !!poll.userSelectedOptionIds.length;
 
   return (
     <>
       {cloneElement(children, {
-        onContextMenu: handleRightClick,
+        onContextMenu: handleOpenMenu,
         style: { cursor: "context-menu", userSelect: "none" },
       })}
 
       <Menu
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
+        open={isMenuOpen}
+        onClose={handleCloseMenu}
         anchorReference="anchorPosition"
-        anchorPosition={position}
+        anchorPosition={anchorPosition}
       >
         {userHasVoted && !poll.isQuiz && (
-          <MenuItem onClick={handleRetractVote}>Retract vote</MenuItem>
+          <MenuItem onClick={withCloseMenu(handleRetractVote)}>
+            Retract vote
+          </MenuItem>
         )}
-        {isOwnMessage && <MenuItem onClick={handleDelete}>Delete</MenuItem>}
+        {isOwnMessage && (
+          <MenuItem onClick={withCloseMenu(handleDelete)}>Delete</MenuItem>
+        )}
       </Menu>
     </>
   );

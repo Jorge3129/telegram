@@ -1,0 +1,25 @@
+.delete_message_modal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  padding: 0.6em;
+
+  .delete_message_modal_body {
+    padding: 1.5em 1.1em;
+  }
+
+  .delete_message_modal_buttons {
+    display: flex;
+    justify-content: end;
+    gap: 0.3rem;
+
+    .delete_message_modal_button {
+      text-transform: none;
+      padding: 0.3em 0.9em;
+
+      &:hover {
+        background-color: var(--blue_lighter);
+      }
+    }
+  }
+}

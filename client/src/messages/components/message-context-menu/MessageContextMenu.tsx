@@ -1,13 +1,10 @@
-import { FC, ReactElement, cloneElement, useState, MouseEvent } from "react";
+import { FC, ReactElement, cloneElement } from "react";
 import "./MessageContextMenu.scss";
 import { Menu, MenuItem } from "@mui/material";
-import { useSelector } from "react-redux";
-import { CurrentChatActions } from "../../../current-chat/reducers/current-chat.reducer";
-import { useAppDispatch } from "../../../redux/store";
-import { selectUser } from "../../../redux/user-reducer";
-import { messageApiService } from "../../messages-api.service";
-import { MessageActions } from "../../state/messages.reducer";
 import { TextMessage } from "../../models/message.model";
+import { useEditMessage } from "../../hooks/message-actions/use-edit-message";
+import { useOpenDeleteMessageModal } from "../../hooks/message-actions/use-open-delete-message-modal";
+import { useContextMenu } from "../../../shared/hooks/use-context-menu";
 
 interface Props {
   children: ReactElement;
@@ -15,63 +12,38 @@ interface Props {
 }
 
 const MessageContextMenu: FC<Props> = ({ children, message }) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [position, setPosition] = useState({ left: 0, top: 0 });
+  const {
+    isMenuOpen,
+    anchorPosition,
+    handleOpenMenu,
+    handleCloseMenu,
+    withCloseMenu,
+  } = useContextMenu();
 
-  const { user } = useSelector(selectUser);
+  const handleDelete = useOpenDeleteMessageModal(message);
+  const handleEdit = useEditMessage(message);
 
-  const dispatch = useAppDispatch();
-
-  const handleRightClick = (event: MouseEvent<HTMLElement>) => {
-    event.preventDefault();
-    setPosition({
-      top: event.clientY - 2,
-      left: event.clientX - 4,
-    });
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleDelete = async () => {
-    handleClose();
-
-    await messageApiService.delete(message.id);
-
-    dispatch(MessageActions.deleteMessage(message.id));
-  };
-
-  const handleEdit = () => {
-    handleClose();
-
-    dispatch(
-      CurrentChatActions.setInput({
-        type: "edit",
-        message: message,
-      })
-    );
-  };
-
-  const isOwnMessage = user?.id === message.authorId;
+  const isOwnMessage = message.isCurrentUserAuthor;
 
   return (
     <>
       {cloneElement(children, {
-        onContextMenu: handleRightClick,
+        onContextMenu: handleOpenMenu,
         style: { cursor: "context-menu", userSelect: "none" },
       })}
 
       <Menu
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
+        open={isMenuOpen}
+        onClose={handleCloseMenu}
         anchorReference="anchorPosition"
-        anchorPosition={position}
+        anchorPosition={anchorPosition}
       >
-        {isOwnMessage && <MenuItem onClick={handleEdit}>Edit</MenuItem>}
-        {isOwnMessage && <MenuItem onClick={handleDelete}>Delete</MenuItem>}
+        {isOwnMessage && (
+          <MenuItem onClick={withCloseMenu(handleEdit)}>Edit</MenuItem>
+        )}
+        {isOwnMessage && (
+          <MenuItem onClick={withCloseMenu(handleDelete)}>Delete</MenuItem>
+        )}
       </Menu>
     </>
   );
