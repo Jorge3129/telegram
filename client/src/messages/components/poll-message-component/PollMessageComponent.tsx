@@ -24,24 +24,33 @@ const PollMessageComponent: FC<Props> = ({ message, chatType }) => {
   const showAuthor = chatType === "group" && !isOwn;
 
   return (
-    <PollContextMenu poll={message.poll} message={message}>
-      <div className={"poll_message_item" + classIf(isOwn, "own_message")}>
-        <div className="message_author">{showAuthor && message.authorName}</div>
+    <PollContextMenu
+      poll={message.poll}
+      message={message}
+      renderChildren={(props) => (
+        <div
+          {...props}
+          className={"poll_message_item" + classIf(isOwn, "own_message")}
+        >
+          <div className="message_author">
+            {showAuthor && message.authorName}
+          </div>
 
-        <div className="message_text">
-          <PollComponent
-            poll={message.poll}
-            isOwnMessage={isOwn}
-            message={message}
-          />
-        </div>
+          <div className="message_text">
+            <PollComponent
+              poll={message.poll}
+              isOwnMessage={isOwn}
+              message={message}
+            />
+          </div>
 
-        <div className="message_info">
-          <MessageTimestamp timestamp={message.timestamp} />
-          <MessageStatusWrapper message={message} currentUser={user} />
+          <div className="message_info">
+            <MessageTimestamp timestamp={message.timestamp} />
+            <MessageStatusWrapper message={message} currentUser={user} />
+          </div>
         </div>
-      </div>
-    </PollContextMenu>
+      )}
+    />
   );
 };
 

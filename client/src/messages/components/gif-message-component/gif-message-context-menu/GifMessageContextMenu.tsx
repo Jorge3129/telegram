@@ -1,46 +1,35 @@
-import { FC, ReactElement, cloneElement } from "react";
+import { FC, ReactElement } from "react";
 import "./GifMessageContextMenu.scss";
-import { Menu, MenuItem } from "@mui/material";
 import { GifMessage } from "../../../models/message.model";
 import { useOpenDeleteMessageModal } from "../../../hooks/message-actions/use-open-delete-message-modal";
-import { useContextMenu } from "../../../../shared/hooks/use-context-menu";
+import MessageContextMenu, {
+  MessageMenuChildProps,
+  MessageMenuOptionConfig,
+} from "../../message-context-menu/MessageContextMenu";
 
 interface Props {
-  children: ReactElement;
+  renderChildren: (props: MessageMenuChildProps) => ReactElement;
   message: GifMessage;
 }
 
-const GifMessageContextMenu: FC<Props> = ({ children, message }) => {
-  const {
-    isMenuOpen,
-    anchorPosition,
-    handleOpenMenu,
-    handleCloseMenu,
-    withCloseMenu,
-  } = useContextMenu();
-
+const GifMessageContextMenu: FC<Props> = ({ renderChildren, message }) => {
   const handleDelete = useOpenDeleteMessageModal(message);
 
   const isOwnMessage = message.isCurrentUserAuthor;
 
-  return (
-    <>
-      {cloneElement(children, {
-        onContextMenu: handleOpenMenu,
-        style: { cursor: "context-menu", userSelect: "none" },
-      })}
+  const menuOptions: MessageMenuOptionConfig[] = [
+    {
+      text: "Delete",
+      enabled: isOwnMessage,
+      handler: handleDelete,
+    },
+  ];
 
-      <Menu
-        open={isMenuOpen}
-        onClose={handleCloseMenu}
-        anchorReference="anchorPosition"
-        anchorPosition={anchorPosition}
-      >
-        {isOwnMessage && (
-          <MenuItem onClick={withCloseMenu(handleDelete)}>Delete</MenuItem>
-        )}
-      </Menu>
-    </>
+  return (
+    <MessageContextMenu
+      menuOptions={menuOptions}
+      renderChildren={renderChildren}
+    />
   );
 };
 

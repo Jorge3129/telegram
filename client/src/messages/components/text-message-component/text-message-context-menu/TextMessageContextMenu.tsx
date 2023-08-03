@@ -1,51 +1,42 @@
-import { FC, ReactElement, cloneElement } from "react";
-import "./MessageContextMenu.scss";
-import { Menu, MenuItem } from "@mui/material";
+import { FC, ReactElement } from "react";
+import "./TextMessageContextMenu.scss";
 import { TextMessage } from "../../../models/message.model";
 import { useEditMessage } from "../../../hooks/message-actions/use-edit-message";
 import { useOpenDeleteMessageModal } from "../../../hooks/message-actions/use-open-delete-message-modal";
-import { useContextMenu } from "../../../../shared/hooks/use-context-menu";
+import MessageContextMenu, {
+  MessageMenuChildProps,
+  MessageMenuOptionConfig,
+} from "../../message-context-menu/MessageContextMenu";
 
 interface Props {
-  children: ReactElement;
+  renderChildren: (props: MessageMenuChildProps) => ReactElement;
   message: TextMessage;
 }
 
-const TextMessageContextMenu: FC<Props> = ({ children, message }) => {
-  const {
-    isMenuOpen,
-    anchorPosition,
-    handleOpenMenu,
-    handleCloseMenu,
-    withCloseMenu,
-  } = useContextMenu();
-
+const TextMessageContextMenu: FC<Props> = ({ renderChildren, message }) => {
   const handleDelete = useOpenDeleteMessageModal(message);
   const handleEdit = useEditMessage(message);
 
   const isOwnMessage = message.isCurrentUserAuthor;
 
-  return (
-    <>
-      {cloneElement(children, {
-        onContextMenu: handleOpenMenu,
-        style: { cursor: "context-menu", userSelect: "none" },
-      })}
+  const menuOptions: MessageMenuOptionConfig[] = [
+    {
+      text: "Edit",
+      enabled: isOwnMessage,
+      handler: handleEdit,
+    },
+    {
+      text: "Delete",
+      enabled: isOwnMessage,
+      handler: handleDelete,
+    },
+  ];
 
-      <Menu
-        open={isMenuOpen}
-        onClose={handleCloseMenu}
-        anchorReference="anchorPosition"
-        anchorPosition={anchorPosition}
-      >
-        {isOwnMessage && (
-          <MenuItem onClick={withCloseMenu(handleEdit)}>Edit</MenuItem>
-        )}
-        {isOwnMessage && (
-          <MenuItem onClick={withCloseMenu(handleDelete)}>Delete</MenuItem>
-        )}
-      </Menu>
-    </>
+  return (
+    <MessageContextMenu
+      menuOptions={menuOptions}
+      renderChildren={renderChildren}
+    />
   );
 };
 

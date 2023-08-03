@@ -30,26 +30,37 @@ const TextMessageComponent: FC<Props> = ({ message, chatType }) => {
   const showAuthor = chatType === "group" && !isOwn;
 
   return (
-    <TextMessageContextMenu message={message}>
-      <div className={"message_item" + classIf(isOwn, "own_message")}>
-        <div className="message_author">{showAuthor && message.authorName}</div>
-        {file && (
-          <div className="message_media">
-            <MediaContainer media={file} className="message_img" />
+    <TextMessageContextMenu
+      message={message}
+      renderChildren={(props) => (
+        <div
+          {...props}
+          className={"message_item" + classIf(isOwn, "own_message")}
+        >
+          <div className="message_author">
+            {showAuthor && message.authorName}
           </div>
-        )}
 
-        <div className="message_text">{message.text}</div>
+          {file && (
+            <div className="message_media">
+              <MediaContainer media={file} className="message_img" />
+            </div>
+          )}
 
-        <div className="message_info">
-          {message.edited && <div className="message_edited_label">edited</div>}
-          <MessageTimestamp timestamp={message.timestamp} />
-          <MessageStatusWrapper message={message} currentUser={user} />
+          <div className="message_text">{message.text}</div>
+
+          <div className="message_info">
+            {message.edited && (
+              <div className="message_edited_label">edited</div>
+            )}
+            <MessageTimestamp timestamp={message.timestamp} />
+            <MessageStatusWrapper message={message} currentUser={user} />
+          </div>
+
+          <div className="clearfix"></div>
         </div>
-
-        <div className="clearfix"></div>
-      </div>
-    </TextMessageContextMenu>
+      )}
+    />
   );
 };
 
