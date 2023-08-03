@@ -4,7 +4,7 @@ import { Poll } from "../../models/poll.model";
 import { PollMessage } from "../../../messages/models/message.model";
 import { Close } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import PollResultsDialogBody from "../poll-results-dialog-body/PollResultsDialogBody";
+import PollResultsDialogBody from "./poll-results-dialog-body/PollResultsDialogBody";
 
 export interface PollResultsDialogProps {
   onClose: () => void;

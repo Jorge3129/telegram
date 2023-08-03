@@ -1,11 +1,11 @@
 import { FC } from "react";
 import "./PollResultsDialogBody.scss";
-import { Poll } from "../../models/poll.model";
+import { Poll } from "../../../models/poll.model";
 import { Avatar } from "@mui/material";
-import { initials } from "../../../shared/utils/format-initials";
-import { useGetVotePercentage } from "../../hooks/use-get-vote-percentages";
-import { formatWithQuantity } from "../../../shared/utils/pluralize";
-import { useGetVotes } from "../../hooks/use-get-votes";
+import { initials } from "../../../../shared/utils/format-initials";
+import { useGetVotePercentage } from "../../../hooks/use-get-vote-percentages";
+import { formatWithQuantity } from "../../../../shared/utils/pluralize";
+import { useGetVotes } from "../../../hooks/use-get-votes";
 
 interface Props {
   poll: Poll;

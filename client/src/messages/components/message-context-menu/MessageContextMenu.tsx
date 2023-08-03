@@ -1,13 +1,9 @@
 import { FC, ReactElement, cloneElement, useState, MouseEvent } from "react";
 import "./MessageContextMenu.scss";
 import { Menu, MenuItem } from "@mui/material";
-import { useSelector } from "react-redux";
-import { CurrentChatActions } from "../../../current-chat/reducers/current-chat.reducer";
-import { useAppDispatch } from "../../../redux/store";
-import { selectUser } from "../../../redux/user-reducer";
-import { messageApiService } from "../../messages-api.service";
-import { MessageActions } from "../../state/messages.reducer";
 import { TextMessage } from "../../models/message.model";
+import { useEditMessage } from "../../hooks/message-actions/use-edit-message";
+import { useDeleteMessage } from "../../hooks/message-actions/use-delete-message";
 
 interface Props {
   children: ReactElement;
@@ -17,10 +13,6 @@ interface Props {
 const MessageContextMenu: FC<Props> = ({ children, message }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [position, setPosition] = useState({ left: 0, top: 0 });
-
-  const { user } = useSelector(selectUser);
-
-  const dispatch = useAppDispatch();
 
   const handleRightClick = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
@@ -35,26 +27,17 @@ const MessageContextMenu: FC<Props> = ({ children, message }) => {
     setAnchorEl(null);
   };
 
-  const handleDelete = async () => {
-    handleClose();
-
-    await messageApiService.delete(message.id);
-
-    dispatch(MessageActions.deleteMessage(message.id));
+  const withClose = (callback: () => void | Promise<void>) => {
+    return () => {
+      handleClose();
+      void callback();
+    };
   };
 
-  const handleEdit = () => {
-    handleClose();
+  const handleDelete = useDeleteMessage(message);
+  const handleEdit = useEditMessage(message);
 
-    dispatch(
-      CurrentChatActions.setInput({
-        type: "edit",
-        message: message,
-      })
-    );
-  };
-
-  const isOwnMessage = user?.id === message.authorId;
+  const isOwnMessage = message.isCurrentUserAuthor;
 
   return (
     <>
@@ -70,8 +53,12 @@ const MessageContextMenu: FC<Props> = ({ children, message }) => {
         anchorReference="anchorPosition"
         anchorPosition={position}
       >
-        {isOwnMessage && <MenuItem onClick={handleEdit}>Edit</MenuItem>}
-        {isOwnMessage && <MenuItem onClick={handleDelete}>Delete</MenuItem>}
+        {isOwnMessage && (
+          <MenuItem onClick={withClose(handleEdit)}>Edit</MenuItem>
+        )}
+        {isOwnMessage && (
+          <MenuItem onClick={withClose(handleDelete)}>Delete</MenuItem>
+        )}
       </Menu>
     </>
   );

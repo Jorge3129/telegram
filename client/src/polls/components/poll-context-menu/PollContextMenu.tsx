@@ -2,13 +2,9 @@ import { FC, ReactElement, cloneElement, useState, MouseEvent } from "react";
 import "./PollContextMenu.scss";
 import { Poll } from "../../models/poll.model";
 import { Menu, MenuItem } from "@mui/material";
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../../redux/store";
-import { selectUser } from "../../../redux/user-reducer";
 import { PollMessage } from "../../../messages/models/message.model";
-import { messageApiService } from "../../../messages/messages-api.service";
-import { MessageActions } from "../../../messages/state/messages.reducer";
-import { pollsApiService } from "../../polls-api.service";
+import { useDeleteMessage } from "../../../messages/hooks/message-actions/use-delete-message";
+import { useRetractVote } from "../../hooks/poll-actions/use-retract-vote";
 
 interface Props {
   children: ReactElement;
@@ -19,10 +15,6 @@ interface Props {
 const PollContextMenu: FC<Props> = ({ children, message, poll }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [position, setPosition] = useState({ left: 0, top: 0 });
-
-  const { user } = useSelector(selectUser);
-
-  const dispatch = useAppDispatch();
 
   const handleRightClick = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
@@ -37,30 +29,17 @@ const PollContextMenu: FC<Props> = ({ children, message, poll }) => {
     setAnchorEl(null);
   };
 
-  const handleDelete = async () => {
-    handleClose();
-
-    await messageApiService.delete(message.id);
-
-    dispatch(MessageActions.deleteMessage(message.id));
+  const withClose = (callback: () => void | Promise<void>) => {
+    return () => {
+      handleClose();
+      void callback();
+    };
   };
 
-  const handleRetractVote = async () => {
-    handleClose();
+  const handleDelete = useDeleteMessage(message);
+  const handleRetractVote = useRetractVote(poll, message);
 
-    await pollsApiService.retractVote(poll.id);
-
-    dispatch(MessageActions.retractPollVote({ messageId: message.id }));
-
-    dispatch(
-      MessageActions.setPollVotePercentages({
-        messageId: message.id,
-        votePercentages: undefined,
-      })
-    );
-  };
-
-  const isOwnMessage = user?.id === message.authorId;
+  const isOwnMessage = message.isCurrentUserAuthor;
 
   const userHasVoted = !!poll.userSelectedOptionIds.length;
 
@@ -79,9 +58,13 @@ const PollContextMenu: FC<Props> = ({ children, message, poll }) => {
         anchorPosition={position}
       >
         {userHasVoted && !poll.isQuiz && (
-          <MenuItem onClick={handleRetractVote}>Retract vote</MenuItem>
+          <MenuItem onClick={withClose(handleRetractVote)}>
+            Retract vote
+          </MenuItem>
         )}
-        {isOwnMessage && <MenuItem onClick={handleDelete}>Delete</MenuItem>}
+        {isOwnMessage && (
+          <MenuItem onClick={withClose(handleDelete)}>Delete</MenuItem>
+        )}
       </Menu>
     </>
   );
