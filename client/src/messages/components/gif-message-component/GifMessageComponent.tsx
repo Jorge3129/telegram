@@ -24,25 +24,31 @@ const GifMessageComponent: FC<Props> = ({ message, chatType }) => {
   const showAuthor = chatType === "group" && !isOwn;
 
   return (
-    <GifMessageContextMenu message={message}>
-      <div
-        className={
-          "message_item gif_message_item" + classIf(isOwn, "own_message")
-        }
-      >
-        <div className="message_author">{showAuthor && message.authorName}</div>
-        <div className="message_media">
-          <Gif gif={message.srcObject} width={220} hideAttribution noLink />
-        </div>
+    <GifMessageContextMenu
+      message={message}
+      renderChildren={(props) => (
+        <div
+          {...props}
+          className={
+            "message_item gif_message_item" + classIf(isOwn, "own_message")
+          }
+        >
+          <div className="message_author">
+            {showAuthor && message.authorName}
+          </div>
+          <div className="message_media">
+            <Gif gif={message.srcObject} width={220} hideAttribution noLink />
+          </div>
 
-        <div className="message_info">
-          <MessageTimestamp timestamp={message.timestamp} />
-          <MessageStatusWrapper message={message} currentUser={user} />
-        </div>
+          <div className="message_info">
+            <MessageTimestamp timestamp={message.timestamp} />
+            <MessageStatusWrapper message={message} currentUser={user} />
+          </div>
 
-        <div className="clearfix"></div>
-      </div>
-    </GifMessageContextMenu>
+          <div className="clearfix"></div>
+        </div>
+      )}
+    />
   );
 };
 

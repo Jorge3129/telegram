@@ -1,17 +1,29 @@
-import { FC, ReactElement, cloneElement } from "react";
+import { CSSProperties, FC, MouseEvent, ReactElement } from "react";
 import "./MessageContextMenu.scss";
 import { Menu, MenuItem } from "@mui/material";
-import { TextMessage } from "../../models/message.model";
-import { useEditMessage } from "../../hooks/message-actions/use-edit-message";
-import { useOpenDeleteMessageModal } from "../../hooks/message-actions/use-open-delete-message-modal";
 import { useContextMenu } from "../../../shared/hooks/use-context-menu";
 
-interface Props {
-  children: ReactElement;
-  message: TextMessage;
-}
+export type MessageMenuChildProps = {
+  onContextMenu?: (e: MouseEvent<HTMLElement>) => void;
+  style?: CSSProperties | undefined;
+};
 
-const MessageContextMenu: FC<Props> = ({ children, message }) => {
+export type MessageMenuOptionConfig = {
+  text: string;
+  icon?: JSX.Element;
+  enabled?: boolean;
+  handler: () => void | Promise<void>;
+};
+
+export type MessageMenuProps = {
+  menuOptions: MessageMenuOptionConfig[];
+  renderChildren: (props: MessageMenuChildProps) => ReactElement;
+};
+
+const MessageContextMenu: FC<MessageMenuProps> = ({
+  renderChildren,
+  menuOptions,
+}) => {
   const {
     isMenuOpen,
     anchorPosition,
@@ -20,14 +32,9 @@ const MessageContextMenu: FC<Props> = ({ children, message }) => {
     withCloseMenu,
   } = useContextMenu();
 
-  const handleDelete = useOpenDeleteMessageModal(message);
-  const handleEdit = useEditMessage(message);
-
-  const isOwnMessage = message.isCurrentUserAuthor;
-
   return (
     <>
-      {cloneElement(children, {
+      {renderChildren({
         onContextMenu: handleOpenMenu,
         style: { cursor: "context-menu", userSelect: "none" },
       })}
@@ -37,12 +44,22 @@ const MessageContextMenu: FC<Props> = ({ children, message }) => {
         onClose={handleCloseMenu}
         anchorReference="anchorPosition"
         anchorPosition={anchorPosition}
+        className="message_menu"
       >
-        {isOwnMessage && (
-          <MenuItem onClick={withCloseMenu(handleEdit)}>Edit</MenuItem>
-        )}
-        {isOwnMessage && (
-          <MenuItem onClick={withCloseMenu(handleDelete)}>Delete</MenuItem>
+        {menuOptions.map(
+          (option) =>
+            option.enabled && (
+              <MenuItem
+                key={option.text}
+                className="message_menu_item"
+                onClick={withCloseMenu(option.handler)}
+              >
+                <div className="message_menu_item_content">
+                  <div className="message_menu_item_icon">{option.icon}</div>
+                  <div className="message_menu_item_text">{option.text}</div>
+                </div>
+              </MenuItem>
+            )
         )}
       </Menu>
     </>

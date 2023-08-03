@@ -1,6 +1,7 @@
 import { FC, ReactElement } from "react";
-import "./GifMessageContextMenu.scss";
-import { GifMessage } from "../../../models/message.model";
+import "./TextMessageContextMenu.scss";
+import { TextMessage } from "../../../models/message.model";
+import { useEditMessage } from "../../../hooks/message-actions/use-edit-message";
 import { useOpenDeleteMessageModal } from "../../../hooks/message-actions/use-open-delete-message-modal";
 import MessageContextMenu, {
   MessageMenuChildProps,
@@ -9,15 +10,22 @@ import MessageContextMenu, {
 
 interface Props {
   renderChildren: (props: MessageMenuChildProps) => ReactElement;
-  message: GifMessage;
+  message: TextMessage;
 }
 
-const GifMessageContextMenu: FC<Props> = ({ renderChildren, message }) => {
+const TextMessageContextMenu: FC<Props> = ({ renderChildren, message }) => {
   const handleDelete = useOpenDeleteMessageModal(message);
+  const handleEdit = useEditMessage(message);
 
   const isOwnMessage = message.isCurrentUserAuthor;
 
   const menuOptions: MessageMenuOptionConfig[] = [
+    {
+      text: "Edit",
+      enabled: isOwnMessage,
+      handler: handleEdit,
+      icon: <i className="fa-solid fa-pen"></i>,
+    },
     {
       text: "Delete",
       enabled: isOwnMessage,
@@ -34,4 +42,4 @@ const GifMessageContextMenu: FC<Props> = ({ renderChildren, message }) => {
   );
 };
 
-export default GifMessageContextMenu;
+export default TextMessageContextMenu;
