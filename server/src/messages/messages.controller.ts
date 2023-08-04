@@ -60,13 +60,4 @@ export class MessagesController {
   ): Promise<void> {
     await this.messageService.delete(messageId, user);
   }
-
-  @Post(':messageId/reads')
-  @ApiBearerAuth()
-  public async updateMessageReads(
-    @Param('messageId') messageId: string,
-    @RequestUser() user: UserEntity,
-  ) {
-    await this.messageService.readMessage(messageId, user);
-  }
 }

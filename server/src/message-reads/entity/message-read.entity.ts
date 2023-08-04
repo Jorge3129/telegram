@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from '../../users/entity/user.entity';
-import { MessageEntity } from './message.entity';
+import { MessageEntity } from '../../messages/entity/message.entity';
 
 @Entity('message_reads')
 @Index(['userId', 'messageId'], { unique: true })

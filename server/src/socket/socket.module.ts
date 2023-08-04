@@ -9,9 +9,16 @@ import { AuthModule } from '../auth/auth.module';
 import { ChatUsersModule } from '../chat-users/chat-users.module';
 import { PollsModule } from '../polls/polls.module';
 import { UserModule } from '../users/user.module';
+import { MessagesModule } from '../messages/messages.module';
 
 @Module({
-  imports: [UserModule, ChatUsersModule, AuthModule, PollsModule],
+  imports: [
+    UserModule,
+    MessagesModule,
+    ChatUsersModule,
+    AuthModule,
+    PollsModule,
+  ],
   providers: [
     SocketGateway,
     SocketAuthService,

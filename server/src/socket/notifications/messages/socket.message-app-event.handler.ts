@@ -7,11 +7,14 @@ import { EditMessageEventPayload } from '../../../messages/events/edit-message.e
 import { MessageEventType } from '../../../messages/events/message-event-type';
 import { ReadMessageEventPayload } from '../../../messages/events/read-message.event';
 import { UserService } from '../../../users/user.service';
+import { MessageEntityToModelMapper } from '../../../messages/mappers/entity-to-model/message-entity-to-model.mapper';
+import { UserEntity } from '../../../users/entity/user.entity';
 
 @Injectable()
 export class SocketMessageAppEventHandler {
   constructor(
     private userService: UserService,
+    private messageMapper: MessageEntityToModelMapper,
     private messagePublisher: MessageNotificationPublisher,
   ) {}
 
@@ -64,9 +67,14 @@ export class SocketMessageAppEventHandler {
       return;
     }
 
+    const messageModel = await this.messageMapper.mapEntityToModel(
+      message,
+      <UserEntity>user,
+    );
+
     this.messagePublisher.publishMessageRead(
       {
-        message,
+        message: messageModel,
         userId: user.id,
       },
       authorSocketId,
