@@ -35,11 +35,11 @@ export class GetVotePercentagesRequirement {
   ): RequirementConfig[] {
     const requirements: RequirementConfig[] = [
       {
-        check: this.chatWithPollMembership.validate(user.id, poll.id),
+        check: () => this.chatWithPollMembership.validate(user.id, poll.id),
         errMessage: 'User is not member of any chat with this poll',
       },
       {
-        check: this.userHasVotedRequirement.validate(user.id, poll.id),
+        check: () => this.userHasVotedRequirement.validate(user.id, poll.id),
         errMessage: 'User has not voted in this poll',
       },
     ];

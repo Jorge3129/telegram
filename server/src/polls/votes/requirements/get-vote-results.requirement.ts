@@ -35,15 +35,15 @@ export class GetVoteResultsRequirement {
   ): RequirementConfig[] {
     const requirements: RequirementConfig[] = [
       {
-        check: this.chatWithPollMembership.validate(user.id, poll.id),
+        check: () => this.chatWithPollMembership.validate(user.id, poll.id),
         errMessage: 'User is not member of any chat with this poll',
       },
       {
-        check: this.userHasVotedRequirement.validate(user.id, poll.id),
+        check: () => this.userHasVotedRequirement.validate(user.id, poll.id),
         errMessage: 'User has not voted in this poll',
       },
       {
-        check: !poll.isAnonymous,
+        check: () => !poll.isAnonymous,
         errMessage: 'Cannot view results of an anonymous poll',
       },
     ];

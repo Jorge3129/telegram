@@ -45,7 +45,7 @@ export class CreateVoteRequirement {
   ): RequirementConfig[] {
     const requirements: RequirementConfig[] = [
       {
-        check: this.chatWithPollMembership.validate(user.id, poll.id),
+        check: () => this.chatWithPollMembership.validate(user.id, poll.id),
         errMessage: 'User is not member of any chat with this poll',
       },
     ];
@@ -62,7 +62,7 @@ export class CreateVoteRequirement {
   ): RequirementConfig[] {
     const requirements: RequirementConfig[] = [
       {
-        checkNot: this.userHasVotedRequirement.validate(userId, pollId),
+        checkNot: () => this.userHasVotedRequirement.validate(userId, pollId),
         errMessage: 'User has already voted in this poll',
       },
     ];
@@ -80,19 +80,19 @@ export class CreateVoteRequirement {
   ): RequirementConfig[] {
     return [
       {
-        check: this.isAnswerListUnique(answerOptionIds),
+        check: () => this.isAnswerListUnique(answerOptionIds),
         errMessage: 'Votes should be unique',
       },
       {
-        check: this.isAnswerListExisting(answerOptionIds, answerOptions),
+        check: () => this.isAnswerListExisting(answerOptionIds, answerOptions),
         errMessage: 'Some answer options do not exist',
       },
       {
-        check: this.isAnswerListFromTheSamePoll(answerOptions, poll.id),
+        check: () => this.isAnswerListFromTheSamePoll(answerOptions, poll.id),
         errMessage: 'Some votes are in another poll',
       },
       {
-        check: this.isMultipleChoiceAllowed(poll, answerOptions),
+        check: () => this.isMultipleChoiceAllowed(poll, answerOptions),
         errMessage: 'Cannot choose multiple options',
       },
     ].map((config) => ({
