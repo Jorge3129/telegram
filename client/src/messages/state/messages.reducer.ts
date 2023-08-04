@@ -1,17 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/rootReducer";
-import { isPollMessage, isTextMessage, Message } from "../models/message.model";
+import { isTextMessage, Message } from "../models/message.model";
 import { PollVotePercentage } from "../../polls/models/poll-vote-percentage";
 import { PollAnswerOptionWithUsers } from "../../polls/models/poll-answer-option-with-user";
 import { isMessageSentBefore } from "../utils/is-message-sent-before";
+import { updatePoll } from "./message-state.utils";
+import { Poll } from "../../polls/models/poll.model";
 
-interface MessageState {
+export interface MessagesState {
   messages: Message[];
   loading: boolean;
   error: boolean;
 }
 
-const initialState: MessageState = {
+const initialState: MessagesState = {
   messages: [],
   loading: false,
   error: false,
@@ -80,28 +82,28 @@ const messageSlice = createSlice({
       state,
       {
         payload,
-      }: PayloadAction<{ messageId: string; selectedOptionIds: string[] }>
+      }: PayloadAction<{
+        messageId: string;
+        selectedOptionIds: string[];
+        votesPercentages: PollVotePercentage[];
+      }>
     ) => {
-      state.messages
-        .filter((message) => message.id === payload.messageId)
-        .forEach((message) => {
-          if (isPollMessage(message)) {
-            message.poll.userSelectedOptionIds = payload.selectedOptionIds;
-          }
-        });
+      updatePoll(state, payload.messageId, (poll) => {
+        poll.userSelectedOptionIds = payload.selectedOptionIds;
+        poll.votesPercentages = payload.votesPercentages;
+        poll.totalVotesCount = poll.totalVotesCount + 1;
+      });
     },
 
     retractPollVote: (
       state,
       { payload }: PayloadAction<{ messageId: string }>
     ) => {
-      state.messages
-        .filter((message) => message.id === payload.messageId)
-        .forEach((message) => {
-          if (isPollMessage(message)) {
-            message.poll.userSelectedOptionIds = [];
-          }
-        });
+      updatePoll(state, payload.messageId, (poll) => {
+        poll.userSelectedOptionIds = [];
+        poll.votesPercentages = undefined;
+        poll.totalVotesCount = poll.totalVotesCount - 1;
+      });
     },
 
     setPollVotePercentages: (
@@ -111,15 +113,13 @@ const messageSlice = createSlice({
       }: PayloadAction<{
         messageId: string;
         votePercentages: PollVotePercentage[] | undefined;
+        votesCount: number;
       }>
     ) => {
-      state.messages
-        .filter((message) => message.id === payload.messageId)
-        .forEach((message) => {
-          if (isPollMessage(message)) {
-            message.poll.votesPercentages = payload.votePercentages;
-          }
-        });
+      updatePoll(state, payload.messageId, (poll) => {
+        poll.votesPercentages = payload.votePercentages;
+        poll.totalVotesCount = payload.votesCount;
+      });
     },
 
     setPollVoteResults: (
@@ -131,13 +131,9 @@ const messageSlice = createSlice({
         results: PollAnswerOptionWithUsers[] | undefined;
       }>
     ) => {
-      state.messages
-        .filter((message) => message.id === payload.messageId)
-        .forEach((message) => {
-          if (isPollMessage(message)) {
-            message.poll.answerOptionsWithUsers = payload.results;
-          }
-        });
+      updatePoll(state, payload.messageId, (poll) => {
+        poll.answerOptionsWithUsers = payload.results;
+      });
     },
   },
 });

@@ -26,6 +26,8 @@ export class PollEntityToModelMapper {
       currentUser.id,
     );
 
+    const pollId = pollEntity.id;
+
     return {
       id: pollEntity.id,
       question: pollEntity.question,
@@ -36,8 +38,9 @@ export class PollEntityToModelMapper {
         pollEntity.answerOptions,
       ),
       userSelectedOptionIds,
+      totalVotesCount: await this.votesQueryService.countTotalVotes(pollId),
       votesPercentages: await this.getVotesPercentages(
-        pollEntity.id,
+        pollId,
         userSelectedOptionIds,
         currentUser,
       ),

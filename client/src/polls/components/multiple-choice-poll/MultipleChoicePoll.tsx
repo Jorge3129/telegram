@@ -9,6 +9,7 @@ import PollOptionPercentageBar from "../poll-option-percentage-bar/PollOptionPer
 import PollButton from "../poll-button/PollButton";
 import ViewResultsButton from "../view-results-button/ViewResultsButton";
 import PollOptionPercentage from "../poll-option-percentage/PollOptionPercentage";
+import VoteCountMessage from "../vote-count-message/VoteCountMessage";
 
 interface Props {
   poll: Poll;
@@ -92,6 +93,8 @@ const MultipleChoicePoll: FC<Props> = ({ poll, message, isOwnPoll }) => {
           >
             Vote
           </PollButton>
+        ) : poll.isAnonymous ? (
+          <VoteCountMessage isOwnPoll={isOwnPoll} poll={poll} />
         ) : (
           <ViewResultsButton
             message={message}

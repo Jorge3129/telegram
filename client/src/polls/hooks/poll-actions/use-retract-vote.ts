@@ -11,13 +11,6 @@ export const useRetractVote = (poll: Poll, message: PollMessage) => {
     await pollsApiService.retractVote(poll.id);
 
     dispatch(MessageActions.retractPollVote({ messageId: message.id }));
-
-    dispatch(
-      MessageActions.setPollVotePercentages({
-        messageId: message.id,
-        votePercentages: undefined,
-      })
-    );
   };
 
   return handleRetractVote;

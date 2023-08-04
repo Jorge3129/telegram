@@ -10,12 +10,14 @@ import { GetVoteResultsRequirement } from './requirements/get-vote-results.requi
 import { PollsQueryService } from '../poll-services/polls-query.service';
 import { GetVotePercentagesRequirement } from './requirements/get-vote-percentages.requirement';
 import { UserEntity } from '../../users/entity/user.entity';
+import { CountTotalDistinctUserVotesQuery } from './queries/count-total-distinct-user-votes.query';
 
 @Injectable()
 export class VotesQueryService {
   constructor(
     private em: EntityManager,
     private countVotePercentageQuery: CountVotePercentagesQuery,
+    private countTotalVotesQuery: CountTotalDistinctUserVotesQuery,
     private getPollVoteUsersQuery: GetPollVoteUsersQuery,
     private getVoteResultsRequirement: GetVoteResultsRequirement,
     private getVotePercentagesRequirement: GetVotePercentagesRequirement,
@@ -37,6 +39,10 @@ export class VotesQueryService {
     pollId: string,
   ): Promise<PollVotesPercentage[]> {
     return this.countVotePercentageQuery.execute(this.em, pollId);
+  }
+
+  public async countTotalVotes(pollId: string): Promise<number> {
+    return this.countTotalVotesQuery.execute(this.em, pollId);
   }
 
   public async getPollVotedUsers(

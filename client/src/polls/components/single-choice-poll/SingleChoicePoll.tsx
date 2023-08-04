@@ -6,9 +6,9 @@ import { useHandleVote } from "../../hooks/use-handle-vote";
 import { Poll } from "../../models/poll.model";
 import PollOptionCheckbox from "../poll-option-checkbox/PollOptionCheckbox";
 import PollOptionPercentageBar from "../poll-option-percentage-bar/PollOptionPercentageBar";
-import NoVotesMessage from "./no-votes-message/NoVotesMessage";
 import ViewResultsButton from "../view-results-button/ViewResultsButton";
 import PollOptionPercentage from "../poll-option-percentage/PollOptionPercentage";
+import VoteCountMessage from "../vote-count-message/VoteCountMessage";
 
 interface Props {
   poll: Poll;
@@ -62,8 +62,8 @@ const SingleChoicePoll: FC<Props> = ({ poll, message, isOwnPoll }) => {
       </div>
 
       <div className="poll_button_container">
-        {!userHasVoted ? (
-          <NoVotesMessage isOwnPoll={isOwnPoll} />
+        {!userHasVoted || poll.isAnonymous ? (
+          <VoteCountMessage isOwnPoll={isOwnPoll} poll={poll} />
         ) : (
           <ViewResultsButton
             message={message}

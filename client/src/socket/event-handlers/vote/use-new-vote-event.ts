@@ -15,17 +15,18 @@ export const useNewVoteEvent = (socket: Socket | null) => {
   const { currentChatId } = useSelector(selectCurrentChat);
 
   const onNewVote = useCallback(
-    ({ chatId, messageId, votePercentages }: NewVoteSocketPayload) => {
-      console.log({ chatId, messageId, votePercentages });
-
-      if (currentChatId === chatId) {
-        dispatch(
-          MessageActions.setPollVotePercentages({
-            messageId,
-            votePercentages,
-          })
-        );
+    (eventPayload: NewVoteSocketPayload) => {
+      if (currentChatId !== eventPayload.chatId) {
+        return;
       }
+
+      dispatch(
+        MessageActions.setPollVotePercentages({
+          messageId: eventPayload.messageId,
+          votePercentages: eventPayload.votePercentages,
+          votesCount: eventPayload.totalVotesCount,
+        })
+      );
     },
     [currentChatId, dispatch]
   );

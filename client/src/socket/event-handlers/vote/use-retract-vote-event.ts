@@ -15,15 +15,18 @@ export const useRetractVoteEvent = (socket: Socket | null) => {
   const { currentChatId } = useSelector(selectCurrentChat);
 
   const onRetractVote = useCallback(
-    ({ chatId, messageId, votePercentages }: RetractVoteSocketPayload) => {
-      if (currentChatId === chatId) {
-        dispatch(
-          MessageActions.setPollVotePercentages({
-            messageId,
-            votePercentages,
-          })
-        );
+    (eventPayload: RetractVoteSocketPayload) => {
+      if (currentChatId !== eventPayload.chatId) {
+        return;
       }
+
+      dispatch(
+        MessageActions.setPollVotePercentages({
+          messageId: eventPayload.messageId,
+          votePercentages: eventPayload.votePercentages,
+          votesCount: eventPayload.totalVotesCount,
+        })
+      );
     },
     [currentChatId, dispatch]
   );
