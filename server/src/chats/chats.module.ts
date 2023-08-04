@@ -7,11 +7,13 @@ import { ChatsService } from './chats.service';
 import { ChatMappersModule } from './mappers/chat-mappers.module';
 import { MessagesModule } from '../messages/messages.module';
 import { ChatUsersModule } from '../chat-users/chat-users.module';
+import { MessageReadsModule } from '../message-reads/message-reads.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ChatEntity]),
     MessagesModule,
+    MessageReadsModule,
     ChatUsersModule,
   ],
   controllers: [ChatsController],

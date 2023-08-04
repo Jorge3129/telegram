@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AppMessageEvent } from '../events';
 import { CreateMessageEvent } from '../events/create-message.event';
-import { ReadMessageEvent } from '../events/read-message.event';
 import { MessageEntityToModelMapper } from '../mappers/entity-to-model/message-entity-to-model.mapper';
 import { Message } from '../models/message.type';
 import { CreateMessageService } from './operations/create-message.service';
@@ -10,10 +9,8 @@ import { EditMessageDto } from '../dto/edit-message.dto';
 import { DeleteMessageService } from './operations/delete-message-service';
 import { DeleteMessageEvent } from '../events/delete-message.event';
 import { EditMessageEvent } from '../events/edit-message.event';
-import { MessageReadsMutationService } from './message-reads-mutation.service';
+import { MessageReadsMutationService } from '../../message-reads/mutations/message-reads-mutation.service';
 import { CreateMessageDto } from '../dto/create-message/create-message.dto';
-import { EntityManager } from 'typeorm';
-import { MessageEntity } from '../entity/message.entity';
 import { ChatMembershipService } from '../../chat-users/services/chat-membership.service';
 import { AppEventEmitter } from '../../shared/services/app-event-emitter.service';
 import { UserEntity } from '../../users/entity/user.entity';
@@ -28,7 +25,6 @@ export class MessageMutationService {
     private membershipService: ChatMembershipService,
     private messageReadsService: MessageReadsMutationService,
     private messageMapper: MessageEntityToModelMapper,
-    private entityManager: EntityManager,
     private eventEmitter: AppEventEmitter<AppMessageEvent>,
   ) {}
 
@@ -88,17 +84,5 @@ export class MessageMutationService {
     const message = await this.deleteMessageService.delete(messageId, user);
 
     this.eventEmitter.emit(new DeleteMessageEvent({ message, user }));
-  }
-
-  public async readMessage(messageId: string, user: UserEntity): Promise<void> {
-    const message = await this.entityManager
-      .findOneByOrFail(MessageEntity, {
-        id: messageId,
-      })
-      .then((entity) => this.messageMapper.mapEntityToModel(entity, user));
-
-    await this.messageReadsService.updateSeen(user.id, message);
-
-    this.eventEmitter.emit(new ReadMessageEvent({ message, user }));
   }
 }

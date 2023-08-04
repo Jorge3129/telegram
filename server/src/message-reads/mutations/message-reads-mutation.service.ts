@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { MessageReadEntity } from '../entity/message-read.entity';
-import { MessageEntity } from '../entity/message.entity';
+import { MessageEntity } from '../../messages/entity/message.entity';
 import { AppLoggerService } from '../../logging/app-logger.service';
 
 @Injectable()

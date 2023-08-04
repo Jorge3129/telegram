@@ -10,6 +10,7 @@ import { MessageMutationsModule } from './mutations/message-mutations.module';
 import { ChatUsersModule } from '../chat-users/chat-users.module';
 import { PollsModule } from '../polls/polls.module';
 import { UserModule } from '../users/user.module';
+import { MessageReadsModule } from '../message-reads/message-reads.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from '../users/user.module';
     ChatUsersModule,
     UserModule,
     PollsModule,
+    MessageReadsModule,
   ],
   providers: [
     MessageService,
@@ -25,6 +27,7 @@ import { UserModule } from '../users/user.module';
     ...MessageMutationsModule.providers,
   ],
   exports: [
+    ...MessageMapperModule.providers,
     ...MessageQueriesModule.providers,
     ...MessageMutationsModule.providers,
   ],

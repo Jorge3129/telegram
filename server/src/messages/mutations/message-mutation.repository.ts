@@ -1,6 +1,6 @@
 import { EntityManager, Repository } from 'typeorm';
 import { MessageEntity } from '../entity/message.entity';
-import { MessageReadEntity } from '../entity/message-read.entity';
+import { MessageReadEntity } from '../../message-reads/entity/message-read.entity';
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';

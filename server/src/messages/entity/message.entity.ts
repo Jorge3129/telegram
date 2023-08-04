@@ -12,7 +12,7 @@ import {
 import { UserEntity } from '../../users/entity/user.entity';
 import { ChatEntity } from '../../chats/entity/chat.entity';
 import { MessageContentEntity } from './message-content/message-content.entity';
-import { MessageReadEntity } from './message-read.entity';
+import { MessageReadEntity } from '../../message-reads/entity/message-read.entity';
 
 export enum MessageType {
   PERSONAL_MESSAGE = 'personal-message',
