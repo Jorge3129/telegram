@@ -2,7 +2,6 @@ import _ from "lodash";
 import { RefObject, useCallback, useEffect, useState } from "react";
 import { isNotNullable } from "../../shared/utils/is-not-null";
 import { Message } from "../models/message.model";
-import { getMessageText } from "../utils/get-message-text";
 import { useEmitLocalMessageRead } from "./use-emit-local-message-read";
 import { useMessageReadsQueue } from "./use-message-reads-queue";
 import { findLatestMessage } from "../utils/find-latest-message";
@@ -45,8 +44,6 @@ export const useObserveMessageReads = (
         return;
       }
 
-      console.log(getMessageText(latestMessage));
-
       emitLocalReadEvent(latestMessage);
       emitMessageRead(latestMessage);
     },
@@ -59,8 +56,6 @@ export const useObserveMessageReads = (
     if (!containerRef || messagesLoading) {
       return;
     }
-
-    console.log("new observer");
 
     const messagesMap = _.keyBy(messages, "id");
 

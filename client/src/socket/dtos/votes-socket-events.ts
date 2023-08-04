@@ -13,6 +13,7 @@ export interface NewVoteSocketPayload {
   selectedAnswerOptionIds: string[];
   user: User;
   votePercentages: PollVotePercentage[];
+  totalVotesCount: number;
 }
 
 export interface RetractVoteSocketPayload {
@@ -21,4 +22,5 @@ export interface RetractVoteSocketPayload {
   user: User;
   chatId: number;
   votePercentages: PollVotePercentage[];
+  totalVotesCount: number;
 }

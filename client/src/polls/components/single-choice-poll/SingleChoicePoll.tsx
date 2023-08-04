@@ -63,7 +63,7 @@ const SingleChoicePoll: FC<Props> = ({ poll, message, isOwnPoll }) => {
 
       <div className="poll_button_container">
         {!userHasVoted || poll.isAnonymous ? (
-          <VoteCountMessage isOwnPoll={isOwnPoll} votesCount={0} />
+          <VoteCountMessage isOwnPoll={isOwnPoll} poll={poll} />
         ) : (
           <ViewResultsButton
             message={message}

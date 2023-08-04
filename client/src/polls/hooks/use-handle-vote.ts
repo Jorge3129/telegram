@@ -16,13 +16,7 @@ export const useHandleVote = (message: Message, poll: Poll) => {
       MessageActions.addPollVote({
         messageId: message.id,
         selectedOptionIds,
-      })
-    );
-
-    dispatch(
-      MessageActions.setPollVotePercentages({
-        messageId: message.id,
-        votePercentages: result,
+        votesPercentages: result,
       })
     );
   };

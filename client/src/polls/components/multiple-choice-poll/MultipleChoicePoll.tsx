@@ -94,7 +94,7 @@ const MultipleChoicePoll: FC<Props> = ({ poll, message, isOwnPoll }) => {
             Vote
           </PollButton>
         ) : poll.isAnonymous ? (
-          <VoteCountMessage isOwnPoll={isOwnPoll} votesCount={0} />
+          <VoteCountMessage isOwnPoll={isOwnPoll} poll={poll} />
         ) : (
           <ViewResultsButton
             message={message}
