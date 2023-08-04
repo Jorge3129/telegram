@@ -15,4 +15,5 @@ export interface Poll {
   answerOptions: PollAnswerOption[];
   userSelectedOptionIds: string[];
   votesPercentages: PollVotesPercentage[];
+  totalVotesCount: number;
 }
