@@ -2,6 +2,7 @@ import _ from "lodash";
 import { useState, useEffect, useCallback } from "react";
 import { v4 as uuid } from "uuid";
 import { PollOptionState } from "./create-poll-form/CreatePollForm";
+import { StateTuple } from "../../../shared/types/state-tuple";
 
 export const usePollOptionActions = () => {
   const [options, setOptions] = useState<PollOptionState[]>([]);
@@ -48,7 +49,6 @@ export const usePollOptionActions = () => {
     options,
     editOption,
     removeOption,
-    addOptionText,
-    setAddOptionText,
+    addOptionState: [addOptionText, setAddOptionText] as StateTuple<string>,
   };
 };
