@@ -21,14 +21,6 @@ const ViewResultsButton: FC<Props> = ({ poll, isOwnPoll, message }) => {
 
   const fetchPollResults = useFetchPollResults(poll, message);
 
-  const renderDialog = (props: PollResultsDialogProps) => (
-    <PollResultsDialog
-      poll={props.poll}
-      message={props.message}
-      onClose={props.onClose}
-    />
-  );
-
   const onClose = useCallback(() => {
     closeModal();
   }, [closeModal]);
@@ -36,7 +28,7 @@ const ViewResultsButton: FC<Props> = ({ poll, isOwnPoll, message }) => {
   const onOpen = () => {
     fetchPollResults();
     openModal(
-      renderDialog,
+      (props) => <PollResultsDialog {...props} />,
       { poll, message, onClose },
       "poll_results_dialog_wrapper"
     );
