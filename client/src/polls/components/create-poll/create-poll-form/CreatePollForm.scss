@@ -15,6 +15,10 @@
       background-color: var(--white);
       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
 
+      &:last-child {
+        box-shadow: none;
+      }
+
       .create_poll_label {
         color: $blue_text;
         font-size: 0.9em;
@@ -67,6 +71,7 @@
   .create_poll_modal_buttons {
     display: flex;
     justify-content: end;
+    padding: 0 1.1em 0.8em;
     gap: 0.3rem;
 
     .create_poll_modal_button {

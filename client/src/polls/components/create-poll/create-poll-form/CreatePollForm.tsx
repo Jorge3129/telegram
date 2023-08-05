@@ -3,11 +3,11 @@ import "./CreatePollForm.scss";
 import CreatePollOptionInput from "../create-poll-option-input/CreatePollOptionInput";
 import { usePollOptionActions } from "../use-poll-option-actions";
 import { formatWithQuantity } from "../../../../shared/utils/pluralize";
-import { FormGroup, FormControlLabel, Checkbox, Button } from "@mui/material";
-import { classIf } from "../../../../utils/class-if";
+import { Button } from "@mui/material";
 import { usePollSettings } from "../use-poll-settings";
 import { CreatePollDto } from "../../../dto/create-poll.dto";
 import { useSendMessage } from "../../../../current-chat/hooks/use-send-message";
+import CreatePollSettings from "../create-poll-settings/CreatePollSettings";
 
 interface Props {
   closeModal: () => void;
@@ -24,7 +24,7 @@ const CreatePollForm: FC<Props> = ({ closeModal }) => {
   const { options, editOption, removeOption, addOptionText, setAddOptionText } =
     usePollOptionActions();
 
-  const { pollSettings, toggleSetting, settingOptions } = usePollSettings();
+  const { pollSettings, toggleSetting, settingsOptions } = usePollSettings();
 
   const optionsNumberLimit = 10;
 
@@ -47,7 +47,7 @@ const CreatePollForm: FC<Props> = ({ closeModal }) => {
   return (
     <div className="create_poll_form_wrapper">
       <form className="create_poll_form">
-        <div className="question_section create_poll_section">
+        <div className="create_poll_section">
           <label htmlFor="question" className="create_poll_label">
             Question
           </label>
@@ -62,7 +62,7 @@ const CreatePollForm: FC<Props> = ({ closeModal }) => {
           />
         </div>
 
-        <div className="options_section create_poll_section">
+        <div className="create_poll_section">
           <div className="create_poll_label">Poll options</div>
 
           <div className="poll_options_list">
@@ -97,29 +97,11 @@ const CreatePollForm: FC<Props> = ({ closeModal }) => {
             : `You have added the maximum number of options`}
         </div>
 
-        <div className="options_section create_poll_section">
-          <div className="create_poll_label">Settings</div>
-
-          <FormGroup>
-            {settingOptions.map(({ name, title }) => (
-              <FormControlLabel
-                className="settings_form_label"
-                key={name}
-                control={
-                  <Checkbox
-                    className={
-                      "settings_checkbox" +
-                      classIf(pollSettings[name], "checked")
-                    }
-                    checked={pollSettings[name]}
-                    onChange={() => toggleSetting(name)}
-                  />
-                }
-                label={title}
-              />
-            ))}
-          </FormGroup>
-        </div>
+        <CreatePollSettings
+          settingsOptions={settingsOptions}
+          pollSettings={pollSettings}
+          toggleSetting={toggleSetting}
+        />
       </form>
 
       <div className="create_poll_modal_buttons">
