@@ -1,4 +1,5 @@
 import { CreatePollDto } from "../../polls/dto/create-poll.dto";
+import { DistributiveOmit } from "../../shared/types/distributive-omit";
 import { Media } from "./media.model";
 import { IGif } from "@giphy/js-types";
 
@@ -22,4 +23,12 @@ export interface CreatePollMessageDto extends BaseCreateMessageDto {
   poll: CreatePollDto;
 }
 
-export type CreateMessageDto = CreateTextMessageDto | CreateGifMessageDto;
+export type CreateMessageDto =
+  | CreateTextMessageDto
+  | CreateGifMessageDto
+  | CreatePollMessageDto;
+
+export type CreateMessageDtoWithoutChat = DistributiveOmit<
+  CreateMessageDto,
+  "chatId"
+>;
