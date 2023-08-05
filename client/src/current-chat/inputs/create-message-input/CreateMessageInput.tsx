@@ -1,8 +1,8 @@
-import { FC, useEffect, useRef, useState, MouseEvent } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import "./CreateMessageInput.scss";
 import { useSelector } from "react-redux";
 import { useEmojiInput } from "../../../reaction-media/emoji/use-emoji-input";
-import { useSend } from "../../hooks/useSend";
+import { useSendMessage } from "../../hooks/use-send-message";
 import { CreateMessageInputState } from "../../reducers/current-chat-state.type";
 import { selectCurrentChat } from "../../reducers/current-chat.reducer";
 import FileInput from "../file-input/FileInput";
@@ -12,24 +12,28 @@ interface Props {
 }
 
 const CreateMessageInput: FC<Props> = () => {
+  const { currentChatId } = useSelector(selectCurrentChat);
   const [text, setText] = useState("");
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEmojiInput((emoji) => setText((text) => text + emoji));
 
-  const { currentChatId } = useSelector(selectCurrentChat);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, [text, currentChatId]);
 
-  const sendMessage = useSend(text);
+  const sendMessage = useSendMessage();
 
-  const handleSubmit = (e: MouseEvent<HTMLElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setText("");
-    void sendMessage();
+
+    const messageText = text;
+
+    void sendMessage({
+      type: "text",
+      text: messageText,
+    });
   };
 
   return (
@@ -55,7 +59,10 @@ const CreateMessageInput: FC<Props> = () => {
             <button
               type="submit"
               className="main_chat_send_button icon_container"
-              onClick={handleSubmit}
+              onClick={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
             >
               <i className="fa-solid fa-paper-plane main_chat_send_icon" />
             </button>

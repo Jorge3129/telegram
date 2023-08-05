@@ -1,26 +1,23 @@
 import { FC, MouseEvent } from "react";
 import "./MediaModal.scss";
 import { useSelector } from "react-redux";
-import { useSend } from "../../../current-chat/hooks/useSend";
 import {
   selectCurrentChat,
   CurrentChatActions,
 } from "../../../current-chat/reducers/current-chat.reducer";
 import { useAppDispatch } from "../../../redux/store";
-import { uploadsApiService } from "../../../uploads/uploads-api.service";
 import MediaContainer from "../MediaContainer";
+import { useSendMediaMessage } from "../../../current-chat/hooks/use-send-media-message";
 
 const MediaModal: FC = () => {
   const dispatch = useAppDispatch();
   const { media } = useSelector(selectCurrentChat);
 
-  const sendMessage = useSend("");
+  const sendMessage = useSendMediaMessage();
 
-  const handleSend = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleSend = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await sendMessage();
-    dispatch(CurrentChatActions.clearMedia());
-    await uploadsApiService.postFile();
+    void sendMessage();
   };
 
   const handleCancel = (e: MouseEvent<HTMLButtonElement>) => {

@@ -1,37 +1,18 @@
-import { MessageActions } from "../../messages/state/messages.reducer";
-import { ChatActions } from "../../chats/chats.reducer";
-
-import { useAppDispatch } from "../../redux/store";
-import { useSelector } from "react-redux";
-import { Message } from "../../messages/models/message.model";
-import { messageApiService } from "../../messages/messages-api.service";
-
-import { selectCurrentChat } from "../../current-chat/reducers/current-chat.reducer";
 import { IGif } from "@giphy/js-types";
+import { CreateMessageDtoWithoutChat } from "../../messages/models/create-message.dto";
+import { useSendMessage } from "../../current-chat/hooks/use-send-message";
 
 export const useSendGif = () => {
-  const { currentChatId } = useSelector(selectCurrentChat);
-  const dispatch = useAppDispatch();
+  const handleSendMessage = useSendMessage();
 
-  const dispatchSendMessage = (message: Message) => {
-    dispatch(MessageActions.addMessage(message));
-    dispatch(ChatActions.setLastMessage({ message, chatId: message.chatId }));
-    dispatch(ChatActions.setUnread({ unread: 0, chatId: message.chatId }));
-  };
-
-  const handleSend = async (gif: IGif) => {
-    if (!currentChatId) {
-      return;
-    }
-
-    const createdMessage = await messageApiService.create({
+  const handleSendGif = (gif: IGif) => {
+    const messageDto: CreateMessageDtoWithoutChat = {
       type: "gif",
-      chatId: currentChatId,
       srcObject: gif,
-    });
+    };
 
-    dispatchSendMessage(createdMessage);
+    void handleSendMessage(messageDto);
   };
 
-  return handleSend;
+  return handleSendGif;
 };
