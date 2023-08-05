@@ -30,7 +30,7 @@ describe('ChatsController', () => {
 
     await mockAuthService.login(currentUser.id);
 
-    await chatsClient.seedGroupChat('Bloto', currentUser);
+    await chatsClient.seedGroupChat('Bloto', [currentUser]);
 
     const fetchedChats = await chatsClient.getUserChats().expect(200).getBody();
 

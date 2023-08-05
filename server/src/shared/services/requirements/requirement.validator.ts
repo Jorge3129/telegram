@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
+  RequirementCheck,
   RequirementConfig,
   RequirementError,
   isNegativeRequirement,
@@ -12,7 +13,7 @@ export class RequirementValidator {
     defaultError: (message?: string) => Error,
   ): Promise<void> {
     for (const requirement of requirements) {
-      const success = await this.getCheckResult(requirement);
+      const success = await this.getRequirementResult(requirement);
 
       if (!success) {
         const { err, errMessage } = requirement;
@@ -22,14 +23,22 @@ export class RequirementValidator {
     }
   }
 
-  private async getCheckResult(req: RequirementConfig): Promise<boolean> {
+  private async getRequirementResult(req: RequirementConfig): Promise<boolean> {
     if (isNegativeRequirement(req)) {
-      const result = await req.checkNot;
+      const result = await this.getCheckResult(req.checkNot);
 
       return !result;
     }
 
-    return await req.check;
+    return await this.getCheckResult(req.check);
+  }
+
+  private async getCheckResult(check: RequirementCheck) {
+    if (typeof check === 'function') {
+      return await check();
+    }
+
+    return check;
   }
 
   private getError(

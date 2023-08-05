@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { MessageEntity } from '../entity/message.entity';
@@ -44,6 +44,18 @@ export class MessageQueryRepository {
     where: FindOptionsWhere<MessageEntity>,
   ): Promise<MessageEntity | null> {
     return this.messageRepo.findOneBy(where);
+  }
+
+  public async findOneByOrFail(
+    where: FindOptionsWhere<MessageEntity>,
+  ): Promise<MessageEntity> {
+    const message = await this.findOneBy(where);
+
+    if (!message) {
+      throw new NotFoundException('Message not found');
+    }
+
+    return message;
   }
 
   public findBy(

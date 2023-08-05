@@ -37,11 +37,11 @@ export class RetractVoteRequirement {
   ): RequirementConfig[] {
     const requirements: RequirementConfig[] = [
       {
-        check: this.chatWithPollMembership.validate(user.id, poll.id),
+        check: () => this.chatWithPollMembership.validate(user.id, poll.id),
         errMessage: 'User is not member of any chat with this poll',
       },
       {
-        check: !poll.isQuiz,
+        check: () => !poll.isQuiz,
         errMessage: 'Cannot retract vote from a quiz',
       },
     ];
@@ -58,7 +58,7 @@ export class RetractVoteRequirement {
   ): RequirementConfig[] {
     const requirements: RequirementConfig[] = [
       {
-        check: this.userHasVotedRequirement.validate(userId, pollId),
+        check: () => this.userHasVotedRequirement.validate(userId, pollId),
         errMessage: 'User has not voted in this poll',
       },
     ];

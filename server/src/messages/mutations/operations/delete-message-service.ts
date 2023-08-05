@@ -1,30 +1,27 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MessageMutationRepository } from '../message-mutation.repository';
 import { MessageQueryRepository } from '../../queries/message-query.repository';
 import { MessageEntity } from '../../entity/message.entity';
-import { User } from '../../../users/user.type';
+import { DeleteMessageRequirement } from '../../requirements/delete-message.requirement';
+import { UserEntity } from '../../../users/entity/user.entity';
 
 @Injectable()
 export class DeleteMessageService {
   constructor(
     private messageRepo: MessageMutationRepository,
+    private deleteMessageRequirement: DeleteMessageRequirement,
     private messageQueryRepo: MessageQueryRepository,
   ) {}
 
-  public async delete(messageId: string, user: User): Promise<MessageEntity> {
-    const message = await this.messageQueryRepo.findOneBy({ id: messageId });
+  public async delete(
+    messageId: string,
+    user: UserEntity,
+  ): Promise<MessageEntity> {
+    const message = await this.messageQueryRepo.findOneByOrFail({
+      id: messageId,
+    });
 
-    if (!message) {
-      throw new NotFoundException('Message not found');
-    }
-
-    if (message.authorId !== user.id) {
-      throw new ForbiddenException('Cannot delete this message');
-    }
+    await this.deleteMessageRequirement.validate(message, user);
 
     await this.messageRepo.delete(messageId);
 
