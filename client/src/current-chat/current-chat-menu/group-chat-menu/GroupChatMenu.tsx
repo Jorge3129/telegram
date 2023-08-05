@@ -5,24 +5,27 @@ import CurrentChatMenuWrapper, {
   CurrentChatMenuOptionConfig,
 } from "../current-chat-menu-wrapper/CurrentChatMenuWrapper";
 import PollIcon from "@mui/icons-material/Poll";
+import { useOpenCreatePollModal } from "../../../polls/hooks/use-open-create-poll-modal";
 
 interface Props {
   renderChildren: (props: CurrentChatMenuChildProps) => ReactElement;
 }
 
 const GroupChatMenu: FC<Props> = ({ renderChildren }) => {
+  const openCreatePoll = useOpenCreatePollModal();
+
   const menuOptions: CurrentChatMenuOptionConfig[] = useMemo(
     () => [
       {
         text: "Create poll",
         icon: <PollIcon />,
         handler: () => {
-          console.log("create poll");
+          openCreatePoll();
         },
         enabled: true,
       },
     ],
-    []
+    [openCreatePoll]
   );
 
   return (
