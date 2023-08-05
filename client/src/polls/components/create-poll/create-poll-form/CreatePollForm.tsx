@@ -3,6 +3,9 @@ import "./CreatePollForm.scss";
 import CreatePollOptionInput from "../create-poll-option-input/CreatePollOptionInput";
 import { usePollOptionActions } from "../use-poll-option-actions";
 import { formatWithQuantity } from "../../../../shared/utils/pluralize";
+import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { classIf } from "../../../../utils/class-if";
+import { usePollSettings } from "../use-poll-settings";
 
 interface Props {}
 
@@ -20,6 +23,8 @@ const CreatePollForm: FC<Props> = () => {
   const optionsNumberLimit = 10;
 
   const canAddAnOption = options.length < optionsNumberLimit;
+
+  const { pollSettings, toggleSetting, settingOptions } = usePollSettings();
 
   return (
     <div className="create_poll_form_wrapper">
@@ -77,11 +82,25 @@ const CreatePollForm: FC<Props> = () => {
         <div className="options_section create_poll_section">
           <div className="create_poll_label">Settings</div>
 
-          <input
-            type="text"
-            className="create_poll_input"
-            placeholder="Settings here"
-          />
+          <FormGroup>
+            {settingOptions.map(({ name, title }) => (
+              <FormControlLabel
+                className="settings_form_label"
+                key={name}
+                control={
+                  <Checkbox
+                    className={
+                      "settings_checkbox" +
+                      classIf(pollSettings[name], "checked")
+                    }
+                    checked={pollSettings[name]}
+                    onChange={() => toggleSetting(name)}
+                  />
+                }
+                label={title}
+              />
+            ))}
+          </FormGroup>
         </div>
       </form>
     </div>
