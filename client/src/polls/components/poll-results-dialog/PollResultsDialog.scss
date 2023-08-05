@@ -1,6 +1,4 @@
 .poll_results_dialog {
-  width: 25rem;
-
   .poll_results_dialog_header {
     padding: 0.8em 1.1em;
 
@@ -19,6 +17,27 @@
       font-weight: 600;
       font-size: 1em;
       overflow-wrap: break-word;
+    }
+  }
+}
+
+@media screen and (min-width: 641px) {
+  .poll_results_dialog {
+    width: 25rem;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  $margin: 32px;
+  .poll_results_dialog_wrapper {
+    width: 100%;
+
+    .MuiPaper-root {
+      margin: $margin;
+    }
+
+    .poll_results_dialog {
+      width: calc(100vw - 2 * $margin);
     }
   }
 }

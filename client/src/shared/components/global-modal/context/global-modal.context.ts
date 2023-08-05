@@ -1,7 +1,11 @@
 import { Context, createContext, useContext } from "react";
 
 interface GlobalModalContextData<T> {
-  openModal: (render: (props: T) => JSX.Element, props: T) => void;
+  openModal: (
+    render: (props: T) => JSX.Element,
+    props: T,
+    className?: string
+  ) => void;
   closeModal: () => void;
   setProps: (props: T) => void;
 }

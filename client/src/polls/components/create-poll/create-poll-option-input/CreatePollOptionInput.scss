@@ -1,0 +1,18 @@
+.poll_option_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .poll_option_input {
+    flex: 1;
+    height: 100%;
+    padding: 0.7em 0;
+    border: none;
+    font-size: 0.9em;
+    border-bottom: 1px solid #dcdcdc;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

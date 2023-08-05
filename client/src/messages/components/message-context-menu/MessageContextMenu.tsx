@@ -36,7 +36,7 @@ const MessageContextMenu: FC<MessageMenuProps> = ({
     <>
       {renderChildren({
         onContextMenu: handleOpenMenu,
-        style: { cursor: "context-menu", userSelect: "none" },
+        style: { cursor: "context-menu" },
       })}
 
       <Menu
