@@ -38,5 +38,11 @@
       display: flex;
       flex-direction: column;
     }
+
+    .options_limit_message {
+      font-size: 0.9em;
+      color: var(--gray_darker);
+      padding: 0 1.1em;
+    }
   }
 }

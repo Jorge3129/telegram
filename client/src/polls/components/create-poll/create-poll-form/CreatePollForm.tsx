@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import "./CreatePollForm.scss";
 import CreatePollOptionInput from "../create-poll-option-input/CreatePollOptionInput";
 import { usePollOptionActions } from "../use-poll-option-actions";
+import { formatWithQuantity } from "../../../../shared/utils/pluralize";
 
 interface Props {}
 
@@ -15,6 +16,10 @@ const CreatePollForm: FC<Props> = () => {
 
   const { options, editOption, removeOption, addOptionText, setAddOptionText } =
     usePollOptionActions();
+
+  const optionsNumberLimit = 10;
+
+  const canAddAnOption = options.length < optionsNumberLimit;
 
   return (
     <div className="create_poll_form_wrapper">
@@ -49,13 +54,24 @@ const CreatePollForm: FC<Props> = () => {
             ))}
           </div>
 
-          <input
-            type="text"
-            className="create_poll_input"
-            placeholder="Add an option"
-            value={addOptionText}
-            onChange={(e) => setAddOptionText(e.target.value)}
-          />
+          {canAddAnOption && (
+            <input
+              type="text"
+              className="create_poll_input"
+              placeholder="Add an option"
+              value={addOptionText}
+              onChange={(e) => setAddOptionText(e.target.value)}
+            />
+          )}
+        </div>
+
+        <div className="options_limit_message">
+          {canAddAnOption
+            ? `You can add ${formatWithQuantity(
+                optionsNumberLimit - options.length,
+                "more option"
+              )}`
+            : `You have added the maximum number of options`}
         </div>
 
         <div className="options_section create_poll_section">
