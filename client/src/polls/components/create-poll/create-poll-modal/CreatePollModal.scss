@@ -1,0 +1,35 @@
+.create_poll_modal_header {
+  padding: 0.8em 1.1em 0;
+
+  .create_poll_modal_title {
+    .title {
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 641px) {
+  .create_poll_modal {
+    width: 25rem;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  $margin: 32px;
+  .create_poll_modal_wrapper {
+    width: 100%;
+
+    .MuiPaper-root {
+      margin: $margin;
+    }
+
+    .create_poll_modal {
+      width: calc(100vw - 2 * $margin);
+    }
+  }
+}
