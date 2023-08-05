@@ -11,10 +11,8 @@ import { DeleteMessageEvent } from '../events/delete-message.event';
 import { EditMessageEvent } from '../events/edit-message.event';
 import { MessageReadsMutationService } from '../../message-reads/mutations/message-reads-mutation.service';
 import { CreateMessageDto } from '../dto/create-message/create-message.dto';
-import { ChatMembershipService } from '../../chat-users/services/chat-membership.service';
 import { AppEventEmitter } from '../../shared/services/app-event-emitter.service';
 import { UserEntity } from '../../users/entity/user.entity';
-import { User } from '../../users/user.type';
 
 @Injectable()
 export class MessageMutationService {
@@ -22,7 +20,6 @@ export class MessageMutationService {
     private createMessageService: CreateMessageService,
     private editMessageService: EditMessageService,
     private deleteMessageService: DeleteMessageService,
-    private membershipService: ChatMembershipService,
     private messageReadsService: MessageReadsMutationService,
     private messageMapper: MessageEntityToModelMapper,
     private eventEmitter: AppEventEmitter<AppMessageEvent>,
@@ -32,11 +29,6 @@ export class MessageMutationService {
     message: CreateMessageDto,
     user: UserEntity,
   ): Promise<Message> {
-    await this.membershipService.checkUserChatMembership(
-      user.id,
-      message.chatId,
-    );
-
     const savedMessage = await this.createMessageService.saveFromDto(
       message,
       user,
@@ -63,7 +55,7 @@ export class MessageMutationService {
   public async editMessage(
     messageId: string,
     dto: EditMessageDto,
-    user: User,
+    user: UserEntity,
   ): Promise<void> {
     const message = await this.editMessageService.editMessage(
       messageId,
@@ -80,7 +72,7 @@ export class MessageMutationService {
     );
   }
 
-  public async delete(messageId: string, user: User): Promise<void> {
+  public async delete(messageId: string, user: UserEntity): Promise<void> {
     const message = await this.deleteMessageService.delete(messageId, user);
 
     this.eventEmitter.emit(new DeleteMessageEvent({ message, user }));

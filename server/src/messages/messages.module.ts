@@ -11,6 +11,10 @@ import { ChatUsersModule } from '../chat-users/chat-users.module';
 import { PollsModule } from '../polls/polls.module';
 import { UserModule } from '../users/user.module';
 import { MessageReadsModule } from '../message-reads/message-reads.module';
+import { CreateMessageRequirement } from './requirements/create-message.requirement';
+import { DeleteMessageRequirement } from './requirements/delete-message.requirement';
+import { MessageAuthorRequirement } from './requirements/message-author.requirement';
+import { EdiMessageRequirement } from './requirements/edit-message.requirement';
 
 @Module({
   imports: [
@@ -22,6 +26,10 @@ import { MessageReadsModule } from '../message-reads/message-reads.module';
   ],
   providers: [
     MessageService,
+    CreateMessageRequirement,
+    DeleteMessageRequirement,
+    MessageAuthorRequirement,
+    EdiMessageRequirement,
     ...MessageMapperModule.providers,
     ...MessageQueriesModule.providers,
     ...MessageMutationsModule.providers,

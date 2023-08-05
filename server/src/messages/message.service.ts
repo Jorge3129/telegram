@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Message } from './models/message.type';
-import { User } from '../users/user.type';
 
 import { MessageMutationService } from './mutations/message-mutation.service';
 import { EditMessageDto } from './dto/edit-message.dto';
@@ -25,7 +24,7 @@ export class MessageService {
   public async editMessage(
     messageId: string,
     dto: EditMessageDto,
-    user: User,
+    user: UserEntity,
   ): Promise<void> {
     await this.messageMutationService.editMessage(messageId, dto, user);
   }
