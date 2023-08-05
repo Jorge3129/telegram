@@ -6,6 +6,7 @@ import {
   selectCurrentChat,
   CurrentChatActions,
 } from "../reducers/current-chat.reducer";
+import CurrentChatMenuButton from "../current-chat-menu/current-chat-menu-button/CurrentChatMenuButton";
 
 interface Props {}
 
@@ -41,7 +42,7 @@ const CurrentChatTopBar: FC<Props> = () => {
         </div>
 
         <div className="chat_top_bar_menu icon_container">
-          <i className="fa-solid fa-ellipsis-vertical chat_top_bar_icon" />
+          <CurrentChatMenuButton />
         </div>
       </div>
     </div>

@@ -1,0 +1,24 @@
+.current_chat_menu {
+  .current_chat_menu_item {
+    font-size: 0.9em;
+    padding-left: 0.5em;
+    padding-right: 2em;
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+
+    .current_chat_menu_item_content {
+      display: flex;
+      width: 100%;
+      gap: 0.5em;
+
+      .current_chat_menu_item_icon {
+        display: grid;
+        place-content: center;
+        width: 2em;
+        color: #565656;
+      }
+    }
+  }
+}
