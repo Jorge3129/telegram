@@ -14,13 +14,19 @@ const GlobalModal: FC<PropsWithChildren<Props>> = ({ children }) => {
     renderContent: null,
   });
   const [modalProps, setModalProps] = useState<unknown | null>(null);
+  const [modalClassName, setModalClassName] = useState<string>("");
 
   const openModal = useCallback(
-    (renderContent: (props: unknown) => JSX.Element, props: unknown) => {
+    (
+      renderContent: (props: unknown) => JSX.Element,
+      props: unknown,
+      className = ""
+    ) => {
       setModalProps(props);
       setModalState({
         renderContent,
       });
+      setModalClassName(className);
     },
     []
   );
@@ -44,6 +50,7 @@ const GlobalModal: FC<PropsWithChildren<Props>> = ({ children }) => {
     <GlobalModalContext.Provider value={{ openModal, closeModal, setProps }}>
       {children}
       <Dialog
+        className={modalClassName}
         keepMounted
         open={!!modalState.renderContent}
         onClose={closeModal}

@@ -35,7 +35,11 @@ const ViewResultsButton: FC<Props> = ({ poll, isOwnPoll, message }) => {
 
   const onOpen = () => {
     fetchPollResults();
-    openModal(renderDialog, { poll, message, onClose });
+    openModal(
+      renderDialog,
+      { poll, message, onClose },
+      "poll_results_dialog_wrapper"
+    );
   };
 
   useEffect(() => {
