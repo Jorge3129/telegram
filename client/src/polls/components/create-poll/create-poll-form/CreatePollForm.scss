@@ -63,4 +63,19 @@
       }
     }
   }
+
+  .create_poll_modal_buttons {
+    display: flex;
+    justify-content: end;
+    gap: 0.3rem;
+
+    .create_poll_modal_button {
+      text-transform: none;
+      padding: 0.3em 0.9em;
+
+      &:hover {
+        background-color: var(--blue_lighter);
+      }
+    }
+  }
 }

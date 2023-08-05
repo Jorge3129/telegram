@@ -6,7 +6,7 @@ export interface CreatePollModalProps {
   onClose: () => void;
 }
 
-const CreatePollModal: FC<CreatePollModalProps> = () => {
+const CreatePollModal: FC<CreatePollModalProps> = ({ onClose }) => {
   return (
     <div className="create_poll_modal">
       <div className="create_poll_modal_header">
@@ -15,7 +15,7 @@ const CreatePollModal: FC<CreatePollModalProps> = () => {
         </div>
       </div>
 
-      <CreatePollForm />
+      <CreatePollForm closeModal={onClose} />
     </div>
   );
 };

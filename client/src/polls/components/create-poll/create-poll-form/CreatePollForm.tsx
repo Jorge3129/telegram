@@ -3,28 +3,43 @@ import "./CreatePollForm.scss";
 import CreatePollOptionInput from "../create-poll-option-input/CreatePollOptionInput";
 import { usePollOptionActions } from "../use-poll-option-actions";
 import { formatWithQuantity } from "../../../../shared/utils/pluralize";
-import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { FormGroup, FormControlLabel, Checkbox, Button } from "@mui/material";
 import { classIf } from "../../../../utils/class-if";
 import { usePollSettings } from "../use-poll-settings";
+import { CreatePollDto } from "../../../dto/create-poll.dto";
 
-interface Props {}
+interface Props {
+  closeModal: () => void;
+}
 
 export type PollOptionState = {
   id: string;
   text: string;
 };
 
-const CreatePollForm: FC<Props> = () => {
+const CreatePollForm: FC<Props> = ({ closeModal }) => {
   const [question, setQuestion] = useState("");
 
   const { options, editOption, removeOption, addOptionText, setAddOptionText } =
     usePollOptionActions();
 
+  const { pollSettings, toggleSetting, settingOptions } = usePollSettings();
+
   const optionsNumberLimit = 10;
 
   const canAddAnOption = options.length < optionsNumberLimit;
 
-  const { pollSettings, toggleSetting, settingOptions } = usePollSettings();
+  const onSubmit = () => {
+    const dto: CreatePollDto = {
+      ...pollSettings,
+      question,
+      answerOptions: options.map((option) => ({
+        text: option.text,
+      })),
+    };
+
+    console.log(dto);
+  };
 
   return (
     <div className="create_poll_form_wrapper">
@@ -103,6 +118,22 @@ const CreatePollForm: FC<Props> = () => {
           </FormGroup>
         </div>
       </form>
+
+      <div className="create_poll_modal_buttons">
+        <Button className="create_poll_modal_button" onClick={closeModal}>
+          Cancel
+        </Button>
+
+        <Button
+          className="create_poll_modal_button"
+          onClick={(e) => {
+            e.preventDefault();
+            onSubmit();
+          }}
+        >
+          Create
+        </Button>
+      </div>
     </div>
   );
 };
