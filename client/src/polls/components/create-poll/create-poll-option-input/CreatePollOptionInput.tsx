@@ -25,7 +25,7 @@ const CreatePollOptionInput: FC<Props> = ({
     }
 
     inputRef.current.focus();
-  }, []);
+  }, [isLastOption]);
 
   useEffect(() => {
     if (!option.text && isLastOption) {
@@ -47,7 +47,7 @@ const CreatePollOptionInput: FC<Props> = ({
         }}
       />
 
-      <IconButton onClick={() => removeOption(option.id)}>
+      <IconButton onClick={() => removeOption(option.id)} tabIndex={-1}>
         <CloseIcon />
       </IconButton>
     </div>
