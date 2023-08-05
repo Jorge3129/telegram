@@ -7,6 +7,7 @@ import { FormGroup, FormControlLabel, Checkbox, Button } from "@mui/material";
 import { classIf } from "../../../../utils/class-if";
 import { usePollSettings } from "../use-poll-settings";
 import { CreatePollDto } from "../../../dto/create-poll.dto";
+import { useSendMessage } from "../../../../current-chat/hooks/use-send-message";
 
 interface Props {
   closeModal: () => void;
@@ -29,8 +30,10 @@ const CreatePollForm: FC<Props> = ({ closeModal }) => {
 
   const canAddAnOption = options.length < optionsNumberLimit;
 
-  const onSubmit = () => {
-    const dto: CreatePollDto = {
+  const sendMessage = useSendMessage();
+
+  const handleSubmit = () => {
+    const pollDto: CreatePollDto = {
       ...pollSettings,
       question,
       answerOptions: options.map((option) => ({
@@ -38,7 +41,7 @@ const CreatePollForm: FC<Props> = ({ closeModal }) => {
       })),
     };
 
-    console.log(dto);
+    void sendMessage({ type: "poll", poll: pollDto });
   };
 
   return (
@@ -128,7 +131,8 @@ const CreatePollForm: FC<Props> = ({ closeModal }) => {
           className="create_poll_modal_button"
           onClick={(e) => {
             e.preventDefault();
-            onSubmit();
+            handleSubmit();
+            closeModal();
           }}
         >
           Create
