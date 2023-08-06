@@ -4,11 +4,10 @@ import { usePollOptionActions } from "../use-poll-option-actions";
 import { formatWithQuantity } from "../../../../shared/utils/pluralize";
 import { Button } from "@mui/material";
 import { usePollSettings } from "../use-poll-settings";
-import { CreatePollDto } from "../../../dto/create-poll.dto";
-import { useSendMessage } from "../../../../current-chat/hooks/use-send-message";
 import CreatePollSettings from "../create-poll-settings/CreatePollSettings";
 import CreatePollQuestionInput from "../create-poll-question-input/CreatePollQuestionInput";
 import CreatePollOptionsList from "../create-poll-options-list/CreatePollOptionsList";
+import CreatePollButton from "../create-poll-button/CreatePollButton";
 
 interface Props {
   closeModal: () => void;
@@ -29,20 +28,6 @@ const CreatePollForm: FC<Props> = ({ closeModal }) => {
 
   const optionsNumberLimit = 10;
   const canAddAnOption = options.length < optionsNumberLimit;
-
-  const sendMessage = useSendMessage();
-
-  const handleSubmit = () => {
-    const pollDto: CreatePollDto = {
-      ...pollSettings,
-      question,
-      answerOptions: options.map((option) => ({
-        text: option.text,
-      })),
-    };
-
-    void sendMessage({ type: "poll", poll: pollDto });
-  };
 
   return (
     <div className="create_poll_form_wrapper">
@@ -81,16 +66,12 @@ const CreatePollForm: FC<Props> = ({ closeModal }) => {
           Cancel
         </Button>
 
-        <Button
-          className="create_poll_modal_button"
-          onClick={(e) => {
-            e.preventDefault();
-            handleSubmit();
-            closeModal();
-          }}
-        >
-          Create
-        </Button>
+        <CreatePollButton
+          question={question}
+          options={options}
+          pollSettings={pollSettings}
+          closeModal={closeModal}
+        />
       </div>
     </div>
   );

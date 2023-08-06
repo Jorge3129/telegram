@@ -1,0 +1,17 @@
+.settings_form_label {
+  .settings_checkbox {
+    .MuiSvgIcon-root {
+      color: var(--gray);
+    }
+
+    &.checked {
+      .MuiSvgIcon-root {
+        color: var(--blue);
+      }
+    }
+  }
+
+  .MuiTypography-root {
+    font-size: 0.9em;
+  }
+}
