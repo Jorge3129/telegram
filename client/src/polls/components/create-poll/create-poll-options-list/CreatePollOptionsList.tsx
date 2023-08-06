@@ -41,7 +41,7 @@ const CreatePollOptionsList: FC<Props> = ({
         <input
           type="text"
           className="create_poll_input"
-          placeholder="Add an option"
+          placeholder="Add an option..."
           value={addOptionText}
           onChange={(e) => setAddOptionText(e.target.value)}
         />
