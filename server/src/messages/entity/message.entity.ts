@@ -53,7 +53,9 @@ export abstract class MessageEntity {
   @JoinColumn()
   content: MessageContentEntity;
 
-  @OneToMany(() => MessageReadEntity, (read) => read.message)
+  @OneToMany(() => MessageReadEntity, (read) => read.message, {
+    onDelete: 'CASCADE',
+  })
   reads: MessageReadEntity[];
 }
 
