@@ -1,6 +1,5 @@
 import { EntityManager, Repository } from 'typeorm';
 import { MessageEntity } from '../entity/message.entity';
-import { MessageReadEntity } from '../../message-reads/entity/message-read.entity';
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,16 +17,8 @@ export class MessageMutationRepository {
     return this.messageRepo.save({ ...dto });
   }
 
-  public saveMany(dtos: Partial<MessageEntity>[]): Promise<MessageEntity[]> {
-    return this.messageRepo.save(dtos.map((dto) => ({ ...dto })));
-  }
-
   public async delete(messageId: string): Promise<void> {
-    await this.entityManager.transaction(async (tx) => {
-      await tx.delete(MessageReadEntity, { messageId });
-
-      await tx.delete(MessageEntity, messageId);
-    });
+    await this.entityManager.delete(MessageEntity, messageId);
   }
 
   public async updateMessageText(
